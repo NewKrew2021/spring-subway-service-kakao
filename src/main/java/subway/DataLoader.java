@@ -1,31 +1,34 @@
 package subway;
 
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.member.dao.MemberDao;
+import subway.member.domain.Member;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 
 @Component
 @Profile("!test")
-public class DataLoader implements ApplicationRunner {
+public class DataLoader implements CommandLineRunner {
     private StationDao stationDao;
     private LineDao lineDao;
     private SectionDao sectionDao;
+    private MemberDao memberDao;
 
-    public DataLoader(StationDao stationDao, LineDao lineDao, SectionDao sectionDao) {
+    public DataLoader(StationDao stationDao, LineDao lineDao, SectionDao sectionDao, MemberDao memberDao) {
         this.stationDao = stationDao;
         this.lineDao = lineDao;
         this.sectionDao = sectionDao;
+        this.memberDao = memberDao;
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(String... args) throws Exception {
         Station 강남역 = stationDao.insert(new Station("강남역"));
         Station 판교역 = stationDao.insert(new Station("판교역"));
         Station 정자역 = stationDao.insert(new Station("정자역"));
@@ -41,6 +44,9 @@ public class DataLoader implements ApplicationRunner {
         이호선.addSection(new Section(강남역, 역삼역, 10));
         이호선.addSection(new Section(역삼역, 잠실역, 10));
         sectionDao.insertSections(이호선);
+
+        Member member = new Member("email@email.com", "password", 10);
+        memberDao.insert(member);
     }
 }
 
