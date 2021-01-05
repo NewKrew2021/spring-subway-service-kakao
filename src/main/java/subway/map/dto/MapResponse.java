@@ -1,7 +1,7 @@
-package subway.map;
+package subway.map.dto;
 
-import subway.line.LineResponse;
-import subway.station.StationResponse;
+import subway.line.dto.LineResponse;
+import subway.station.dto.StationResponse;
 
 import java.util.List;
 

@@ -7,8 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import subway.AcceptanceTest;
-import subway.line.LineResponse;
-import subway.station.StationResponse;
+import subway.line.dto.LineResponse;
+import subway.map.dto.MapResponse;
+import subway.station.dto.StationResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.line.LineAcceptanceTest.지하철_노선_등록되어_있음;
