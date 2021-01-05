@@ -7,7 +7,7 @@
   <a href="https://edu.nextstep.camp/c/R89PYi5H" alt="nextstep atdd">
     <img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fedu.nextstep.camp%2Fc%2FR89PYi5H">
   </a>
-  <img alt="GitHub" src="https://img.shields.io/github/license/next-step/spring-subway-admin-kakao">
+  <img alt="GitHub" src="https://img.shields.io/github/license/next-step/spring-subway-service-kakao">
 </p>
 
 <br>
@@ -45,10 +45,10 @@ npm run dev
 
 ## 🐞 Bug Report
 
-버그를 발견한다면, [Issues](https://github.com/next-step/spring-subway-admin-kakao/issues) 에 등록해주세요 :)
+버그를 발견한다면, [Issues](https://github.com/next-step/spring-subway-service-kakao/issues) 에 등록해주세요 :)
 
 <br>
 
 ## 📝 License
 
-This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blob/master/LICENSE) licensed.
+This project is [MIT](https://github.com/next-step/spring-subway-service-kakao/blob/master/LICENSE) licensed.
