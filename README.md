@@ -56,7 +56,7 @@ This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blo
 
 
 ## 구현해야할 기능 목록
-- [ x ] 최단경로 조회 기능
+- [x] 최단경로 조회 기능
 - [ ] 토큰 발급 API 구현
 - [ ] 토큰을 통한 인증 - 내 정보 기능
 - [ ] 즐겨 찾기 기능 구현

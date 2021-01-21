@@ -1,5 +1,6 @@
 package subway.path.dto;
 
+import subway.path.domain.Path;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
@@ -12,10 +13,10 @@ public class PathResponse {
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int distance, int fare) {
-        this.stations = stations;
-        this.distance = distance;
-        this.fare = fare;
+    public PathResponse(Path path) {
+        this.stations = StationResponse.listOf(path.getStations());
+        this.distance = path.getDistance();
+        this.fare = path.getFare();
     }
 
     public List<StationResponse> getStations() {
