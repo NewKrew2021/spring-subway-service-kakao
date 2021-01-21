@@ -62,4 +62,16 @@ public class SectionDao {
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
+
+    public List<Section> getSections() {
+       return jdbcTemplate.query("select S.id as id, S.distance as distance, " +
+               "UST.id as up_station_id, UST.name as up_station_name, DST.id as down_station_id, DST.name as down_station_name " +
+               "from Section S "+
+               "left outer join STATION UST on S.up_station_id = UST.id " +
+               "left outer join STATION DST on S.down_station_id = DST.id;",actorRowMapper);
+    }
+
+
+
+
 }

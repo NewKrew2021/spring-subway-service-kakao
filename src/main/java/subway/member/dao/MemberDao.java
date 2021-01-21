@@ -1,11 +1,13 @@
 package subway.member.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.auth.exception.InvalidMemberException;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
@@ -54,6 +56,10 @@ public class MemberDao {
 
     public Member findByEmail(String email) {
         String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        } catch (EmptyResultDataAccessException e){
+            throw new InvalidMemberException();
+        }
     }
 }
