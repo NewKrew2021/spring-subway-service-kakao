@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import subway.exceptions.UnauthorizedException;
 import subway.member.dao.MemberDao;
+import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
@@ -40,9 +41,14 @@ public class MemberService {
     public Member findAuthorizedMember(String email, String password) {
         Member member = memberDao.findByEmail(email)
                 .orElseThrow(UnauthorizedException::new);
-        if (member.checkPassword(password)) {
+        if (member.hasDifferentPassword(password)) {
             throw new UnauthorizedException();
         }
         return member;
+    }
+
+    public LoginMember findLoginMember(String email) {
+        Member member = memberDao.findByEmail(email).orElseThrow(UnauthorizedException::new);
+        return new LoginMember(member);
     }
 }
