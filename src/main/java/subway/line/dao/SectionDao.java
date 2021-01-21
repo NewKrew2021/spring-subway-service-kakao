@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class SectionDao {
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 

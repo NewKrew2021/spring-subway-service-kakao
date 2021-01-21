@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
+
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
@@ -35,6 +36,12 @@ public class Sections {
         addSectionDownToDown(section);
 
         this.sections.add(section);
+    }
+
+    public void addSections(Sections sections) {
+        for (Section section : sections.getSections()) {
+            this.sections.add(section);
+        }
     }
 
     private void checkAlreadyExisted(Section section) {
