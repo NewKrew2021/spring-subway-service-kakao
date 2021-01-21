@@ -66,7 +66,7 @@ This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blo
 * 구현 기능
     * PathController - 컨트롤러 매핑
     * PathService - PathResponse를 리턴해주는 메소드 구현
-        * 모든 노선의 모든 구간 불러오기 -> 그래프 생성
+        * 모든 구간 불러오기 -> 그래프 생성
         * 최단 경로 및 거리 탐색
         * PathResponse에 최단 경로 Station 리스트와 거리 저장
     
