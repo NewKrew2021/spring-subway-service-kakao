@@ -52,3 +52,21 @@ npm run dev
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blob/master/LICENSE) licensed.
+
+
+## 구현 기능 목록
+
+### 경로 조회 기능
+
+* 요구사항
+    * 출발역과 도착역 사이의 최단 거리 경로
+    * 경로와 함께 총 거리 출력
+    * 여러 노선 환승 가능
+    
+* 구현 기능
+    * PathController - 컨트롤러 매핑
+    * PathService - PathResponse를 리턴해주는 메소드 구현
+        * 모든 노선의 모든 구간 불러오기 -> 그래프 생성
+        * 최단 경로 및 거리 탐색
+        * PathResponse에 최단 경로 Station 리스트와 거리 저장
+    
