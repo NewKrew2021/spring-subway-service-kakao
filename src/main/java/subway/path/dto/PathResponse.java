@@ -1,32 +1,37 @@
 package subway.path.dto;
 
+import java.util.List;
 import subway.station.dto.StationResponse;
 
-import java.util.List;
-
 public class PathResponse {
-    private List<StationResponse> stations;
-    private int distance;
-    private int fare;
 
-    public PathResponse() {
-    }
+  private List<StationResponse> stations;
+  private int distance;
+  private int fare;
 
-    public PathResponse(List<StationResponse> stations, int distance, int fare) {
-        this.stations = stations;
-        this.distance = distance;
-        this.fare = fare;
-    }
+  public PathResponse() {
+  }
 
-    public List<StationResponse> getStations() {
-        return stations;
-    }
+  public PathResponse(List<StationResponse> stations, int distance) {
+    this.stations = stations;
+    this.distance = distance;
+  }
 
-    public int getDistance() {
-        return distance;
-    }
+  public PathResponse(List<StationResponse> stations, int distance, int fare) {
+    this.stations = stations;
+    this.distance = distance;
+    this.fare = fare;
+  }
 
-    public int getFare() {
-        return fare;
-    }
+  public List<StationResponse> getStations() {
+    return stations;
+  }
+
+  public int getDistance() {
+    return distance;
+  }
+
+  public int getFare() {
+    return fare;
+  }
 }
