@@ -1,12 +1,15 @@
 package subway.line.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,13 @@ import java.util.stream.Collectors;
 public class SectionDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
+
+    private final RowMapper<Section> actorRowMapper = (resultSet, rowNum) -> new Section(
+            resultSet.getLong("id"),
+            new Station(resultSet.getLong("up_station_id"), resultSet.getString("up_station_name")),
+            new Station(resultSet.getLong("down_station_id"), resultSet.getString("down_station_name")),
+            resultSet.getInt("distance")
+    );
 
     public SectionDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;

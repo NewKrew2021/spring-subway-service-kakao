@@ -1,5 +1,9 @@
 package subway.line.domain;
 
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
+import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
@@ -139,5 +143,24 @@ public class Sections {
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
+    }
+
+    public DijkstraShortestPath getDijkstraShorestPath() {
+        for (Section section : sections) {
+            System.out.println(section.toString());
+        }
+
+        WeightedMultigraph<Long, DefaultWeightedEdge> graph
+                = new WeightedMultigraph(DefaultWeightedEdge.class);
+
+        for (Section section : sections) {
+            Long v1 = section.getUpStation().getId();
+            Long v2 = section.getDownStation().getId();
+            graph.addVertex(v1);
+            graph.addVertex(v2);
+            graph.setEdgeWeight(graph.addEdge(v1, v2), section.getDistance());
+            graph.setEdgeWeight(graph.addEdge(v2, v1), section.getDistance());
+        }
+        return new DijkstraShortestPath(graph);
     }
 }

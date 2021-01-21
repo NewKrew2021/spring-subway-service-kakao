@@ -18,6 +18,10 @@ public class PathResponse {
         this.fare = fare;
     }
 
+    public static PathResponse of(List<StationResponse> stations, int distance) {
+        return new PathResponse(stations, distance, 0);
+    }
+
     public List<StationResponse> getStations() {
         return stations;
     }
