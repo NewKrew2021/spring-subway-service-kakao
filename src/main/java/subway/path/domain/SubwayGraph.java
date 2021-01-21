@@ -1,5 +1,6 @@
 package subway.path.domain;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -18,12 +19,9 @@ public class SubwayGraph {
         dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
-    public List<Station> getShortestPath(Station source, Station target) {
-        return dijkstraShortestPath.getPath(source, target).getVertexList();
-    }
-
-    public Long getShortestDistance(Station source, Station target) {
-        return (long) dijkstraShortestPath.getPath(source, target).getWeight();
+    public Path getShortestPath(Station source, Station target) {
+        GraphPath<Station, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(source, target);
+        return new Path(path.getVertexList(), (int) path.getWeight());
     }
 
    private void makeGraph(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {

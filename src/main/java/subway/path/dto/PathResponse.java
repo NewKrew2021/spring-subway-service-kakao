@@ -9,7 +9,7 @@ public class PathResponse {
     private int distance;
     private int fare;
 
-    public PathResponse() {
+    private PathResponse() {
     }
 
     public PathResponse(List<StationResponse> stations, int distance, int fare) {

@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -32,6 +33,21 @@ public class SectionDao {
         params.put("distance", section.getDistance());
         Long sectionId = simpleJdbcInsert.executeAndReturnKey(params).longValue();
         return new Section(sectionId, section.getUpStation(), section.getDownStation(), section.getDistance());
+    }
+
+    public List<Section> getSections() {
+        String sql = "select UST.id as up_station_id, " +
+                "UST.name as up_station_name, " +
+                "DST.id as down_station_id, " +
+                "DST.name as down_station_name, " +
+                "S.distance as distance " +
+                "from SECTION S " +
+                "left outer join STATION UST on S.up_station_id = UST.id " +
+                "left outer join STATION DST on S.down_station_id = DST.id ";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Section(
+                new Station(rs.getLong("up_station_id"), rs.getString("up_station_name")),
+                new Station(rs.getLong("down_station_id"), rs.getString("down_station_name")),
+                rs.getInt("distance")));
     }
 
     public void deleteByLineId(Long lineId) {

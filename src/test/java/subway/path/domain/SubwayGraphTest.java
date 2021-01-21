@@ -34,7 +34,9 @@ public class SubwayGraphTest {
                 new Section(v4, end, 1));
 
         SubwayGraph subwayGraph = new SubwayGraph(sections);
-        assertThat(subwayGraph.getShortestPath(start, end)).containsExactly(start, v1, v5, v2, v3, v4, end);
-        assertThat(subwayGraph.getShortestDistance(start, end)).isEqualTo(6);
+        Path path = subwayGraph.getShortestPath(start, end);
+
+        assertThat(path.getPath()).containsExactly(start, v1, v5, v2, v3, v4, end);
+        assertThat(path.getDistance()).isEqualTo(6);
     }
 }
