@@ -1,8 +1,29 @@
 package subway.favorite.ui;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.favorite.application.FavoriteService;
+import subway.favorite.domain.Favorite;
+import subway.favorite.dto.FavoriteRequest;
+import subway.member.domain.LoginMember;
+
+import java.net.URI;
 
 @RestController
+@RequestMapping("/favorites")
 public class FavoriteController {
-    // TODO: 즐겨찾기 기능 구현하기
+
+    private final FavoriteService favoriteService;
+
+    public FavoriteController(FavoriteService favoriteService) {
+        this.favoriteService = favoriteService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createFavorites(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
+        Favorite favorite = favoriteService.create(loginMember, favoriteRequest.getSource(), favoriteRequest.getTarget());
+        return ResponseEntity.created(URI.create("/favorites/" + favorite.getId())).build();
+    }
+
 }

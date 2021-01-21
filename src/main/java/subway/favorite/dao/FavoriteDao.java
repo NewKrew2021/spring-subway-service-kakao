@@ -1,0 +1,52 @@
+package subway.favorite.dao;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+import subway.favorite.domain.Favorite;
+import subway.station.domain.Station;
+
+import javax.sql.DataSource;
+import java.util.List;
+
+@Repository
+public class FavoriteDao {
+
+    private JdbcTemplate jdbcTemplate;
+    private SimpleJdbcInsert insertAction;
+
+    private RowMapper<Favorite> rowMapper = (rs, rowNum) ->
+            new Favorite(
+                    rs.getLong("id"),
+                    rs.getLong("user_id"),
+                    rs.getLong("source_id"),
+                    rs.getLong("target_id")
+            );
+
+
+    public FavoriteDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.insertAction = new SimpleJdbcInsert(dataSource)
+                .withTableName("favorite")
+                .usingGeneratedKeyColumns("id");
+    }
+
+    public Favorite insert(Favorite favorite) {
+        SqlParameterSource params = new BeanPropertySqlParameterSource(favorite);
+        Long id = insertAction.executeAndReturnKey(params).longValue();
+        return new Favorite(id, favorite.getUserId(), favorite.getSourceId(), favorite.getTargetId());
+    }
+
+//    public void deleteById(Long id) {
+//        String sql = "delete from STATION where id = ?";
+//        jdbcTemplate.update(sql, id);
+//    }
+
+//    public Station findById(Long id) {
+//        String sql = "select * from STATION where id = ?";
+//        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+//    }
+}
