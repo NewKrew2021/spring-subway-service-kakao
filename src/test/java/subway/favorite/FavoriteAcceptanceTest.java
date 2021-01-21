@@ -75,7 +75,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> deleteResponse = 즐겨찾기_삭제_요청(사용자, createResponse);
         // then
-        즐겨찾기_삭제됨(deleteResponse);
+        즐겨찾기_삭제됨(사용자, deleteResponse);
     }
 
     public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(TokenResponse tokenResponse, StationResponse source, StationResponse target) {
@@ -130,7 +130,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         assertThat(resultTargetNames).isEqualTo(Arrays.asList("정자역", "정자역"));
     }
 
-    public static void 즐겨찾기_삭제됨(ExtractableResponse<Response> response) {
+    public static void 즐겨찾기_삭제됨(TokenResponse tokenResponse, ExtractableResponse<Response> response) {
+        List<FavoriteResponse> list = 즐겨찾기_목록_조회_요청(tokenResponse).jsonPath().getList(".", FavoriteResponse.class);
+        assertThat(list).hasSize(1);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }

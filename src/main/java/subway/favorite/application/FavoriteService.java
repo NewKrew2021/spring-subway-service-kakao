@@ -39,4 +39,8 @@ public class FavoriteService {
                 stationService.findStationById(favorite.getTargetId())
         );
     }
+
+    public void delete(LoginMember loginMember, Long id) {
+        favoriteDao.deleteByIdAndUserId(id, loginMember.getId());
+    }
 }

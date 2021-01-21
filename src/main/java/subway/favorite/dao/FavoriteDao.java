@@ -39,10 +39,10 @@ public class FavoriteDao {
         return new Favorite(id, favorite.getUserId(), favorite.getSourceId(), favorite.getTargetId());
     }
 
-//    public void deleteById(Long id) {
-//        String sql = "delete from STATION where id = ?";
-//        jdbcTemplate.update(sql, id);
-//    }
+    public void deleteByIdAndUserId(Long id, Long userId) {
+        String sql = "delete from FAVORITE where id = ? and user_id = ?";
+        jdbcTemplate.update(sql, id, userId);
+    }
 
     public List<Favorite> findByUserId(Long id) {
         String sql = "select * from FAVORITE where user_id = ?";
