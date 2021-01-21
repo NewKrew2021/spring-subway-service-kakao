@@ -1,12 +1,19 @@
 package subway.auth.ui;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.LoginMember;
+import subway.member.domain.Member;
+import subway.member.dto.MemberResponse;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private AuthService authService;
@@ -24,6 +31,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
-        return null;
+        Member member = authService.getPayload(AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest()));
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 }

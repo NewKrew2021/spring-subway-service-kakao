@@ -28,6 +28,10 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
+    public MemberResponse findMemberByEmail(String email) {
+        return MemberResponse.of(memberDao.findByEmail(email));
+    }
+
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
         memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
