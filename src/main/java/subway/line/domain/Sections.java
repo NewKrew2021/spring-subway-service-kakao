@@ -1,11 +1,12 @@
 package subway.line.domain;
 
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
+import subway.path.domain.Path;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
@@ -139,5 +140,46 @@ public class Sections {
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
+    }
+
+    public Path getShortestPath(Long source, Long target) {
+        WeightedMultigraph<String, DefaultWeightedEdge> graph
+                = new WeightedMultigraph(DefaultWeightedEdge.class);
+
+        Map<String, Station> stations = new HashMap<>();
+
+        sections.stream()
+                .forEach(section -> {
+                    Station upStation = section.getUpStation();
+                    Station downStation = section.getDownStation();
+                    Long upStationId = upStation.getId();
+                    Long downStationId = downStation.getId();
+                    stations.put(String.valueOf(upStationId), upStation);
+                    stations.put(String.valueOf(downStationId), downStation);
+                });
+
+        stations.keySet().stream()
+                .forEach(key -> graph.addVertex(key));
+
+        sections.stream()
+                .forEach(section -> {
+                    Station upStation = section.getUpStation();
+                    Station downStation = section.getDownStation();
+                    Long upStationId = upStation.getId();
+                    Long downStationId = downStation.getId();
+                    graph.setEdgeWeight(graph.addEdge(String.valueOf(upStationId), String.valueOf(downStationId)), section.getDistance());
+                });
+
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+
+        List<String> shortestPathOnlyVertex
+                = dijkstraShortestPath.getPath(String.valueOf(source), String.valueOf(target)).getVertexList();
+        double shortestDistance = dijkstraShortestPath.getPathWeight(String.valueOf(source), String.valueOf(target));
+
+        List<Station> shortestPath = shortestPathOnlyVertex.stream()
+                .map(key -> stations.get(key))
+                .collect(Collectors.toList());
+
+        return new Path(shortestPath, (int) shortestDistance);
     }
 }
