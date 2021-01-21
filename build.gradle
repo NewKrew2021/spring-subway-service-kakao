@@ -33,6 +33,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     runtimeOnly 'com.h2database:h2'
+
+    testImplementation 'io.rest-assured:json-path:3.3.0'
+    testImplementation 'io.rest-assured:xml-path:3.3.0'
+    testImplementation 'io.rest-assured:rest-assured:3.3.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.2'
 }
 
 test {

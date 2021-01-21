@@ -42,15 +42,15 @@ npm run dev
 
 ### 객체 정의
 * [ ] SubwayShortestPath 일급객체 제작
-* [ ] PathService 빈 생성체
+* [x] PathService 빈 생성체
 
 ### 출발역과 도착역 사이의 최단 거리 경로 계산
-* [ ] 검색 시 최단 거리 경로 구하기 (역과 구간 전체 데이터를 통해 jgrapht를 사용하여 구현)
-* [ ] 검색시 총 거리 구하기
-* [ ] 여러 노선의 환승도 고려한 검색
+* [x] 검색 시 최단 거리 경로 구하기 (역과 구간 전체 데이터를 통해 jgrapht를 사용하여 구현)
+* [x] 검색시 총 거리 구하기
+* [x] 여러 노선의 환승도 고려한 검색
 
 ### 경로 조회 API
-* [ ] 경로 조회 요청 및 응답 구현 (PathController)
+* [x] 경로 조회 요청 및 응답 구현 (PathController)
 
 ## ✏️ Code Review Process
 [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)

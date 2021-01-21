@@ -22,10 +22,10 @@ public class PathController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PathResponse> getShortestPath(
-            @RequestParam Long sourceId, @RequestParam Long targetId
+            @RequestParam Long source, @RequestParam Long target
     ){
         return ResponseEntity
                 .ok()
-                .body(pathService.getShortestpathResponse(sourceId, targetId));
+                .body(pathService.getShortestpathResponse(source,target));
     }
 }

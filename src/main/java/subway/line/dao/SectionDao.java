@@ -81,10 +81,10 @@ public class SectionDao {
                 .stream()
                 .map(it ->
                         new Section(
-                                (Long) it.get("section_id"),
-                                new Station((Long) it.get("up_station_id"), (String) it.get("up_station_name")),
-                                new Station((Long) it.get("down_station_id"), (String) it.get("down_station_name")),
-                                (int) it.get("distance")))
+                                (Long) it.get("SECTION_ID"),
+                                new Station((Long) it.get("UP_STATION_ID"), (String) it.get("UP_STATION_NAME")),
+                                new Station((Long) it.get("DOWN_STATION_ID"), (String) it.get("DOWN_STATION_NAME")),
+                                (int) it.get("SECTION_DISTANCE")))
                 .collect(Collectors.toList());
     }
 }

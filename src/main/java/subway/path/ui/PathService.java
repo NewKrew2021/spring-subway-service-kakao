@@ -49,16 +49,18 @@ public class PathService {
         }
 
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+
         List<String> shortestStationIds = dijkstraShortestPath
                 .getPath(source.toString(), target.toString())
                 .getVertexList();
+
         List<StationResponse> shortestStations = shortestStationIds
                 .stream()
                 .map((String stationId) -> stationDao.findById(Long.parseLong(stationId)))
                 .map((Station station) -> new StationResponse(station.getId(), station.getName()))
                 .collect(Collectors.toList());
 
-        int sumOfDistance = dijkstraShortestPath.getPath(source.toString(), target.toString()).getLength();
+        int sumOfDistance = (int) dijkstraShortestPath.getPath(source.toString(), target.toString()).getWeight();
 
         return new PathResponse(shortestStations, sumOfDistance, 0);
     }
