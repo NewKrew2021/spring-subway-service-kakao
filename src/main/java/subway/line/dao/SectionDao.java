@@ -53,4 +53,9 @@ public class SectionDao {
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
+
+    public List<Map<String, Object>> findAll() {
+        String sql = "select * from SECTION";
+        return jdbcTemplate.queryForList(sql);
+    }
 }
