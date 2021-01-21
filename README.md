@@ -52,3 +52,54 @@ npm run dev
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blob/master/LICENSE) licensed.
+
+<br>
+
+## 요구사항 정리
+- 1단계
+    - 출발역과 도착역 사이의 최단 거리 경로를 구하는 API 구현
+        - request & response
+    ```
+    HTTP/1.1 200
+    Request method:	GET
+    Request URI:	http://localhost:55494/paths?source=1&target=6
+    Headers: 	Accept=application/json
+    		    Content-Type=application/json; charset=UTF-8
+    ```
+
+    ```
+    HTTP/1.1 200
+    Content-Type: application/json
+    Transfer-Encoding: chunked
+    Date: Sat, 09 May 2020 14:54:11 GMT
+    Keep-Alive: timeout=60
+    Connection: keep-alive
+
+    {
+        "stations": [
+            {
+                "id": 5,
+                "name": "양재시민의숲역"
+            },
+            {
+                "id": 4,
+                "name": "양재역"
+            },
+            {
+                "id": 1,
+                "name": "강남역"
+            },
+            {
+                "id": 2,
+                "name": "역삼역"
+            },
+            {
+                "id": 3,
+                "name": "선릉역"
+            }
+        ],
+        "distance": 40
+    }
+    ```
+    - 검색 시 경로와 함께 총 거리를 출력(요금은 무시)
+    - 한 노선에서 경로 찾기 뿐만 아니라 여러 노선의 환승도 고려하기

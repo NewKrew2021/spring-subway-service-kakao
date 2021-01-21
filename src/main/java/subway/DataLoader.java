@@ -34,6 +34,8 @@ public class DataLoader implements CommandLineRunner {
         Station 정자역 = stationDao.insert(new Station("정자역"));
         Station 역삼역 = stationDao.insert(new Station("역삼역"));
         Station 잠실역 = stationDao.insert(new Station("잠실역"));
+        Station 서현역 = stationDao.insert(new Station("서헌역"));
+        Station 이매역 = stationDao.insert(new Station("이매역"));
 
         Line 신분당선 = lineDao.insert(new Line("신분당선", "red lighten-1"));
         신분당선.addSection(new Section(강남역, 판교역, 10));
@@ -44,6 +46,11 @@ public class DataLoader implements CommandLineRunner {
         이호선.addSection(new Section(강남역, 역삼역, 10));
         이호선.addSection(new Section(역삼역, 잠실역, 10));
         sectionDao.insertSections(이호선);
+
+        Line 분당선 = lineDao.insert(new Line("분당선", "green lighten-1"));
+        분당선.addSection(new Section(서현역, 이매역, 10));
+        sectionDao.insertSections(분당선);
+
 
         Member member = new Member("email@email.com", "password", 10);
         memberDao.insert(member);
