@@ -44,6 +44,16 @@ public class Sections {
         }
     }
 
+    public boolean isExist(Section section) {
+        for (Section section1 : sections) {
+            if(section1.getUpStation().equals(section.getUpStation()) && section1.getDownStation().equals(section.getDownStation())
+            || section1.getUpStation().equals(section.getDownStation()) && section1.getDownStation().equals(section.getUpStation())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void checkExistedAny(Section section) {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());

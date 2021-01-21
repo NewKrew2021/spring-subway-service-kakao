@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
@@ -21,7 +23,7 @@ public class PathController {
 
     // TODO: 경로조회 기능 구현하기
     @GetMapping
-    public ResponseEntity<PathResponse> findMinDistance(@RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findMinDistance(source, target));
+    public ResponseEntity<PathResponse> findMinDistance(@AuthenticationPrincipal(required = false) LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
+        return ResponseEntity.ok(pathService.findMinDistance(loginMember, source, target));
     }
 }
