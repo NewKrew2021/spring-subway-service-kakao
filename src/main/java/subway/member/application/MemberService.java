@@ -2,8 +2,7 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
+import subway.exceptions.UnauthorizedException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -36,5 +35,14 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long id) {
         memberDao.deleteById(id);
+    }
+
+    public Member findAuthorizedMember(String email, String password) {
+        Member member = memberDao.findByEmail(email)
+                .orElseThrow(UnauthorizedException::new);
+        if (member.checkPassword(password)) {
+            throw new UnauthorizedException();
+        }
+        return member;
     }
 }
