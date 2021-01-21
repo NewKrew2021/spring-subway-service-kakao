@@ -2,7 +2,10 @@ package subway.line.domain;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import subway.line.exception.InvalidStationIdException;
 import subway.station.domain.Station;
 
 public class SectionsInAllLine {
@@ -20,7 +23,6 @@ public class SectionsInAllLine {
   }
 
   private Map<Long, Station> createStationMap() {
-
     return sections.stream()
         .flatMap(section -> section.getStations().stream())
         .distinct()
@@ -28,7 +30,8 @@ public class SectionsInAllLine {
   }
 
   public Station findStation(Long stationId) {
-    return stationMap.get(stationId);
+    return Optional.ofNullable(stationMap.get(stationId))
+            .orElseThrow(() -> new InvalidStationIdException(stationId));
   }
 
 }
