@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class StationService {
+
     private StationDao stationDao;
 
     public StationService(StationDao stationDao) {
@@ -24,6 +25,10 @@ public class StationService {
 
     public Station findStationById(Long id) {
         return stationDao.findById(id);
+    }
+
+    public List<Station> findAll() {
+        return stationDao.findAll();
     }
 
     public List<StationResponse> findAllStationResponses() {
