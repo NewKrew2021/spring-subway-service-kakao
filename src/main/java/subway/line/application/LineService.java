@@ -89,4 +89,7 @@ public class LineService {
         sectionDao.insertSections(line);
     }
 
+    public List<Section> findAllSections() {
+        return sectionDao.findAll();
+    }
 }
