@@ -3,7 +3,6 @@ package subway.line.domain;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
@@ -145,7 +144,7 @@ public class Sections {
         downSection.ifPresent(it -> sections.remove(it));
     }
 
-    public DijkstraShortestPath getDijkstraShorestPath() {
+    public DijkstraShortestPath getDijkstraShortestPath() {
         for (Section section : sections) {
             System.out.println(section.toString());
         }

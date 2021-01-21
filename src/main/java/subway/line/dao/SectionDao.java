@@ -9,7 +9,6 @@ import subway.line.domain.Section;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

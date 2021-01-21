@@ -25,7 +25,7 @@ public class PathService {
 
     public PathResponse getShortPath(Long sourceId, Long targetId) {
         Sections sections = new Sections(sectionDao.getSections());
-        DijkstraShortestPath dijkstraShortestPath = sections.getDijkstraShorestPath();
+        DijkstraShortestPath dijkstraShortestPath = sections.getDijkstraShortestPath();
         List<Long> vertexList = dijkstraShortestPath.getPath(sourceId, targetId).getVertexList();
         return PathResponse.of(vertexList.stream()
                 .map(stationId -> StationResponse.of(stationDao.findById(stationId)))
