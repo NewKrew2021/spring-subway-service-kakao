@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.favorite.domain.Favorite;
-import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -45,8 +44,8 @@ public class FavoriteDao {
 //        jdbcTemplate.update(sql, id);
 //    }
 
-//    public Station findById(Long id) {
-//        String sql = "select * from STATION where id = ?";
-//        return jdbcTemplate.queryForObject(sql, rowMapper, id);
-//    }
+    public List<Favorite> findByUserId(Long id) {
+        String sql = "select * from FAVORITE where user_id = ?";
+        return jdbcTemplate.query(sql, rowMapper, id);
+    }
 }

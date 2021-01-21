@@ -61,7 +61,7 @@ This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blo
 - [x] 토큰을 통한 인증 - 내 정보 기능
 - [ ] 즐겨 찾기 기능 구현
     - [x] 생성 
-    - [ ] 목록 조회 
+    - [x] 목록 조회 
     - [ ] 삭제
 - [ ] 요금 계산 기능
     - [ ] 거리별
