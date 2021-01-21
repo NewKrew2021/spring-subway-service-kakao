@@ -22,7 +22,7 @@ public class PathResponse {
 
     public static PathResponse of(Path path) {
         List<StationResponse> stations = path.getStations().stream()
-                .map(it -> StationResponse.of(it))
+                .map(StationResponse::of)
                 .collect(Collectors.toList());
         return new PathResponse(stations, path.getDistance(), path.getFare());
     }

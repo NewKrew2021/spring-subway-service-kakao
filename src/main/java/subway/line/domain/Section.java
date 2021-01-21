@@ -39,4 +39,12 @@ public class Section {
     public int getDistance() {
         return distance;
     }
+
+    public String getUpStationId() {
+        return String.valueOf(upStation.getId());
+    }
+
+    public String getDownStationId() {
+        return String.valueOf(downStation.getId());
+    }
 }

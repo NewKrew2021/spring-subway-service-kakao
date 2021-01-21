@@ -103,7 +103,7 @@ public class Sections {
 
     private Section findUpEndSection() {
         List<Station> downStations = this.sections.stream()
-                .map(it -> it.getDownStation())
+                .map(Section::getDownStation)
                 .collect(Collectors.toList());
 
         return this.sections.stream()
@@ -145,41 +145,41 @@ public class Sections {
     public Path getShortestPath(Long source, Long target) {
         WeightedMultigraph<String, DefaultWeightedEdge> graph
                 = new WeightedMultigraph(DefaultWeightedEdge.class);
-
         Map<String, Station> stations = new HashMap<>();
 
-        sections.stream()
-                .forEach(section -> {
-                    Station upStation = section.getUpStation();
-                    Station downStation = section.getDownStation();
-                    Long upStationId = upStation.getId();
-                    Long downStationId = downStation.getId();
-                    stations.put(String.valueOf(upStationId), upStation);
-                    stations.put(String.valueOf(downStationId), downStation);
-                });
-
-        stations.keySet().stream()
-                .forEach(key -> graph.addVertex(key));
-
-        sections.stream()
-                .forEach(section -> {
-                    Station upStation = section.getUpStation();
-                    Station downStation = section.getDownStation();
-                    Long upStationId = upStation.getId();
-                    Long downStationId = downStation.getId();
-                    graph.setEdgeWeight(graph.addEdge(String.valueOf(upStationId), String.valueOf(downStationId)), section.getDistance());
-                });
+        addStationVertexToGraph(stations, graph);
+        addSectionEdgeToGraph(graph);
 
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-
         List<String> shortestPathOnlyVertex
                 = dijkstraShortestPath.getPath(String.valueOf(source), String.valueOf(target)).getVertexList();
         double shortestDistance = dijkstraShortestPath.getPathWeight(String.valueOf(source), String.valueOf(target));
 
         List<Station> shortestPath = shortestPathOnlyVertex.stream()
-                .map(key -> stations.get(key))
+                .map(stations::get)
                 .collect(Collectors.toList());
 
         return new Path(shortestPath, (int) shortestDistance);
+    }
+
+    private void addSectionEdgeToGraph(WeightedMultigraph<String, DefaultWeightedEdge> graph) {
+        sections.forEach(section -> {
+                    String upStationId = section.getUpStationId();
+                    String downStationId = section.getDownStationId();
+                    graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), section.getDistance());
+                });
+    }
+
+    private void addStationVertexToGraph(Map<String, Station> stations, WeightedMultigraph<String, DefaultWeightedEdge> graph) {
+        sections.forEach(section -> {
+                    Station upStation = section.getUpStation();
+                    Station downStation = section.getDownStation();
+                    String upStationId = section.getUpStationId();
+                    String downStationId = section.getDownStationId();
+                    stations.put(upStationId, upStation);
+                    stations.put(downStationId, downStation);
+                });
+
+        stations.keySet().forEach(graph::addVertex);
     }
 }

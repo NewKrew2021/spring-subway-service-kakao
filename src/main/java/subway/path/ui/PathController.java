@@ -21,15 +21,4 @@ public class PathController {
     public ResponseEntity<PathResponse> findShortestPath(@RequestParam Long source, @RequestParam Long target) {
         return ResponseEntity.ok(pathService.findShortestPathResponse(source, target));
     }
-
 }
-
-/*
-<Request>
-HTTP/1.1 200
-Request method:	GET
-Request URI:	http://localhost:55494/paths?source=1&target=6
-Headers: 	Accept=application/json
-		Content-Type=application/json; charset=UTF-8
-
- */
