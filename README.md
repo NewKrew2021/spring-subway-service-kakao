@@ -41,7 +41,7 @@ npm run dev
 ## 경로 조회 기능
 
 ### 객체 정의
-* [ ] SubwayShortestPath 일급객체 제작
+* [x] SubwayPathGraph 일급객체 제작
 * [x] PathService 빈 생성체
 
 ### 출발역과 도착역 사이의 최단 거리 경로 계산
