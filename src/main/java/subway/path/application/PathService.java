@@ -24,13 +24,8 @@ public class PathService {
     }
 
     public PathResponse searchShortestPath(Long source, Long target) {
-        WeightedMultigraph<String, DefaultWeightedEdge> graph = createGrapth();
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(createGrapth());
         List<String> shortestPath = dijkstraShortestPath.getPath(String.valueOf(source), String.valueOf(target)).getVertexList();
-
-//        for (String s : shortestPath) {
-//            System.out.println(stationDao.findById(Long.parseLong(s)).getName());
-//        }
 
         List<StationResponse> stationResponses = StationResponse.listOf(shortestPath.stream()
                 .map(id -> stationDao.findById(Long.parseLong(id)))
@@ -42,7 +37,7 @@ public class PathService {
 
     private WeightedMultigraph<String, DefaultWeightedEdge> createGrapth() {
         WeightedMultigraph<String, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
-        List<Map<String, Object>> sections = sectionDao.findAll();
+        List<Map<String, Object>> sections = sectionDao.findAllAsMap();
 
         for (Map<String, Object> section : sections) {
             String upStationId = String.valueOf(section.get("up_station_id"));
