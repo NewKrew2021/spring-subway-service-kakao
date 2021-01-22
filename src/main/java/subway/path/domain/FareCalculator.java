@@ -7,13 +7,12 @@ import java.util.List;
 
 public class FareCalculator {
 
-
     public static int getFare(int distance, List<Line> lines, LoginMember loginMember) {
-        int fare = DistanceFare.getFare((int) distance);
+        int fare = DistanceFare.getFare(distance);
 
         fare += LineFare.getFare(lines);
 
-        if (!loginMember.equals(LoginMember.NOT_LOGINED)) {
+        if (loginMember.isLogined()) {
             fare = LoginMemberAgeFare.getFare(loginMember, fare);
         }
         return fare;

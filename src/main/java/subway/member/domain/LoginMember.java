@@ -20,6 +20,10 @@ public class LoginMember {
         this(member.getId(), member.getEmail(), member.getAge());
     }
 
+    public boolean isLogined() {
+        return !this.equals(NOT_LOGINED);
+    }
+
     public Long getId() {
         return id;
     }
