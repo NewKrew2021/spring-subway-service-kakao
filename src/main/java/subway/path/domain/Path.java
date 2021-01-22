@@ -1,5 +1,7 @@
 package subway.path.domain;
 
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
@@ -20,7 +22,7 @@ public class Path {
     }
 
     public void addEdges(List<Section> sections) {
-        for( Section section: sections ) {
+        for (Section section : sections) {
             Station upStation = section.getUpStation();
             Station downStation = section.getDownStation();
 
@@ -30,6 +32,12 @@ public class Path {
         }
     }
 
+    public GraphPath findShortestPathGraph(Station source, Station target) {
+        DijkstraShortestPath dijkstraShortestPath
+                = new DijkstraShortestPath<>(graph);
+        return dijkstraShortestPath.getPath(source, target);
+    }
+
     public boolean containStation(Station station) {
         return graph.containsVertex(station);
     }
@@ -37,7 +45,5 @@ public class Path {
     public boolean containEdge(Station source, Station target) {
         return graph.containsEdge(source, target);
     }
-
-
 
 }

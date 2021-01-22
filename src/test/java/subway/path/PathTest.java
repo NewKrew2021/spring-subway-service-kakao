@@ -1,5 +1,6 @@
 package subway.path;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -86,4 +87,34 @@ public class PathTest {
         assertThat(path.containEdge(교대역, 강남역)).isTrue();
     }
 
+    @Test
+    public void findShortestPathTest() {
+        Path path = new Path();
+        Station 강남역 = new Station(1L, "강남역");
+        Station 양재역 = new Station(3L, "양재역");
+        Station 교대역 = new Station(5L, "교대역");
+
+        List<Station> stations = Arrays.asList(
+                강남역,
+                양재역,
+                교대역
+        );
+
+        path.addStations(stations);
+
+        List<Section> sections = new ArrayList<>();
+        sections.add( new Section(강남역, 양재역, 10) );
+        sections.add( new Section(양재역, 교대역, 10) );
+        sections.add( new Section(강남역, 교대역, 15) );
+
+        path.addEdges(sections);
+
+        GraphPath shortestPathGraph = path.findShortestPathGraph(강남역, 교대역);
+        List<Station> shortestPath = shortestPathGraph.getVertexList();
+        assertThat(shortestPath.get(0)).isEqualTo(강남역);
+        assertThat(shortestPath.get(1)).isEqualTo(교대역);
+
+        int weight = (int) shortestPathGraph.getWeight();
+        assertThat(weight).isEqualTo(15);
+    }
 }
