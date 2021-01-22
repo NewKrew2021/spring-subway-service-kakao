@@ -1,10 +1,10 @@
-package subway.path.domain;
+package subway.path.domain.fare;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import subway.line.domain.Line;
-import subway.path.domain.fare.LineFare;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,16 +13,19 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class LineFareTest {
+class LinePolicyTest {
 
+    @DisplayName("노선에 따른 요금을 계산한다")
     @ParameterizedTest
     @MethodSource("generateLines")
     void getFare(List<Line> lines, int expected) {
+        // given
+        LinePolicy linePolicy = new LinePolicy(lines);
 
-        //when
-        int result = LineFare.getFare(lines);
+        // when
+        int result = linePolicy.apply(0);
 
-        //then
+        // then
         assertThat(result).isEqualTo(expected);
 
     }

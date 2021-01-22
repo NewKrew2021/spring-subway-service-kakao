@@ -1,9 +1,8 @@
 package subway.path.domain.fare;
 
-import subway.member.domain.LoginMember;
+public class AgePolicy implements FarePolicy {
 
-public class LoginMemberAgeFare {
-
+    private static final int NO_CHARGE = 0;
     private static final int MIN_AGE_CHILD = 6;
     private static final int MIN_AGE_TEENAGER = 13;
     private static final int MIN_AGE_ADULT = 19;
@@ -11,10 +10,16 @@ public class LoginMemberAgeFare {
     private static final double CHILD_DISCOUNT_RATE = 0.5;
     private static final double TEENAGER_DISCOUNT_RATE = 0.2;
 
-    public static int getFare(LoginMember loginMember, int fare) {
-        int age = loginMember.getAge();
+    private final int age;
+
+    public AgePolicy(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public int apply(int fare) {
         if (age < MIN_AGE_CHILD) {
-            return 0;
+            return NO_CHARGE;
         }
         if (age < MIN_AGE_TEENAGER) {
             return fare - (int) ((fare - DEDUCTION_FARE) * CHILD_DISCOUNT_RATE);
