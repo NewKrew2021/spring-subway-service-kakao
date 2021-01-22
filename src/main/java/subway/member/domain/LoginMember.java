@@ -1,5 +1,7 @@
 package subway.member.domain;
 
+import subway.member.dto.MemberResponse;
+
 public class LoginMember {
     private Long id;
     private String email;
