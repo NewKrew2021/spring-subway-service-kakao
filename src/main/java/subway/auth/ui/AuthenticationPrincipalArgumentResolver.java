@@ -10,6 +10,7 @@ import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.exceptions.UnauthorizedException;
+import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +31,10 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = AuthorizationExtractor.extract(webRequest.getNativeRequest(HttpServletRequest.class));
+        if (!parameter.getParameterAnnotation(AuthenticationPrincipal.class).required()
+                && token == null) {
+            return LoginMember.NOT_LOGINED;
+        }
         if (token == null) {
             throw new UnauthorizedException();
         }

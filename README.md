@@ -63,7 +63,7 @@ This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blo
     - [x] 생성 
     - [x] 목록 조회 
     - [x] 삭제
-- [ ] 요금 계산 기능
+- [x] 요금 계산 기능
     - [x] 거리별
-    - [ ] 노선별 
-    - [ ] 연령별
+    - [x] 노선별 
+    - [x] 연령별

@@ -8,11 +8,16 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.member.domain.LoginMember;
+import subway.path.domain.DistanceFare;
+import subway.path.domain.LineFare;
+import subway.path.domain.LoginMemberAgeFare;
 import subway.path.domain.Path;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PathService {
@@ -25,22 +30,53 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public Path findPaths(long source, long target) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+    public Path findPaths(long source, long target, LoginMember loginMember) {
+        WeightedMultigraph<Station, DistanceLineEdge> graph = new WeightedMultigraph<>(DistanceLineEdge.class);
 
         List<Line> lines = lineService.findLines();
         for (Line line : lines) {
             for (Section section : line.getSections()) {
                 graph.addVertex(section.getUpStation());
                 graph.addVertex(section.getDownStation());
-                graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance());
+                graph.addEdge(section.getUpStation(), section.getDownStation(), new DistanceLineEdge(section.getDistance(), line));
             }
         }
 
-        DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        GraphPath<Station, DefaultWeightedEdge> graphPath
+        DijkstraShortestPath<Station, DistanceLineEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, DistanceLineEdge> graphPath
                 = dijkstraShortestPath.getPath(stationService.findStationById(source), stationService.findStationById(target));
 
-        return new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), 0);
+        int fare = DistanceFare.getFare((int) graphPath.getWeight());
+        List<Station> stations = graphPath.getVertexList();
+        List<Line> targetLines = graphPath.getEdgeList()
+                .stream()
+                .map(DistanceLineEdge::getLine)
+                .collect(Collectors.toList());
+        fare += LineFare.getFare(targetLines);
+
+        if (!loginMember.equals(LoginMember.NOT_LOGINED)) {
+            fare = LoginMemberAgeFare.getFare(loginMember, fare);
+        }
+
+        return new Path(stations, (int) graphPath.getWeight(), fare);
+    }
+
+    static class DistanceLineEdge extends DefaultWeightedEdge {
+        private int distance;
+        private Line line;
+
+        public DistanceLineEdge(int distance, Line line) {
+            this.distance = distance;
+            this.line = line;
+        }
+
+        @Override
+        protected double getWeight() {
+            return distance;
+        }
+
+        public Line getLine() {
+            return line;
+        }
     }
 }

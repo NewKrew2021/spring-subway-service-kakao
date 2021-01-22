@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
@@ -19,7 +21,9 @@ public class PathController {
     }
 
     @GetMapping
-    public ResponseEntity<PathResponse> findPaths(@RequestParam long source, @RequestParam long target) {
-        return ResponseEntity.ok(new PathResponse(pathService.findPaths(source, target)));
+    public ResponseEntity<PathResponse> findPaths(
+            @AuthenticationPrincipal(required = false) LoginMember loginMember,
+            @RequestParam long source, @RequestParam long target) {
+        return ResponseEntity.ok(new PathResponse(pathService.findPaths(source, target, loginMember)));
     }
 }
