@@ -1,21 +1,15 @@
 package subway.line.domain;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
-        return sections;
+        return Collections.unmodifiableList(sections);
     }
 
     public Sections() {
@@ -142,24 +136,5 @@ public class Sections {
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
-    }
-
-    public DijkstraShortestPath getDijkstraShortestPath() {
-        for (Section section : sections) {
-            System.out.println(section.toString());
-        }
-
-        WeightedMultigraph<Long, DefaultWeightedEdge> graph
-                = new WeightedMultigraph(DefaultWeightedEdge.class);
-
-        for (Section section : sections) {
-            Long v1 = section.getUpStation().getId();
-            Long v2 = section.getDownStation().getId();
-            graph.addVertex(v1);
-            graph.addVertex(v2);
-            graph.setEdgeWeight(graph.addEdge(v1, v2), section.getDistance());
-            graph.setEdgeWeight(graph.addEdge(v2, v1), section.getDistance());
-        }
-        return new DijkstraShortestPath(graph);
     }
 }

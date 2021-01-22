@@ -27,7 +27,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String accessToken= AuthorizationExtractor.extract((HttpServletRequest)webRequest.getNativeRequest());
+        String accessToken = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
+        if (accessToken == null)
+            return null;
         return LoginMember.of(authService.checkInvalidToken(accessToken));
     }
 }

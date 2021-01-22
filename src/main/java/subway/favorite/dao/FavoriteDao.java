@@ -51,7 +51,7 @@ public class FavoriteDao {
                 "where F.member_id= ?;", rowMapper, memberId);
     }
 
-    public void deleteById(Long id){
-        jdbcTemplate.update("delete from FAVORITE where id=?",id);
+    public void deleteById(Long id) {
+        jdbcTemplate.update("delete from FAVORITE where id=?", id);
     }
 }

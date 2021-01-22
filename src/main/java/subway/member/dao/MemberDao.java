@@ -58,7 +58,7 @@ public class MemberDao {
         String sql = "select * from MEMBER where email = ?";
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, email);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new InvalidMemberException();
         }
     }

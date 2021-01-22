@@ -32,9 +32,9 @@ public class AuthService {
     }
 
     public Member checkInvalidToken(String accessToken) {
-       if(!jwtTokenProvider.validateToken(accessToken)) {
-           throw new InvalidTokenException();
-       }
-       return memberDao.findByEmail(jwtTokenProvider.getPayload(accessToken));
+        if (!jwtTokenProvider.validateToken(accessToken)) {
+            throw new InvalidTokenException();
+        }
+        return memberDao.findByEmail(jwtTokenProvider.getPayload(accessToken));
     }
 }

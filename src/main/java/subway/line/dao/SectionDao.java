@@ -1,12 +1,10 @@
 package subway.line.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -18,13 +16,6 @@ import java.util.stream.Collectors;
 public class SectionDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
-
-    private final RowMapper<Section> actorRowMapper = (resultSet, rowNum) -> new Section(
-            resultSet.getLong("id"),
-            new Station(resultSet.getLong("up_station_id"), resultSet.getString("up_station_name")),
-            new Station(resultSet.getLong("down_station_id"), resultSet.getString("down_station_name")),
-            resultSet.getInt("distance")
-    );
 
     public SectionDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
@@ -62,16 +53,4 @@ public class SectionDao {
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
-
-    public List<Section> getSections() {
-       return jdbcTemplate.query("select S.id as id, S.distance as distance, " +
-               "UST.id as up_station_id, UST.name as up_station_name, DST.id as down_station_id, DST.name as down_station_name " +
-               "from Section S "+
-               "left outer join STATION UST on S.up_station_id = UST.id " +
-               "left outer join STATION DST on S.down_station_id = DST.id;",actorRowMapper);
-    }
-
-
-
-
 }

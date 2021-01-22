@@ -36,6 +36,10 @@ public class LineRequest {
         return color;
     }
 
+    public int getExtraFare() {
+        return extraFare;
+    }
+
     public Long getUpStationId() {
         return upStationId;
     }
