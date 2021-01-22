@@ -141,45 +141,4 @@ public class Sections {
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
     }
-
-    public Path getShortestPath(Long source, Long target) {
-        WeightedMultigraph<String, DefaultWeightedEdge> graph
-                = new WeightedMultigraph(DefaultWeightedEdge.class);
-        Map<String, Station> stations = new HashMap<>();
-
-        addStationVertexToGraph(stations, graph);
-        addSectionEdgeToGraph(graph);
-
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-        List<String> shortestPathOnlyVertex
-                = dijkstraShortestPath.getPath(String.valueOf(source), String.valueOf(target)).getVertexList();
-        double shortestDistance = dijkstraShortestPath.getPathWeight(String.valueOf(source), String.valueOf(target));
-
-        List<Station> shortestPath = shortestPathOnlyVertex.stream()
-                .map(stations::get)
-                .collect(Collectors.toList());
-
-        return new Path(shortestPath, (int) shortestDistance);
-    }
-
-    private void addSectionEdgeToGraph(WeightedMultigraph<String, DefaultWeightedEdge> graph) {
-        sections.forEach(section -> {
-                    String upStationId = section.getUpStationId();
-                    String downStationId = section.getDownStationId();
-                    graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), section.getDistance());
-                });
-    }
-
-    private void addStationVertexToGraph(Map<String, Station> stations, WeightedMultigraph<String, DefaultWeightedEdge> graph) {
-        sections.forEach(section -> {
-                    Station upStation = section.getUpStation();
-                    Station downStation = section.getDownStation();
-                    String upStationId = section.getUpStationId();
-                    String downStationId = section.getDownStationId();
-                    stations.put(upStationId, upStation);
-                    stations.put(downStationId, downStation);
-                });
-
-        stations.keySet().forEach(graph::addVertex);
-    }
 }
