@@ -52,6 +52,18 @@ npm run dev
 ### 경로 조회 API
 * [x] 경로 조회 요청 및 응답 구현 (PathController)
 
+## 회원 인증 기능
+
+### 토큰 API (AuthController)
+* [x] 토큰 발급 요청 및 응답 (JWT 라이브러리 사용)
+
+### 인증 기능
+* [x] 멤버 관리 기능에 토큰 인증 로직 구현
+
+### 즐겨찾기 API (FavoriteController)
+* [ ] 즐겨찾기 생성 요청 및 응답
+* [ ] 즐겨찾기 목록 조회 요청 및 응답
+* [ ] 즐겨찾기 목록 삭제 요청 및 응답
 
 
 ## ✏️ Code Review Process
