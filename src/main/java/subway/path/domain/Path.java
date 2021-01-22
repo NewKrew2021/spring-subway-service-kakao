@@ -1,28 +1,21 @@
 package subway.path.domain;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
-import subway.line.domain.Line;
-import subway.line.domain.Section;
-import subway.station.domain.Station;
+import subway.member.domain.LoginMember;
+import subway.path.util.FareUtil;
 import subway.station.dto.StationResponse;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Path {
 
     private List<StationResponse> stations;
     private int distance;
-    private int fare;
+    private int extraFare;
 
-    public Path(List<StationResponse> stations, int distance) {
+    public Path(List<StationResponse> stations, int distance, int extraFare) {
         this.stations = stations;
         this.distance = distance;
+        this.extraFare = extraFare;
     }
 
     public List<StationResponse> getStations() {
@@ -33,7 +26,20 @@ public class Path {
         return distance;
     }
 
-    public int getFare() {
-        return fare;
+    public int getExtraFare() {
+        return extraFare;
+    }
+
+    public int getTotalFare() {
+        int totalFare = extraFare + FareUtil.calculateDistanceFare(distance);
+        return totalFare;
+    }
+
+    public int getTotalFare(LoginMember loginMember) {
+        return discountAmount(getTotalFare(), loginMember);
+    }
+
+    public int discountAmount(int totalFare, LoginMember loginMember) {
+        return totalFare - (int) ((totalFare - 350) * loginMember.getDiscountPercentage());
     }
 }

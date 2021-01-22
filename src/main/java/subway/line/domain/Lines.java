@@ -1,11 +1,6 @@
 package subway.line.domain;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
-import subway.path.dto.PathResponse;
 import subway.station.domain.Station;
-import subway.station.dto.StationResponse;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class Lines {
 
-    private List<Line> lines;
+    private final List<Line> lines;
 
     public Lines(List<Line> lines) {
         this.lines = lines;
@@ -35,6 +30,10 @@ public class Lines {
             sections.addAll(line.getSections().getSections());
         }
         return sections;
+    }
+
+    public int getTotalExtraFares(){
+        return lines.stream().mapToInt(Line::getFare).sum();
     }
 
 }

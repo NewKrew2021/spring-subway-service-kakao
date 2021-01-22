@@ -3,10 +3,9 @@ package subway.path.ui;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
@@ -29,5 +28,10 @@ public class PathController {
     @GetMapping
     public ResponseEntity<PathResponse> findPath(@RequestParam("source") Long sourceId, @RequestParam("target") Long targetId) {
         return ResponseEntity.ok().body(pathService.findPath(sourceId, targetId));
+    }
+
+    @GetMapping(headers = "Authorization")
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember, @RequestParam("source") Long sourceId, @RequestParam("target") Long targetId) {
+        return ResponseEntity.ok().body(pathService.findPath(loginMember, sourceId, targetId));
     }
 }

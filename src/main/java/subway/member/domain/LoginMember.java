@@ -25,4 +25,14 @@ public class LoginMember {
     public Integer getAge() {
         return age;
     }
+
+    public double getDiscountPercentage() {
+        if (age >= 6 && age < 13) {
+            return 0.5;
+        }
+        if (age >= 13 && age < 19) {
+            return 0.2;
+        }
+        return 0.0;
+    }
 }

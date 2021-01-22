@@ -9,20 +9,22 @@ public class Section extends DefaultWeightedEdge {
     private Long id;
     private Station upStation;
     private Station downStation;
+    private Long lineId;
     private int distance;
 
     public Section() {
     }
 
-    public Section(Long id, Station upStation, Station downStation, int distance) {
-        this(upStation, downStation, distance);
+    public Section(Long id, Station upStation, Station downStation,long lineId, int distance) {
+        this(upStation, downStation,lineId,distance);
         this.id = id;
     }
 
-    public Section(Station upStation, Station downStation, int distance) {
+    public Section(Station upStation, Station downStation, long lineId, int distance) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+        this.lineId = lineId;
     }
 
     public Long getId() {
@@ -39,6 +41,10 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDistance() {
         return distance;
+    }
+
+    public Long getLineId() {
+        return lineId;
     }
 
     @Override

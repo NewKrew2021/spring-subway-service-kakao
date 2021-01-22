@@ -3,6 +3,7 @@ package subway.path.application;
 import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Lines;
+import subway.member.domain.LoginMember;
 import subway.path.domain.Graph;
 import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
@@ -20,12 +21,28 @@ public class PathService {
         this.stationService = stationService;
     }
 
+
+
     public PathResponse findPath(Long sourceId, Long targetId) {
+        return PathResponse.of(getPath(sourceId,targetId));
+    }
+    public PathResponse findPath(LoginMember loginMember, Long sourceId, Long targetId){
+        return PathResponse.of(getPath(sourceId,targetId), loginMember);
+    }
+
+    private Path getPath(Long sourceId, Long targetId) {
         Lines lines = new Lines(lineService.findLines());
         Station sourceStation = stationService.findStationById(sourceId);
         Station targetStation = stationService.findStationById(targetId);
         Graph graph = new Graph(lines.getUniqueStations(), lines.getAllSections());
-        Path path = new Path(graph.getPathStations(sourceStation, targetStation), graph.getPathDistance(sourceStation, targetStation));
-        return PathResponse.of(path);
+
+        Lines pathLines = new Lines(lineService.findLineByIds(graph.getPathLineIds(sourceStation, targetStation)));
+        Path path = new Path(
+                graph.getPathStations(sourceStation, targetStation),
+                graph.getPathDistance(sourceStation, targetStation),
+                pathLines.getTotalExtraFares()
+        );
+        return path;
     }
+
 }
