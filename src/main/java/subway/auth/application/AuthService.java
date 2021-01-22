@@ -19,9 +19,13 @@ public class AuthService {
     }
 
     private boolean checkValidLogin(String email, String password){
-        return memberDao.findByEmail(email)
-                .getPassword()
-                .equals(password);
+        try{
+            return memberDao.findByEmail(email)
+                    .getPassword()
+                    .equals(password);
+        } catch(EmptyResultDataAccessException erdae){
+            return false;
+        }
     }
 
     public TokenResponse createToken(TokenRequest tokenRequest){
