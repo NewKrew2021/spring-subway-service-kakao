@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.exception.AlreadyExistedEmailException;
+import subway.exception.NotExistMemberException;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
@@ -33,8 +35,12 @@ public class MemberDao {
 
     public Member insert(Member member) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
-        Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-        return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
+        try {
+            Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
+            return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
+        } catch (RuntimeException e) {
+            throw new AlreadyExistedEmailException();
+        }
     }
 
     public void update(Member member) {
@@ -49,7 +55,11 @@ public class MemberDao {
 
     public Member findById(Long id) {
         String sql = "select * from MEMBER where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        } catch (RuntimeException e) {
+            throw new NotExistMemberException();
+        }
     }
 
     public Member findByEmail(String email) {
@@ -57,7 +67,7 @@ public class MemberDao {
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, email);
         } catch (RuntimeException e) {
-            throw new IllegalArgumentException();
+            throw new NotExistMemberException();
         }
     }
 }

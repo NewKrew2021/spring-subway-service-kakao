@@ -4,11 +4,9 @@ import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.member.application.MemberService;
+import subway.exception.AuthorizationFailException;
 import subway.member.dao.MemberDao;
-import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
-import subway.member.dto.MemberResponse;
 
 @Service
 public class AuthService {
@@ -28,7 +26,7 @@ public class AuthService {
 
     public Member getMemberByToken(String token) {
         if (!jwtTokenProvider.validateToken(token)) {
-            throw new IllegalArgumentException();
+            throw new AuthorizationFailException();
         }
         return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
     }

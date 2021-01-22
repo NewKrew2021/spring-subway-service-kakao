@@ -3,6 +3,8 @@ package subway.line.dao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.exception.DuplicateNameException;
+import subway.exception.NotExistLineException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
@@ -33,8 +35,12 @@ public class LineDao {
         params.put("name", line.getName());
         params.put("color", line.getColor());
         params.put("extra_fare", line.getExtraFare());
-        Long lineId = insertAction.executeAndReturnKey(params).longValue();
-        return new Line(lineId, line.getName(), line.getColor());
+        try {
+            Long lineId = insertAction.executeAndReturnKey(params).longValue();
+            return new Line(lineId, line.getName(), line.getColor());
+        } catch (RuntimeException e){
+            throw new DuplicateNameException();
+        }
     }
 
     public Line findById(Long id) {
@@ -48,9 +54,12 @@ public class LineDao {
                 "left outer join STATION UST on S.up_station_id = UST.id " +
                 "left outer join STATION DST on S.down_station_id = DST.id " +
                 "WHERE L.id = ?";
-
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
-        return mapLine(result);
+        try {
+            List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+            return mapLine(result);
+        } catch (RuntimeException e){
+            throw new NotExistLineException();
+        }
     }
 
     public void update(Line newLine) {

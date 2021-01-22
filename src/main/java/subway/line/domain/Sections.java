@@ -1,5 +1,8 @@
 package subway.line.domain;
 
+import subway.exception.AlreadyExistedSectionException;
+import subway.exception.NoMoreSectionToDeleteException;
+import subway.exception.TooLowDistanceException;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
@@ -40,14 +43,14 @@ public class Sections {
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new RuntimeException();
+            throw new AlreadyExistedSectionException();
         }
     }
 
     public boolean isExist(Section section) {
         for (Section section1 : sections) {
-            if(section1.getUpStation().equals(section.getUpStation()) && section1.getDownStation().equals(section.getDownStation())
-            || section1.getUpStation().equals(section.getDownStation()) && section1.getDownStation().equals(section.getUpStation())){
+            if (section1.getUpStation().equals(section.getUpStation()) && section1.getDownStation().equals(section.getDownStation())
+                    || section1.getUpStation().equals(section.getDownStation()) && section1.getDownStation().equals(section.getUpStation())) {
                 return true;
             }
         }
@@ -58,7 +61,7 @@ public class Sections {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new RuntimeException();
+            throw new AlreadyExistedSectionException();
         }
     }
 
@@ -86,7 +89,7 @@ public class Sections {
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+            throw new TooLowDistanceException();
         }
         this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
@@ -130,7 +133,7 @@ public class Sections {
 
     public void removeStation(Station station) {
         if (sections.size() <= 1) {
-            throw new RuntimeException();
+            throw new NoMoreSectionToDeleteException();
         }
 
         Optional<Section> upSection = sections.stream()

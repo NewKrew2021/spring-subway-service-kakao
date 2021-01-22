@@ -1,5 +1,6 @@
 package subway.line.domain;
 
+import subway.exception.TooLowExtraFareException;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -32,17 +33,20 @@ public class Line {
 
     public Line(String name, String color, int extraFare) {
         this(name, color);
+        if(extraFare < 0){
+            throw new TooLowExtraFareException();
+        }
         this.extraFare = extraFare;
     }
 
     public Line(Long id, String name, String color, int extraFare) {
-        this(id, name, color);
-        this.extraFare = extraFare;
+        this(name, color, extraFare);
+        this.id = id;
     }
 
     public Line(Long id, String name, String color, Sections sections, int extraFare) {
-        this(id, name, color, sections);
-        this.extraFare = extraFare;
+        this(id, name, color, extraFare);
+        this.sections = sections;
     }
 
     public Long getId() {
@@ -63,12 +67,6 @@ public class Line {
 
     public Sections getSections() {
         return sections;
-    }
-
-    public void update(Line line) {
-        this.name = line.getName();
-        this.color = line.getColor();
-        this.extraFare = line.getExtraFare();
     }
 
     public void addSection(Station upStation, Station downStation, int distance) {

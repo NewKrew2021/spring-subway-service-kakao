@@ -1,5 +1,9 @@
 package subway.member.domain;
 
+import subway.exception.LoginFailException;
+import subway.exception.TooLowAgeException;
+import subway.exception.WrongEmailFormatException;
+
 import java.util.Objects;
 
 public class Member {
@@ -12,25 +16,25 @@ public class Member {
     }
 
     public Member(String email, String password) {
+        String emailRule = "/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i";
+        if (!email.matches(emailRule)) {
+            throw new WrongEmailFormatException();
+        }
         this.email = email;
         this.password = password;
     }
 
-    public Member(Long id, String email, String password, Integer age) {
-        this(email, password);
-        this.id = id;
-        this.age = age;
-    }
-
-    public Member(Long id, String email, Integer age) {
-        this.id = id;
-        this.email = email;
-        this.age = age;
-    }
-
     public Member(String email, String password, Integer age) {
         this(email, password);
+        if (age < 1) {
+            throw new TooLowAgeException();
+        }
         this.age = age;
+    }
+
+    public Member(Long id, String email, String password, Integer age) {
+        this(email, password, age);
+        this.id = id;
     }
 
     public Long getId() {
@@ -50,8 +54,8 @@ public class Member {
     }
 
     public void checkValidMember(Member member) {
-        if(!this.equals(member)){
-            throw new IllegalArgumentException();
+        if (!this.equals(member)) {
+            throw new LoginFailException();
         }
     }
 

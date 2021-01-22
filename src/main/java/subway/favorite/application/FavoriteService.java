@@ -7,7 +7,6 @@ import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.member.domain.LoginMember;
 import subway.station.dao.StationDao;
-import subway.station.dto.StationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
