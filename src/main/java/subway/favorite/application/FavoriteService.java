@@ -35,4 +35,8 @@ public class FavoriteService {
                 .map(FavoriteResponse::of)
                 .collect(Collectors.toList());
     }
+
+    public void deleteFavoriteById(LoginMember loginMember, Long favoriteId) {
+        favoriteDao.deleteFavoriteById(loginMember.getId(), favoriteId);
+    }
 }
