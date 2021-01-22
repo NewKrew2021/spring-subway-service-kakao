@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class Path {
         stations.forEach(graph::addVertex);
     }
 
-    public void addEdges(List<Section> sections) {
-        for (Section section : sections) {
+    public void addEdges(Sections sections) {
+        for (Section section : sections.getSections()) {
             Station upStation = section.getUpStation();
             Station downStation = section.getDownStation();
 

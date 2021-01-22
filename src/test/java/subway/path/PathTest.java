@@ -6,6 +6,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
 import subway.path.domain.Path;
 import subway.station.domain.Station;
 
@@ -27,7 +28,6 @@ public class PathTest {
         graph.setEdgeWeight(graph.addEdge("v1", "v2"), 2);
         graph.setEdgeWeight(graph.addEdge("v2", "v3"), 2);
         graph.setEdgeWeight(graph.addEdge("v1", "v3"), 100);
-
 
         DijkstraShortestPath dijkstraShortestPath
                 = new DijkstraShortestPath(graph);
@@ -80,7 +80,7 @@ public class PathTest {
         sections.add( new Section(양재역, 교대역, 10) );
         sections.add( new Section(강남역, 교대역, 15) );
 
-        path.addEdges(sections);
+        path.addEdges(new Sections(sections));
 
         assertThat(path.containEdge(강남역, 양재역)).isTrue();
         assertThat(path.containEdge(양재역, 교대역)).isTrue();
@@ -107,7 +107,7 @@ public class PathTest {
         sections.add( new Section(양재역, 교대역, 10) );
         sections.add( new Section(강남역, 교대역, 15) );
 
-        path.addEdges(sections);
+        path.addEdges(new Sections(sections));
 
         GraphPath shortestPathGraph = path.findShortestPathGraph(강남역, 교대역);
         List<Station> shortestPath = shortestPathGraph.getVertexList();
