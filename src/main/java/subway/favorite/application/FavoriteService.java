@@ -22,4 +22,8 @@ public class FavoriteService {
     public List<Favorite> findAllFavorites(Long memberId) {
         return favoriteDao.findAll(memberId);
     }
+
+    public void deleteFavorite(Long id) {
+        favoriteDao.deleteById(id);
+    }
 }

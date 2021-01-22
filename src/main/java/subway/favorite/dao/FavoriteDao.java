@@ -41,4 +41,9 @@ public class FavoriteDao {
         String sql = "select id, member_id, source_station_id, target_station_id from FAVORITE where member_id = ?";
         return jdbcTemplate.query(sql, rowMapper, memberId);
     }
+
+    public void deleteById(Long id) {
+        String sql = "delete from FAVORITE where id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }
