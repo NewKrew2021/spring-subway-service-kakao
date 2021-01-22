@@ -1,5 +1,6 @@
 package subway.path.dto;
 
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
