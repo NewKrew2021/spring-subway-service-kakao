@@ -106,7 +106,34 @@ This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blo
 
 <br>
 - 2단계
-  - JWT 라이브러리를 활용하여 액세스 토큰 발급 기능을 구현하기 ( 멤버 관리기능은 사전에 제공됨 )
-  - 발급한 토큰을 이용하여 로그인이 필요한 기능(회원 정보 수정/삭제) 요청 시 포함하여 보내고 이를 이용하여 기능이 동작하도록 리팩터링 하기
-  - 즐겨찾기 기능을 구현하기
-  - 미리 제공된 프론트엔드 코드를 바탕으로 기능이 잘 동작하도록 완성하기
+  
+- JWT 라이브러리를 활용하여 액세스 토큰 발급 기능을 구현하기 ( 멤버 관리기능은 사전에 제공됨 )
+- 발급한 토큰을 이용하여 로그인이 필요한 기능(회원 정보 수정/삭제) 요청 시 포함하여 보내고 이를 이용하여 기능이 동작하도록 리팩터링 하기
+- 즐겨찾기 기능을 구현하기
+  - 생성 요청/응답
+  ```http
+  POST /favorites HTTP/1.1
+  authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE2MDkwNDM1NDYsImV4cCI6MTYwOTA0NzE0Nn0.dwBfYOzG_4MXj48Zn5Nmc3FjB0OuVYyNzGqFLu52syY
+  accept: */*
+  content-type: application/json; charset=UTF-8
+  content-length: 27
+  host: localhost:50336
+  connection: Keep-Alive
+  user-agent: Apache-HttpClient/4.5.13 (Java/14.0.2)
+  accept-encoding: gzip,deflate
+  {
+  "source": "1",
+  "target": "3"
+  }
+  ```
+  
+  ```http
+  HTTP/1.1 201 Created
+  Keep-Alive: timeout=60
+  Connection: keep-alive
+  Content-Length: 0
+  Date: Sun, 27 Dec 2020 04:32:26 GMT
+  Location: /favorites/1
+  ```
+
+- 미리 제공된 프론트엔드 코드를 바탕으로 기능이 잘 동작하도록 완성하기
