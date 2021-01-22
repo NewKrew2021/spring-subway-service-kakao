@@ -1,5 +1,6 @@
 package subway.auth.application;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
@@ -34,6 +35,10 @@ public class AuthService {
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);
+    }
+
+    public boolean validateToken(String token){
+        return jwtTokenProvider.validateToken(token);
     }
 
     public Member findMemberByToken(String token){
