@@ -10,8 +10,6 @@ import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
-import java.nio.file.Path;
-
 @RestController
 @RequestMapping("/paths")
 public class PathController {
@@ -24,6 +22,6 @@ public class PathController {
     // TODO: 경로조회 기능 구현하기
     @GetMapping
     public ResponseEntity<PathResponse> findMinDistance(@AuthenticationPrincipal(required = false) LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findMinDistance(loginMember, source, target));
+        return ResponseEntity.ok(pathService.findShortestPath(loginMember, source, target));
     }
 }

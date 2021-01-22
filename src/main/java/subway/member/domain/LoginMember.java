@@ -29,4 +29,12 @@ public class LoginMember {
     public boolean isLoginMember() {
         return id >= 1;
     }
+
+    public boolean isChild() {
+        return isLoginMember() && 6 <= age && age < 13;
+    }
+
+    public boolean isTeenager() {
+        return isLoginMember() && 13 <= age && age < 19;
+    }
 }
