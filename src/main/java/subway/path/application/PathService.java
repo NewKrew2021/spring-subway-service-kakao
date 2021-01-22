@@ -58,10 +58,10 @@ public class PathService {
     }
 
     private int getTotalFare(LoginMember loginMember, int totalFare) {
-        if (loginMember != null && 13 <= loginMember.getAge() && loginMember.getAge() < 19) {
+        if (loginMember.isLoginMember() && 13 <= loginMember.getAge() && loginMember.getAge() < 19) {
             totalFare -= (totalFare - 350) * 0.2;
         }
-        if (loginMember != null && 6 <= loginMember.getAge() && loginMember.getAge() < 13) {
+        if (loginMember.isLoginMember() && 6 <= loginMember.getAge() && loginMember.getAge() < 13) {
             totalFare -= (totalFare - 350) * 0.5;
         }
 

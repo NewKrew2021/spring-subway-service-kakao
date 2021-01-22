@@ -1,7 +1,6 @@
 package subway.auth.ui;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -11,7 +10,6 @@ import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
-import subway.member.dto.MemberResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,9 +31,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
         if (token == null) {
-            return null;
+            return new LoginMember(-1L, "", -1);
         }
-        Member member = authService.getPayload(token);
+        Member member = authService.getMemberByToken(token);
         return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 }

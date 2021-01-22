@@ -19,20 +19,15 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
         this.memberDao = memberDao;
     }
+
     public TokenResponse createToken(TokenRequest tokenRequest) {
-        checkValidMember(memberDao.findByEmail(tokenRequest.getEmail()), tokenRequest);
-        String token = jwtTokenProvider.createToken(tokenRequest.getEmail());
-        return new TokenResponse(token);
+        memberDao.findByEmail(tokenRequest.getEmail())
+                .checkValidMember(new Member(tokenRequest.getEmail(), tokenRequest.getPassword()));
+        return new TokenResponse(jwtTokenProvider.createToken(tokenRequest.getEmail()));
     }
 
-    private void checkValidMember(Member member, TokenRequest tokenRequest) {
-        if (!member.getEmail().equals(tokenRequest.getEmail()) || !member.getPassword().equals(tokenRequest.getPassword())) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public Member getPayload(String token) {
-        if(!jwtTokenProvider.validateToken(token)){
+    public Member getMemberByToken(String token) {
+        if (!jwtTokenProvider.validateToken(token)) {
             throw new IllegalArgumentException();
         }
         return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
