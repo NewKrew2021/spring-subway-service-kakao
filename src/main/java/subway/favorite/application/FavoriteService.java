@@ -9,6 +9,9 @@ import subway.member.domain.LoginMember;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class FavoriteService {
     private final FavoriteDao favoriteDao;
@@ -24,5 +27,12 @@ public class FavoriteService {
         Station targetStation = stationDao.findById(request.getTarget());
         Favorite favorite = favoriteDao.insert(new Favorite(loginMember.getId(), sourceStation, targetStation));
         return FavoriteResponse.of(favorite);
+    }
+
+    public List<FavoriteResponse> findFavoriteByMemberId(LoginMember loginMember) {
+        List<Favorite> favorites = favoriteDao.findById(loginMember.getId());
+        return favorites.stream()
+                .map(FavoriteResponse::of)
+                .collect(Collectors.toList());
     }
 }

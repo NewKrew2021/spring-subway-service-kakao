@@ -1,10 +1,7 @@
 package subway.favorite.ui;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.favorite.application.FavoriteService;
 import subway.favorite.dto.FavoriteRequest;
@@ -12,6 +9,7 @@ import subway.favorite.dto.FavoriteResponse;
 import subway.member.domain.LoginMember;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("favorites")
@@ -26,5 +24,11 @@ public class FavoriteController {
     public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
         FavoriteResponse favoriteResponse = favoriteService.saveFavorite(loginMember, favoriteRequest);
         return ResponseEntity.created(URI.create("/favorites/" + favoriteResponse.getId())).body(favoriteResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<FavoriteResponse>> findFavoriteByMemberId(@AuthenticationPrincipal LoginMember loginMember) {
+        List<FavoriteResponse> favoriteResponses = favoriteService.findFavoriteByMemberId(loginMember) ;
+        return ResponseEntity.ok().body(favoriteResponses);
     }
 }
