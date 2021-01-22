@@ -1,7 +1,5 @@
 package subway.member.ui;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
@@ -46,16 +44,8 @@ public class MemberController {
 
     @GetMapping("/members/me")
     public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        if (loginMember == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        try {
-            MemberResponse member = memberService.findMember(loginMember.getId());
-            return ResponseEntity.ok().body(member);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        MemberResponse member = memberService.findMember(loginMember.getId());
+        return ResponseEntity.ok().body(member);
     }
 
     @PutMapping("/members/me")

@@ -1,7 +1,5 @@
 package subway.member.domain;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-
 public class Member {
     private Long id;
     private String email;
