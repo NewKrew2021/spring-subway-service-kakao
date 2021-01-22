@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.domain.fare;
 
 import subway.line.domain.Line;
 

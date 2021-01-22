@@ -1,12 +1,11 @@
 package subway.path.domain;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
+import subway.path.domain.path.Path;
 import subway.station.domain.Station;
 
 import java.util.Arrays;

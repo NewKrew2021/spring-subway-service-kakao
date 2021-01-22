@@ -4,6 +4,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import subway.member.domain.LoginMember;
+import subway.path.domain.fare.LoginMemberAgeFare;
 
 import java.util.stream.Stream;
 

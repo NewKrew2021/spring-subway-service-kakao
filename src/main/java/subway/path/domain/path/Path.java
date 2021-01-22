@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.domain.path;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -7,6 +7,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.member.domain.LoginMember;
+import subway.path.domain.fare.FareCalculator;
 import subway.station.domain.Station;
 
 import java.util.List;

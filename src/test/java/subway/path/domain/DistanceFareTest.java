@@ -2,6 +2,7 @@ package subway.path.domain;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import subway.path.domain.fare.DistanceFare;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

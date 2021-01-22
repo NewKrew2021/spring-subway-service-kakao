@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
-import subway.path.domain.Path;
-import subway.path.domain.PathValue;
+import subway.path.domain.path.Path;
+import subway.path.domain.path.PathValue;
 import subway.station.application.StationService;
 
 import java.util.List;
