@@ -2,9 +2,8 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
+import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
@@ -26,6 +25,11 @@ public class MemberService {
     public MemberResponse findMember(Long id) {
         Member member = memberDao.findById(id);
         return MemberResponse.of(member);
+    }
+
+    public LoginMember findMemberByEmail(String email) {
+        Member member = memberDao.findByEmail(email);
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 
     @Transactional
