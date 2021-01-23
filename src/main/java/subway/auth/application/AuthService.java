@@ -2,7 +2,6 @@ package subway.auth.application;
 
 import org.springframework.stereotype.Service;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.exceptions.UnauthorizedException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
@@ -24,9 +23,6 @@ public class AuthService {
     }
 
     public LoginMember getLoginMember(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new UnauthorizedException();
-        }
         String email = jwtTokenProvider.getPayload(token);
         return memberService.getLoginMember(email);
     }
