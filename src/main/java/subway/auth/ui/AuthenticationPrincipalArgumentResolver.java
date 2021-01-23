@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private AuthService authService;
+
+    private final AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
@@ -27,17 +28,24 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = AuthorizationExtractor.extract(webRequest.getNativeRequest(HttpServletRequest.class));
-        if (!parameter.getParameterAnnotation(AuthenticationPrincipal.class).required()
-                && token == null) {
-            return LoginMember.NOT_LOGINED;
-        }
-        if (token == null) {
+        if (loginRequired(parameter) && loginInfoNotExist(token)) {
             throw new UnauthorizedException();
         }
+
+        if (loginInfoNotExist(token)) {
+            return LoginMember.NOT_LOGINED;
+        }
         return authService.getLoginMember(token);
+    }
+
+    private boolean loginRequired(MethodParameter parameter) {
+        return parameter.getParameterAnnotation(AuthenticationPrincipal.class).required();
+    }
+
+    private boolean loginInfoNotExist(String token) {
+        return token == null;
     }
 }

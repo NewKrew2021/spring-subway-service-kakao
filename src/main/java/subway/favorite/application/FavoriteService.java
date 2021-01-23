@@ -1,6 +1,7 @@
 package subway.favorite.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteResponse;
@@ -21,6 +22,7 @@ public class FavoriteService {
         this.stationService = stationService;
     }
 
+    @Transactional
     public Favorite create(LoginMember loginMember, Long source, Long target) {
         return favoriteDao.insert(new Favorite(loginMember.getId(), source, target));
     }
@@ -40,6 +42,7 @@ public class FavoriteService {
         );
     }
 
+    @Transactional
     public void delete(LoginMember loginMember, Long id) {
         favoriteDao.deleteByIdAndUserId(id, loginMember.getId());
     }

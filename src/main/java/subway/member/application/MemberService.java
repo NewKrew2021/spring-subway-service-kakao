@@ -11,7 +11,7 @@ import subway.member.dto.MemberResponse;
 
 @Service
 public class MemberService {
-    private MemberDao memberDao;
+    private final MemberDao memberDao;
 
     public MemberService(MemberDao memberDao) {
         this.memberDao = memberDao;
@@ -38,17 +38,15 @@ public class MemberService {
         memberDao.deleteById(id);
     }
 
-    public Member findAuthorizedMember(String email, String password) {
-        Member member = memberDao.findByEmail(email)
+    public Member getAuthorizedMember(String email, String password) {
+        return memberDao.findByEmail(email)
+                .filter(member -> member.hasSamePassword(password))
                 .orElseThrow(UnauthorizedException::new);
-        if (member.hasDifferentPassword(password)) {
-            throw new UnauthorizedException();
-        }
-        return member;
     }
 
-    public LoginMember findLoginMember(String email) {
-        Member member = memberDao.findByEmail(email).orElseThrow(UnauthorizedException::new);
-        return new LoginMember(member);
+    public LoginMember getLoginMember(String email) {
+        return memberDao.findByEmail(email)
+                .map(LoginMember::new)
+                .orElseThrow(UnauthorizedException::new);
     }
 }

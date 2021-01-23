@@ -4,8 +4,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import subway.line.domain.Line;
 
 public class DistanceLineEdge extends DefaultWeightedEdge {
-    private int distance;
-    private Line line;
+    private final int distance;
+    private final Line line;
 
     public DistanceLineEdge(int distance, Line line) {
         this.distance = distance;

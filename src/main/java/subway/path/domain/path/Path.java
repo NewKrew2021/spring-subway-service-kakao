@@ -22,20 +22,13 @@ public class Path {
     public static Path from(List<Line> lines, Station source, Station target) {
         WeightedMultigraph<Station, DistanceLineEdge> graph = new WeightedMultigraph<>(DistanceLineEdge.class);
         for (Line line : lines) {
-            fillGraph(graph, line);
+            generateGraph(graph, line);
         }
 
-        try {
-            GraphPath<Station, DistanceLineEdge> shortestPath = new DijkstraShortestPath<>(graph).getPath(source, target);
-            return new Path(shortestPath);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("시작역 또는 종착역이 그래프에 존재하지 않습니다");
-        } catch (NullPointerException e) {
-            throw new IllegalArgumentException("시작역에서 종착역으로 가는 최단 경로가 존재하지 않습니다");
-        }
+        return generatePath(source, target, graph);
     }
 
-    private static void fillGraph(WeightedMultigraph<Station, DistanceLineEdge> graph, Line line) {
+    private static void generateGraph(WeightedMultigraph<Station, DistanceLineEdge> graph, Line line) {
         for (Section section : line.getSections()) {
             Station upStation = section.getUpStation();
             Station downStation = section.getDownStation();
@@ -43,6 +36,17 @@ public class Path {
             graph.addVertex(upStation);
             graph.addVertex(downStation);
             graph.addEdge(upStation, downStation, new DistanceLineEdge(section.getDistance(), line));
+        }
+    }
+
+    private static Path generatePath(Station source, Station target, WeightedMultigraph<Station, DistanceLineEdge> graph) {
+        try {
+            GraphPath<Station, DistanceLineEdge> shortestPath = new DijkstraShortestPath<>(graph).getPath(source, target);
+            return new Path(shortestPath);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("시작역 또는 종착역이 그래프에 존재하지 않습니다");
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("시작역에서 종착역으로 가는 최단 경로가 존재하지 않습니다");
         }
     }
 

@@ -21,13 +21,13 @@ public class PathService {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathValue findPaths(long source, long target, LoginMember loginMember) {
+    public PathValue findPath(long source, long target, LoginMember loginMember) {
         Path path = Path.from(
                 lineService.findLines(),
                 stationService.findStationById(source),
                 stationService.findStationById(target)
         );
-        int distance = path.getDistance();
-        return new PathValue(path.getStations(), distance, fareCalculator.getFare(distance, path.getLines(), loginMember));
+        int fare = fareCalculator.getFare(path.getDistance(), path.getLines(), loginMember);
+        return new PathValue(path.getStations(), path.getDistance(), fare);
     }
 }

@@ -9,6 +9,7 @@ import subway.member.domain.Member;
 
 @Service
 public class AuthService {
+
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberService memberService;
 
@@ -18,9 +19,8 @@ public class AuthService {
     }
 
     public String createToken(String email, String password) {
-        Member member = memberService.findAuthorizedMember(email, password);
-        String token = jwtTokenProvider.createToken(member.getEmail());
-        return token;
+        Member member = memberService.getAuthorizedMember(email, password);
+        return jwtTokenProvider.createToken(member.getEmail());
     }
 
     public LoginMember getLoginMember(String token) {
@@ -28,6 +28,6 @@ public class AuthService {
             throw new UnauthorizedException();
         }
         String email = jwtTokenProvider.getPayload(token);
-        return memberService.findLoginMember(email);
+        return memberService.getLoginMember(email);
     }
 }
