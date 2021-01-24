@@ -4,18 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
-import subway.member.domain.LoginMember;
-import subway.path.domain.path.Path;
 import subway.station.domain.Station;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PathTest {
 
-    private List<Line> lines;
     private Station 강남역;
     private Station 양재역;
     private Station 교대역;
@@ -25,6 +21,8 @@ public class PathTest {
     private Line 신분당선;
     private Line 이호선;
     private Line 삼호선;
+
+    private SubwayGraph graph;
 
     /**
      * 교대역  --- *2호선*(28) ---   강남역   --- *2호선*(38) ---   잠실역
@@ -51,14 +49,14 @@ public class PathTest {
         삼호선.addSection(교대역, 남부터미널역, 5);
         삼호선.addSection(남부터미널역, 양재역, 2);
 
-        lines = Arrays.asList(신분당선, 이호선, 삼호선);
+        graph = SubwayGraph.from(Arrays.asList(신분당선, 이호선, 삼호선));
     }
 
-    @DisplayName("남부터미널역에서 강남역 어른이 가는 경우")
+    @DisplayName("남부터미널역에서 강남역을 가는 경로")
     @Test
     void testPath1() {
         // when
-        Path path = Path.from(lines, 남부터미널역, 강남역);
+        Path path = graph.getPath(남부터미널역, 강남역);
 
         // then
         assertThat(path.getStations()).isEqualTo(Arrays.asList(남부터미널역, 양재역, 강남역));
@@ -66,16 +64,15 @@ public class PathTest {
         assertThat(path.getLines()).isEqualTo(Arrays.asList(삼호선, 신분당선));
     }
 
-    @DisplayName("교대역에서 잠실역을 어른이 가는 경우")
+    @DisplayName("교대역에서 잠실역을 가는 경로")
     @Test
     void testPath2() {
         //when
-        Path path = Path.from(lines, 교대역, 잠실역);
+        Path path = graph.getPath(교대역, 잠실역);
 
         //then
         assertThat(path.getStations()).isEqualTo(Arrays.asList(교대역, 남부터미널역, 양재역, 강남역, 잠실역));
         assertThat(path.getDistance()).isEqualTo(65);
-        assertThat(path.getLines()).isEqualTo(Arrays.asList(삼호선, 신분당선, 이호선));
+        assertThat(path.getLines()).isEqualTo(Arrays.asList(삼호선, 삼호선, 신분당선, 이호선));
     }
-
 }

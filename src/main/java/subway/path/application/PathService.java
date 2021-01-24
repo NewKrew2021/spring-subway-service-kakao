@@ -6,6 +6,7 @@ import subway.member.domain.LoginMember;
 import subway.path.domain.fare.FareCalculator;
 import subway.path.domain.path.Path;
 import subway.path.domain.path.PathValue;
+import subway.path.domain.path.SubwayGraph;
 import subway.station.application.StationService;
 
 @Service
@@ -22,11 +23,9 @@ public class PathService {
     }
 
     public PathValue findPath(long source, long target, LoginMember loginMember) {
-        Path path = Path.from(
-                lineService.findLines(),
-                stationService.findStationById(source),
-                stationService.findStationById(target)
-        );
+        SubwayGraph graph = SubwayGraph.from(lineService.findLines());
+        Path path = graph.getPath(stationService.findStationById(source), stationService.findStationById(target));
+
         int fare = fareCalculator.getFare(path.getDistance(), path.getLines(), loginMember);
         return new PathValue(path.getStations(), path.getDistance(), fare);
     }
