@@ -16,7 +16,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(AlreadyExistedSectionException.class)
     public ResponseEntity alreadyExistedSection() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler(AuthorizationFailException.class)
@@ -36,22 +36,22 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(NoMoreSectionToDeleteException.class)
     public ResponseEntity noMoreSectionToDeleteException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler(NotExistLineException.class)
     public ResponseEntity notExistLineException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler(NotExistMemberException.class)
     public ResponseEntity notExistMemberException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @ExceptionHandler(NotExistStationException.class)
     public ResponseEntity notExistStationException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler(TooLowAgeException.class)

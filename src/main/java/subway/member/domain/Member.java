@@ -16,7 +16,7 @@ public class Member {
     }
 
     public Member(String email, String password) {
-        String emailRule = "/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i";
+        String emailRule = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
         if (!email.matches(emailRule)) {
             throw new WrongEmailFormatException();
         }
