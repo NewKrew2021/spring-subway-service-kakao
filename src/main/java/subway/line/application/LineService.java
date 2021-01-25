@@ -1,7 +1,7 @@
 package subway.line.application;
 
 import org.springframework.stereotype.Service;
-import subway.auth.exception.SectionNotFoundException;
+import subway.line.exception.SectionNotFoundException;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;

@@ -28,7 +28,7 @@ public class AuthService {
     }
 
     private boolean isMember(String password, Member member) {
-        return member != null && member.validatePassword(password);
+        return member.validatePassword(password);
     }
 
     public Member checkInvalidToken(String accessToken) {
