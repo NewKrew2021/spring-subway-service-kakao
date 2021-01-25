@@ -22,7 +22,7 @@ create table if not exists SECTION
     down_station_id bigint not null,
     distance int not null,
     primary key(id)
-    );
+);
 
 create table if not exists MEMBER
 (
@@ -32,3 +32,13 @@ create table if not exists MEMBER
     age int not null,
     primary key(id)
 );
+
+create table if not exists FAVORITE
+(
+    id bigint auto_increment not null,
+    source bigint not null,
+    target bigint not null,
+    primary key(id)
+    );
+
+
