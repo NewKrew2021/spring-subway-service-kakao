@@ -46,8 +46,6 @@ public class DirectedSections extends Section {
 
     public int getResultPrice(LoginMember loginMember) {
         int defaultPrice = getPrice();
-        System.out.println("!!!!!");
-        System.out.println(defaultPrice);
         if (loginMember.getType() == LoginMemberType.KID) {
             return 0;
         }
