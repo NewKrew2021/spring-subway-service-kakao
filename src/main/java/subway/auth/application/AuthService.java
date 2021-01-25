@@ -2,9 +2,9 @@ package subway.auth.application;
 
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenResponse;
+import subway.auth.exception.UnAuthorizedException;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.exception.UnAuthorizedException;
 import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
