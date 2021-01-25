@@ -3,13 +3,15 @@ package subway.line.application;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
-import subway.line.domain.Line;
-import subway.line.domain.Section;
+import subway.line.domain.*;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.member.domain.LoginMember;
+import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
+import subway.station.dto.StationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +29,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor()));
+        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(), request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }
@@ -62,6 +64,14 @@ public class LineService {
         return lineDao.findById(id);
     }
 
+    public List<Section> findAllSections() {
+        return lineDao.findAll().stream()
+                .map(Line::getSections)
+                .map(Sections::getSections)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
         lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
     }
@@ -87,6 +97,16 @@ public class LineService {
 
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
+    }
+
+    public PathResponse getShortestPath(LoginMember member, Station sourceStation, Station targetStation) {
+        SubwayMap map = new SubwayMap(findLines());
+        DirectedSections directedSections = map.getShortestPath(sourceStation, targetStation);
+        return new PathResponse(
+                StationResponse.listOf(directedSections.getStations()),
+                directedSections.getDistance(),
+                0
+        );
     }
 
 }

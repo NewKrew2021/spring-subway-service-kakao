@@ -9,8 +9,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
+import subway.line.domain.Section;
+import subway.line.domain.Sections;
+import subway.line.domain.SubwayMap;
 import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.ArrayList;
@@ -23,7 +27,8 @@ import static subway.line.SectionAcceptanceTest.지하철_구간_등록되어_�
 import static subway.station.StationAcceptanceTest.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 조회")
-public class PathAcceptanceTest extends AcceptanceTest {
+public class
+PathAcceptanceTest extends AcceptanceTest {
     private LineResponse 신분당선;
     private LineResponse 이호선;
     private LineResponse 삼호선;
