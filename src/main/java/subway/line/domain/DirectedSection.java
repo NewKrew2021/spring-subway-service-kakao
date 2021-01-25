@@ -2,25 +2,28 @@ package subway.line.domain;
 
 import subway.station.domain.Station;
 
-public class DirectedSection extends Section {
+public class DirectedSection extends Section{
     private final boolean isUpward;
 
     public DirectedSection(Section section, Station sourceStation) {
-        super(section.id, section.upStation, section.downStation, section.distance);
-        this.isUpward = section.downStation.equals(sourceStation);
+        super(section.getId(),
+                section.getUpStation(),
+                section.getDownStation(),
+                section.getDistance());
+        this.isUpward = section.getDownStation().equals(sourceStation);
     }
 
     public Station getSourceStation() {
         if(isUpward) {
-            return downStation;
+            return getDownStation();
         }
-        return upStation;
+        return getUpStation();
     }
 
     public Station getTargetStation() {
         if(isUpward) {
-            return upStation;
+            return getUpStation();
         }
-        return downStation;
+        return getDownStation();
     }
 }

@@ -72,5 +72,4 @@ public class SubwayMap {
                 .findAny()
                 .orElseThrow(IllegalStateException::new);
     }
-
 }

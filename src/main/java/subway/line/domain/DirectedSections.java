@@ -4,9 +4,10 @@ import subway.station.domain.Station;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-public class DirectedSections {
+public class DirectedSections extends Section{
     private static final int MIN_DISTANCE = 10;
     private static final int MAX_DISTANCE = 50;
     private static final int DEFAULT_PRICE = 1250;
@@ -42,7 +43,7 @@ public class DirectedSections {
 
     public List<Station> getStations() {
         if (sections.isEmpty()) {
-            return Arrays.asList();
+            return Collections.emptyList();
         }
 
         List<Station> stations = new ArrayList<>();
