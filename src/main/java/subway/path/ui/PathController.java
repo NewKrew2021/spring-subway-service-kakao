@@ -3,7 +3,9 @@ package subway.path.ui;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
@@ -13,11 +15,6 @@ import subway.path.dto.PathResponse;
 @RequestMapping("/paths")
 public class PathController {
     // TODO: 경로조회 기능 구현하기
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity illegalArgumentHandler(IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
 
     private PathService pathService;
 

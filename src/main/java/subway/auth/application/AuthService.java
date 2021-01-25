@@ -3,6 +3,7 @@ package subway.auth.application;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
+import subway.auth.exceptions.UnauthorizedUserException;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
@@ -27,7 +28,7 @@ public class AuthService {
     public TokenResponse createToken(TokenRequest tokenRequest) {
         Member member = memberService.findMemberByEmail(tokenRequest.getEmail());
         if(!validateMember(member, tokenRequest)) {
-            throw new IllegalArgumentException(INVALID_USER_INFORMATION_ERROR_MESSAGE);
+            throw new UnauthorizedUserException(INVALID_USER_INFORMATION_ERROR_MESSAGE);
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);

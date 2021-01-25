@@ -1,9 +1,7 @@
 package subway.auth.ui;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +13,6 @@ import subway.auth.dto.TokenResponse;
 @RequestMapping("/login")
 public class AuthController {
     // TODO: 로그인(토큰 발급) 요청 처리하기
-
-    @ExceptionHandler
-    public ResponseEntity illegalArgumentHandler(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-    }
 
     private AuthService authService;
 
