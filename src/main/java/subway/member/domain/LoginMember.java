@@ -34,7 +34,7 @@ public class LoginMember {
     }
 
     public double getDiscountRate() {
-        if (age >= MINIMUM_CHILD_AGE && age < MAXIMUM_CHILD_AGE) {
+        if (age >= MINIMUM_CHILD_AGE && age <= MAXIMUM_CHILD_AGE) {
             return CHILD_DISCOUNT_RATE;
         }
         if (age >= MINIMUM_TEENAGER_AGE && age <= MAXIMUM_TEENAGER_AGE) {

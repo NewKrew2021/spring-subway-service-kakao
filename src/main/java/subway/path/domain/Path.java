@@ -9,6 +9,7 @@ import java.util.List;
 public class Path {
 
     public static final int DEDUCTIONS = 350;
+    public static final int BASE_MONEY = 1250;
     private List<StationResponse> stations;
     private int distance;
     private int extraFare;
@@ -32,7 +33,7 @@ public class Path {
     }
 
     public int getTotalFare() {
-        int totalFare = extraFare + FareUtil.calculateDistanceFare(distance);
+        int totalFare = extraFare + FareUtil.calculateDistanceFare(distance, BASE_MONEY);
         return totalFare;
     }
 
