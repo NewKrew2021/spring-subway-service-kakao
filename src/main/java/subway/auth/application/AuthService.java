@@ -1,8 +1,10 @@
 package subway.auth.application;
 
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exception.UnAuthorizedException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 
@@ -22,7 +24,11 @@ public class AuthService {
     }
 
     public LoginMember validateToken(String token) {
-        String email = tokenProvider.getPayload(token);
-        return memberService.findLoginMember(email);
+        try{
+            String email = tokenProvider.getPayload(token);
+            return memberService.findLoginMember(email);
+        } catch (MalformedJwtException e) {
+            throw new UnAuthorizedException();
+        }
     }
 }
