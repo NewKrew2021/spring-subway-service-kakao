@@ -1,12 +1,11 @@
 package subway.line.domain;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
-import subway.path.domain.Path;
 import subway.station.domain.Station;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
@@ -140,5 +139,20 @@ public class Sections {
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
+    }
+
+    public void addSections(Sections sections) {
+        this.sections.addAll(sections.sections);
+    }
+
+    public Section getSection(Station upStation, Station downStation) {
+        return sections.stream()
+                .filter(section -> (section.getUpStation().equals(upStation) && section.getDownStation().equals(downStation))
+                || (section.getDownStation().equals(upStation) && section.getUpStation().equals(downStation)))
+                .findFirst().get();
+    }
+
+    public boolean hasSection(Section section) {
+        return sections.contains(section);
     }
 }
