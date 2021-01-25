@@ -20,10 +20,7 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> searchShortestPath(@AuthenticationPrincipal LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
-        PathResponse pathResponse = pathService.searchShortestPath(source, target);
-        if (loginMember == null) {
-            return ResponseEntity.ok().body(pathResponse);
-        }
-        return ResponseEntity.ok().body(pathService.discount(pathResponse, loginMember));
+        PathResponse pathResponse = pathService.searchPathAndFare(loginMember, source, target);
+        return ResponseEntity.ok().body(pathResponse);
     }
 }

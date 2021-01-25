@@ -1,6 +1,9 @@
 package subway.line.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
@@ -19,12 +22,14 @@ import java.util.stream.Collectors;
 public class LineDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert insertAction;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    public LineDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public LineDao(JdbcTemplate jdbcTemplate, DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.insertAction = new SimpleJdbcInsert(dataSource)
                 .withTableName("line")
                 .usingGeneratedKeyColumns("id");
+        this.namedJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     public Line insert(Line line) {
@@ -111,8 +116,9 @@ public class LineDao {
         jdbcTemplate.update("delete from Line where id = ?", id);
     }
 
-    public int findExtraFareById(Long id) {
-        String sql = "select extra_fare from LINE where id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, id);
+    public int findMaxExtraFareByIds(List<Long> ids) {
+        SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
+        String sql = "select max(extra_fare) from LINE where id in (:ids)";
+        return namedJdbcTemplate.queryForObject(sql, parameters, Integer.class);
     }
 }
