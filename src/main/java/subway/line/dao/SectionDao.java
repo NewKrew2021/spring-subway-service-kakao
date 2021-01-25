@@ -54,6 +54,13 @@ public class SectionDao {
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
 
+    public Long findLineIdByUpStationIdAndDownStationId(Long upStationId, Long downStationId) {
+        String sql = "select line_id from SECTION " +
+                "where (up_station_id = ? and down_station_id = ?) " +
+                "or (down_station_id = ? and up_station_id = ?)";
+        return jdbcTemplate.queryForObject(sql, Long.class, upStationId, downStationId, upStationId, downStationId);
+    }
+
     public List<Map<String, Object>> findAllAsMap() {
         String sql = "select * from SECTION";
         return jdbcTemplate.queryForList(sql);
