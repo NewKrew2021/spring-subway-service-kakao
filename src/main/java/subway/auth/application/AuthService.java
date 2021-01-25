@@ -22,7 +22,7 @@ public class AuthService {
 
     public void checkInvalidMember(String email, String password) {
         Member member = memberDao.findByEmail(email);
-        if (isMember(password, member)) {
+        if (!isMember(password, member)) {
             throw new InvalidMemberException();
         }
     }
