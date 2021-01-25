@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
+
+    private int extraFare;
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {

@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Line;
 import subway.path.domain.Path;
+import subway.path.domain.PathGraphEdge;
 import subway.path.dto.PathResponse;
 import subway.station.dao.StationDao;
+
+import java.util.List;
 
 @Service
 public class PathService {
@@ -19,11 +22,12 @@ public class PathService {
         this.lineDao = lineDao;
     }
 
-    public PathResponse findPathResponse(long sourceId, long targetId) {
+    public PathResponse findPathResponse(long sourceId, long targetId, int age) {
         return new PathBuilder()
-                .makePath()
                 .initializePath()
                 .makeGraphPath(sourceId, targetId)
+                .calculateFare()
+                .discountBy(age)
                 .makePathResponse();
     }
 
@@ -31,17 +35,13 @@ public class PathService {
 
         private final Path path = new Path();
         private GraphPath graphPath;
-
-        public PathBuilder makePath() {
-            return this;
-        }
+        private int fare;
 
         public PathBuilder initializePath() {
             path.addStations(stationDao.findAll());
-            lineDao.findAll()
-                    .stream()
-                    .map(Line::getSections)
-                    .forEach(path::addEdges);
+            lineDao.findAll() // List<Line>
+                    .stream() // Line -> Sections, fare
+                    .forEach(path::addEdges); // 여기다가 fare를 넣
             return this;
         }
 
@@ -50,8 +50,41 @@ public class PathService {
             return this;
         }
 
+        public PathBuilder calculateFare() {
+            List<PathGraphEdge> edgeList = graphPath.getEdgeList();
+            fare = edgeList.stream()
+                    .map(PathGraphEdge::getExtraFare)
+                    .max(Integer::compare)
+                    .orElse(0);
+
+            int distance = (int) graphPath.getWeight();
+            fare += calculateFareByDistance(distance);
+
+            return this;
+        }
+
+        private PathBuilder discountBy(int age) {
+            if( 19 > age && 13 <= age ) {
+                fare = (int) ((fare - 350) * 0.8 + 350);
+            }
+            if( 13 > age && 6 <= age ) {
+                fare = (int) ((fare - 350) * 0.5 + 350);
+            }
+            return this;
+        }
+
+        private int calculateFareByDistance(int distance) {
+            if( distance > 50 ) {
+                return 1250 + 800 + (distance - 50) / 8 * 100;
+            }
+            if( distance > 10 ) {
+                return 1250 + (distance - 10) / 5 * 100;
+            }
+            return 1250;
+        }
+
         public PathResponse makePathResponse() {
-            return new PathResponse(graphPath.getVertexList(), (int) graphPath.getWeight());
+            return new PathResponse(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
         }
     }
 

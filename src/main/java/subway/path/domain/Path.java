@@ -2,32 +2,33 @@ package subway.path.domain;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import java.util.List;
 
 public class Path {
 
-    private final WeightedMultigraph<Station, DefaultWeightedEdge> graph;
+    private final WeightedMultigraph<Station, PathGraphEdge> graph;
 
     public Path() {
-        this.graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        this.graph = new WeightedMultigraph<>(PathGraphEdge.class);
     }
 
     public void addStations(List<Station> stations) {
         stations.forEach(graph::addVertex);
     }
 
-    public void addEdges(Sections sections) {
-        for (Section section : sections.getSections()) {
+    public void addEdges(Line line) {
+        for (Section section : line.getSections().getSections()) {
             Station upStation = section.getUpStation();
             Station downStation = section.getDownStation();
+            int extraFare = line.getExtraFare();
 
-            DefaultWeightedEdge edge = graph.addEdge(upStation, downStation);
+            PathGraphEdge edge = graph.addEdge(upStation, downStation);
+            graph.addEdge(upStation, downStation, new PathGraphEdge(section.getDistance(), extraFare));
 
             graph.setEdgeWeight(edge, section.getDistance());
         }

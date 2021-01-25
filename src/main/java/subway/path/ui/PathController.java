@@ -1,10 +1,10 @@
 package subway.path.ui;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.dto.TokenRequest;
+import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
@@ -20,8 +20,12 @@ public class PathController {
     }
 
     @GetMapping
-    public ResponseEntity<PathResponse> findShortestPath(@RequestParam long source, @RequestParam long target) {
-        return ResponseEntity.ok(pathService.findPathResponse(source, target));
+    public ResponseEntity<PathResponse> findShortestPath(@RequestBody TokenRequest tokenRequest, @RequestParam long source, @RequestParam long target) {
+        return ResponseEntity.ok(pathService.findPathResponse(source, target, loginMember.getAge()));
     }
-
+//
+//    @GetMapping
+//    public ResponseEntity<PathResponse> findShortestPath(@RequestParam long source, @RequestParam long target) {
+//        return ResponseEntity.ok(pathService.findPathResponse(source, target, 0));
+//    }
 }

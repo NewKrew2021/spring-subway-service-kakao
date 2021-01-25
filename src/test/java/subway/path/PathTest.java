@@ -80,7 +80,7 @@ public class PathTest {
         sections.add( new Section(양재역, 교대역, 10) );
         sections.add( new Section(강남역, 교대역, 15) );
 
-        path.addEdges(new Sections(sections));
+//        path.addEdges(new Sections(sections));
 
         assertThat(path.containEdge(강남역, 양재역)).isTrue();
         assertThat(path.containEdge(양재역, 교대역)).isTrue();
@@ -107,7 +107,7 @@ public class PathTest {
         sections.add( new Section(양재역, 교대역, 10) );
         sections.add( new Section(강남역, 교대역, 15) );
 
-        path.addEdges(new Sections(sections));
+//        path.addEdges(new Sections(sections));
 
         GraphPath shortestPathGraph = path.findShortestPathGraph(강남역, 교대역);
         List<Station> shortestPath = shortestPathGraph.getVertexList();

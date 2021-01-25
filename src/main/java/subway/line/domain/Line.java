@@ -8,6 +8,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
+    private int extraFare;
     private Sections sections = new Sections();
 
     public Line() {
@@ -31,6 +32,12 @@ public class Line {
         this.sections = sections;
     }
 
+    public Line(String name, String color, int extraFare) {
+        this.name = name;
+        this.color = color;
+        this.extraFare = extraFare;
+    }
+
     public Long getId() {
         return id;
     }
@@ -45,6 +52,10 @@ public class Line {
 
     public Sections getSections() {
         return sections;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
     }
 
     public void update(Line line) {
