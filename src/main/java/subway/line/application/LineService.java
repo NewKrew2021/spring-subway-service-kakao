@@ -5,6 +5,7 @@ import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
@@ -28,7 +29,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor()));
+        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(), request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }
@@ -52,6 +53,10 @@ public class LineService {
 
     public List<Line> findLines() {
         return lineDao.findAll();
+    }
+
+    public Sections findAllSections() {
+        return new Sections(sectionDao.findAll());
     }
 
     public LineResponse findLineResponseById(Long id) {

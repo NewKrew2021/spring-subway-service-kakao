@@ -14,6 +14,10 @@ public class Line {
     public Line() {
     }
 
+    public Line(String name, String color, int extraFare) {
+        this(0L, name, color, extraFare, new Sections());
+    }
+
     public Line(String name, String color) {
         this(0L, name, color, 0, new Sections());
     }
