@@ -10,72 +10,72 @@ import subway.exception.*;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(AlreadyExistedEmailException.class)
-    public ResponseEntity alreadyExistedEmail() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> alreadyExistedEmail() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일 입니다.");
     }
 
     @ExceptionHandler(AlreadyExistedSectionException.class)
-    public ResponseEntity alreadyExistedSection() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> alreadyExistedSection() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 구간입니다.");
     }
 
     @ExceptionHandler(AuthorizationFailException.class)
-    public ResponseEntity authorizationFail() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<String> authorizationFail() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 실패하였습니다.");
     }
 
     @ExceptionHandler(DuplicateNameException.class)
-    public ResponseEntity duplicateNameException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> duplicateNameException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이름입니다.");
     }
 
     @ExceptionHandler(LoginFailException.class)
-    public ResponseEntity loginFailException() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<String> loginFailException() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 실패하였습니다.");
     }
 
     @ExceptionHandler(NoMoreSectionToDeleteException.class)
-    public ResponseEntity noMoreSectionToDeleteException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> noMoreSectionToDeleteException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("더이상 역을 삭제할 수 없습니다.");
     }
 
     @ExceptionHandler(NotExistLineException.class)
-    public ResponseEntity notExistLineException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> notExistLineException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 노선입니다.");
     }
 
     @ExceptionHandler(NotExistMemberException.class)
-    public ResponseEntity notExistMemberException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> notExistMemberException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 사용자 입니다.");
     }
 
     @ExceptionHandler(NotExistStationException.class)
-    public ResponseEntity notExistStationException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> notExistStationException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 역입니다.");
     }
 
     @ExceptionHandler(TooLowAgeException.class)
-    public ResponseEntity tooLowAgeException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> tooLowAgeException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("나이가 잘못되었습니다.");
     }
 
     @ExceptionHandler(TooLowDistanceException.class)
-    public ResponseEntity tooLowDistanceException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> tooLowDistanceException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("거리가 잘못되었습니다.");
     }
 
     @ExceptionHandler(TooLowExtraFareException.class)
-    public ResponseEntity tooLowExtraFareException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> tooLowExtraFareException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("추가요금이 잘못되었습니다.");
     }
 
     @ExceptionHandler(WrongStationIdException.class)
-    public ResponseEntity wrongStationIdException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> wrongStationIdException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 역 아이디 입니다.");
     }
 
     @ExceptionHandler(WrongEmailFormatException.class)
-    public ResponseEntity wrongEmailFormatException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> wrongEmailFormatException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 이메일 형식입니다.");
     }
 }

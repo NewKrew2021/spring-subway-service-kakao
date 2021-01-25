@@ -32,7 +32,6 @@ public class FareUtil {
 
     public static int calculateDistanceFare(int totalDistance) {
         int distanceFare = BASE_FARE;
-
         if (BASIC_FARE_DISTANCE < totalDistance && totalDistance <= FIFTY_KILOMETER) {
             distanceFare += Math.ceil((totalDistance - BASIC_FARE_DISTANCE) / MIDDLE_DISTANCE_DENOMINATOR) * HUNDRED;
         }
