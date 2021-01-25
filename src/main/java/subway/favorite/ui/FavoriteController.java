@@ -1,6 +1,5 @@
 package subway.favorite.ui;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
@@ -22,18 +21,20 @@ public class FavoriteController {
     }
 
     @PostMapping("/favorites")
-    public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
+    public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember,
+                                         @RequestBody FavoriteRequest favoriteRequest) {
         Favorite favorite = favoriteService.saveFavorite(loginMember, favoriteRequest);
         return ResponseEntity.created(URI.create("/favorites/" + favorite.getId())).build();
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<List<FavoriteResponse>> findFavorites(@AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<List<FavoriteResponse>> findFavorites(@AuthenticationPrincipal LoginMember loginMember) {
         return ResponseEntity.ok().body(favoriteService.findAllFavorites(loginMember));
     }
 
     @DeleteMapping("/favorites/{id}")
-    public ResponseEntity removeFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable Long id){
+    public ResponseEntity removeFavorite(@AuthenticationPrincipal LoginMember loginMember,
+                                         @PathVariable Long id) {
         favoriteService.deleteFavorite(loginMember, id);
         return ResponseEntity.noContent().build();
     }

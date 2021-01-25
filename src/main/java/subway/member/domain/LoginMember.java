@@ -17,7 +17,7 @@ public class LoginMember {
     }
 
     private void validate() {
-        if(id == null){
+        if (id == null) {
             throw new LoginFailException();
         }
     }

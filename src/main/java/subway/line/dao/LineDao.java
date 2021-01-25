@@ -9,13 +9,16 @@ import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
 public class LineDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert insertAction;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert insertAction;
 
     public LineDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
@@ -46,13 +49,13 @@ public class LineDao {
                 "left outer join STATION DST on S.down_station_id = DST.id " +
                 "WHERE L.id = ?";
 
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, id);
         return mapLine(result);
     }
 
     public void update(Line newLine) {
         String sql = "update LINE set name = ?, color = ?, extra_fare = ? where id = ?";
-        jdbcTemplate.update(sql, new Object[]{newLine.getName(), newLine.getColor(), newLine.getExtraFare(), newLine.getId()});
+        jdbcTemplate.update(sql, newLine.getName(), newLine.getColor(), newLine.getExtraFare(), newLine.getId());
     }
 
     public List<Line> findAll() {
@@ -61,7 +64,7 @@ public class LineDao {
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
                 "from LINE L \n" +
-                        "left outer join SECTION S on L.id = S.line_id " +
+                "left outer join SECTION S on L.id = S.line_id " +
                 "left outer join STATION UST on S.up_station_id = UST.id " +
                 "left outer join STATION DST on S.down_station_id = DST.id ";
 
@@ -105,6 +108,7 @@ public class LineDao {
     }
 
     public void deleteById(Long id) {
-        jdbcTemplate.update("delete from Line where id = ?", id);
+        String sql = "delete from Line where id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

@@ -8,7 +8,8 @@ public class FavoriteResponse {
     private StationResponse source;
     private StationResponse target;
 
-    public FavoriteResponse() {}
+    public FavoriteResponse() {
+    }
 
     private FavoriteResponse(Long id, StationResponse source, StationResponse target) {
         this.id = id;

@@ -1,18 +1,18 @@
 package subway.member.ui;
 
-import subway.auth.domain.AuthenticationPrincipal;
-import subway.member.domain.LoginMember;
-import subway.member.application.MemberService;
-import subway.member.dto.MemberRequest;
-import subway.member.dto.MemberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberRequest;
+import subway.member.dto.MemberResponse;
 
 import java.net.URI;
 
 @RestController
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -49,7 +49,8 @@ public class MemberController {
     }
 
     @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember,
+                                                             @RequestBody MemberRequest param) {
         memberService.updateMember(loginMember.getId(), param);
         return ResponseEntity.ok().build();
     }

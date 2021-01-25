@@ -1,16 +1,13 @@
 package subway.auth.ui;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import subway.auth.application.AuthService;
-import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.exception.LoginFailException;
-import subway.member.application.MemberService;
-import subway.member.domain.LoginMember;
-import subway.member.dto.MemberRequest;
-import subway.member.dto.MemberResponse;
 
 @RestController
 public class AuthController {
@@ -22,12 +19,11 @@ public class AuthController {
 
     @PostMapping("/login/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest) {
-        String accessToken;
         try {
-            accessToken = authService.login(tokenRequest);
+            String accessToken = authService.login(tokenRequest);
+            return ResponseEntity.ok().body(new TokenResponse(accessToken));
         } catch (Exception e) {
             throw new LoginFailException();
         }
-        return ResponseEntity.ok().body(new TokenResponse(accessToken));
     }
 }

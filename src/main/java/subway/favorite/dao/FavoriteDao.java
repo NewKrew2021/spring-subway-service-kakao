@@ -20,7 +20,7 @@ public class FavoriteDao {
             resultSet.getLong("member_id"),
             new Station(resultSet.getLong("source_station_id"), resultSet.getString("source_station_name")),
             new Station(resultSet.getLong("target_station_id"), resultSet.getString("target_station_name"))
-        );
+    );
 
     public FavoriteDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -50,8 +50,8 @@ public class FavoriteDao {
         return jdbcTemplate.query(sql, favoriteRowMapper, memberId);
     }
 
-    public boolean deleteFavoriteById(Long memberId, Long favoriteId) {
-        String deleteSqlById = "delete from FAVORITE where id = ? and member_id = ?";
-        return jdbcTemplate.update(deleteSqlById, favoriteId, memberId) > 0;
+    public void deleteFavoriteById(Long memberId, Long favoriteId) {
+        String sql = "delete from FAVORITE where id = ? and member_id = ?";
+        jdbcTemplate.update(sql, favoriteId, memberId);
     }
 }

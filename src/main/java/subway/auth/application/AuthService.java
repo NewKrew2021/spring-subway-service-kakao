@@ -27,9 +27,8 @@ public class AuthService {
     }
 
     public LoginMember decode(String token) {
-        String email;
-        if(jwtTokenProvider.validateToken(token)){
-            email = jwtTokenProvider.getPayload(token);
+        if (jwtTokenProvider.validateToken(token)) {
+            String email = jwtTokenProvider.getPayload(token);
             Member member = memberDao.findByEmail(email);
             return new LoginMember(member.getId(), member.getEmail(), member.getAge());
         }
