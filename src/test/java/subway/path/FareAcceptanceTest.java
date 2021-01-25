@@ -82,7 +82,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
     @Test
     void defaultFare() {
         // when
-        ExtractableResponse<Response> response = 최단_경로_검색_요청(교대역, 남부터미널역);
+        ExtractableResponse<Response> response = 최단_경로_검색_요청(남부터미널역, 교대역);
 
         // then
         최단_경로_요금_조회됨(response, 1250);
