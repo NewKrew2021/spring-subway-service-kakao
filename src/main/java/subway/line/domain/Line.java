@@ -84,4 +84,15 @@ public class Line {
     public List<Station> getStations() {
         return sections.getStations();
     }
+
+    @Override
+    public String toString() {
+        return "Line{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                ", extraFare=" + extraFare +
+                ", sections=" + sections +
+                '}';
+    }
 }

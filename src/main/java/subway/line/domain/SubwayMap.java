@@ -33,7 +33,6 @@ public class SubwayMap {
                 ).findFirst();
 
         if (!lineOptional.isPresent()) throw new RuntimeException();
-
         return lineOptional.get().getExtraFare();
     }
 

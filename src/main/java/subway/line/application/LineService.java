@@ -10,6 +10,7 @@ import subway.line.domain.SubwayMap;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.member.domain.LoginMember;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
@@ -31,7 +32,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor()));
+        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(),request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }
@@ -93,13 +94,15 @@ public class LineService {
         sectionDao.insertSections(line);
     }
 
-    public PathResponse getShortestPath(Station sourceStation, Station targetStation) {
+    public PathResponse getShortestPathWithFare(LoginMember loginMember,
+                                                Station sourceStation,
+                                                Station targetStation) {
         SubwayMap map = new SubwayMap(findLines());
         DirectedSections directedSections = map.getShortestPath(sourceStation, targetStation);
         return new PathResponse(
                 StationResponse.listOf(directedSections.getStations()),
                 directedSections.getDistance(),
-                0
+                directedSections.getResultPrice(loginMember)
         );
     }
 }
