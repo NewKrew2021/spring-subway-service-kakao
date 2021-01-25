@@ -13,6 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/favorites")
 public class FavoriteController {
     private final FavoriteService favoriteService;
 
@@ -20,19 +21,19 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    @PostMapping("/favorites")
+    @PostMapping
     public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember,
                                          @RequestBody FavoriteRequest favoriteRequest) {
         Favorite favorite = favoriteService.saveFavorite(loginMember, favoriteRequest);
         return ResponseEntity.created(URI.create("/favorites/" + favorite.getId())).build();
     }
 
-    @GetMapping("/favorites")
+    @GetMapping
     public ResponseEntity<List<FavoriteResponse>> findFavorites(@AuthenticationPrincipal LoginMember loginMember) {
         return ResponseEntity.ok().body(favoriteService.findAllFavorites(loginMember));
     }
 
-    @DeleteMapping("/favorites/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity removeFavorite(@AuthenticationPrincipal LoginMember loginMember,
                                          @PathVariable Long id) {
         favoriteService.deleteFavorite(loginMember, id);
