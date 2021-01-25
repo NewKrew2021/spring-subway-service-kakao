@@ -1,18 +1,22 @@
 package subway.favorite.domain;
 
+import subway.station.domain.Station;
+
 public class Favorite {
 
     private Long id;
-    private Long source;
-    private Long target;
+    private Station source;
+    private Station target;
+    private Long userId;
 
-    public Favorite(Long source, Long target) {
+    public Favorite(Station source, Station target, Long userId) {
         this.source = source;
         this.target = target;
+        this.userId = userId;
     }
 
-    public Favorite(Long id, Long source, Long target) {
-        this(source,target);
+    public Favorite(Long id, Station source, Station target, Long userId) {
+        this(source,target,userId);
         this.id = id;
     }
 
@@ -20,11 +24,15 @@ public class Favorite {
         return id;
     }
 
-    public Long getSource() {
+    public Station getSource() {
         return source;
     }
 
-    public Long getTarget() {
+    public Station getTarget() {
         return target;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

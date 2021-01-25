@@ -1,5 +1,6 @@
 package subway.favorite.dto;
 
+import subway.favorite.domain.Favorite;
 import subway.station.dto.StationResponse;
 
 public class FavoriteResponse {
@@ -11,6 +12,12 @@ public class FavoriteResponse {
         this.id = id;
         this.source = source;
         this.target = target;
+    }
+
+    public FavoriteResponse(Favorite favorite){
+        this(favorite.getId(),
+                 StationResponse.of(favorite.getSource()),
+                StationResponse.of(favorite.getTarget()));
     }
 
     public Long getId() {

@@ -38,6 +38,7 @@ create table if not exists FAVORITE
     id bigint auto_increment not null,
     source bigint not null,
     target bigint not null,
+    user_id bigint not null,
     primary key(id)
     );
 

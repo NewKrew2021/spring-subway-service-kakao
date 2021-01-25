@@ -9,6 +9,8 @@ import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
+import java.util.List;
+
 @Service
 public class FavoriteService {
 
@@ -20,13 +22,23 @@ public class FavoriteService {
         this.stationDao = stationDao;
     }
 
-    public FavoriteResponse createFavorite(FavoriteRequest favoriteRequest) {
-        Favorite insertFavorite = favoriteDao.insert(new Favorite(favoriteRequest.getSource(), favoriteRequest.getTarget()));
+    public FavoriteResponse createFavorite(FavoriteRequest favoriteRequest, Long memberId) {
         Station sourceStation = stationDao.findById(favoriteRequest.getSource());
         Station targetStation = stationDao.findById(favoriteRequest.getTarget());
+
+        Favorite insertFavorite = favoriteDao.insert(new Favorite(sourceStation, targetStation,memberId));
+
         StationResponse sourceStationResponse = new StationResponse(sourceStation.getId(), sourceStation.getName());
         StationResponse targetStationResponse = new StationResponse(targetStation.getId(), targetStation.getName());
 
         return new FavoriteResponse(insertFavorite.getId(),sourceStationResponse, targetStationResponse);
+    }
+
+    public void deleteFavorite(Long id){
+        favoriteDao.delete(id);
+    }
+
+    public List<Favorite> findAllByUserId(Long userId){
+        return favoriteDao.findAllByUserId(userId);
     }
 }

@@ -62,8 +62,8 @@ npm run dev
 
 ### 즐겨찾기 API (FavoriteController)
 * [x] 즐겨찾기 생성 요청 및 응답
-* [ ] 즐겨찾기 목록 조회 요청 및 응답
-* [ ] 즐겨찾기 목록 삭제 요청 및 응답
+* [x] 즐겨찾기 목록 조회 요청 및 응답
+* [x] 즐겨찾기 목록 삭제 요청 및 응답
 
 
 ## ✏️ Code Review Process

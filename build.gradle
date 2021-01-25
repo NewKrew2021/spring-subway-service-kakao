@@ -40,6 +40,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.2'
+    runtimeOnly 'javax.xml.bind:jaxb-api:2.3.1'
 }
 
 test {
