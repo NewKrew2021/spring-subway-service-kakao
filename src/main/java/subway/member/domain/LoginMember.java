@@ -1,6 +1,7 @@
 package subway.member.domain;
 
 public class LoginMember {
+    public static final LoginMember NO_ONE = new LoginMember();
     private Long id;
     private String email;
     private Integer age;
@@ -24,5 +25,9 @@ public class LoginMember {
 
     public Integer getAge() {
         return age;
+    }
+
+    public boolean isNotLoggedIn() {
+        return this.equals(NO_ONE);
     }
 }

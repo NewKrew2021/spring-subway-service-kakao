@@ -30,6 +30,11 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
+    public LoginMember findLoginMember(String email) {
+        Member member =memberDao.findByEmail(email).orElseThrow(RuntimeException::new);
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+    }
+
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
         memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
