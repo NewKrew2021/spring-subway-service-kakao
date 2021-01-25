@@ -5,17 +5,14 @@ import subway.exception.NoMoreSectionToDeleteException;
 import subway.exception.TooLowDistanceException;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
-        return sections;
+        return Collections.unmodifiableList(sections);
     }
 
     public Sections() {
@@ -110,7 +107,7 @@ public class Sections {
             nextSection = findSectionByNextUpStation(nextSection.getDownStation());
         }
 
-        return stations;
+        return Collections.unmodifiableList(stations);
     }
 
     private Section findUpEndSection() {
