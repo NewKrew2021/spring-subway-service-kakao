@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathTest {
+public class SubwayPathTest {
 
     private Station 강남역;
     private Station 양재역;
@@ -56,23 +56,23 @@ public class PathTest {
     @Test
     void testPath1() {
         // when
-        Path path = graph.getPath(남부터미널역, 강남역);
+        SubwayPath subwayPath = graph.getPath(남부터미널역, 강남역);
 
         // then
-        assertThat(path.getStations()).isEqualTo(Arrays.asList(남부터미널역, 양재역, 강남역));
-        assertThat(path.getDistance()).isEqualTo(22);
-        assertThat(path.getLines()).isEqualTo(Arrays.asList(삼호선, 신분당선));
+        assertThat(subwayPath.getStations()).isEqualTo(Arrays.asList(남부터미널역, 양재역, 강남역));
+        assertThat(subwayPath.getDistance()).isEqualTo(22);
+        assertThat(subwayPath.getLines()).isEqualTo(Arrays.asList(삼호선, 신분당선));
     }
 
     @DisplayName("교대역에서 잠실역을 가는 경로")
     @Test
     void testPath2() {
         //when
-        Path path = graph.getPath(교대역, 잠실역);
+        SubwayPath subwayPath = graph.getPath(교대역, 잠실역);
 
         //then
-        assertThat(path.getStations()).isEqualTo(Arrays.asList(교대역, 남부터미널역, 양재역, 강남역, 잠실역));
-        assertThat(path.getDistance()).isEqualTo(65);
-        assertThat(path.getLines()).isEqualTo(Arrays.asList(삼호선, 삼호선, 신분당선, 이호선));
+        assertThat(subwayPath.getStations()).isEqualTo(Arrays.asList(교대역, 남부터미널역, 양재역, 강남역, 잠실역));
+        assertThat(subwayPath.getDistance()).isEqualTo(65);
+        assertThat(subwayPath.getLines()).isEqualTo(Arrays.asList(삼호선, 삼호선, 신분당선, 이호선));
     }
 }

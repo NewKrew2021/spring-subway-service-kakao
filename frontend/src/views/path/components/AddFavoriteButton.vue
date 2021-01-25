@@ -18,7 +18,7 @@ import { CREATE_FAVORITE } from '@/store/shared/actionTypes'
 export default {
   name: 'AddFavoriteButton',
   props: {
-    path: {
+    subwayPath: {
       type: Object,
       required: true
     }
@@ -28,7 +28,7 @@ export default {
     ...mapActions([CREATE_FAVORITE]),
     async onAddFavorite() {
       try {
-        const { source, target } = this.path
+        const { source, target } = this.subwayPath
         await this.createFavorite({ source, target })
         this.showSnackbar(SNACKBAR_MESSAGES.FAVORITE.ADD.SUCCESS)
       } catch (e) {

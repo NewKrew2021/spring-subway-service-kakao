@@ -68,7 +68,7 @@ export default {
         },
         {
           _id: 4,
-          link: '/path',
+          link: '/subwayPath',
           text: '경로 검색'
         }
       ]
