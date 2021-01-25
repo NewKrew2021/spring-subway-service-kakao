@@ -20,7 +20,7 @@ public class PathService {
     public PathResponse getShortestPathOfStations(Station source, Station target, int age) {
         List<Line> lines = lineDao.findAll();
         Graph graph = new Graph(lines);
-        return PathResponse.of(graph.getPath(source, target, age));
+        return PathResponse.of(graph.getPathInfo(source, target, age));
     }
 }
 
