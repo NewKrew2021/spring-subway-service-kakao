@@ -24,37 +24,40 @@ public class Path {
 
     public static Path make(List<Line> lines, Station sourceStation, Station targetStation) {
         DijkstraShortestPath dijkstraShortestPath = getDijkstraPath(lines);
+
         return new Path(
                 dijkstraShortestPath.getPath(sourceStation, targetStation).getVertexList(),
-                (int)dijkstraShortestPath.getPath(sourceStation, targetStation).getWeight() ,
+                (int) dijkstraShortestPath.getPath(sourceStation, targetStation).getWeight(),
                 0
         );
+
     }
 
     private static DijkstraShortestPath getDijkstraPath(List<Line> lines) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph
-                = new WeightedMultigraph(DefaultWeightedEdge.class);
-
-        lines.stream()
-                .map(Line::getSections)
-                .map(Sections::getSections)
-                .flatMap(Collection::stream)
-                .forEach(section -> addGraph(graph, section));
+        WeightedMultigraph<Station, WeightWithLine> graph
+                = new WeightedMultigraph(WeightWithLine.class);
+        for (Line line : lines) {
+            line.getSections()
+                    .getSections()
+                    .forEach(section -> addGraph(graph, section, line));
+        }
 
         return new DijkstraShortestPath(graph);
     }
 
-    private static void addGraph(WeightedMultigraph<Station, DefaultWeightedEdge> graph, Section section) {
+    private static void addGraph(WeightedMultigraph<Station, WeightWithLine> graph, Section section, Line line) {
         Station upStation = section.getUpStation();
         Station downStation = section.getDownStation();
-        if(!graph.containsVertex(upStation)) {
+        WeightWithLine weightWithLine = new WeightWithLine(section.getDistance(), line);
+        if (!graph.containsVertex(upStation)) {
             graph.addVertex(upStation);
         }
-        if(!graph.containsVertex(downStation)) {
+        if (!graph.containsVertex(downStation)) {
             graph.addVertex(downStation);
         }
-        graph.setEdgeWeight(graph.addEdge(upStation,downStation), section.getDistance());
-        graph.setEdgeWeight(graph.addEdge(downStation,upStation), section.getDistance());
+        graph.addEdge(upStation, downStation, weightWithLine);
+        graph.addEdge(downStation, upStation, weightWithLine);
+
     }
 
     public int getDistance() {

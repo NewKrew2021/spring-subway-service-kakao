@@ -1,21 +1,14 @@
 package subway.path.application;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
-import subway.line.domain.Section;
-import subway.line.domain.Sections;
 import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PathService {
