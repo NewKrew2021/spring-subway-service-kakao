@@ -5,20 +5,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.domain.DirectedSection;
 import subway.path.domain.DirectedSections;
-import subway.path.domain.SubwayNavigator;
+import subway.path.domain.SubwayMap;
 import subway.path.domain.SubwayPrice;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubwayNavigatorTest {
-    SubwayNavigator 이호선_삼호선_네비게이션;
+public class SubwayMapTest {
+    SubwayMap 이호선_삼호선_네비게이션;
     Line 이호선;
     Line 삼호선;
     Station 서초역 = new Station(1L, "서초역");
@@ -43,7 +41,7 @@ public class SubwayNavigatorTest {
         List<Line> lines = new ArrayList<>();
         lines.add(이호선);
         lines.add(삼호선);
-        이호선_삼호선_네비게이션 = new SubwayNavigator(lines);
+        이호선_삼호선_네비게이션 = new SubwayMap(lines);
     }
 
     @DisplayName("적절한 경로를 구하는지 체크")

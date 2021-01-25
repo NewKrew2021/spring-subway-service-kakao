@@ -38,6 +38,10 @@ public class DirectedSections {
         return SubwayPrice.getPrice(getDistance(), getMaxExtraFare());
     }
 
+    public int getDiscountPrice(int age) {
+        return SubwayPrice.getDiscountPrice(getDistance(), getMaxExtraFare(), age);
+    }
+
     private int getMaxExtraFare() {
         return sections.stream()
                 .map(DirectedSection::getLine)
