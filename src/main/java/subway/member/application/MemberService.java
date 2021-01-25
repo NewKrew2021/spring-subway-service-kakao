@@ -2,6 +2,7 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.exception.InvalidRequestException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -33,11 +34,16 @@ public class MemberService {
 
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+        Member newMember = new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge());
+        if (memberDao.update(newMember) == 0) {
+            throw new InvalidRequestException("회원 정보 수정에 실패하였습니다.");
+        }
     }
 
     @Transactional
     public void deleteMember(Long id) {
-        memberDao.deleteById(id);
+        if (memberDao.deleteById(id) == 0) {
+            throw new InvalidRequestException("회원 정보 삭제에 실패하였습니다.");
+        }
     }
 }

@@ -37,14 +37,14 @@ public class MemberDao {
         return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
     }
 
-    public void update(Member member) {
+    public int update(Member member) {
         String sql = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
-        jdbcTemplate.update(sql, member.getEmail(), member.getPassword(), member.getAge(), member.getId());
+        return jdbcTemplate.update(sql, member.getEmail(), member.getPassword(), member.getAge(), member.getId());
     }
 
-    public void deleteById(Long id) {
+    public int deleteById(Long id) {
         String sql = "delete from MEMBER where id = ?";
-        jdbcTemplate.update(sql, id);
+        return jdbcTemplate.update(sql, id);
     }
 
     public Member findById(Long id) {
