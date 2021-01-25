@@ -41,6 +41,6 @@ public class Path {
     }
 
     public int discountAmount(int totalFare, LoginMember loginMember) {
-        return totalFare - (int) ((totalFare - DEDUCTIONS) * loginMember.getDiscountPercentage());
+        return totalFare - (int) ((totalFare - DEDUCTIONS) * loginMember.getDiscountRate());
     }
 }

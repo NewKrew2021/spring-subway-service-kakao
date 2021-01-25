@@ -1,6 +1,13 @@
 package subway.member.domain;
 
 public class LoginMember {
+    public static final double CHILD_DISCOUNT_RATE = 0.5;
+    public static final double TEENAGER_DISCOUNT_RATE = 0.2;
+    public static final double NONE_DISCOUNT_RATE = 0.0;
+    public static final int MINIMUM_CHILD_AGE = 6;
+    public static final int MAXIMUM_CHILD_AGE = 12;
+    public static final int MINIMUM_TEENAGER_AGE = 13;
+    public static final int MAXIMUM_TEENAGER_AGE = 18;
     private Long id;
     private String email;
     private Integer age;
@@ -26,13 +33,13 @@ public class LoginMember {
         return age;
     }
 
-    public double getDiscountPercentage() {
-        if (age >= 6 && age < 13) {
-            return 0.5;
+    public double getDiscountRate() {
+        if (age >= MINIMUM_CHILD_AGE && age < MAXIMUM_CHILD_AGE) {
+            return CHILD_DISCOUNT_RATE;
         }
-        if (age >= 13 && age < 19) {
-            return 0.2;
+        if (age >= MINIMUM_TEENAGER_AGE && age <= MAXIMUM_TEENAGER_AGE) {
+            return TEENAGER_DISCOUNT_RATE;
         }
-        return 0.0;
+        return NONE_DISCOUNT_RATE;
     }
 }
