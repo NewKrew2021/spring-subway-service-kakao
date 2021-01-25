@@ -11,6 +11,7 @@ import subway.member.domain.Member;
 @Service
 public class AuthService {
 
+    public static final String INVALID_USER_INFORMATION_ERROR_MESSAGE = "유효하지 않은 입력입니다.";
     private JwtTokenProvider jwtTokenProvider;
     private MemberService memberService;
 
@@ -26,7 +27,7 @@ public class AuthService {
     public TokenResponse createToken(TokenRequest tokenRequest) {
         Member member = memberService.findMemberByEmail(tokenRequest.getEmail());
         if(!validateMember(member, tokenRequest)) {
-            throw new IllegalArgumentException("유효하지 않은 입력입니다.");
+            throw new IllegalArgumentException(INVALID_USER_INFORMATION_ERROR_MESSAGE);
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);

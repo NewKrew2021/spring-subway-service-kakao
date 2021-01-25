@@ -7,13 +7,12 @@ import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Graph {
 
+    public static final String NO_MATCHING_PATH_EXCEPTION_ERROR_MESSAGE = "두 역 사이에 경로가 존재하지 않습니다.";
     private WeightedMultigraph<Station, Section> graph = new WeightedMultigraph(Section.class);
     private DijkstraShortestPath<Station,Section> dijkstraShortestPath;
 
@@ -31,7 +30,7 @@ public class Graph {
                     .map(StationResponse::of)
                     .collect(Collectors.toList());
         } catch (NullPointerException e) {
-            throw new IllegalArgumentException("두 역 사이에 경로가 존재하지 않습니다.");
+            throw new IllegalArgumentException(NO_MATCHING_PATH_EXCEPTION_ERROR_MESSAGE);
         }
     }
 
