@@ -3,10 +3,10 @@ package subway.line.domain;
 import subway.station.domain.Station;
 
 public class Section {
-    private Long id;
-    private Station upStation;
-    private Station downStation;
-    private int distance;
+    protected Long id;
+    protected Station upStation;
+    protected Station downStation;
+    protected int distance;
 
     public Section() {
     }
@@ -38,5 +38,9 @@ public class Section {
 
     public int getDistance() {
         return distance;
+    }
+
+    public boolean contains(Station station) {
+        return upStation.equals(station) || downStation.equals(station);
     }
 }

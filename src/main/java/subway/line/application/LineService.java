@@ -3,26 +3,22 @@ package subway.line.application;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
-import subway.line.domain.DirectedSections;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.line.domain.SubwayMap;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
-import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
-import subway.station.dto.StationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class LineService {
-    private final LineDao lineDao;
-    private final SectionDao sectionDao;
-    private final StationService stationService;
+    private LineDao lineDao;
+    private SectionDao sectionDao;
+    private StationService stationService;
 
     public LineService(LineDao lineDao, SectionDao sectionDao, StationService stationService) {
         this.lineDao = lineDao;
