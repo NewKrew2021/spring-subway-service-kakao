@@ -9,18 +9,17 @@ import java.util.List;
 @Component
 public class FarePolicyFactory {
 
-    public FarePolicy createBy(int distance) {
-        return new DistancePolicy(distance);
-    }
+    public FarePolicy createBy(int distance, List<Line> lines, LoginMember loginMember) {
+        FarePolicy defaultPolicy = getDistanceAndLinePolicy(distance, lines);
 
-    public FarePolicy createBy(List<Line> lines) {
-        return new LinePolicy(lines);
-    }
-
-    public FarePolicy createBy(LoginMember loginMember) {
         if (loginMember.isNotLogined()) {
-            return new IdentityPolicy();
+            return defaultPolicy;
         }
-        return new AgePolicy(loginMember.getAge());
+        return defaultPolicy.andThen(new AgePolicy(loginMember.getAge()));
+    }
+
+    private FarePolicy getDistanceAndLinePolicy(int distance, List<Line> lines) {
+        return new DistancePolicy(distance)
+                .andThen(new LinePolicy(lines));
     }
 }

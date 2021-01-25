@@ -19,11 +19,6 @@ public class FareCalculatorImpl implements FareCalculator {
 
     @Override
     public int getFare(int distance, List<Line> lines, LoginMember loginMember) {
-        int fare = BASE_FARE;
-        fare = farePolicyFactory.createBy(distance).apply(fare);
-        fare = farePolicyFactory.createBy(lines).apply(fare);
-        fare = farePolicyFactory.createBy(loginMember).apply(fare);
-
-        return fare;
+        return farePolicyFactory.createBy(distance, lines, loginMember).apply(BASE_FARE);
     }
 }

@@ -9,4 +9,8 @@ public interface FarePolicy {
      * @return policy-applied fare
      */
     int apply(int fare);
+
+    default FarePolicy andThen(FarePolicy next) {
+        return fare -> next.apply(apply(fare));
+    }
 }
