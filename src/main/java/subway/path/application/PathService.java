@@ -13,8 +13,8 @@ import subway.station.domain.Station;
 @Service
 public class PathService {
 
-    private LineService lineService;
-    private StationService stationService;
+    private final LineService lineService;
+    private final StationService stationService;
 
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
@@ -37,12 +37,11 @@ public class PathService {
         Graph graph = new Graph(lines.getUniqueStations(), lines.getAllSections());
 
         Lines pathLines = new Lines(lineService.findLineByIds(graph.getPathLineIds(sourceStation, targetStation)));
-        Path path = new Path(
+        return new Path(
                 graph.getPathStations(sourceStation, targetStation),
                 graph.getPathDistance(sourceStation, targetStation),
                 pathLines.getTotalExtraFares()
         );
-        return path;
     }
 
 }

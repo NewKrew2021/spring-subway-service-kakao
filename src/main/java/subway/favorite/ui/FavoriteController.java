@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/favorites")
 public class FavoriteController {
-    // TODO: 즐겨찾기 기능 구현하기
 
     private FavoriteService favoriteService;
     private MemberService memberService;
@@ -26,7 +25,7 @@ public class FavoriteController {
     }
 
     @PostMapping
-    private ResponseEntity<Void> createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest){
+    private ResponseEntity<Void> createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
         FavoriteResponse favoriteResponse = favoriteService.createFavorite(loginMember, favoriteRequest);
         return ResponseEntity.created(URI.create("/favorites/" + favoriteResponse.getId())).build();
     }

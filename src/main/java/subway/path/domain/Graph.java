@@ -6,21 +6,18 @@ import subway.line.domain.Section;
 import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Graph {
 
-    private WeightedMultigraph<Station, Section> graph = new WeightedMultigraph(Section.class);
-    private DijkstraShortestPath<Station,Section> dijkstraShortestPath;
+    private final WeightedMultigraph<Station, Section> graph = new WeightedMultigraph<>(Section.class);
+    private final DijkstraShortestPath<Station,Section> dijkstraShortestPath;
 
     public Graph(List<Station> stations, List<Section> sections) {
-        stations.forEach(station -> graph.addVertex(station));
+        stations.forEach(graph::addVertex);
         sections.forEach(section -> graph.addEdge(section.getUpStation(), section.getDownStation(), section));
-        dijkstraShortestPath = new DijkstraShortestPath(graph);
+        dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
     public List<StationResponse> getPathStations(Station sourceStation, Station targetStation) {
@@ -36,10 +33,11 @@ public class Graph {
     }
 
     public List<Long> getPathLineIds(Station sourceStation, Station targetStation) {
-        return new ArrayList<>(dijkstraShortestPath.getPath(sourceStation, targetStation)
+        return dijkstraShortestPath.getPath(sourceStation, targetStation)
                 .getEdgeList().stream()
                 .map(Section::getLineId)
-                .collect(Collectors.toSet()));
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public int getPathDistance(Station sourceStation, Station targetStation){

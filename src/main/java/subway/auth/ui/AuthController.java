@@ -14,14 +14,13 @@ import subway.auth.dto.TokenResponse;
 @Controller
 @RequestMapping("/login")
 public class AuthController {
-    // TODO: 로그인(토큰 발급) 요청 처리하기
 
     @ExceptionHandler
     public ResponseEntity illegalArgumentHandler(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;

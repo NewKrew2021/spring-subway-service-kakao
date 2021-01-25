@@ -11,8 +11,8 @@ import subway.member.domain.Member;
 @Service
 public class AuthService {
 
-    private JwtTokenProvider jwtTokenProvider;
-    private MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final MemberService memberService;
 
     public AuthService(JwtTokenProvider jwtTokenProvider, MemberService memberService) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -25,7 +25,7 @@ public class AuthService {
 
     public TokenResponse createToken(TokenRequest tokenRequest) {
         Member member = memberService.findMemberByEmail(tokenRequest.getEmail());
-        if(!validateMember(member, tokenRequest)) {
+        if (!validateMember(member, tokenRequest)) {
             throw new IllegalArgumentException("유효하지 않은 입력입니다.");
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());

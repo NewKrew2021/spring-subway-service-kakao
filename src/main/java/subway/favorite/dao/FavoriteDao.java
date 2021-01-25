@@ -17,7 +17,7 @@ public class FavoriteDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<Favorite> rowMapper = (rs, rowNum) -> new Favorite(
+    private final RowMapper<Favorite> rowMapper = (rs, rowNum) -> new Favorite(
             rs.getLong("id"),
             rs.getLong("member_id"),
             rs.getLong("source_station_id"),
@@ -52,7 +52,7 @@ public class FavoriteDao {
         return jdbcTemplate.query(SQL, rowMapper, memberId);
     }
 
-    public int deleteById(Long id){
+    public int deleteById(Long id) {
         String SQL = "DELETE FROM favorite WHERE id = ?";
         return jdbcTemplate.update(SQL,id);
     }

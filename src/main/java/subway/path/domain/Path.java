@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Path {
 
-    private List<StationResponse> stations;
-    private int distance;
-    private int extraFare;
+    private final List<StationResponse> stations;
+    private final int distance;
+    private final int extraFare;
 
     public Path(List<StationResponse> stations, int distance, int extraFare) {
         this.stations = stations;
@@ -26,13 +26,8 @@ public class Path {
         return distance;
     }
 
-    public int getExtraFare() {
-        return extraFare;
-    }
-
     public int getTotalFare() {
-        int totalFare = extraFare + FareUtil.calculateDistanceFare(distance);
-        return totalFare;
+        return extraFare + FareUtil.calculateDistanceFare(distance);
     }
 
     public int getTotalFare(LoginMember loginMember) {

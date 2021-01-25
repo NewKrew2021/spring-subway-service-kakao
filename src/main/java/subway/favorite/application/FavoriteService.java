@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class FavoriteService {
 
-    private FavoriteDao favoriteDao;
-    private StationService stationService;
+    private final FavoriteDao favoriteDao;
+    private final StationService stationService;
 
     public FavoriteService(FavoriteDao favoriteDao, StationService stationService) {
         this.favoriteDao = favoriteDao;

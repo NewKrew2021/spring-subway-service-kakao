@@ -3,19 +3,24 @@ package subway.path.util;
 
 public class FareUtil {
 
-    public static int calculateDistanceFare(int distance){
-        int totalFare = 1250;
+    private static final int BASIC_FARE = 1250;
+    private static final int BASIC_STANDARD_LENGTH = 10;
+    public static final int EXTRA_STANDARD_LENGTH = 50;
+    public static final int EXTRA_FARE = 100;
 
-        if(distance < 10){
+    public static int calculateDistanceFare(int distance) {
+        int totalFare = BASIC_FARE;
+
+        if (distance < BASIC_STANDARD_LENGTH) {
             return totalFare;
         }
         return getExtraFareByDistance(distance) + totalFare;
     }
 
     public static int getExtraFareByDistance(int distance) {
-        if(distance < 50) {
-            return (int) Math.ceil((double)(distance - 10) / 5) * 100;
+        if (distance < EXTRA_STANDARD_LENGTH) {
+            return (int) Math.ceil((double) (distance - BASIC_STANDARD_LENGTH) / 5) * EXTRA_FARE;
         }
-        return 800 + Math.max(0, (int) Math.ceil((double)(distance - 50) / 8) * 100);
+        return 800 + (int) Math.ceil((double) (distance - EXTRA_STANDARD_LENGTH) / 8) * EXTRA_FARE;
     }
 }

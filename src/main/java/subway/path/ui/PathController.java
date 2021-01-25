@@ -12,14 +12,13 @@ import subway.path.dto.PathResponse;
 @Controller
 @RequestMapping("/paths")
 public class PathController {
-    // TODO: 경로조회 기능 구현하기
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity illegalArgumentHandler(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    private PathService pathService;
+    private final PathService pathService;
 
     public PathController(PathService pathService) {
         this.pathService = pathService;
