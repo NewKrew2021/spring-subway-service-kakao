@@ -29,4 +29,9 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<Void> NullFavorite() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+    @ExceptionHandler(SectionNotFoundException.class)
+    public ResponseEntity<Void> NullSection(){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 }

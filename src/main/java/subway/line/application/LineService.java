@@ -1,6 +1,7 @@
 package subway.line.application;
 
 import org.springframework.stereotype.Service;
+import subway.auth.exception.SectionNotFoundException;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
@@ -39,7 +40,7 @@ public class LineService {
             Section section = new Section(upStation, downStation, request.getDistance());
             return sectionDao.insert(line, section);
         }
-        return null;
+        throw new SectionNotFoundException();
     }
 
     public List<LineResponse> findLineResponses() {
