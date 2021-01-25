@@ -26,9 +26,7 @@ public class AuthController {
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest) {
         String email = tokenRequest.getEmail();
         String password = tokenRequest.getPassword();
-        if (authService.checkInvalidMember(email, password)) {
-            throw new InvalidMemberException();
-        }
+        authService.checkInvalidMember(email, password);
         return ResponseEntity.ok().body(new TokenResponse(jwtTokenProvider.createToken(email)));
     }
 

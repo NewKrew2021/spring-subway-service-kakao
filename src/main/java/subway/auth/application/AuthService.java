@@ -6,6 +6,7 @@ import subway.auth.exception.InvalidTokenException;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
+import subway.member.exception.InvalidMemberException;
 
 @Service
 public class AuthService {
@@ -19,12 +20,11 @@ public class AuthService {
     }
 
 
-    public boolean checkInvalidMember(String email, String password) {
+    public void checkInvalidMember(String email, String password) {
         Member member = memberDao.findByEmail(email);
         if (isMember(password, member)) {
-            return false;
+            throw new InvalidMemberException();
         }
-        return true;
     }
 
     private boolean isMember(String password, Member member) {
