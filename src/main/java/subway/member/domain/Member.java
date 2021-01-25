@@ -7,6 +7,7 @@ import subway.exception.WrongEmailFormatException;
 import java.util.Objects;
 
 public class Member {
+    private static final String EMAIL_RULE = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
     private Long id;
     private String email;
     private String password;
@@ -16,7 +17,7 @@ public class Member {
     }
 
     public Member(String email, String password) {
-        String emailRule = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        String emailRule = EMAIL_RULE;
         if (!email.matches(emailRule)) {
             throw new WrongEmailFormatException();
         }

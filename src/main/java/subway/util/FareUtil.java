@@ -14,8 +14,8 @@ public class FareUtil {
     private static final double TEENAGER_SALE_RATE = 0.2;
     private static final double CHILD_SALE_RATE = 0.5;
     private static final int BASIC_FARE_DISTANCE = 10;
-    private static final int FIFTY_KILOMETER = 50;
-    private static final int OVER_FIFTY_KILOMETER_FARE = 800;
+    private static final int EXTRA_FARE_DISTANCE = 50;
+    private static final int OVER_EXTRA_DISTANCE_FARE = 800;
     private static final double MIDDLE_DISTANCE_DENOMINATOR = 5;
     private static final double HIGH_DISTANCE_DENOMINATOR = 8;
 
@@ -33,11 +33,11 @@ public class FareUtil {
     public static int calculateDistanceFare(int totalDistance) {
         int distanceFare = BASE_FARE;
 
-        if (BASIC_FARE_DISTANCE < totalDistance && totalDistance <= FIFTY_KILOMETER) {
+        if (BASIC_FARE_DISTANCE < totalDistance && totalDistance <= EXTRA_FARE_DISTANCE) {
             distanceFare += Math.ceil((totalDistance - BASIC_FARE_DISTANCE) / MIDDLE_DISTANCE_DENOMINATOR) * HUNDRED;
         }
-        if (totalDistance > FIFTY_KILOMETER) {
-            distanceFare += OVER_FIFTY_KILOMETER_FARE + Math.ceil((totalDistance - FIFTY_KILOMETER) / HIGH_DISTANCE_DENOMINATOR) * HUNDRED;
+        if (totalDistance > EXTRA_FARE_DISTANCE) {
+            distanceFare += OVER_EXTRA_DISTANCE_FARE + Math.ceil((totalDistance - EXTRA_FARE_DISTANCE) / HIGH_DISTANCE_DENOMINATOR) * HUNDRED;
         }
         return distanceFare;
     }
