@@ -65,8 +65,4 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<Void> invalidToken() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
 }

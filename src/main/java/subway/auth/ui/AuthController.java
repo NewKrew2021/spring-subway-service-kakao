@@ -34,9 +34,4 @@ public class AuthController {
         return ResponseEntity.ok().body(new TokenResponse(jwtTokenProvider.createToken(email)));
     }
 
-    @ExceptionHandler(InvalidMemberException.class)
-    public ResponseEntity<Void> invalidToken() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
 }

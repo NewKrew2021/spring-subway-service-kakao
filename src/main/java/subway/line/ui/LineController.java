@@ -61,8 +61,5 @@ public class LineController {
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity handleSQLException() {
-        return ResponseEntity.badRequest().build();
-    }
+
 }

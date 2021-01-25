@@ -13,8 +13,6 @@ public class LineResponse {
     private int extraFare;
     private List<StationResponse> stations;
 
-    public LineResponse() {
-    }
 
     public LineResponse(Long id, String name, String color, int extraFare, List<StationResponse> stations) {
         this.id = id;
