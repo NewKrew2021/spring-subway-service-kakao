@@ -9,6 +9,8 @@ import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
 
+import java.util.Optional;
+
 @Service
 public class MemberService {
     private MemberDao memberDao;
@@ -25,6 +27,11 @@ public class MemberService {
 
     public MemberResponse findMember(Long id) {
         Member member = memberDao.findById(id);
+        return MemberResponse.of(member);
+    }
+
+    public MemberResponse findMemberByEmail(String email){
+        Member member = memberDao.findByEmail(email);
         return MemberResponse.of(member);
     }
 
