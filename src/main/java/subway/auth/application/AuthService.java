@@ -1,9 +1,12 @@
 package subway.auth.application;
 
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exception.InvalidTokenException;
+import subway.exception.LoginFailException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 
@@ -21,7 +24,7 @@ public class AuthService {
 
     public TokenResponse createToken(TokenRequest tokenRequest){
         if(!checkEmailValidation(tokenRequest.getEmail(), tokenRequest.getPassword())){
-            throw new IllegalArgumentException();
+            throw new LoginFailException();
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);
@@ -36,6 +39,9 @@ public class AuthService {
     }
 
     public Member getMemberByToken(String token){
-        return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
+        if (jwtTokenProvider.validateToken(token)){
+            return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
+        }
+        throw new InvalidTokenException();
     }
 }

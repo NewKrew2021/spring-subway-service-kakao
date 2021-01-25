@@ -10,6 +10,7 @@ import subway.auth.application.AuthService;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.exception.LoginFailException;
 
 @Controller
 public class AuthController {
@@ -30,7 +31,7 @@ public class AuthController {
             System.out.println(authService.getPayLoad(tokenResponse.getAccessToken()));
             return ResponseEntity.ok().body(tokenResponse);
         }
-        catch (IllegalArgumentException e){
+        catch (LoginFailException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

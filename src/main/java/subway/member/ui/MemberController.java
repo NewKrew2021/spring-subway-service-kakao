@@ -5,6 +5,7 @@ import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exception.InvalidTokenException;
 import subway.member.domain.LoginMember;
 import subway.member.application.MemberService;
 import subway.member.dto.MemberRequest;
@@ -67,4 +68,10 @@ public class MemberController {
         memberService.deleteMember(loginMember.getId());
         return ResponseEntity.noContent().build();
     }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Void> invalidToken(){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
 }
