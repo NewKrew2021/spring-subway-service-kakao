@@ -1,5 +1,6 @@
 package subway.member.application;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import subway.member.dao.MemberDao;
@@ -28,7 +29,14 @@ public class MemberService {
     }
 
     public LoginMember findMemberByEmail(String email) {
-        Member member = memberDao.findByEmail(email);
+        Member member;
+
+        try {
+            member = memberDao.findByEmail(email);
+        } catch (DataAccessException ignored) {
+            return null;
+        }
+
         return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 
