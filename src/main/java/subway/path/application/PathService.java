@@ -4,7 +4,8 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
-import subway.path.domain.Path;
+import subway.path.domain.ShortestGraph;
+import subway.path.domain.TempLogic;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
@@ -27,8 +28,8 @@ public class PathService {
         Station sourceStation = stationService.findStationById(sourceId);
         Station targetStation = stationService.findStationById(targetId);
 
-        Path path = Path.make(lines, sourceStation, targetStation, loginMember);
-        return PathResponse.make(path.getStations(), path.getDistance(), path.getFare());
+        TempLogic tempLogic = new TempLogic(new ShortestGraph(lines,sourceStation,targetStation),loginMember);
+        return PathResponse.make(tempLogic.getStations(), tempLogic.getDistance(), tempLogic.getFare());
     }
 
 }
