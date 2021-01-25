@@ -1,7 +1,7 @@
 package subway.member.domain;
 
 import org.junit.jupiter.api.Test;
-import subway.exception.WrongEmailFormatException;
+import subway.exception.WrongInputDataException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -15,7 +15,7 @@ public class MemberTest {
 
     @Test
     void 멤버생성_실패_테스트(){
-        assertThatExceptionOfType(WrongEmailFormatException.class).isThrownBy(()->{
+        assertThatExceptionOfType(WrongInputDataException.class).isThrownBy(()->{
             new Member("adult.com","1234");
         });
     }

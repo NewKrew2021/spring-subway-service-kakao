@@ -1,8 +1,7 @@
 package subway.member.domain;
 
 import subway.exception.LoginFailException;
-import subway.exception.TooLowAgeException;
-import subway.exception.WrongEmailFormatException;
+import subway.exception.WrongInputDataException;
 
 import java.util.Objects;
 
@@ -20,7 +19,7 @@ public class Member {
     public Member(String email, String password) {
         String emailRule = EMAIL_RULE_REGEX;
         if (!email.matches(emailRule)) {
-            throw new WrongEmailFormatException();
+            throw new WrongInputDataException("이메일 형식이 잘못되었습니다.");
         }
         this.email = email;
         this.password = password;
@@ -29,7 +28,7 @@ public class Member {
     public Member(String email, String password, Integer age) {
         this(email, password);
         if (age < MIN_AGE) {
-            throw new TooLowAgeException();
+            throw new WrongInputDataException("연령이 잘못 입력되었습니다.");
         }
         this.age = age;
     }

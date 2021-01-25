@@ -2,7 +2,7 @@ package subway.line.domain;
 
 import subway.exception.AlreadyExistedDataException;
 import subway.exception.NoMoreSectionToDeleteException;
-import subway.exception.TooLowDistanceException;
+import subway.exception.WrongInputDataException;
 import subway.station.domain.Station;
 
 import java.util.*;
@@ -40,7 +40,7 @@ public class Sections {
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new AlreadyExistedDataException();
+            throw new AlreadyExistedDataException("동일한 구간이 존재합니다.");
         }
     }
 
@@ -58,7 +58,7 @@ public class Sections {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new AlreadyExistedDataException();
+            throw new AlreadyExistedDataException("동일한 구간이 존재합니다.");
         }
     }
 
@@ -86,7 +86,7 @@ public class Sections {
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new TooLowDistanceException();
+            throw new WrongInputDataException("거리가 잘못 입력되었습니다.");
         }
         this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);

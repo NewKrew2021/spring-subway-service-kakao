@@ -1,10 +1,11 @@
 package subway.line.dao;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import subway.exception.DuplicateNameException;
-import subway.exception.NotExistLineException;
+import subway.exception.AlreadyExistedDataException;
+import subway.exception.NotExistDataException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
@@ -38,8 +39,8 @@ public class LineDao {
         try {
             Long lineId = insertAction.executeAndReturnKey(params).longValue();
             return new Line(lineId, line.getName(), line.getColor());
-        } catch (RuntimeException e){
-            throw new DuplicateNameException();
+        } catch (DuplicateKeyException e){
+            throw new AlreadyExistedDataException("이미 사용중인 노선 명 입니다.");
         }
     }
 
@@ -54,12 +55,8 @@ public class LineDao {
                 "left outer join STATION UST on S.up_station_id = UST.id " +
                 "left outer join STATION DST on S.down_station_id = DST.id " +
                 "WHERE L.id = ?";
-        try {
-            List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
-            return mapLine(result);
-        } catch (RuntimeException e){
-            throw new NotExistLineException();
-        }
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+        return mapLine(result);
     }
 
     public void update(Line newLine) {
@@ -77,7 +74,6 @@ public class LineDao {
                 "left outer join SECTION S on L.id = S.line_id " +
                 "left outer join STATION UST on S.up_station_id = UST.id " +
                 "left outer join STATION DST on S.down_station_id = DST.id ";
-
         List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
         Map<Long, List<Map<String, Object>>> resultByLine = result.stream().collect(Collectors.groupingBy(it -> (Long) it.get("line_id")));
         return resultByLine.entrySet().stream()
@@ -87,7 +83,7 @@ public class LineDao {
 
     private Line mapLine(List<Map<String, Object>> result) {
         if (result.size() == 0) {
-            throw new RuntimeException();
+            throw new NotExistDataException("노선이 존재하지 않습니다.");
         }
 
         List<Section> sections = extractSections(result);

@@ -1,6 +1,6 @@
 package subway.line.domain;
 
-import subway.exception.TooLowExtraFareException;
+import subway.exception.WrongInputDataException;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class Line {
     public Line(String name, String color, int extraFare) {
         this(name, color);
         if(extraFare < 0){
-            throw new TooLowExtraFareException();
+            throw new WrongInputDataException("추가요금이 잘못 입력되었습니다.");
         }
         this.extraFare = extraFare;
     }

@@ -1,6 +1,6 @@
 package subway.favorite.domain;
 
-import subway.exception.WrongStationIdException;
+import subway.exception.WrongInputDataException;
 
 public class Favorite {
     private Long id;
@@ -10,7 +10,7 @@ public class Favorite {
 
     public Favorite(Long memberId, Long sourceStationId, Long targetStationId) {
         if (sourceStationId.equals(targetStationId)) {
-            throw new WrongStationIdException();
+            throw new WrongInputDataException("역이 잘못 입력되었습니다.");
         }
         this.memberId = memberId;
         this.sourceStationId = sourceStationId;

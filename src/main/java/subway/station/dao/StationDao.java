@@ -1,13 +1,15 @@
 package subway.station.dao;
 
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import subway.exception.DuplicateNameException;
-import subway.exception.NotExistStationException;
+import subway.exception.AlreadyExistedDataException;
+import subway.exception.NotExistDataException;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
@@ -37,8 +39,8 @@ public class StationDao {
         try {
             Long id = insertAction.executeAndReturnKey(params).longValue();
             return new Station(id, station.getName());
-        } catch (RuntimeException e){
-            throw new DuplicateNameException();
+        } catch (DuplicateKeyException e){
+            throw new AlreadyExistedDataException("이미 사용중인 역 명입니다.");
         }
     }
 
@@ -56,8 +58,8 @@ public class StationDao {
         String sql = "select * from STATION where id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, id);
-        } catch (RuntimeException e){
-            throw new NotExistStationException();
+        } catch (IncorrectResultSizeDataAccessException e){
+            throw new NotExistDataException("해당 역이 존재하지 않습니다.");
         }
     }
 }

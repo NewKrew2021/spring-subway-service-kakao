@@ -1,7 +1,6 @@
 package subway.line.domain;
 
-import subway.exception.TooLowDistanceException;
-import subway.exception.WrongStationIdException;
+import subway.exception.WrongInputDataException;
 import subway.station.domain.Station;
 
 import java.util.Objects;
@@ -23,14 +22,14 @@ public class Section {
     public Section(Station upStation, Station downStation, int distance) {
         this(upStation, downStation);
         if (distance < 1) {
-            throw new TooLowDistanceException();
+            throw new WrongInputDataException("거리가 잘못 입력되었습니다.");
         }
         this.distance = distance;
     }
 
     public Section(Station upStation, Station downStation) {
         if (upStation.equals(downStation)) {
-            throw new WrongStationIdException();
+            throw new WrongInputDataException("역이 잘못 입력되었습니다.");
         }
         this.upStation = upStation;
         this.downStation = downStation;
