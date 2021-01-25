@@ -30,6 +30,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
         HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
         String accessToken = AuthorizationExtractor.extract(httpServletRequest);
+        if(accessToken == null || accessToken.equals("null")) {
+            return null;
+        }
         if(!authService.checkToken(accessToken)) {
             throw new InvalidTokenException("유효하지 않은 토큰입니다.");
         }

@@ -23,12 +23,7 @@ public class PathController {
     }
 
     @GetMapping
-    public ResponseEntity<PathResponse> findPath(@RequestParam("source") Long sourceId, @RequestParam("target") Long targetId) {
-        return ResponseEntity.ok().body(pathService.findPath(sourceId, targetId));
-    }
-
-    @GetMapping(headers = "Authorization")
-    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal LoginMember loginMember, @RequestParam("source") Long sourceId, @RequestParam("target") Long targetId) {
+    public ResponseEntity<PathResponse> findPath(@AuthenticationPrincipal(required = false) LoginMember loginMember, @RequestParam("source") Long sourceId, @RequestParam("target") Long targetId) {
         return ResponseEntity.ok().body(pathService.findPath(loginMember, sourceId, targetId));
     }
 }
