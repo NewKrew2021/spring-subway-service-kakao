@@ -27,8 +27,6 @@ public class AuthController {
     public ResponseEntity<TokenResponse> tryLogin(@RequestBody TokenRequest tokenRequest){
         try{
             TokenResponse tokenResponse  = authService.createToken(tokenRequest);
-            System.out.println("1111111111111111");
-            System.out.println(authService.getPayLoad(tokenResponse.getAccessToken()));
             return ResponseEntity.ok().body(tokenResponse);
         }
         catch (LoginFailException e){

@@ -2,6 +2,7 @@ package subway.favorite.application;
 
 import org.springframework.stereotype.Service;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exception.InvalidTokenException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteResponse;
@@ -27,9 +28,9 @@ public class FavoriteService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public void save(String token, Long source, Long target) {
+    public Favorite save(String token, Long source, Long target) {
         Member member = memberDao.findByEmail(jwtTokenProvider.getPayload(token));
-        favoriteDao.save(new Favorite(member.getId(), source, target));
+        return favoriteDao.save(new Favorite(member.getId(), source, target));
     }
 
     public List<Favorite> getFavorites(String token) {
@@ -44,5 +45,14 @@ public class FavoriteService {
                             StationResponse.of(stationDao.findById(favorite.getSourceId())),
                             StationResponse.of(stationDao.findById(favorite.getTargetId()))))
                 .collect(Collectors.toList());
+    }
+
+    public void deleteFavorites(String token, Long favoriteId) {
+        if(!jwtTokenProvider.getPayload(token)
+                .equals(memberDao.findById(favoriteDao.findById(favoriteId).getMemberId()).getEmail())){
+            throw new InvalidTokenException();
+        }
+
+        favoriteDao.deleteById(favoriteId);
     }
 }

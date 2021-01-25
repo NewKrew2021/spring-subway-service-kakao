@@ -2,18 +2,24 @@ package subway.favorite.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.favorite.domain.Favorite;
 import subway.member.domain.Member;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class FavoriteDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
 
     private RowMapper<Favorite> rowMapper = (rs, rowNum) ->
             new Favorite(
@@ -25,15 +31,33 @@ public class FavoriteDao {
 
     public FavoriteDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("favorite")
+                .usingGeneratedKeyColumns("id");
     }
 
-    public void save(Favorite favorite) {
-        String sql = "insert into favorite (member_id, source_station_id, target_station_id) values ( ?, ?, ? )";
-        jdbcTemplate.update(sql, favorite.getMemberId(), favorite.getSourceId(), favorite.getTargetId());
+    public Favorite save(Favorite favorite) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("member_id", favorite.getMemberId());
+        parameters.put("source_station_id", favorite.getSourceId());
+        parameters.put("target_station_id", favorite.getTargetId());
+
+        Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+        return new Favorite(id, favorite.getMemberId(), favorite.getSourceId(), favorite.getTargetId());
     }
 
     public List<Favorite> findAll(Long memberId) {
         String sql = "select * from favorite where member_id = ?";
         return jdbcTemplate.query(sql, rowMapper, memberId);
+    }
+
+    public Favorite findById(Long id){
+        String sql = "select * from favorite where id = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    }
+
+    public void deleteById(Long favoriteId) {
+        String sql = "delete from favorite where id = ?";
+        jdbcTemplate.update(sql, favoriteId);
     }
 }
