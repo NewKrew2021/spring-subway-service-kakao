@@ -63,6 +63,7 @@ public class MemberDao {
     }
 
     public Member findByEmail(String email) {
+        System.out.println(email);
         String sql = "select * from MEMBER where email = ?";
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, email);

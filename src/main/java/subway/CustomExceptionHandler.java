@@ -46,7 +46,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(NotExistMemberException.class)
     public ResponseEntity<String> notExistMemberException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 사용자 입니다.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 사용자 입니다.");
     }
 
     @ExceptionHandler(NotExistStationException.class)
