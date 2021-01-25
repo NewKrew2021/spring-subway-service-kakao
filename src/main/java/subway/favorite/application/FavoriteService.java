@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
-
     public static final int NO_UPDATED_ROW = 0;
     private FavoriteDao favoriteDao;
     private StationService stationService;
