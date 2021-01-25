@@ -1,6 +1,8 @@
 package subway.station.application;
 
 import org.springframework.stereotype.Service;
+import subway.favorite.dao.FavoriteDao;
+import subway.line.dao.SectionDao;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationRequest;
@@ -12,9 +14,13 @@ import java.util.stream.Collectors;
 @Service
 public class StationService {
     private StationDao stationDao;
+    private SectionDao sectionDao;
+    private FavoriteDao favoriteDao;
 
-    public StationService(StationDao stationDao) {
+    public StationService(StationDao stationDao, SectionDao sectionDao, FavoriteDao favoriteDao) {
         this.stationDao = stationDao;
+        this.sectionDao = sectionDao;
+        this.favoriteDao = favoriteDao;
     }
 
     public StationResponse saveStation(StationRequest stationRequest) {
@@ -35,6 +41,10 @@ public class StationService {
     }
 
     public void deleteStationById(Long id) {
+        if (sectionDao.findByStationId(id) > 0) {
+            throw new RuntimeException();
+        }
+        favoriteDao.deleteFavoriteByStationId(id);
         stationDao.deleteById(id);
     }
 }

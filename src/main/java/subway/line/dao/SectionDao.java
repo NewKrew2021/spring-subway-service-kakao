@@ -56,27 +56,10 @@ public class SectionDao {
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
 
-    public Sections findAll() {
-        String sql = "select S.id as section_id, S.distance as section_distance, " +
-                "UST.id as up_station_id, UST.name as up_station_name, " +
-                "DST.id as down_station_id, DST.name as down_station_name " +
-                "from LINE L \n" +
-                "left outer join SECTION S on L.id = S.line_id " +
-                "left outer join STATION UST on S.up_station_id = UST.id " +
-                "left outer join STATION DST on S.down_station_id = DST.id ";
-
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-        return new Sections(result.stream()
-                .map(it -> mapSection(it))
-                .collect(Collectors.toList()));
-    }
-
-    private Section mapSection(Map<String, Object> result) {
-        return new Section(
-                (Long) result.get("SECTION_ID"),
-                new Station((Long) result.get("UP_STATION_ID"), (String) result.get("UP_STATION_NAME")),
-                new Station((Long) result.get("DOWN_STATION_ID"), (String) result.get("DOWN_STATION_NAME")),
-                (int) result.get("SECTION_DISTANCE")
+    public int findByStationId(Long stationId) {
+        return jdbcTemplate.queryForObject(
+                "select count(*) from SECTION where up_station_id = ? or down_station_id = ?",
+                Integer.class, stationId, stationId
         );
     }
 }

@@ -61,4 +61,11 @@ public class FavoriteDao {
     public void deleteFavoriteById(Long memberId, Long favoriteId) {
         jdbcTemplate.update("delete from FAVORITE where id = ? and member_id = ?", favoriteId, memberId);
     }
+
+    public void deleteFavoriteByStationId(Long stationId) {
+        jdbcTemplate.update(
+                "delete from FAVORITE where source_station_id = ? or target_station_id = ?",
+                stationId, stationId
+        );
+    }
 }

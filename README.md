@@ -133,3 +133,4 @@ This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blo
 
 * 라인 삭제 시 관련된 구간 삭제
 * 특정 구간 포함된 역 삭제 불가
+* 특정 역 삭제 시 관련된 즐겨찾기 모두 삭제
