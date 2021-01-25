@@ -8,9 +8,9 @@ public enum AgeFare {
     TEEN(19, 0.2, 350),
     ADULT(10000, 0, 0);
 
-    private int upperAgeRange;
-    private double discountRate;
-    private int deduction;
+    private final int upperAgeRange;
+    private final double discountRate;
+    private final int deduction;
 
     AgeFare(int upperAgeRange, double discountRate, int deduction) {
         this.upperAgeRange = upperAgeRange;

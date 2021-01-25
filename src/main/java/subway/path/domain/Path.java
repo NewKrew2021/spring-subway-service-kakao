@@ -5,8 +5,8 @@ import subway.station.domain.Station;
 import java.util.List;
 
 public class Path {
-    private List<Station> stations;
-    private int distance;
+    private final List<Station> stations;
+    private final int distance;
     private int fare;
 
     public Path(List<Station> stations, int distance, int fare) {
@@ -25,5 +25,15 @@ public class Path {
 
     public int getFare() {
         return fare;
+    }
+
+    public void applyDistanceFarePolicy() {
+        DistanceFare distanceFare = DistanceFare.getDistanceFare(distance);
+        fare += distanceFare.calculateExtraFareByDistance(distance);
+    }
+
+    public void applyAgeFarePolicy(int age) {
+        AgeFare ageFare = AgeFare.getAgeFare(age);
+        fare -= ageFare.calculateDiscountFareByAge(fare);
     }
 }

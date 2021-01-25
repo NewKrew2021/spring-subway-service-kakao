@@ -8,10 +8,10 @@ public enum DistanceFare {
     OVER_TEN_KM(11, 5, 100, 1250),
     DEFAULT(1, 10, 1250, 0);
 
-    private int basisDistance;
-    private int unitDistance;
-    private int extraFarePerUnit;
-    private int defaultFare;
+    private final int basisDistance;
+    private final int unitDistance;
+    private final int extraFarePerUnit;
+    private final int defaultFare;
 
     DistanceFare(int basisDistance, int unitDistance, int extraFarePerUnit, int defaultFare) {
         this.basisDistance = basisDistance;
