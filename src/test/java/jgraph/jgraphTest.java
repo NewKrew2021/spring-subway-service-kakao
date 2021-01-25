@@ -91,4 +91,36 @@ public class jgraphTest {
 
         assertThat(shortestPath.getWeight()).isEqualTo(2);
     }
+
+    @Test
+    public void getDijkstraShortestPath_hasMultiplePath() {
+
+        WeightedMultigraph<Station, Edge> graph
+                = new WeightedMultigraph<>(Edge.class);
+
+        graph.addVertex(A);
+        graph.addVertex(B);
+        graph.addVertex(C);
+        graph.addVertex(D);
+
+        graph.addEdge(A, B, A_B);
+        graph.addEdge(A, C, A_C);
+        graph.addEdge(B, D, B_D);
+        graph.addEdge(C, D, C_D);
+
+        graph.setEdgeWeight(A_B, 2);
+        graph.setEdgeWeight(A_C, 2);
+        graph.setEdgeWeight(B_D, 2);
+        graph.setEdgeWeight(C_D, 2);
+
+        DijkstraShortestPath<Station, Edge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, Edge> shortestPath = dijkstraShortestPath.getPath(A, D);
+
+        for(Edge edge: shortestPath.getEdgeList()){
+            System.out.println(edge.getSource().getName());
+            System.out.println(edge.getTarget().getName());
+        }
+
+        assertThat(shortestPath.getWeight()).isEqualTo(4);
+    }
 }

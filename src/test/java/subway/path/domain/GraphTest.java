@@ -47,7 +47,7 @@ public class GraphTest {
     @Test
     public void noGraphTest(){
         Graph graph = new Graph(lines);
-        assertThatThrownBy(() -> graph.getPath("6", "1")).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> graph.getPath(죽전역, 강남역, 10)).isInstanceOf(RuntimeException.class);
     }
 
 }

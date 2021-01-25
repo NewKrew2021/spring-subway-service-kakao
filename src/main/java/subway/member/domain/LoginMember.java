@@ -1,28 +1,38 @@
 package subway.member.domain;
 
+import subway.exception.LoginFailException;
+
 public class LoginMember {
     private Long id;
     private String email;
-    private Integer age;
+    private int age;
 
     public LoginMember() {
     }
 
-    public LoginMember(Long id, String email, Integer age) {
+    public LoginMember(Long id, String email, int age) {
         this.id = id;
         this.email = email;
         this.age = age;
     }
 
+    private void validate() {
+        if(id == null){
+            throw new LoginFailException();
+        }
+    }
+
     public Long getId() {
+        validate();
         return id;
     }
 
     public String getEmail() {
+        validate();
         return email;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 }

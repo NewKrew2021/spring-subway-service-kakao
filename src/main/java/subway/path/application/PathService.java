@@ -17,10 +17,10 @@ public class PathService {
         this.lineDao = lineDao;
     }
 
-    public PathResponse getShortestPathOfStations(String startStationId, String endStationId) {
+    public PathResponse getShortestPathOfStations(Station source, Station target, int age) {
         List<Line> lines = lineDao.findAll();
         Graph graph = new Graph(lines);
-        return PathResponse.of(graph.getPath(startStationId, endStationId));
+        return PathResponse.of(graph.getPath(source, target, age));
     }
 }
 

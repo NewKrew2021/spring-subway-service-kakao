@@ -2,11 +2,9 @@ package subway.path.domain;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import java.util.*;
@@ -16,19 +14,14 @@ public class Graph {
     private final DijkstraShortestPath<Station, Edge> dijkstraShortestPath;
 
     public Graph(List<Line> lines) {
-        graph = new WeightedMultigraph(DefaultWeightedEdge.class);
-
-        List<Section> sections = lines.stream()
-                .map(Line::getSections)
-                .map(Sections::getSections)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-
-        List<Station> stations = lines.stream()
+        lines.stream()
                 .map(Line::getStations)
                 .flatMap(List::stream)
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().forEach(graph::addVertex);
+
+        for(Line line : lines){
+            addAllSectionsAsEdge(line);
+        }
 
         dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
