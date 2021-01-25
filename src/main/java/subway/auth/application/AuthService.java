@@ -3,11 +3,9 @@ package subway.auth.application;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenResponse;
 import subway.auth.exception.UnAuthorizedException;
-import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.domain.LoginMember;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +24,7 @@ public class AuthService {
         return new TokenResponse(token);
     }
 
-    public LoginMember validateToken(HttpServletRequest request) {
-        String token = AuthorizationExtractor.extract(request);
+    public LoginMember validateToken(String token) {
         if(token == null) {
             throw new UnAuthorizedException();
         }
