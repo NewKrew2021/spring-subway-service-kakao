@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class FavoriteService {
 
-    private FavoriteDao favoriteDao;
-    private StationDao stationDao;
+    private final FavoriteDao favoriteDao;
+    private final StationDao stationDao;
 
     public FavoriteService(FavoriteDao favoriteDao, StationDao stationDao) {
         this.favoriteDao = favoriteDao;
@@ -26,19 +26,17 @@ public class FavoriteService {
         Station sourceStation = stationDao.findById(favoriteRequest.getSource());
         Station targetStation = stationDao.findById(favoriteRequest.getTarget());
 
-        Favorite insertFavorite = favoriteDao.insert(new Favorite(sourceStation, targetStation,memberId));
+        Favorite insertFavorite = favoriteDao.insert(new Favorite(sourceStation, targetStation, memberId));
 
-        StationResponse sourceStationResponse = new StationResponse(sourceStation.getId(), sourceStation.getName());
-        StationResponse targetStationResponse = new StationResponse(targetStation.getId(), targetStation.getName());
-
-        return new FavoriteResponse(insertFavorite.getId(),sourceStationResponse, targetStationResponse);
+        return new FavoriteResponse(insertFavorite.getId(),
+                StationResponse.of(sourceStation), StationResponse.of(targetStation));
     }
 
-    public void deleteFavorite(Long id){
+    public void deleteFavorite(Long id) {
         favoriteDao.delete(id);
     }
 
-    public List<Favorite> findAllByUserId(Long userId){
+    public List<Favorite> findAllByUserId(Long userId) {
         return favoriteDao.findAllByUserId(userId);
     }
 }
