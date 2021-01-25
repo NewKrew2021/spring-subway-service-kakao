@@ -2,6 +2,7 @@ package subway.favorite.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import subway.auth.exception.FavoriteNotFoundException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
@@ -31,7 +32,7 @@ public class FavoriteService {
                     stationService.findStationById(favoriteRequest.getTarget()));
             return FavoriteResponse.of(favoriteDao.insert(favorite));
         }
-        return null;
+        throw new FavoriteNotFoundException();
     }
 
     public List<FavoriteResponse> findFavoriteResponses(Long memberId) {

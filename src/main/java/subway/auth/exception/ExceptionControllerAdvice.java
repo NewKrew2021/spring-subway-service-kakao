@@ -24,4 +24,9 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<Void> invalidToken() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @ExceptionHandler(FavoriteNotFoundException.class)
+    public ResponseEntity<Void> NullFavorite() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 }
