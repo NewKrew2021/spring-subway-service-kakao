@@ -10,11 +10,11 @@ import subway.station.domain.Station;
 
 public class PathGraph {
 
-  WeightedMultigraph<Station, DefaultWeightedEdge> pathGraph;
+    SubwayGraph<Station, SubwayEdge> pathGraph;
 
   public PathGraph(SectionsInAllLine sections) {
-    WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(
-        DefaultWeightedEdge.class);
+    SubwayGraph<Station, SubwayEdge> graph = new SubwayGraph(
+        SubwayEdge.class);
 
     sections.getSections()
         .forEach(section -> {
@@ -24,7 +24,7 @@ public class PathGraph {
               graph.setEdgeWeight(graph.addEdge(
                   section.getUpStation(),
                   section.getDownStation()),
-                  section.getDistance());
+                  new SubwayWeight(10, section.getDistance()));
             }
         );
 
@@ -33,7 +33,7 @@ public class PathGraph {
 
   public Path getPath(Station sourceStation, Station targetStation) {
     DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(pathGraph);
-    GraphPath<Station, DefaultWeightedEdge> shortestPath = dijkstraShortestPath
+    GraphPath<Station, SubwayEdge> shortestPath = dijkstraShortestPath
         .getPath(sourceStation, targetStation);
 
     if (shortestPath == null) {

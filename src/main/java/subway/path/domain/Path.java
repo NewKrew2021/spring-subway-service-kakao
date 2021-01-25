@@ -7,9 +7,9 @@ import subway.station.domain.Station;
 
 public class Path {
 
-  GraphPath<Station, DefaultWeightedEdge> path;
+  GraphPath<Station, SubwayEdge> path;
 
-  public Path(GraphPath<Station, DefaultWeightedEdge> shortestPath) {
+  public Path(GraphPath<Station, SubwayEdge> shortestPath) {
     this.path = shortestPath;
   }
 
