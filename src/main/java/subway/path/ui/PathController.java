@@ -26,6 +26,6 @@ public class PathController {
             @RequestParam long source,
             @RequestParam long target
     ) {
-        return ResponseEntity.ok(new PathResponse(pathService.findPath(source, target, loginMember)));
+        return ResponseEntity.ok(PathResponse.from(pathService.findPath(source, target, loginMember)));
     }
 }

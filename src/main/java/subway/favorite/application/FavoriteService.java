@@ -35,7 +35,7 @@ public class FavoriteService {
     }
 
     private FavoriteResponse mapToResponse(Favorite favorite) {
-        return new FavoriteResponse(
+        return FavoriteResponse.of(
                 favorite,
                 stationService.findStationById(favorite.getSourceId()),
                 stationService.findStationById(favorite.getTargetId())

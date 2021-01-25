@@ -3,12 +3,9 @@ package subway.member.dto;
 import subway.member.domain.Member;
 
 public class MemberRequest {
-    private String email;
-    private String password;
-    private Integer age;
-
-    public MemberRequest() {
-    }
+    private final String email;
+    private final String password;
+    private final Integer age;
 
     public MemberRequest(String email, String password, Integer age) {
         this.email = email;
