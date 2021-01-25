@@ -1,5 +1,6 @@
 package subway.line.domain;
 
+import subway.line.dto.LineRequest;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -37,6 +38,10 @@ public class Line {
         this.color = color;
         this.sections = sections;
         this.extraFare = extraFare;
+    }
+
+    public static Line of(LineRequest lineRequest) {
+        return new Line(lineRequest.getName(), lineRequest.getColor(), lineRequest.getExtraFare());
     }
 
     public Long getId() {

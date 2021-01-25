@@ -40,14 +40,14 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(Long memberId, Long id) {
-        if (!memberHasFavorite(favoriteDao.findMemberIdById(id), memberId)) {
+        if (!memberHasFavorite(memberId, id)) {
             throw new AuthorizationException("등록된 즐겨찾기가 존재하지 않습니다.");
         }
 
         favoriteDao.deleteById(id);
     }
 
-    private boolean memberHasFavorite(Long id1, Long id2) {
-        return id1.equals(id2);
+    private boolean memberHasFavorite(Long memberId, Long id) {
+        return favoriteDao.findMemberIdById(id).equals(memberId);
     }
 }
