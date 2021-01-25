@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.infrastructure.AuthorizationExtractor;
-import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exception.InvalidTokenException;
 import subway.favorite.application.FavoriteService;
 import subway.favorite.domain.Favorite;

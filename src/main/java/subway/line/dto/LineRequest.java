@@ -47,4 +47,8 @@ public class LineRequest {
     public int getDistance() {
         return distance;
     }
+
+    public int getExtraFare(){
+        return extraFare;
+    }
 }

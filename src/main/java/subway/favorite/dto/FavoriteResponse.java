@@ -1,6 +1,5 @@
 package subway.favorite.dto;
 
-import subway.favorite.domain.Favorite;
 import subway.station.dto.StationResponse;
 
 public class FavoriteResponse {
