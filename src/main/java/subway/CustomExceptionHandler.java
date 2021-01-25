@@ -10,7 +10,7 @@ import subway.exception.*;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(AlreadyExistedDataException.class)
-    public ResponseEntity<String> alreadyExistedData(Exception e) {
+    public ResponseEntity<String> alreadyExistedDataException(Exception e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
@@ -25,8 +25,8 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(NotExistDataException.class)
-    public ResponseEntity<String> notExistMemberException(Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    public ResponseEntity<String> notExistsDataException(Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
     @ExceptionHandler(NoMoreSectionToDeleteException.class)
