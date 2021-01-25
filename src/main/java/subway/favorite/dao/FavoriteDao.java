@@ -11,6 +11,7 @@ import subway.favorite.domain.Favorite;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class FavoriteDao {
@@ -28,10 +29,15 @@ public class FavoriteDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Favorite save(Favorite favorite) {
+    public Optional<Favorite> save(Favorite favorite) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(insertFavorite(favorite), keyHolder);
-        return new Favorite((Long) keyHolder.getKey(), favorite.getMemberId(), favorite.getSource(), favorite.getTarget());
+        return findById((Long)keyHolder.getKey());
+    }
+
+    public Optional<Favorite> findById(Long id) {
+        List<Favorite> result = jdbcTemplate.query("select id, member_id, source_station_id, target_station_id from FAVORITE where id = ?", rowMapper, id);
+        return result.stream().findAny();
     }
 
     private PreparedStatementCreator insertFavorite(Favorite favorite) {

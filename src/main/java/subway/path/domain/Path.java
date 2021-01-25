@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Path {
 
+    public static final int DEDUCTIONS = 350;
     private final List<StationResponse> stations;
     private final int distance;
     private final int extraFare;
@@ -35,6 +36,6 @@ public class Path {
     }
 
     public int discountAmount(int totalFare, LoginMember loginMember) {
-        return totalFare - (int) ((totalFare - 350) * loginMember.getDiscountPercentage());
+        return totalFare - (int) ((totalFare - DEDUCTIONS) * loginMember.getDiscountPercentage());
     }
 }

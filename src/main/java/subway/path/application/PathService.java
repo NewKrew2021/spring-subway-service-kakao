@@ -21,12 +21,10 @@ public class PathService {
         this.stationService = stationService;
     }
 
-
-
-    public PathResponse findPath(Long sourceId, Long targetId) {
-        return PathResponse.of(getPath(sourceId,targetId));
-    }
     public PathResponse findPath(LoginMember loginMember, Long sourceId, Long targetId){
+        if(loginMember == null) {
+            return PathResponse.of(getPath(sourceId, targetId));
+        }
         return PathResponse.of(getPath(sourceId,targetId), loginMember);
     }
 

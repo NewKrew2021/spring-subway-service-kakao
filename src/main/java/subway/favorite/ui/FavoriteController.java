@@ -6,7 +6,6 @@ import subway.auth.domain.AuthenticationPrincipal;
 import subway.favorite.application.FavoriteService;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
-import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 
 import java.net.URI;
@@ -17,11 +16,9 @@ import java.util.List;
 public class FavoriteController {
 
     private FavoriteService favoriteService;
-    private MemberService memberService;
 
-    public FavoriteController(FavoriteService favoriteService, MemberService memberService) {
+    public FavoriteController(FavoriteService favoriteService) {
         this.favoriteService = favoriteService;
-        this.memberService = memberService;
     }
 
     @PostMapping
@@ -31,13 +28,13 @@ public class FavoriteController {
     }
 
     @GetMapping
-    private ResponseEntity<List<FavoriteResponse>> findAllFavorites(@AuthenticationPrincipal LoginMember loginMember){
+    private ResponseEntity<List<FavoriteResponse>> findAllFavorites(@AuthenticationPrincipal LoginMember loginMember) {
         List<FavoriteResponse> list = favoriteService.findAll(loginMember);
         return ResponseEntity.ok(list);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Void> deleteFavorite(@AuthenticationPrincipal LoginMember loginMember,@PathVariable long id){
+    private ResponseEntity<Void> deleteFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable long id) {
         favoriteService.deleteFavorite(id);
         return ResponseEntity.noContent().build();
     }

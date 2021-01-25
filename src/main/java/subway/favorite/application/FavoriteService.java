@@ -1,6 +1,7 @@
 package subway.favorite.application;
 
 import org.springframework.stereotype.Service;
+import subway.exceptions.NotExistsDataException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
@@ -17,6 +18,7 @@ public class FavoriteService {
 
     private final FavoriteDao favoriteDao;
     private final StationService stationService;
+    public static final int NO_UPDATED_ROW = 0;
 
     public FavoriteService(FavoriteDao favoriteDao, StationService stationService) {
         this.favoriteDao = favoriteDao;
@@ -24,7 +26,8 @@ public class FavoriteService {
     }
 
     public FavoriteResponse createFavorite(LoginMember loginMember, FavoriteRequest favoriteRequest) {
-        Favorite favorite = favoriteDao.save(new Favorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget()));
+        Favorite favorite = favoriteDao.save(new Favorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget()))
+                .orElseThrow(() -> new NotExistsDataException("즐겨찾기 저장에 실패했습니다."));
         return new FavoriteResponse(favorite.getId(),
                 StationResponse.of(stationService.findStationById(favorite.getSource())),
                 StationResponse.of(stationService.findStationById(favorite.getTarget())));
@@ -38,6 +41,8 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(long favoriteId) {
-        favoriteDao.deleteById(favoriteId);
+        if(favoriteDao.deleteById(favoriteId) == NO_UPDATED_ROW) {
+            throw new NotExistsDataException("삭제하려는 즐겨찾기가 존재하지 않습니다.");
+        }
     }
 }
