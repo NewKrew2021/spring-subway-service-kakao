@@ -1,9 +1,10 @@
-package subway.path.domain;
+package subway.path.util;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import subway.member.domain.LoginMember;
+import subway.path.util.LoginMemberAgeFare;
 
 import java.util.stream.Stream;
 

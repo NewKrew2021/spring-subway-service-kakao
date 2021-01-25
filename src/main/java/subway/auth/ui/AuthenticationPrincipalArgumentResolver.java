@@ -11,12 +11,13 @@ import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.exceptions.UnauthorizedException;
 import subway.member.domain.LoginMember;
+import subway.member.domain.Member;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
@@ -31,13 +32,16 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = AuthorizationExtractor.extract(webRequest.getNativeRequest(HttpServletRequest.class));
-        if (!parameter.getParameterAnnotation(AuthenticationPrincipal.class).required()
-                && token == null) {
-            return LoginMember.NOT_LOGINED;
+        if (loginRequired(parameter) && token == null) {
+            return new UnauthorizedException();
         }
         if (token == null) {
-            throw new UnauthorizedException();
+            return LoginMember.NOT_LOGINED;
         }
         return authService.getLoginMember(token);
+    }
+
+    private boolean loginRequired(MethodParameter parameter) {
+        return parameter.getParameterAnnotation(AuthenticationPrincipal.class).required();
     }
 }

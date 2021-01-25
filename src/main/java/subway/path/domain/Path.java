@@ -7,6 +7,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.member.domain.LoginMember;
+import subway.path.util.FareCalculator;
 import subway.station.domain.Station;
 
 import java.util.List;

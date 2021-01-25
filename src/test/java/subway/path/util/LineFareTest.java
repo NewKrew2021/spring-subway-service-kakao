@@ -1,9 +1,10 @@
-package subway.path.domain;
+package subway.path.util;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import subway.line.domain.Line;
+import subway.path.util.LineFare;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.util;
 
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;

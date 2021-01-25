@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.util;
 
 public class DistanceFare {
 
