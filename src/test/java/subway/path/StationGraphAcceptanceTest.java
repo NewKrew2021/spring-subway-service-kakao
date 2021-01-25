@@ -23,7 +23,7 @@ import static subway.line.SectionAcceptanceTest.지하철_구간_등록되어_�
 import static subway.station.StationAcceptanceTest.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 조회")
-public class GraphAcceptanceTest extends AcceptanceTest {
+public class StationGraphAcceptanceTest extends AcceptanceTest {
     private LineResponse 신분당선;
     private LineResponse 이호선;
     private LineResponse 삼호선;

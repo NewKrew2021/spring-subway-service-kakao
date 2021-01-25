@@ -4,12 +4,12 @@ import subway.station.domain.Station;
 
 import java.util.List;
 
-public class Path {
+public class PathInfo {
     private final List<Station> stations;
     private final int distance;
     private final int fare;
 
-    public Path(List<Station> stations, int distance, int fare) {
+    public PathInfo(List<Station> stations, int distance, int fare) {
         this.stations = stations;
         this.distance = distance;
         this.fare = fare;

@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class GraphTest {
+public class StationGraphTest {
     private final Station 강남역 = new Station(1L, "강남");
     private final Station 정자역 = new Station(2L, "정자");
     private final Station 미금역 = new Station(3L, "미금");
@@ -37,28 +37,28 @@ public class GraphTest {
 
     @Test
     public void graphTest_20살() {
-        Graph graph = new Graph(lines);
+        StationGraph stationGraph = new StationGraph(lines);
 
-        Path path = graph.getPathInfo(강남역, 미금역, 20);
-        assertThat(path.getDistance()).isEqualTo(9);
-        assertThat(path.getStations()).isEqualTo(Arrays.asList(강남역, 정자역, 서현역, 미금역));
-        assertThat(path.getFare()).isEqualTo(1550);
+        PathInfo pathInfo = stationGraph.getPathInfo(강남역, 미금역, 20);
+        assertThat(pathInfo.getDistance()).isEqualTo(9);
+        assertThat(pathInfo.getStations()).isEqualTo(Arrays.asList(강남역, 정자역, 서현역, 미금역));
+        assertThat(pathInfo.getFare()).isEqualTo(1550);
     }
 
     @Test
     public void graphTest_10살() {
-        Graph graph = new Graph(lines);
+        StationGraph stationGraph = new StationGraph(lines);
 
-        Path path = graph.getPathInfo(강남역, 미금역, 10);
-        assertThat(path.getDistance()).isEqualTo(9);
-        assertThat(path.getStations()).isEqualTo(Arrays.asList(강남역, 정자역, 서현역, 미금역));
-        assertThat(path.getFare()).isEqualTo(950);
+        PathInfo pathInfo = stationGraph.getPathInfo(강남역, 미금역, 10);
+        assertThat(pathInfo.getDistance()).isEqualTo(9);
+        assertThat(pathInfo.getStations()).isEqualTo(Arrays.asList(강남역, 정자역, 서현역, 미금역));
+        assertThat(pathInfo.getFare()).isEqualTo(950);
     }
 
     @Test
     public void noGraphTest() {
-        Graph graph = new Graph(lines);
-        assertThatThrownBy(() -> graph.getPathInfo(죽전역, 강남역, 10)).isInstanceOf(RuntimeException.class);
+        StationGraph stationGraph = new StationGraph(lines);
+        assertThatThrownBy(() -> stationGraph.getPathInfo(죽전역, 강남역, 10)).isInstanceOf(RuntimeException.class);
     }
 
 }

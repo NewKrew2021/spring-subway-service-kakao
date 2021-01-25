@@ -29,6 +29,6 @@ public class PathController {
         Station sourceStation = stationService.findStationById(Long.valueOf(source));
         Station targetStation = stationService.findStationById(Long.valueOf(target));
         return ResponseEntity.ok().body(
-                pathService.getShortestPathOfStations(sourceStation, targetStation, loginMember.getAge()));
+                pathService.getPathInfo(sourceStation, targetStation, loginMember.getAge()));
     }
 }
