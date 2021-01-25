@@ -19,10 +19,6 @@ public class Station {
     this.name = name;
   }
 
-  public Station getSelf() {
-    return this;
-  }
-
   public Long getId() {
     return id;
   }

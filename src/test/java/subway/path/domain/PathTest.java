@@ -4,11 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Section;
+import subway.line.domain.SectionWithFare;
 import subway.line.domain.SectionsInAllLine;
 import subway.path.exceptions.UnconnectedPathException;
 import subway.station.domain.Station;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -34,7 +37,9 @@ public class PathTest {
     // 판교 - 망포 - 수원
     @BeforeEach
     void setUp() {
-        sections = new SectionsInAllLine(Arrays.asList(강남_망포, 망포_역삼, 판교_망포, 망포_수원, 제주_서귀포));
+        sections = new SectionsInAllLine(Stream.of(강남_망포, 망포_역삼, 판교_망포, 망포_수원, 제주_서귀포)
+                .map(section -> new SectionWithFare(0, section))
+                .collect(Collectors.toList()));
         pathGraph = new PathGraph(sections);
     }
 

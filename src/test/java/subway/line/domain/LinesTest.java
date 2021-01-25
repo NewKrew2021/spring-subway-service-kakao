@@ -6,6 +6,8 @@ import subway.line.exception.InvalidStationIdException;
 import subway.station.domain.Station;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,13 +33,17 @@ public class LinesTest {
     @Test
     void getSectionsInAllLineTest() {
         Lines lines = new Lines(Arrays.asList(수인선, 신분당선));
-        assertThat(lines.getSectionsInAllLine().getSections()).contains(강남_망포, 망포_역삼, 역삼_수원, 망포_강남, 역삼_망포);
+        assertThat(lines.getSectionsInAllLine()
+                .getSections()
+                .stream()
+                .map(SectionWithFare::getSection)
+                .collect(Collectors.toList())).contains(강남_망포, 망포_역삼, 역삼_수원, 망포_강남, 역삼_망포);
     }
 
     @DisplayName("섹션들에 역이 포함되어 있는지 테스트")
     @Test
     void findStationTest() {
-        SectionsInAllLine sections = new SectionsInAllLine(Arrays.asList(강남_망포, 망포_역삼));
+        SectionsInAllLine sections = new SectionsInAllLine(Stream.of(강남_망포, 망포_역삼).map(section -> new SectionWithFare(0, section)).collect(Collectors.toList()));
 
         assertThat(sections.findStation(강남역.getId())).isEqualTo(강남역);
         assertThat(sections.findStation(망포역.getId())).isEqualTo(망포역);

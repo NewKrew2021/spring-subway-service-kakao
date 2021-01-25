@@ -13,8 +13,10 @@ public class Lines {
 
   public SectionsInAllLine getSectionsInAllLine() {
     return new SectionsInAllLine(lines.stream()
-        .flatMap(line -> line.getSections().getSections().stream())
+        .flatMap(line -> line.getSections()
+                .getSections()
+                .stream()
+                .map(section -> new SectionWithFare(line.getExtraFare(), section)))
         .collect(Collectors.toList()));
   }
-
 }

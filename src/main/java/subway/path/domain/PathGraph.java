@@ -24,7 +24,7 @@ public class PathGraph {
               graph.setEdgeWeight(graph.addEdge(
                   section.getUpStation(),
                   section.getDownStation()),
-                  new SubwayWeight(10, section.getDistance()));
+                  new SubwayWeight(section.getExtraFare(), section.getDistance()));
             }
         );
 
