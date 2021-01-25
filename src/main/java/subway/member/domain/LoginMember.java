@@ -1,6 +1,9 @@
 package subway.member.domain;
 
 public class LoginMember {
+    public static final int CHILD_MIN_AGE = 6;
+    public static final int TEENAGER_MIN_AGE = 13;
+    public static final int TEENAGER_MAX_AGE = 19;
     private Long id;
     private String email;
     private Integer age;
@@ -31,10 +34,10 @@ public class LoginMember {
     }
 
     public boolean isChild() {
-        return isLoginMember() && 6 <= age && age < 13;
+        return isLoginMember() && CHILD_MIN_AGE <= age && age < TEENAGER_MIN_AGE;
     }
 
     public boolean isTeenager() {
-        return isLoginMember() && 13 <= age && age < 19;
+        return isLoginMember() && TEENAGER_MIN_AGE <= age && age < TEENAGER_MAX_AGE;
     }
 }

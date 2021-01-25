@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import subway.exception.AlreadyExistedEmailException;
+import subway.exception.AlreadyExistedDataException;
 import subway.exception.NotExistMemberException;
 import subway.member.domain.Member;
 
@@ -39,7 +39,7 @@ public class MemberDao {
             Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
             return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
         } catch (RuntimeException e) {
-            throw new AlreadyExistedEmailException();
+            throw new AlreadyExistedDataException();
         }
     }
 

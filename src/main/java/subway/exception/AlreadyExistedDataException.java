@@ -1,4 +1,4 @@
 package subway.exception;
 
-public class AlreadyExistedEmailException extends IllegalArgumentException {
+public class AlreadyExistedDataException extends IllegalArgumentException {
 }

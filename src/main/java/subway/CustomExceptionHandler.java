@@ -9,14 +9,9 @@ import subway.exception.*;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(AlreadyExistedEmailException.class)
-    public ResponseEntity<String> alreadyExistedEmail() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이메일 입니다.");
-    }
-
-    @ExceptionHandler(AlreadyExistedSectionException.class)
-    public ResponseEntity<String> alreadyExistedSection() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 구간입니다.");
+    @ExceptionHandler(AlreadyExistedDataException.class)
+    public ResponseEntity<String> alreadyExistedData() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 데이터 입니다.");
     }
 
     @ExceptionHandler(AuthorizationFailException.class)
@@ -24,14 +19,14 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 실패하였습니다.");
     }
 
-    @ExceptionHandler(DuplicateNameException.class)
-    public ResponseEntity<String> duplicateNameException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이름입니다.");
-    }
-
     @ExceptionHandler(LoginFailException.class)
     public ResponseEntity<String> loginFailException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 실패하였습니다.");
+    }
+
+    @ExceptionHandler(DuplicateNameException.class)
+    public ResponseEntity<String> duplicateNameException() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 이름입니다.");
     }
 
     @ExceptionHandler(NoMoreSectionToDeleteException.class)
@@ -41,17 +36,17 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(NotExistLineException.class)
     public ResponseEntity<String> notExistLineException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 노선입니다.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 노선입니다.");
     }
 
     @ExceptionHandler(NotExistMemberException.class)
     public ResponseEntity<String> notExistMemberException() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 사용자 입니다.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 사용자 입니다.");
     }
 
     @ExceptionHandler(NotExistStationException.class)
     public ResponseEntity<String> notExistStationException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 역입니다.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 역입니다.");
     }
 
     @ExceptionHandler(TooLowAgeException.class)

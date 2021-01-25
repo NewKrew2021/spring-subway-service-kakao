@@ -19,7 +19,6 @@ public class PathController {
         this.pathService = pathService;
     }
 
-    // TODO: 경로조회 기능 구현하기
     @GetMapping
     public ResponseEntity<PathResponse> findMinDistance(@AuthenticationPrincipal(required = false) LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
         return ResponseEntity.ok(pathService.findShortestPath(loginMember, source, target));

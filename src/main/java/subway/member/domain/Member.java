@@ -7,6 +7,8 @@ import subway.exception.WrongEmailFormatException;
 import java.util.Objects;
 
 public class Member {
+    public static final int MIN_AGE = 1;
+    public static final String EMAIL_RULE_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
     private Long id;
     private String email;
     private String password;
@@ -16,7 +18,7 @@ public class Member {
     }
 
     public Member(String email, String password) {
-        String emailRule = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        String emailRule = EMAIL_RULE_REGEX;
         if (!email.matches(emailRule)) {
             throw new WrongEmailFormatException();
         }
@@ -26,7 +28,7 @@ public class Member {
 
     public Member(String email, String password, Integer age) {
         this(email, password);
-        if (age < 1) {
+        if (age < MIN_AGE) {
             throw new TooLowAgeException();
         }
         this.age = age;

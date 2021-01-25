@@ -1,6 +1,6 @@
 package subway.line.domain;
 
-import subway.exception.AlreadyExistedSectionException;
+import subway.exception.AlreadyExistedDataException;
 import subway.exception.NoMoreSectionToDeleteException;
 import subway.exception.TooLowDistanceException;
 import subway.station.domain.Station;
@@ -40,7 +40,7 @@ public class Sections {
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new AlreadyExistedSectionException();
+            throw new AlreadyExistedDataException();
         }
     }
 
@@ -58,7 +58,7 @@ public class Sections {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new AlreadyExistedSectionException();
+            throw new AlreadyExistedDataException();
         }
     }
 
