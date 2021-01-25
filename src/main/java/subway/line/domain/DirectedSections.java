@@ -3,7 +3,6 @@ package subway.line.domain;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,8 +48,8 @@ public class DirectedSections extends Section{
         List<Station> stations = new ArrayList<>();
         stations.add(sections.get(0).getSourceStation());
 
-        for (int i = 0; i < sections.size(); i++) {
-            stations.add(sections.get(i).getTargetStation());
+        for (DirectedSection section : sections) {
+            stations.add(section.getTargetStation());
         }
 
         return stations;
