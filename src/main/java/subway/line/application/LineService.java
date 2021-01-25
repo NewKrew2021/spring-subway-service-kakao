@@ -95,4 +95,7 @@ public class LineService {
         sectionDao.insertSections(line);
     }
 
+    public int findExtraFare(Long lineId) {
+        return lineDao.findExtraFareById(lineId);
+    }
 }

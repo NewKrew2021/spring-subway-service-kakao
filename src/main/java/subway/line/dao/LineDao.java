@@ -101,6 +101,7 @@ public class LineDao {
                 .map(it ->
                         new Section(
                                 (Long) it.getKey(),
+                                (Long) it.getValue().get(0).get("line_id"),
                                 new Station((Long) it.getValue().get(0).get("up_station_id"), (String) it.getValue().get(0).get("up_station_name")),
                                 new Station((Long) it.getValue().get(0).get("down_station_id"), (String) it.getValue().get(0).get("down_station_name")),
                                 (int) it.getValue().get(0).get("section_distance")))
@@ -109,5 +110,10 @@ public class LineDao {
 
     public void deleteById(Long id) {
         jdbcTemplate.update("delete from Line where id = ?", id);
+    }
+
+    public int findExtraFareById(Long lineId) {
+        String sql = "select extra_fare from LINE where id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, lineId);
     }
 }

@@ -68,7 +68,7 @@ public class Line {
     }
 
     public void addSection(Station upStation, Station downStation, int distance) {
-        Section section = new Section(upStation, downStation, distance);
+        Section section = new Section(id, upStation, downStation, distance);
         sections.addSection(section);
     }
 
