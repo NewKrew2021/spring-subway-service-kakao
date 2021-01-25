@@ -9,8 +9,8 @@
           <div class="px-4 pb-6">
             <div class="d-flex width-100">
               <v-select
-                v-model="subwayPath.source"
-                class="pr-4 subwayPath-station-select"
+                v-model="path.source"
+                class="pr-4 path-station-select"
                 :items="allStationsView"
                 label="출발역"
                 color="grey darken-1"
@@ -20,8 +20,8 @@
               ></v-select>
               <v-icon class="relative bottom-15">mdi-arrow-right-bold</v-icon>
               <v-select
-                v-model="subwayPath.target"
-                class="pl-4 subwayPath-station-select"
+                v-model="path.target"
+                class="pl-4 path-station-select"
                 :items="allStationsView"
                 label="도착역"
                 color="grey darken-1"
@@ -92,7 +92,7 @@
                   </span>
                 </template>
               </v-card>
-              <AddFavoriteButton :subwayPath="subwayPath" />
+              <AddFavoriteButton :path="path" />
             </div>
           </div>
         </v-card-text>
@@ -107,7 +107,7 @@
   import { SHOW_SNACKBAR } from '@/store/shared/mutationTypes'
   import { SNACKBAR_MESSAGES } from '@/utils/constants'
   import { FETCH_STATIONS, SEARCH_PATH } from '@/store/shared/actionTypes'
-  import AddFavoriteButton from '@/views/subwayPath/components/AddFavoriteButton'
+  import AddFavoriteButton from '@/views/path/components/AddFavoriteButton'
 
   export default {
     name: 'PathPage',
@@ -123,7 +123,7 @@
       ...mapActions([SEARCH_PATH, FETCH_STATIONS]),
       async onSearchResult() {
         try {
-          await this.searchPath(this.subwayPath)
+          await this.searchPath(this.path)
         } catch (e) {
           this.showSnackbar(SNACKBAR_MESSAGES.COMMON.FAIL)
         }
@@ -146,7 +146,7 @@
     },
     data() {
       return {
-        subwayPath: {
+        path: {
           source: '',
           target: ''
         },
@@ -158,7 +158,7 @@
   }
 </script>
 <style scoped>
-.subwayPath-station-select {
+.path-station-select {
   width: 200px;
 }
 </style>

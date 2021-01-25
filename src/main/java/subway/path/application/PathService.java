@@ -24,9 +24,9 @@ public class PathService {
 
     public PathValue findPath(long source, long target, LoginMember loginMember) {
         SubwayGraph graph = SubwayGraph.from(lineService.findLines());
-        SubwayPath subwayPath = graph.getPath(stationService.findStationById(source), stationService.findStationById(target));
+        SubwayPath path = graph.getPath(stationService.findStationById(source), stationService.findStationById(target));
 
-        int fare = fareCalculator.getFare(subwayPath.getDistance(), subwayPath.getLines(), loginMember);
-        return new PathValue(subwayPath.getStations(), subwayPath.getDistance(), fare);
+        int fare = fareCalculator.getFare(path.getDistance(), path.getLines(), loginMember);
+        return new PathValue(path.getStations(), path.getDistance(), fare);
     }
 }
