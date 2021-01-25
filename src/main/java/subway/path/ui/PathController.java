@@ -1,15 +1,13 @@
 package subway.path.ui;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
-import subway.station.dto.StationResponse;
-
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 //.when().get(String.format("/paths?source=%d&target=%d", sourceStation.getId(), targetStation.getId()))
 @RestController
@@ -23,8 +21,12 @@ public class PathController {
     }
 
     @GetMapping(value = "/paths")
-    public ResponseEntity<PathResponse> getShortestPath(@RequestParam("source") Long sourceId , @RequestParam("target") Long targetId) {
-        PathResponse pathResponse = pathService.getShortestPath(sourceId,targetId);
+    public ResponseEntity<PathResponse> getShortestPath(
+                                @AuthenticationPrincipal(required = false) LoginMember loginMember,
+                                @RequestParam("source") Long sourceId,
+                                @RequestParam("target") Long targetId) {
+        PathResponse pathResponse = pathService.getShortestPath(sourceId, targetId, loginMember);
         return ResponseEntity.ok().body(pathResponse);
     }
+
 }

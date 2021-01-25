@@ -1,17 +1,25 @@
 package subway.path.domain;
 
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
+import subway.member.domain.LoginMember;
+import subway.path.domain.fareStrategy.DistanceStrategy;
+import subway.path.domain.fareStrategy.LineStrategy;
+import subway.path.domain.fareStrategy.MemberStrategy;
 import subway.station.domain.Station;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Path {
+    private static final int INITIAL_FARE = 1250;
+
     private List<Station> stations;
     private int distance;
     private int fare;
@@ -22,13 +30,23 @@ public class Path {
         this.fare = fare;
     }
 
-    public static Path make(List<Line> lines, Station sourceStation, Station targetStation) {
+    public static Path make(List<Line> lines, Station sourceStation, Station targetStation, LoginMember loginMember) {
         DijkstraShortestPath dijkstraShortestPath = getDijkstraPath(lines);
+
+        GraphPath graphPath = dijkstraShortestPath.getPath(sourceStation, targetStation);
+
+        int fare = INITIAL_FARE;
+        fare = new DistanceStrategy(fare,graphPath).getFare();
+        fare = new LineStrategy(fare,graphPath).getFare();
+        if(loginMember != null) {
+            fare = new MemberStrategy(fare, loginMember).getFare();
+        }
+
 
         return new Path(
                 dijkstraShortestPath.getPath(sourceStation, targetStation).getVertexList(),
                 (int) dijkstraShortestPath.getPath(sourceStation, targetStation).getWeight(),
-                0
+                fare
         );
 
     }
