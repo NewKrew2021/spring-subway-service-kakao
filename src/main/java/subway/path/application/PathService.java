@@ -7,7 +7,6 @@ import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
-import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
 import subway.path.domain.Path;
@@ -15,7 +14,6 @@ import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,16 +40,29 @@ public class PathService {
                 stationService.findStationById(targetStationId)
         );
 
-        Sections sections = new Sections(graphPath.getEdgeList());
-
         int fare = 1250;
 
-        fare += findMaxLineFare(sections);
+        Sections sections = new Sections(graphPath.getEdgeList());
+
+        fare += findExtraFare(sections);
+
+        fare += findDistanceFare((int) graphPath.getWeight());
 
         Path path = new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
 
         return PathResponse.of(path);
 
+    }
+
+    private int findDistanceFare(int distance) {
+        if (distance <= 10) {
+            return 0;
+        }
+        else if(distance <= 50) {
+            return ((distance - 11) / 5 + 1) * 100;
+        }
+
+        return 800 + ((distance - 51) / 8 + 1) * 100;
     }
 
     private WeightedMultigraph<Station, Section> makeGraph() {
@@ -71,7 +82,7 @@ public class PathService {
         return graph;
     }
 
-    private int findMaxLineFare(Sections sections) {
+    private int findExtraFare(Sections sections) {
         int maxExtraFare = 0;
 
         for (Section section : sections.getSections()) {
