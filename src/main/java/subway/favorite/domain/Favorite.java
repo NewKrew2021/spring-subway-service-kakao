@@ -1,15 +1,13 @@
 package subway.favorite.domain;
 
 public class Favorite {
-    private Long id;
-    private Long memberId;
-    private Long sourceStationId;
-    private Long targetStationId;
+    private final Long id;
+    private final Long memberId;
+    private final Long sourceStationId;
+    private final Long targetStationId;
 
     public Favorite(Long memberId, Long sourceStationId, Long targetStationId) {
-        this.memberId = memberId;
-        this.sourceStationId = sourceStationId;
-        this.targetStationId = targetStationId;
+        this(null, memberId, sourceStationId, targetStationId);
     }
 
     public Favorite(Long id, Long memberId, Long sourceStationId, Long targetStationId) {

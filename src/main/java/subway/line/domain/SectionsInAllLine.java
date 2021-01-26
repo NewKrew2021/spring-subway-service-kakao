@@ -10,9 +10,8 @@ import subway.line.exception.InvalidStationIdException;
 import subway.station.domain.Station;
 
 public class SectionsInAllLine {
-
-  private List<SectionWithFare> sections;
-  private Map<Long, Station> stationMap;
+  private final List<SectionWithFare> sections;
+  private final Map<Long, Station> stationMap;
 
   public SectionsInAllLine(List<SectionWithFare> sections) {
     this.sections = sections;

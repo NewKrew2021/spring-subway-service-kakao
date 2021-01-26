@@ -1,16 +1,16 @@
 package subway.path.domain;
 
 public class SubwayWeight {
-    private int fare;
+    private int extraFare;
     private int distance;
 
-    public SubwayWeight(int fare, int distance) {
-        this.fare = fare;
+    public SubwayWeight(int extraFare, int distance) {
+        this.extraFare = extraFare;
         this.distance = distance;
     }
 
-    public int getFare() {
-        return fare;
+    public int getExtraFare() {
+        return extraFare;
     }
 
     public int getDistance() {

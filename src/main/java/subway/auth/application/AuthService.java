@@ -1,12 +1,12 @@
 package subway.auth.application;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import subway.auth.exception.InvalidPasswordException;
 import subway.auth.exception.InvalidTokenException;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
-import subway.member.domain.Member;
 
 @Service
 public class AuthService {
@@ -20,11 +20,11 @@ public class AuthService {
     }
 
     public String login(String email, String password) {
-        Member member = memberService.findMemberByEmail(email);
-        if(!member.getPassword().equals(password)) {
+        try {
+            return jwtTokenProvider.createToken(memberService.loginMember(email, password));
+        } catch (EmptyResultDataAccessException exception) {
             throw new InvalidPasswordException();
         }
-        return jwtTokenProvider.createToken(email);
     }
 
     public LoginMember findMember(String accessToken) {

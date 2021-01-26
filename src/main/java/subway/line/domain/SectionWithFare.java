@@ -5,8 +5,8 @@ import subway.station.domain.Station;
 import java.util.List;
 
 public class SectionWithFare {
-    private int extraFare;
-    private Section section;
+    private final int extraFare;
+    private final Section section;
 
     public SectionWithFare(int extraFare, Section section) {
         this.extraFare = extraFare;

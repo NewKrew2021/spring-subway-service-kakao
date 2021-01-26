@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class FavoriteService {
 
-    FavoriteDao favoriteDao;
+    private FavoriteDao favoriteDao;
 
     public FavoriteService(FavoriteDao favoriteDao) {
         this.favoriteDao = favoriteDao;
@@ -23,7 +23,7 @@ public class FavoriteService {
         return favoriteDao.findAll(memberId);
     }
 
-    public void deleteFavorite(Long id) {
-        favoriteDao.deleteById(id);
+    public void deleteFavorite(Long memberId, Long favoriteId) {
+        favoriteDao.deleteById(memberId, favoriteId);
     }
 }

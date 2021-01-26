@@ -11,6 +11,6 @@ public class SubwayEdge extends DefaultWeightedEdge {
     }
 
     public int getFare() {
-        return weight.getFare();
+        return weight.getExtraFare();
     }
 }

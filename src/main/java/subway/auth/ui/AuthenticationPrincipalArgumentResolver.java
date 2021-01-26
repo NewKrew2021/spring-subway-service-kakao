@@ -17,7 +17,7 @@ import subway.member.domain.Member;
 import subway.auth.exception.InvalidTokenException;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
@@ -28,7 +28,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         try {

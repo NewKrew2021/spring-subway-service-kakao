@@ -1,46 +1,36 @@
 package subway.path.domain;
 
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
+import subway.line.domain.SectionWithFare;
 import subway.line.domain.SectionsInAllLine;
-import subway.path.exceptions.UnconnectedPathException;
 import subway.station.domain.Station;
 
 public class PathGraph {
+    private SubwayGraph<Station, SubwayEdge> subwayGraph;
 
-    SubwayGraph<Station, SubwayEdge> pathGraph;
-
-  public PathGraph(SectionsInAllLine sections) {
-    SubwayGraph<Station, SubwayEdge> graph = new SubwayGraph(
-        SubwayEdge.class);
-
-    sections.getSections()
-        .forEach(section -> {
-              graph.addVertex(section.getUpStation());
-              graph.addVertex(section.getDownStation());
-
-              graph.setEdgeWeight(graph.addEdge(
-                  section.getUpStation(),
-                  section.getDownStation()),
-                  new SubwayWeight(section.getExtraFare(), section.getDistance()));
-            }
-        );
-
-    this.pathGraph = graph;
-  }
-
-  public Path getPath(Station sourceStation, Station targetStation) {
-    DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(pathGraph);
-    GraphPath<Station, SubwayEdge> shortestPath = dijkstraShortestPath
-        .getPath(sourceStation, targetStation);
-
-    if (shortestPath == null) {
-      throw new UnconnectedPathException(sourceStation, targetStation);
+    public PathGraph(SectionsInAllLine sections) {
+        subwayGraph = new SubwayGraph<>(SubwayEdge.class);
+        setSubwayGraph(sections);
     }
 
-    return new Path(shortestPath);
-  }
+    private void setSubwayGraph(SectionsInAllLine sections) {
+        sections.getSections()
+                .forEach(this::addSectionToSubwayGraph);
+    }
+
+    private void addSectionToSubwayGraph(SectionWithFare section) {
+        subwayGraph.addVertex(section.getUpStation());
+        subwayGraph.addVertex(section.getDownStation());
+
+        subwayGraph.setEdgeWeight((SubwayEdge) subwayGraph.addEdge(
+                section.getUpStation(),
+                section.getDownStation()),
+                new SubwayWeight(section.getExtraFare(), section.getDistance()));
+    }
+
+    public Path getPath(Station sourceStation, Station targetStation) {
+        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(subwayGraph);
+        return new Path(dijkstraShortestPath.getPath(sourceStation, targetStation));
+    }
 
 }

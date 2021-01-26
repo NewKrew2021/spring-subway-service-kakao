@@ -38,6 +38,10 @@ public class MemberService {
         }
     }
 
+    public String loginMember(String email, String password) {
+        return memberDao.login(email, password);
+    }
+
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
         memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));

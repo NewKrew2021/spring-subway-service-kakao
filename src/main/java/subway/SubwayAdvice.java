@@ -5,14 +5,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import subway.auth.exception.AuthException;
+import subway.path.exceptions.UnconnectedPathException;
 
 @RestControllerAdvice
 public class SubwayAdvice {
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<Void> handleAuthException(Exception e) {
+    public ResponseEntity<String> handleAuthException(Exception e) {
         e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @ExceptionHandler(UnconnectedPathException.class)
+    public ResponseEntity<String> exceptionHandle(Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
