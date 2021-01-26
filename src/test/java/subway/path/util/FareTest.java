@@ -2,7 +2,6 @@ package subway.path.util;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import subway.line.domain.Line;
@@ -21,7 +20,6 @@ public class FareTest {
     Line line;
     Line line2;
     List<Station> stations;
-    DijkstraShortestPath dijkstraShortestPath;
     Station station1;
     Station station2;
     Station station3;
@@ -45,15 +43,6 @@ public class FareTest {
         line = new Line(1L, "red", "신분당선", sections1, 300);
         line2 = new Line(2L, "blue", "분당선", sections2, 400);
         loginMember = new LoginMember();
-        dijkstraShortestPath = ShortestPathUtil.getDijkstraShortestPath(Arrays.asList(line, line2));
-
-    }
-
-    @Test
-    void 최대_노선_추가요금_테스트() {
-        List<Station> shortestPath = ShortestPathUtil.getShortestPath(dijkstraShortestPath, station1, station5);
-        ShortestPathUtil.getShortestPathSections(shortestPath);
-        assertThat(FareCalculator.getLineExtraFare(ShortestPathUtil.getShortestPathSections(shortestPath), Arrays.asList(line, line2))).isEqualTo(400);
     }
 
     @ParameterizedTest

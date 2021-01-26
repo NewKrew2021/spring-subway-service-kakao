@@ -21,6 +21,6 @@ public class PathController {
 
     @GetMapping
     public ResponseEntity<PathResponse> findMinDistance(@AuthenticationPrincipal(required = false) LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
-        return ResponseEntity.ok(pathService.findShortestPath(loginMember, source, target));
+        return ResponseEntity.ok(pathService.getPathAndFare(loginMember, source, target));
     }
 }
