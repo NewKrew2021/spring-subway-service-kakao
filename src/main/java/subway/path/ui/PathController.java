@@ -9,10 +9,8 @@ import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
-//.when().get(String.format("/paths?source=%d&target=%d", sourceStation.getId(), targetStation.getId()))
 @RestController
 public class PathController {
-    // TODO: 경로조회 기능 구현하기
 
     private PathService pathService;
 

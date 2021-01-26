@@ -16,7 +16,6 @@ import java.net.URI;
 @RestController
 @RequestMapping("/favorites")
 public class FavoriteController {
-    // TODO: 즐겨찾기 기능 구현하기
     private FavoriteService favoriteService;
 
     public FavoriteController(FavoriteService favoriteService) {

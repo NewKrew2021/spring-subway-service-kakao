@@ -18,8 +18,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
+    public MemberResponse createMember(String email, String password, int age) {
+        Member member = memberDao.insert(new Member(email,password,age));
         return MemberResponse.of(member);
     }
 
@@ -29,8 +29,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+    public void updateMember(Long id, String email, String password, int age) {
+        memberDao.update(new Member(id, email, password, age));
     }
 
     @Transactional
