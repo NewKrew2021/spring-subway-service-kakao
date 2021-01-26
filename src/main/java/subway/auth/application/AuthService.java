@@ -6,7 +6,6 @@ import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.application.MemberService;
-import subway.member.domain.Member;
 import subway.member.dto.MemberResponse;
 
 @Service

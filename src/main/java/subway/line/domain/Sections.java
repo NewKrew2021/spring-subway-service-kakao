@@ -147,4 +147,10 @@ public class Sections {
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
     }
+
+    public List<Long> getLineIds() {
+        return getSections().stream()
+                .map(Section::getLindId)
+                .collect(Collectors.toList());
+    }
 }

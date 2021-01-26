@@ -6,6 +6,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import subway.fare.FareService;
 import subway.line.application.LineService;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
@@ -22,11 +23,13 @@ public class PathService {
 
     private StationService stationService;
     private LineService lineService;
+    private FareService fareService;
 
     @Autowired
-    public PathService(StationService stationService, LineService lineService) {
+    public PathService(StationService stationService, LineService lineService, FareService fareService) {
         this.stationService = stationService;
         this.lineService = lineService;
+        this.fareService = fareService;
     }
 
     public PathResponse getPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
@@ -41,43 +44,14 @@ public class PathService {
                 stationService.findStationById(targetStationId)
         );
 
-        int fare = 1250;
-
+        int distance = (int) graphPath.getWeight();
         Sections sections = new Sections(graphPath.getEdgeList());
 
-        fare += findExtraFare(sections);
+        int fare = fareService.findFare(sections.getLineIds(), distance, loginMember);
 
-        fare += findDistanceFare((int) graphPath.getWeight());
-
-        if (loginMember != null) {
-            fare = applyAgeDiscount(fare, loginMember.getAge());
-        }
-
-        Path path = new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
+        Path path = new Path(graphPath.getVertexList(), distance, fare);
 
         return PathResponse.of(path);
-    }
-
-    private int applyAgeDiscount(int fare, int age) {
-        if (age < 6) {
-            return 0;
-        } else if (age < 13) {
-            return (int) ((fare - 350) * 0.5);
-        } else if (age < 19) {
-            return (int) ((fare - 350) * 0.8);
-        }
-
-        return fare;
-    }
-
-    private int findDistanceFare(int distance) {
-        if (distance <= 10) {
-            return 0;
-        } else if (distance <= 50) {
-            return ((distance - 11) / 5 + 1) * 100;
-        }
-
-        return 800 + ((distance - 51) / 8 + 1) * 100;
     }
 
     private WeightedMultigraph<Station, Section> makeGraph() {
@@ -95,16 +69,5 @@ public class PathService {
         }
 
         return graph;
-    }
-
-    private int findExtraFare(Sections sections) {
-        int maxExtraFare = 0;
-
-        for (Section section : sections.getSections()) {
-            Long lineId = section.getLindId();
-            maxExtraFare = Integer.max(maxExtraFare, lineService.findExtraFare(lineId));
-        }
-
-        return maxExtraFare;
     }
 }
