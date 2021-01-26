@@ -16,6 +16,9 @@ import java.util.Optional;
 @Repository
 public class FavoriteDao {
 
+    public static final String SELECT_FAVORITE = "select id, member_id, source_station_id, target_station_id from FAVORITE where id = ?";
+    public static final String INSERT_FAVORITE = "INSERT INTO favorite (member_id, source_station_id, target_station_id) VALUES (?,?,?)";
+    public static final String DELETE_FAVORITE = "DELETE FROM favorite WHERE id = ?";
     private JdbcTemplate jdbcTemplate;
 
     private RowMapper<Favorite> rowMapper = (rs, rowNum) -> new Favorite(
@@ -36,14 +39,14 @@ public class FavoriteDao {
     }
 
     public Optional<Favorite> findById(Long id) {
-        List<Favorite> result = jdbcTemplate.query("select id, member_id, source_station_id, target_station_id from FAVORITE where id = ?", rowMapper, id);
+        List<Favorite> result = jdbcTemplate.query(SELECT_FAVORITE, rowMapper, id);
         return result.stream().findAny();
     }
 
     private PreparedStatementCreator insertFavorite(Favorite favorite) {
         return con -> {
             PreparedStatement psmt = con.prepareStatement(
-                    "INSERT INTO favorite (member_id, source_station_id, target_station_id) VALUES (?,?,?)",
+                    INSERT_FAVORITE,
                     Statement.RETURN_GENERATED_KEYS
             );
             psmt.setLong(1, favorite.getMemberId());
@@ -54,12 +57,10 @@ public class FavoriteDao {
     }
 
     public List<Favorite> findAll(Long memberId) {
-        String SQL = "SELECT id,member_id,source_station_id,target_station_id FROM favorite WHERE member_id = ?";
-        return jdbcTemplate.query(SQL, rowMapper, memberId);
+        return jdbcTemplate.query(SELECT_FAVORITE, rowMapper, memberId);
     }
 
     public int deleteById(Long id){
-        String SQL = "DELETE FROM favorite WHERE id = ?";
-        return jdbcTemplate.update(SQL,id);
+        return jdbcTemplate.update(DELETE_FAVORITE,id);
     }
 }

@@ -39,7 +39,8 @@ public class Graph {
             return new ArrayList<>(dijkstraShortestPath.getPath(sourceStation, targetStation)
                     .getEdgeList().stream()
                     .map(Section::getLineId)
-                    .collect(Collectors.toSet()));
+                    .distinct()
+                    .collect(Collectors.toList()));
         } catch (NullPointerException e) {
             throw new NotExistsDataException(NO_MATCHING_PATH_EXCEPTION_ERROR_MESSAGE);
         }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Lines {
 
@@ -16,19 +17,16 @@ public class Lines {
     }
 
     public List<Station> getUniqueStations() {
-        Set<Station> uniqueStation = new HashSet<>();
-        for (Line line : lines) {
-            uniqueStation.addAll(line.getSections().getStations());
-        }
-        return new ArrayList<>(uniqueStation);
+        return lines.stream()
+                .flatMap(line -> line.getSections().getStations().stream())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public List<Section> getAllSections() {
-        List<Section> sections = new ArrayList<>();
-        for (Line line : lines) {
-            sections.addAll(line.getSections().getSections());
-        }
-        return sections;
+        return lines.stream()
+                .flatMap(line -> line.getSections().getSections().stream())
+                .collect(Collectors.toList());
     }
 
     public int getTotalExtraFares(){
