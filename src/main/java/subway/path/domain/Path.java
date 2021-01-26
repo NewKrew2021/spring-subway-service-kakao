@@ -34,11 +34,11 @@ public class Path {
         int fare = BASE_FARE + getMaxLineExtraFare() + getDistanceExtraFare();
 
         if (isTeenager(age)) {
-            fare = (int) Math.floor((fare - 350) * 0.8);
+            fare -= (int) Math.floor((fare - 350) * 0.2);
         }
 
         if (isChild(age)) {
-            fare = (int) Math.floor((fare - 350) * 0.5);
+            fare -= (int) Math.floor((fare - 350) * 0.5);
         }
 
         return fare;
