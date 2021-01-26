@@ -16,6 +16,20 @@ import java.util.stream.Collectors;
 @Service
 public class PathService {
 
+    private final static int BASE_FARE_DEDUCTION = 350;
+    private final static int BASE_FARE = 1250;
+    private final static int DISTANCE_FARE = 100;
+    private final static double DISCOUNT_TEEN = 0.8;
+    private final static double DISCOUNT_CHILD = 0.5;
+    private final static int DISTANCE_UNDER = 10;
+    private final static int DISTANCE_UPPER = 50;
+    private final static double DISCOUNT_PER_DISTANCE_UNDER = 5.0;
+    private final static double DISCOUNT_PER_DISTANCE_UPPER = 8.0;
+    private final static int TEEN_AGE_TOP = 19;
+    private final static int TEEN_AGE_BOTTOM = 13;
+    private final static int CHILD_AGE_BOTTOM = 6;
+    private final static int SURCHARGE_DISTANCE_UNDER = 800;
+
     private final StationDao stationDao;
     private final LineDao lineDao;
 
@@ -41,9 +55,9 @@ public class PathService {
 
         public PathBuilder initializePath() {
             path.addStations(stationDao.findAll());
-            lineDao.findAll() // List<Line>
-                    .stream() // Line -> Sections, fare
-                    .forEach(path::addEdges); // 여기다가 fare를 넣
+            lineDao.findAll()
+                    .stream()
+                    .forEach(path::addEdges);
             return this;
         }
 
@@ -66,25 +80,25 @@ public class PathService {
         }
 
         private PathBuilder discountBy(int age) {
-            if( 19 > age && 13 <= age ) {
-                fare = (int) ((fare - 350) * 0.8 + 350);
+            if( TEEN_AGE_TOP > age && TEEN_AGE_BOTTOM <= age ) {
+                fare = (int) ((fare - BASE_FARE_DEDUCTION) * DISCOUNT_TEEN + BASE_FARE_DEDUCTION);
             }
-            if( 13 > age && 6 <= age ) {
-                fare = (int) ((fare - 350) * 0.5 + 350);
+            if( TEEN_AGE_BOTTOM > age && CHILD_AGE_BOTTOM <= age ) {
+                fare = (int) ((fare - BASE_FARE_DEDUCTION) * DISCOUNT_CHILD + BASE_FARE_DEDUCTION);
             }
             return this;
         }
 
         private int calculateFareByDistance(int distance) {
-            if( distance > 50 ) {
-                int ceil = (int) Math.ceil((distance - 50) / 8.0);
-                return 1250 + 800 + ceil * 100;
+            if( distance > DISTANCE_UPPER ) {
+                int ceil = (int) Math.ceil((distance - DISTANCE_UPPER) / DISCOUNT_PER_DISTANCE_UPPER);
+                return BASE_FARE + SURCHARGE_DISTANCE_UNDER + ceil * DISTANCE_FARE;
             }
-            if( distance > 10 ) {
-                int ceil = (int) Math.ceil((distance - 10) / 5.0);
-                return 1250 + ceil * 100;
+            if( distance > DISTANCE_UNDER ) {
+                int ceil = (int) Math.ceil((distance - DISTANCE_UNDER) / DISCOUNT_PER_DISTANCE_UNDER);
+                return BASE_FARE + ceil * DISTANCE_FARE;
             }
-            return 1250;
+            return BASE_FARE;
         }
 
         public PathResponse makePathResponse() {

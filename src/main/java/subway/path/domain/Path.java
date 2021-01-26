@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -22,7 +23,9 @@ public class Path {
     }
 
     public void addEdges(Line line) {
-        for (Section section : line.getSections().getSections()) {
+        Sections sections = line.getSections();
+
+        for (Section section : sections.getSections()) {
             Station upStation = section.getUpStation();
             Station downStation = section.getDownStation();
             int extraFare = line.getExtraFare();
