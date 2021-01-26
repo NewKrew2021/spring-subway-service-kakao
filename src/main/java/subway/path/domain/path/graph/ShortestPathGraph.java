@@ -1,29 +1,31 @@
 package subway.path.domain.path.graph;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 
-public class ShortestPathGraph<V, E> implements Graph<V, E> {
+import java.util.List;
 
-    private final WeightedMultigraph<V, E> graph;
+public class ShortestPathGraph<V, E> {
 
-    private ShortestPathGraph(WeightedMultigraph<V, E> graph) {
+    private final Graph<V, E> graph;
+
+    private ShortestPathGraph(Graph<V, E> graph) {
         this.graph = graph;
     }
 
-    public static <V, E> Graph<V, E> initialize(Class<E> edge) {
-        return new ShortestPathGraph<>(new WeightedMultigraph<>(edge));
+    public static <V, E> ShortestPathGraph<V, E> initialize(List<GraphElement<V, E>> graphElements, Class<E> edgeClass) {
+        Graph<V, E> graph = new WeightedMultigraph<>(edgeClass);
+        for (GraphElement<V, E> element : graphElements) {
+            graph.addVertex(element.getSource());
+            graph.addVertex(element.getTarget());
+            graph.addEdge(element.getSource(), element.getTarget(), element.getEdge());
+        }
+        return new ShortestPathGraph<>(graph);
     }
 
-    @Override
-    public void add(V source, V target, E edge) {
-        graph.addVertex(source);
-        graph.addVertex(target);
-        graph.addEdge(source, target, edge);
-    }
-
-    @Override
-    public Path<V, E> getPath(V source, V target) {
-        return new PathImpl<>(new DijkstraShortestPath<>(graph).getPath(source, target));
+    public GraphPath<V, E> getPath(V source, V target) {
+        return new DijkstraShortestPath<>(graph).getPath(source, target);
     }
 }

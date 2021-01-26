@@ -1,7 +1,7 @@
 package subway.path.domain.path;
 
+import org.jgrapht.GraphPath;
 import subway.line.domain.Line;
-import subway.path.domain.path.graph.Path;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public class SubwayPath {
         this.lines = lines;
     }
 
-    public static SubwayPath from(Path<Station, DistanceLineEdge> path) {
+    public static SubwayPath from(GraphPath<Station, DistanceLineEdge> path) {
         return new SubwayPath(
-                path.getVertexes(),
-                (int) path.getTotalWeight(),
-                getLines(path.getEdges())
+                path.getVertexList(),
+                (int) path.getWeight(),
+                getLines(path.getEdgeList())
         );
     }
 

@@ -1,37 +1,41 @@
 package subway.path.domain.path;
 
 import subway.line.domain.Line;
-import subway.line.domain.Section;
-import subway.path.domain.path.graph.Graph;
+import subway.path.domain.path.graph.GraphElement;
 import subway.path.domain.path.graph.ShortestPathGraph;
 import subway.station.domain.Station;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SubwayGraph {
 
-    private final Graph<Station, DistanceLineEdge> graph;
+    private final ShortestPathGraph<Station, DistanceLineEdge> graph;
 
-    private SubwayGraph(Graph<Station, DistanceLineEdge> graph) {
+    private SubwayGraph(ShortestPathGraph<Station, DistanceLineEdge> graph) {
         this.graph = graph;
     }
 
     public static SubwayGraph from(List<Line> lines) {
-        Graph<Station, DistanceLineEdge> graph = ShortestPathGraph.initialize(DistanceLineEdge.class);
-        for (Line line : lines) {
-            generateGraph(graph, line);
-        }
-        return new SubwayGraph(graph);
+        return new SubwayGraph(ShortestPathGraph.initialize(getGraphElements(lines), DistanceLineEdge.class));
     }
 
-    private static void generateGraph(Graph<Station, DistanceLineEdge> graph, Line line) {
-        for (Section section : line.getSections()) {
-            graph.add(
-                    section.getUpStation(),
-                    section.getDownStation(),
-                    new DistanceLineEdge(section.getDistance(), line)
-            );
-        }
+    private static List<GraphElement<Station, DistanceLineEdge>> getGraphElements(List<Line> lines) {
+        return lines.stream()
+                .map(SubwayGraph::toElements)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    private static List<SubwayGraphElement> toElements(Line line) {
+        return line.getSections()
+                .stream()
+                .map(section -> new SubwayGraphElement(
+                        section.getUpStation(),
+                        section.getDownStation(),
+                        new DistanceLineEdge(section.getDistance(), line)
+                ))
+                .collect(Collectors.toList());
     }
 
     public SubwayPath getPath(Station source, Station target) {
