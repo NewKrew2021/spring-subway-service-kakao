@@ -11,8 +11,8 @@ import subway.member.domain.Member;
 @Service
 public class AuthService {
 
-    private MemberService memberService;
-    private JwtTokenProvider jwtTokenProvider;
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public AuthService(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.memberService = memberService;
@@ -21,18 +21,19 @@ public class AuthService {
 
     public String login(String email, String password) {
         Member member = memberService.findMemberByEmail(email);
-        if(!member.getPassword().equals(password)) {
+        if (!member.isSamePassword(password)) {
             throw new InvalidPasswordException();
         }
         return jwtTokenProvider.createToken(email);
     }
 
     public LoginMember findMember(String accessToken) {
-        if(!jwtTokenProvider.validateToken(accessToken)) {
+        if (!jwtTokenProvider.validateToken(accessToken)) {
             throw new InvalidTokenException();
         }
 
-        return LoginMember.of(memberService.findMemberByEmail(jwtTokenProvider.getPayload(accessToken)));
+        return LoginMember
+                .of(memberService.findMemberByEmail(jwtTokenProvider.getPayload(accessToken)));
     }
 
 }

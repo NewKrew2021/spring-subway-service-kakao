@@ -4,8 +4,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import subway.auth.exception.NoSuchEmailException;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -13,7 +11,8 @@ import subway.member.dto.MemberResponse;
 
 @Service
 public class MemberService {
-    private MemberDao memberDao;
+
+    private final MemberDao memberDao;
 
     public MemberService(MemberDao memberDao) {
         this.memberDao = memberDao;
@@ -40,7 +39,8 @@ public class MemberService {
 
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(),
+                memberRequest.getAge()));
     }
 
     @Transactional

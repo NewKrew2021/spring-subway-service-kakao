@@ -1,8 +1,6 @@
 package subway.auth.ui;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +11,7 @@ import subway.auth.dto.TokenResponse;
 @RestController
 public class AuthController {
 
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
@@ -21,7 +19,8 @@ public class AuthController {
 
     @PostMapping("/login/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest) {
-        return ResponseEntity.ok(new TokenResponse(authService.login(tokenRequest.getEmail(), tokenRequest.getPassword())));
+        return ResponseEntity.ok(new TokenResponse(
+                authService.login(tokenRequest.getEmail(), tokenRequest.getPassword())));
     }
 
 }

@@ -11,21 +11,21 @@ import subway.path.domain.PathGraph;
 @Service
 public class PathService {
 
-  LineService lineService;
+    LineService lineService;
 
-  @Autowired
-  public PathService(LineService lineService) {
-    this.lineService = lineService;
-  }
+    @Autowired
+    public PathService(LineService lineService) {
+        this.lineService = lineService;
+    }
 
-  public Path getShortestPath(Long source, Long target) {
-    SectionsInAllLine sections = new Lines(lineService.findLines()).getSectionsInAllLine();
+    public Path getShortestPath(Long source, Long target) {
+        SectionsInAllLine sections = new Lines(lineService.findLines()).getSectionsInAllLine();
 
-    PathGraph pathGraph = new PathGraph(sections);
-    Path shortestPath = pathGraph
-        .getPath(sections.findStation(source), sections.findStation(target));
-    return shortestPath;
-  }
+        PathGraph pathGraph = new PathGraph(sections);
+        Path shortestPath = pathGraph
+                .getPath(sections.findStation(source), sections.findStation(target));
+        return shortestPath;
+    }
 
 
 }

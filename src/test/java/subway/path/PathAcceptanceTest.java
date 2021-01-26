@@ -70,7 +70,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     StationResponse 제주역 = 지하철역_등록되어_있음("제주역");
     StationResponse 서귀포역 = 지하철역_등록되어_있음("서귀포역");
 
-    LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역,  10);
+    LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역, 10);
 
     ExtractableResponse<Response> response = 거리_경로_조회_요청(1L, 5L);
     경로가_조회되지_않음(response);

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LineResponse {
+
     private Long id;
     private String name;
     private String color;
@@ -16,7 +17,8 @@ public class LineResponse {
     public LineResponse() {
     }
 
-    public LineResponse(Long id, String name, String color, int extraFare, List<StationResponse> stations) {
+    public LineResponse(Long id, String name, String color, int extraFare,
+                        List<StationResponse> stations) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -28,7 +30,8 @@ public class LineResponse {
         List<StationResponse> stations = line.getStations().stream()
                 .map(it -> StationResponse.of(it))
                 .collect(Collectors.toList());
-        return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getExtraFare(), stations);
+        return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getExtraFare(),
+                stations);
     }
 
     public static List<LineResponse> listOf(List<Line> lines) {

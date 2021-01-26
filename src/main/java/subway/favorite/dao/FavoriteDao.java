@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public class FavoriteDao {
 
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert simpleJdbcInsert;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
 
-    private RowMapper<Favorite> rowMapper = (rs, rowNum) ->
+    private final RowMapper<Favorite> rowMapper = (rs, rowNum) ->
             new Favorite(
                     rs.getLong("id"),
                     rs.getLong("member_id"),

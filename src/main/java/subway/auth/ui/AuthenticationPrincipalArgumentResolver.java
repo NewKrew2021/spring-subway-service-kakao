@@ -7,17 +7,17 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.exception.InvalidTokenException;
 import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.LoginMember;
+import subway.member.domain.Member;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import subway.member.domain.LoginMember;
-import subway.member.domain.Member;
-import subway.auth.exception.InvalidTokenException;
-
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private AuthService authService;
+
+    private final AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
@@ -30,9 +30,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         try {
-            String accessToken = AuthorizationExtractor.extract(Objects.requireNonNull(webRequest.getNativeRequest(HttpServletRequest.class)));
+            String accessToken = AuthorizationExtractor
+                    .extract(Objects.requireNonNull(webRequest.getNativeRequest(HttpServletRequest.class)));
             return authService.findMember(accessToken);
         } catch (InvalidTokenException e) {
             validateLoginMemberNecessary(parameter.getParameterAnnotation(AuthenticationPrincipal.class));
@@ -41,7 +43,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     private void validateLoginMemberNecessary(AuthenticationPrincipal authenticationPrincipal) {
-        if(authenticationPrincipal.required()) {
+        if (authenticationPrincipal.required()) {
             throw new InvalidTokenException();
         }
     }

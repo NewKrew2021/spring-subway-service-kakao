@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 public class FavoriteController {
-    // TODO: 즐겨찾기 기능 구현하기
     FavoriteService favoriteService;
     StationService stationService;
 
@@ -39,7 +38,7 @@ public class FavoriteController {
                 .map(favorite -> new FavoriteResponse(favorite.getId(),
                         StationResponse.of(stationService.findStationById(favorite.getSourceStationId())),
                         StationResponse.of(stationService.findStationById(favorite.getTargetStationId()))
-                        ))
+                ))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(favoriteResponses);

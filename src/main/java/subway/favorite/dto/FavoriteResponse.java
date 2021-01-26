@@ -3,9 +3,9 @@ package subway.favorite.dto;
 import subway.station.dto.StationResponse;
 
 public class FavoriteResponse {
-    private Long id;
-    private StationResponse source;
-    private StationResponse target;
+    private final Long id;
+    private final StationResponse source;
+    private final StationResponse target;
 
     public FavoriteResponse(Long id, StationResponse source, StationResponse target) {
         this.id = id;

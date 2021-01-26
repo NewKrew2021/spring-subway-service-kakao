@@ -1,8 +1,9 @@
 package subway.path.domain;
 
 public class SubwayWeight {
-    private int fare;
-    private int distance;
+
+    private final int fare;
+    private final int distance;
 
     public SubwayWeight(int fare, int distance) {
         this.fare = fare;
