@@ -29,21 +29,34 @@ public class PathService {
                 .initializePath()
                 .makeGraphPath(sourceId, targetId)
                 .calculateFare()
-                .discountBy(age)
+                .discountByAge(age)
                 .makePathResponse();
     }
 
     private class PathBuilder {
 
+        public static final int STUDENT_UPPER_BOUND = 19;
+        public static final int STUDENT_LOWER_BOUND = 13;
+        public static final int CHILD_LOWER_BOUND = 6;
+        public static final int CHILD_UPPER_BOUND = 13;
+        public static final int FIXED_DISCOUNT_FARE = 350;
+        public static final double STUDENT_DISCOUNT_RATIO = 0.8;
+        public static final double CHILD_DISCOUNT_RATIO = 0.5;
+        public static final int BASE_FARE = 1250;
+        public static final double UNIT_DISTANCE_OF_LONG_RANGE = 8.0;
+        public static final double UNIT_DISTANCE_OF_SHORT_RANGE = 5.0;
+        public static final int STANDARD_OF_LONG_RANGE = 50;
+        public static final int STANDARD_OF_SHORT_RANGE = 10;
+        public static final int UNIT_FARE = 100;
+        public static final int MAX_FARE_OF_SHORT_RANGE = 800;
         private final Path path = new Path();
         private GraphPath<Station, PathGraphEdge> graphPath;
         private int fare;
 
         public PathBuilder initializePath() {
             path.addStations(stationDao.findAll());
-            lineDao.findAll() // List<Line>
-                    .stream() // Line -> Sections, fare
-                    .forEach(path::addEdges); // 여기다가 fare를 넣
+            lineDao.findAll()
+                    .forEach(path::addEdges);
             return this;
         }
 
@@ -65,26 +78,26 @@ public class PathService {
             return this;
         }
 
-        private PathBuilder discountBy(int age) {
-            if( 19 > age && 13 <= age ) {
-                fare = (int) ((fare - 350) * 0.8 + 350);
+        private PathBuilder discountByAge(int age) {
+            if (STUDENT_LOWER_BOUND <= age && age < STUDENT_UPPER_BOUND) {
+                fare = (int) ((fare - FIXED_DISCOUNT_FARE) * STUDENT_DISCOUNT_RATIO + FIXED_DISCOUNT_FARE);
             }
-            if( 13 > age && 6 <= age ) {
-                fare = (int) ((fare - 350) * 0.5 + 350);
+            if (CHILD_LOWER_BOUND <= age && age < CHILD_UPPER_BOUND) {
+                fare = (int) ((fare - FIXED_DISCOUNT_FARE) * CHILD_DISCOUNT_RATIO + FIXED_DISCOUNT_FARE);
             }
             return this;
         }
 
         private int calculateFareByDistance(int distance) {
-            if( distance > 50 ) {
-                int ceil = (int) Math.ceil((distance - 50) / 8.0);
-                return 1250 + 800 + ceil * 100;
+            if (distance > STANDARD_OF_LONG_RANGE) {
+                int count = (int) Math.ceil((distance - STANDARD_OF_LONG_RANGE) / UNIT_DISTANCE_OF_LONG_RANGE);
+                return BASE_FARE + MAX_FARE_OF_SHORT_RANGE + count * UNIT_FARE;
             }
-            if( distance > 10 ) {
-                int ceil = (int) Math.ceil((distance - 10) / 5.0);
-                return 1250 + ceil * 100;
+            if (distance > STANDARD_OF_SHORT_RANGE) {
+                int count = (int) Math.ceil((distance - STANDARD_OF_SHORT_RANGE) / UNIT_DISTANCE_OF_SHORT_RANGE);
+                return BASE_FARE + count * UNIT_FARE;
             }
-            return 1250;
+            return BASE_FARE;
         }
 
         public PathResponse makePathResponse() {
