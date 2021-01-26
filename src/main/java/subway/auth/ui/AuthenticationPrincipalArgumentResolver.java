@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private AuthService authService;
 
-
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
     }
@@ -35,7 +34,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
         if(!authService.validateToken(token)){
-            throw new InvalidLoginException();
+            return null;
         }
         Member member = authService.findMemberByToken(token);
         return new LoginMember(member.getId(), member.getEmail(), member.getAge());

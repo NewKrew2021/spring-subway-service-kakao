@@ -31,7 +31,7 @@ public class PathService {
         this.lineDao = lineDao;
     }
 
-    public PathResponse getShortestpathResponse(Long source, Long target) {
+    public PathResponse getShortestpathResponse(Long source, Long target, int age) {
         SubwayPathGraph subwayPathGraph = new SubwayPathGraph(
                 new Lines(lineDao.findAll()), source, target);
 
@@ -41,10 +41,12 @@ public class PathService {
                 .map((Station station) -> new StationResponse(station.getId(), station.getName()))
                 .collect(Collectors.toList());
 
+        int totalFare = DistanceExtraFare.getTotalFare(subwayPathGraph.getTotalDistance())
+                + getExtraFareByLines(subwayPathGraph.getLineIdsInShortestPath());
+        totalFare = getAgeDiscountTotalFare(totalFare, age);
+
         return new PathResponse(shortestStations,
-                subwayPathGraph.getTotalDistance(),
-                DistanceExtraFare.getTotalFare(subwayPathGraph.getTotalDistance())
-                        + getExtraFareByLines(subwayPathGraph.getLineIdsInShortestPath()));
+                subwayPathGraph.getTotalDistance(), totalFare);
     }
 
 
@@ -58,5 +60,15 @@ public class PathService {
         return maxExtratotalExtra;
     }
 
-
+    private int getAgeDiscountTotalFare(int totalFare, int age){
+        if(13 <= age && age <= 18){
+            int discountAmount = (totalFare - 350) / 100 * 20;
+            totalFare -= discountAmount;
+        }
+        if(6 <= age && age <= 12){
+            int discountAmount = (totalFare - 350) / 100 * 50;
+            totalFare -= discountAmount;
+        }
+        return totalFare;
+    }
 }
