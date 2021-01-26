@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test;
 import subway.line.domain.Section;
 import subway.line.domain.SectionWithFare;
 import subway.line.domain.SectionsInAllLine;
-import subway.path.exceptions.UnconnectedPathException;
+import subway.path.exceptions.InvalidPathException;
 import subway.station.domain.Station;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,7 +51,7 @@ public class PathTest {
 
     @Test
     void failToFindShortestPathTest() {
-        assertThatThrownBy(() -> pathGraph.getPath(강남역, 서귀포역)).isInstanceOf(UnconnectedPathException.class);
-        assertThatThrownBy(() -> pathGraph.getPath(수원역, 제주역)).isInstanceOf(UnconnectedPathException.class);
+        assertThatThrownBy(() -> pathGraph.getPath(강남역, 서귀포역)).isInstanceOf(InvalidPathException.class);
+        assertThatThrownBy(() -> pathGraph.getPath(수원역, 제주역)).isInstanceOf(InvalidPathException.class);
     }
 }

@@ -121,7 +121,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 토큰_포함_최단_경로_검색_요청(어린이, 남부터미널역, 강남역);
 
         // then
-        최단_경로_요금_조회됨(response, 950);
+        최단_경로_요금_조회됨(response, 1300);
     }
 
     @DisplayName("청소년 요금")
@@ -131,7 +131,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 토큰_포함_최단_경로_검색_요청(청소년, 남부터미널역, 강남역);
 
         // then
-        최단_경로_요금_조회됨(response, 1520);
+        최단_경로_요금_조회됨(response, 1870);
     }
 
     @DisplayName("어른 요금")
