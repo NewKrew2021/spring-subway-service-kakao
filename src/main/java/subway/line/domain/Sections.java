@@ -138,9 +138,9 @@ public class Sections {
         downSection.ifPresent(it -> sections.remove(it));
     }
 
-    public Set<Long> getStationIdsSet(){
+    public Set<Long> getStationIdsSet() {
         Set<Long> stationIdsSet = new HashSet<Long>();
-        for(Section section : sections){
+        for (Section section : sections) {
             stationIdsSet.add(section.getUpStation().getId());
             stationIdsSet.add(section.getDownStation().getId());
         }

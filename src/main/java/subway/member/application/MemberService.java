@@ -2,8 +2,6 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;

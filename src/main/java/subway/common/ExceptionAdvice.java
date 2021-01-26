@@ -9,7 +9,7 @@ import subway.auth.exception.InvalidLoginException;
 @ControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler(InvalidLoginException.class)
-    public ResponseEntity<String> catchInvalidLoginException(){
+    public ResponseEntity<String> catchInvalidLoginException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

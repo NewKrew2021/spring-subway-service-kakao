@@ -2,9 +2,11 @@ package subway.path.domain;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import subway.line.domain.*;
+import subway.line.domain.Line;
+import subway.line.domain.Lines;
+import subway.line.domain.PathEdge;
+import subway.line.domain.Section;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +57,11 @@ public class SubwayPathGraph {
         return (int) graphPath.getWeight();
     }
 
-    public List<Long> getLineIdsInShortestPath(){
+    public List<Long> getLineIdsInShortestPath() {
         return graphPath.getEdgeList().stream()
                 .map(edge -> edge.getLineId())
                 .distinct()
                 .collect(Collectors.toList());
     }
+
 }

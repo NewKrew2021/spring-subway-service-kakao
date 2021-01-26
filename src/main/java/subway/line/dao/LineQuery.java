@@ -19,8 +19,7 @@ public enum LineQuery {
             "left outer join STATION UST on S.up_station_id = UST.id " +
             "left outer join STATION DST on S.down_station_id = DST.id "),
     DELETE_BY_ID("delete from LINE where id = ?"),
-    UPDATE("update LINE set name = ?, color = ? where id = ?")
-    ;
+    UPDATE("update LINE set name = ?, color = ? where id = ?");
 
     private String query;
 

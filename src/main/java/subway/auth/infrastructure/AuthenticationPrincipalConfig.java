@@ -1,10 +1,10 @@
 package subway.auth.infrastructure;
 
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import subway.auth.application.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import subway.auth.application.AuthService;
 
 import java.util.List;
 

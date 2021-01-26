@@ -1,12 +1,10 @@
 package subway.line.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.member.domain.Member;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
@@ -57,11 +55,11 @@ public class SectionDao {
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
 
-    public List<Section> findAll(){
+    public List<Section> findAll() {
         return mapSections(jdbcTemplate.queryForList(SectionQuery.FIND_ALL.getQuery()));
     }
 
-    public List<Section> mapSections(List<Map<String, Object>> result){
+    public List<Section> mapSections(List<Map<String, Object>> result) {
         return result
                 .stream()
                 .map(it ->

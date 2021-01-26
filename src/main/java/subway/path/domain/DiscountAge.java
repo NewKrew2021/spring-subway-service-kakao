@@ -34,7 +34,7 @@ public enum DiscountAge {
         return totalFare;
     }
 
-    private int getDiscountAmount(int totalFare){
+    private int getDiscountAmount(int totalFare) {
         return (int) ((totalFare - DEDUCTION_FARE) * this.discountRate);
     }
 

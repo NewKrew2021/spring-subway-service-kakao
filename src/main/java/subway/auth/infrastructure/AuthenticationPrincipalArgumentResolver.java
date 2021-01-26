@@ -7,8 +7,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
-import subway.auth.exception.InvalidLoginException;
-import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 
@@ -28,12 +26,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public LoginMember resolveArgument(MethodParameter parameter,
-                                  ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest,
-                                  WebDataBinderFactory binderFactory) {
+                                       ModelAndViewContainer mavContainer,
+                                       NativeWebRequest webRequest,
+                                       WebDataBinderFactory binderFactory) {
 
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
-        if(!authService.validateToken(token)){
+        if (!authService.validateToken(token)) {
             return null;
         }
         Member member = authService.findMemberByToken(token);

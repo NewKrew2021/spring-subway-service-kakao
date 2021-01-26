@@ -16,7 +16,7 @@ public class Favorite {
     }
 
     public Favorite(Long id, Station source, Station target, Long userId) {
-        this(source,target,userId);
+        this(source, target, userId);
         this.id = id;
     }
 

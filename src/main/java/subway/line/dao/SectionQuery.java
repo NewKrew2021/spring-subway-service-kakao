@@ -7,8 +7,7 @@ public enum SectionQuery {
             "from SECTION S " +
             "left outer join STATION UST on S.up_station_id = UST.id " +
             "left outer join STATION DST on S.down_station_id = DST.id "),
-    DELETE_BY_LINE_ID("delete from SECTION where line_id = ?")
-    ;
+    DELETE_BY_LINE_ID("delete from SECTION where line_id = ?");
 
     private String query;
 

@@ -40,23 +40,23 @@ public class PathService {
         int totalFare = DistanceExtraFare.getTotalFare(subwayPathGraph.getTotalDistance())
                 + addExtraFareByLines(subwayPathGraph.getLineIdsInShortestPath());
 
-        totalFare = DiscountAge.getTotalFareToDiscountAge(totalFare,age);
+        totalFare = DiscountAge.getTotalFareToDiscountAge(totalFare, age);
 
         return new PathResponse(shortestStations,
                 subwayPathGraph.getTotalDistance(), totalFare);
     }
 
-    private int addExtraFareByLines(List<Long> lineIds){
+    private int addExtraFareByLines(List<Long> lineIds) {
         int maxLineExtraFare = EXTRA_FARE_DEFAULT;
 
-        for(Long lineId : lineIds){
+        for (Long lineId : lineIds) {
             maxLineExtraFare = Math.max(lineDao.findById(lineId).getExtraFare(), maxLineExtraFare);
         }
 
         return maxLineExtraFare;
     }
 
-    public int getLoginMemberAge(LoginMember loginMember){
+    public int getLoginMemberAge(LoginMember loginMember) {
         return (loginMember != null) ? loginMember.getAge().intValue() : AGE_DEFAULT;
     }
 

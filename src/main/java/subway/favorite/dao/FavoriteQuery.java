@@ -8,8 +8,7 @@ public enum FavoriteQuery {
             "left outer join STATION SOURCE_STATION on F.source = SOURCE_STATION.id " +
             "left outer join STATION DESTINATION_STATION on F.target = DESTINATION_STATION.id " +
             "WHERE F.user_id = ?"),
-    DELETE("delete from favorite where id = ?")
-    ;
+    DELETE("delete from favorite where id = ?");
 
     private String query;
 
