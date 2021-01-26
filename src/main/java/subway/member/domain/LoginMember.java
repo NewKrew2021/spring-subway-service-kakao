@@ -1,6 +1,8 @@
 package subway.member.domain;
 
 public class LoginMember {
+
+    public static final LoginMember NOT_LOGIN_MEMBER = new LoginMember(-1L, "", -1);
     private Long id;
     private String email;
     private Integer age;

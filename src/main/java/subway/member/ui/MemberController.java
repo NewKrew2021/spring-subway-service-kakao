@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.exception.NoneAuthorizationException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberRequest;
@@ -61,8 +62,8 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    private ResponseEntity<MemberResponse> handleIllegalArgumentException() {
+    @ExceptionHandler(NoneAuthorizationException.class)
+    private ResponseEntity<MemberResponse> handleNoneAuthorizationException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 

@@ -30,8 +30,8 @@ public class AuthService {
         return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 
-    public boolean validToken(String token) {
-        return jwtTokenProvider.validateToken(token);
+    public boolean invalidToken(String token) {
+        return !jwtTokenProvider.validateToken(token);
     }
 
 }
