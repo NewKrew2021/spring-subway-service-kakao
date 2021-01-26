@@ -1,5 +1,6 @@
 package subway.auth.ui;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -38,7 +39,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     }
 
     private boolean isNotExistToken(String token) {
-        return token == null;
+        return ObjectUtils.isEmpty(token);
     }
 
 }
