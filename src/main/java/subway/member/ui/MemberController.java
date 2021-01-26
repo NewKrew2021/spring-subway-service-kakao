@@ -1,6 +1,7 @@
 package subway.member.ui;
 
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.exception.BadMemberException;
 import subway.member.domain.LoginMember;
 import subway.member.application.MemberService;
 import subway.member.dto.MemberRequest;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 public class MemberController {
@@ -43,20 +45,22 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        MemberResponse member = memberService.findMember(loginMember.getId());
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal Optional<LoginMember> loginMember) {
+        MemberResponse member = memberService.findMember(loginMember.map(LoginMember::getId)
+                .orElseThrow(BadMemberException::new));
         return ResponseEntity.ok().body(member);
     }
 
     @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
-        memberService.updateMember(loginMember.getId(), param);
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal Optional<LoginMember> loginMember, @RequestBody MemberRequest param) {
+        memberService.updateMember(loginMember.map(LoginMember::getId).orElseThrow(BadMemberException::new), param);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/me")
-    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        memberService.deleteMember(loginMember.getId());
+    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal Optional<LoginMember> loginMember) {
+        memberService.deleteMember(loginMember.map(LoginMember::getId)
+                .orElseThrow(BadMemberException::new));
         return ResponseEntity.noContent().build();
     }
 }

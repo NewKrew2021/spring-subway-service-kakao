@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.member.domain.LoginMember;
 import subway.station.domain.Station;
 
 import java.util.*;
@@ -34,7 +35,7 @@ public class Graph {
         }
     }
 
-    public Path getPath(Station source, Station target, int age) {
+    public Path getPath(Station source, Station target, Optional<LoginMember> loginMemberOptional) {
         GraphPath<Station, Edge> shortestPath = dijkstraShortestPath.getPath(source, target);
         if (shortestPath == null) {
             throw new RuntimeException("경로가 없습니다.");
@@ -43,6 +44,8 @@ public class Graph {
         List<Station> vertices = shortestPath.getVertexList();
         int distance = (int)shortestPath.getWeight();
         int fare = calculateFare(distance, shortestPath.getEdgeList());
+
+        int age = loginMemberOptional.map(LoginMember::getAge).orElse(0);
         // age 관련계산
         if(age >=6 && age < 13){
             fare = fare - (int)((fare - 350) * 0.5);

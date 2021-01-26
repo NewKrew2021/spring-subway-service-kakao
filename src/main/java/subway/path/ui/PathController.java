@@ -12,6 +12,8 @@ import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
+import java.util.Optional;
+
 @RestController
 public class PathController {
     private final PathService pathService;
@@ -23,11 +25,11 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> getPath(@AuthenticationPrincipal LoginMember loginMember,
+    public ResponseEntity<PathResponse> getPath(@AuthenticationPrincipal Optional<LoginMember> optionalLoginMember,
                                                 @RequestParam String source, @RequestParam String target) {
         Station sourceStation = stationService.findStationById(Long.valueOf(source));
         Station targetStation = stationService.findStationById(Long.valueOf(target));
         return ResponseEntity.ok().body(
-                pathService.getShortestPathOfStations(sourceStation, targetStation, loginMember.getAge()));
+                pathService.getShortestPathOfStations(sourceStation, targetStation, optionalLoginMember));
     }
 }

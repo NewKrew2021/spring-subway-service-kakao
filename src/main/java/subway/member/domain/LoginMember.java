@@ -18,7 +18,7 @@ public class LoginMember {
 
     private void validate() {
         if(id == null){
-            throw new LoginFailException();
+            throw new LoginFailException("id가 null입니다.");
         }
     }
 

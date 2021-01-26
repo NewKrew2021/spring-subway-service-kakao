@@ -3,11 +3,13 @@ package subway.path.domain;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.member.domain.LoginMember;
 import subway.station.domain.Station;
 import subway.line.domain.Sections;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,7 +41,7 @@ public class GraphTest {
     public void graphTest(){
         Graph graph = new Graph(lines);
 
-        Path path = graph.getPath(강남역, 미금역, 7);
+        Path path = graph.getPath(강남역, 미금역, Optional.of(new LoginMember(1L, "15bass@naver.com", 7)));
         assertThat(path.getDistance()).isEqualTo(9);
         assertThat(path.getStations()).isEqualTo(Arrays.asList(강남역, 정자역, 서현역, 미금역));
     }
@@ -47,7 +49,8 @@ public class GraphTest {
     @Test
     public void noGraphTest(){
         Graph graph = new Graph(lines);
-        assertThatThrownBy(() -> graph.getPath(죽전역, 강남역, 10)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() ->
+                graph.getPath(죽전역, 강남역, Optional.of(new LoginMember(1L, "blha", 10)))
+        ).isInstanceOf(RuntimeException.class);
     }
-
 }
