@@ -3,16 +3,17 @@ package subway.path.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.exception.CannotFindPathException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.member.domain.LoginMember;
 import subway.station.domain.Station;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Graph {
     private final WeightedMultigraph<Station, Edge> graph = new WeightedMultigraph<>(Edge.class);
-    private final DijkstraShortestPath<Station, Edge> dijkstraShortestPath;
 
     public Graph(List<Line> lines) {
         lines.stream()
@@ -24,7 +25,6 @@ public class Graph {
             addAllSectionsAsEdge(line);
         }
 
-        dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
     private void addAllSectionsAsEdge(Line line) {
@@ -36,36 +36,24 @@ public class Graph {
     }
 
     public Path getPath(Station source, Station target, Optional<LoginMember> loginMemberOptional) {
-        GraphPath<Station, Edge> shortestPath = dijkstraShortestPath.getPath(source, target);
-        if (shortestPath == null) {
-            throw new RuntimeException("경로가 없습니다.");
+        GraphPath<Station, Edge> shortestPath = new DijkstraShortestPath<>(graph).getPath(source, target);
+        pathExistenceCheck(shortestPath);
+
+        int distance = (int)shortestPath.getWeight();
+        List<Integer> extraFares = shortestPath.getEdgeList().stream().map(Edge::getExtraFare).collect(Collectors.toList());
+
+        int fare = Fare.calculate(distance, extraFares);
+        if(loginMemberOptional.isPresent()) {
+            fare = Fare.discountByAge(fare, loginMemberOptional.get().getAge());
         }
 
         List<Station> vertices = shortestPath.getVertexList();
-        int distance = (int)shortestPath.getWeight();
-        int fare = calculateFare(distance, shortestPath.getEdgeList());
-
-        int age = loginMemberOptional.map(LoginMember::getAge).orElse(0);
-        // age 관련계산
-        if(age >=6 && age < 13){
-            fare = fare - (int)((fare - 350) * 0.5);
-        }
-        if(age >= 13 && age < 19){
-            fare = fare - (int)((fare - 350) * 0.2);
-        }
-
         return new Path(vertices, distance, fare);
     }
 
-    private int calculateFare(int distance, List<Edge> edgeList) {
-        int distanceFare = 1250 +
-                (int)Math.ceil(Math.min( Math.max((distance - 10), 0), 40 ) / 5.0) * 100 +
-                (int)Math.ceil(Math.max((distance - 50), 0) / 8.0) * 100;
-
-        int maxFare = 0;
-        for (Edge edge : edgeList) {
-            maxFare = Math.max(maxFare, edge.getExtraFare());
+    private void pathExistenceCheck(GraphPath<Station, Edge> shortestPath) {
+        if(null == shortestPath) {
+            throw new CannotFindPathException("경로를 존재하지 않습니다.");
         }
-        return distanceFare + maxFare;
     }
 }
