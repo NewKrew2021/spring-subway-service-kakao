@@ -62,6 +62,10 @@ public class Line {
         return extraFare;
     }
 
+    public List<Station> getStations() {
+        return sections.getStations();
+    }
+
     public void update(Line line) {
         this.name = line.getName();
         this.color = line.getColor();
@@ -81,9 +85,5 @@ public class Line {
 
     public void removeSection(Station station) {
         sections.removeStation(station);
-    }
-
-    public List<Station> getStations() {
-        return sections.getStations();
     }
 }
