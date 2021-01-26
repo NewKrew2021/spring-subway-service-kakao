@@ -10,13 +10,13 @@ public class MemberTest {
 
     @Test
     void 멤버생성_테스트(){
-        assertThat(new Member("adult@email.com","1234")).isEqualTo(new Member("adult@email.com","1234"));
+        assertThat(new Member("adult@email.com","1234",5)).isEqualTo(new Member("adult@email.com","1234",5));
     }
 
     @Test
     void 멤버생성_실패_테스트(){
         assertThatExceptionOfType(WrongInputDataException.class).isThrownBy(()->{
-            new Member("adult.com","1234");
+            new Member("adult.com","1234",5);
         });
     }
 }

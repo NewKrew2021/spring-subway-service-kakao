@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
+    public static final int MIN_SIZE = 1;
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
@@ -129,7 +130,7 @@ public class Sections {
     }
 
     public void removeStation(Station station) {
-        if (sections.size() <= 1) {
+        if (sections.size() <= MIN_SIZE) {
             throw new NoMoreSectionToDeleteException();
         }
 

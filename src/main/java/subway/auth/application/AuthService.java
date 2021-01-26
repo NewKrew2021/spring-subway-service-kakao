@@ -23,7 +23,7 @@ public class AuthService {
     public TokenResponse createToken(TokenRequest tokenRequest) {
         try {
             memberDao.findByEmail(tokenRequest.getEmail())
-                    .checkValidMember(new Member(tokenRequest.getEmail(), tokenRequest.getPassword()));
+                    .checkValidPassword(tokenRequest.getPassword());
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new LoginFailException();
         }

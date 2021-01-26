@@ -16,20 +16,16 @@ public class Member {
     public Member() {
     }
 
-    public Member(String email, String password) {
+    public Member(String email, String password, Integer age) {
         String emailRule = EMAIL_RULE_REGEX;
         if (!email.matches(emailRule)) {
             throw new WrongInputDataException("이메일 형식이 잘못되었습니다.");
         }
-        this.email = email;
-        this.password = password;
-    }
-
-    public Member(String email, String password, Integer age) {
-        this(email, password);
         if (age < MIN_AGE) {
             throw new WrongInputDataException("연령이 잘못 입력되었습니다.");
         }
+        this.email = email;
+        this.password = password;
         this.age = age;
     }
 
@@ -54,8 +50,8 @@ public class Member {
         return age;
     }
 
-    public void checkValidMember(Member member) {
-        if (!this.equals(member)) {
+    public void checkValidPassword(String password) {
+        if (!this.password.equals(password)) {
             throw new LoginFailException();
         }
     }

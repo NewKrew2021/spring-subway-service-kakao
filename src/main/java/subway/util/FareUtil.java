@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FareUtil {
     private static final int BASE_FARE = 1250;
-    private static final int HUNDRED = 100;
+    private static final int PERCENTAGE_VALUE = 100;
     private static final int DEDUCTION_FARE = 350;
     private static final double TEENAGER_SALE_RATE = 0.2;
     private static final double CHILD_SALE_RATE = 0.5;
@@ -33,10 +33,10 @@ public class FareUtil {
     public static int calculateDistanceFare(int totalDistance) {
         int distanceFare = BASE_FARE;
         if (BASIC_FARE_DISTANCE < totalDistance && totalDistance <= FIFTY_KILOMETER) {
-            distanceFare += Math.ceil((totalDistance - BASIC_FARE_DISTANCE) / MIDDLE_DISTANCE_DENOMINATOR) * HUNDRED;
+            distanceFare += Math.ceil((totalDistance - BASIC_FARE_DISTANCE) / MIDDLE_DISTANCE_DENOMINATOR) * PERCENTAGE_VALUE;
         }
         if (totalDistance > FIFTY_KILOMETER) {
-            distanceFare += OVER_FIFTY_KILOMETER_FARE + Math.ceil((totalDistance - FIFTY_KILOMETER) / HIGH_DISTANCE_DENOMINATOR) * HUNDRED;
+            distanceFare += OVER_FIFTY_KILOMETER_FARE + Math.ceil((totalDistance - FIFTY_KILOMETER) / HIGH_DISTANCE_DENOMINATOR) * PERCENTAGE_VALUE;
         }
         return distanceFare;
     }

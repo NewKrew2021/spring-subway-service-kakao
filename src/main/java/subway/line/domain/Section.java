@@ -6,6 +6,7 @@ import subway.station.domain.Station;
 import java.util.Objects;
 
 public class Section {
+    public static final int MIN_DISTANCE = 1;
     private Long id;
     private Station upStation;
     private Station downStation;
@@ -21,7 +22,7 @@ public class Section {
 
     public Section(Station upStation, Station downStation, int distance) {
         this(upStation, downStation);
-        if (distance < 1) {
+        if (distance < MIN_DISTANCE) {
             throw new WrongInputDataException("거리가 잘못 입력되었습니다.");
         }
         this.distance = distance;
