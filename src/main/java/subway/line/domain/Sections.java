@@ -38,12 +38,6 @@ public class Sections {
         this.sections.add(section);
     }
 
-    public void addSections(Sections sections) {
-        for (Section section : sections.getSections()) {
-            this.sections.add(section);
-        }
-    }
-
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
