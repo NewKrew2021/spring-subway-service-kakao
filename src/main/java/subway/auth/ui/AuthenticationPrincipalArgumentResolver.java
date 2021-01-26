@@ -12,6 +12,7 @@ import subway.member.domain.LoginMember;
 import subway.member.dto.MemberResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private AuthService authService;
@@ -31,5 +32,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
         MemberResponse member = authService.findMemberByToken(token);
         return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+    }
+
+    private boolean loginIsRequired(MethodParameter parameter) {
+        return Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)).required();
     }
 }

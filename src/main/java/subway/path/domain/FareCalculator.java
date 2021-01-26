@@ -6,8 +6,9 @@ public class FareCalculator {
     private FareCalculator() {
     }
 
-    public static int getFare(int distance, int extraFare) {
-        return calculateFareByDistance(distance) + extraFare;
+    public static int getFare(int distance, int extraFare, int age) {
+        int fare = calculateFareByDistance(distance) + extraFare;
+        return getDiscountedFare(fare, age);
     }
 
     private static int calculateFareByDistance(int distance) {
@@ -17,9 +18,9 @@ public class FareCalculator {
     }
 
     private static int getDiscountedFare(int fare, int age) {
-//        if (age < 6) {
-//
-//        }
+        if (age < 6) {
+            return 0;
+        }
         if (age < 13) {
             return fare - (int) ((fare - 350) * 0.5);
         }
