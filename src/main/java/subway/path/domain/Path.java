@@ -23,14 +23,9 @@ public class Path {
     }
 
     public void addEdges(Line line) {
-        Sections sections = line.getSections();
-
-        for (Section section : sections.getSections()) {
-            Station upStation = section.getUpStation();
-            Station downStation = section.getDownStation();
+        for (Section section : line.getSections().getSections()) {
             int extraFare = line.getExtraFare();
-
-            graph.addEdge(upStation, downStation, new PathGraphEdge(section.getDistance(), extraFare));
+            graph.addEdge(section.getUpStation(), section.getDownStation(), new PathGraphEdge(section.getDistance(), extraFare));
         }
     }
 

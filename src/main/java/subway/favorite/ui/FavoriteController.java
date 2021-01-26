@@ -11,6 +11,7 @@ import subway.member.domain.LoginMember;
 import java.net.URI;
 
 @RestController
+@RequestMapping("/favorites")
 public class FavoriteController {
     // TODO: 즐겨찾기 기능 구현하기
 
@@ -20,19 +21,19 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    @PostMapping("/favorites")
+    @PostMapping
     public ResponseEntity creatFavorites(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
         favoriteService.insertFavorite(favoriteRequest, loginMember.getId());
-        return ResponseEntity.created(URI.create("/favorite/" + loginMember.getId())).build();
+        return ResponseEntity.created(URI.create("/favorites/" + loginMember.getId())).build();
     }
 
-    @GetMapping("/favorites")
+    @GetMapping
     public ResponseEntity showFavorites(@AuthenticationPrincipal LoginMember loginMember) {
         FavoriteResponse favoriteResponse = favoriteService.showFavoriteByMemberId(loginMember.getId());
         return ResponseEntity.ok().body(favoriteResponse);
     }
 
-    @DeleteMapping("/favorite/{favoriteId}")
+    @DeleteMapping("/{favoriteId}")
     public ResponseEntity deleteFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable Long favoriteId) {
         favoriteService.deleteFavoriteById(loginMember.getId(), favoriteId);
         return ResponseEntity.noContent().build();
