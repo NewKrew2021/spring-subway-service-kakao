@@ -2,7 +2,6 @@ package subway.path.util;
 
 public class DistanceFare {
 
-    private static final int BASE_FARE = 1250;
     private static final int BASE_DISTANCE = 10;
     private static final int EXTRA_DISTANCE = 50;
     private static final int EXTRA_UNIT1 = 5;
@@ -12,12 +11,12 @@ public class DistanceFare {
 
     public static int getFare(int distance) {
         if (distance <= BASE_DISTANCE) {
-            return BASE_FARE;
+            return 0;
         }
         if (distance <= EXTRA_DISTANCE) {
-            return BASE_FARE + getFirstExtraFare(distance);
+            return getFirstExtraFare(distance);
         }
-        return BASE_FARE + getFirstFullExtraFare() + getSecondExtraFare(distance);
+        return getFirstFullExtraFare() + getSecondExtraFare(distance);
     }
 
     private static int getFirstFullExtraFare() {
