@@ -1,8 +1,7 @@
-package subway;
+package subway.auth.infrastructure;
 
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import subway.auth.application.AuthService;
-import subway.auth.ui.AuthenticationPrincipalArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

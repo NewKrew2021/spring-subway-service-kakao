@@ -1,4 +1,4 @@
-package subway;
+package subway.common;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
