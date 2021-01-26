@@ -3,6 +3,7 @@ package subway.path.ui;
 import org.springframework.stereotype.Service;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Sections;
+import subway.path.domain.DistanceExtraFare;
 import subway.path.domain.SubwayPathGraph;
 import subway.path.dto.PathResponse;
 import subway.station.dao.StationDao;
@@ -33,6 +34,6 @@ public class PathService {
                 .collect(Collectors.toList());
 
         return new PathResponse(shortestStations,
-                subwayPathGraph.getTotalDistance(), 0);
+                subwayPathGraph.getTotalDistance(), DistanceExtraFare.getTotalFare(subwayPathGraph.getTotalDistance()));
     }
 }
