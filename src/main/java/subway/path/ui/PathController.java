@@ -14,8 +14,6 @@ import subway.station.application.StationService;
 
 @RestController
 public class PathController {
-    // TODO: 경로조회 기능 구현하기
-
     private PathService pathService;
     private LineService lineService;
     private StationService stationService;

@@ -35,7 +35,7 @@ public class FavoriteResponse {
                 StationResponse.of(favorite.getTargetStation()));
     }
 
-    public static List<FavoriteResponse> listOf(List<Favorite> favorites){
+    public static List<FavoriteResponse> listOf(List<Favorite> favorites) {
         return favorites.stream()
                 .map(FavoriteResponse::of)
                 .collect(Collectors.toList());

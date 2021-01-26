@@ -1,16 +1,14 @@
 package subway.member.ui;
 
-import subway.auth.application.AuthService;
-import subway.auth.domain.AuthenticationPrincipal;
-import subway.auth.infrastructure.AuthorizationExtractor;
-import subway.member.domain.LoginMember;
-import subway.member.application.MemberService;
-import subway.member.dto.MemberRequest;
-import subway.member.dto.MemberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.auth.application.AuthService;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberRequest;
+import subway.member.dto.MemberResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 @RestController
