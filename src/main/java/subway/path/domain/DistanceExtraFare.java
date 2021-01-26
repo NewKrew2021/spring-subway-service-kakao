@@ -6,6 +6,9 @@ public enum DistanceExtraFare {
     EXCEED_50KM(50, 8,100)
     ;
 
+    private static final int TOTAL_FARE_DAFAULT = 0;
+    private static final int REST_ZERO = 0;
+
     private int minDistance;
     private int period;
     private int extraFare;
@@ -30,7 +33,7 @@ public enum DistanceExtraFare {
 
     public static int getTotalFare(int distance){
         int calculatedDistance = distance;
-        int totalFare = 0;
+        int totalFare = TOTAL_FARE_DAFAULT;
 
         if(calculatedDistance > EXCEED_50KM.getMinDistance()){
             totalFare += getTotalExtraFare(calculatedDistance, EXCEED_50KM);
@@ -47,10 +50,14 @@ public enum DistanceExtraFare {
     private static int getTotalExtraFare(int distance, DistanceExtraFare distanceExtraFare){
         int periodCount = (distance - distanceExtraFare.getMinDistance()) / distanceExtraFare.getPeriod();
 
-        if((distance - distanceExtraFare.getMinDistance()) % distanceExtraFare.getPeriod() != 0){
-            periodCount += 1;
+        if(isStatusToAddOnePeriodCount(distance,distanceExtraFare)){
+            periodCount++;
         }
 
         return periodCount * distanceExtraFare.getExtraFare();
+    }
+
+    private static boolean isStatusToAddOnePeriodCount(int distance, DistanceExtraFare distanceExtraFare){
+        return (distance - distanceExtraFare.getMinDistance()) % distanceExtraFare.getPeriod() != REST_ZERO;
     }
 }
