@@ -5,7 +5,6 @@ import subway.auth.application.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import subway.path.ui.LoginInterceptor;
 
 import java.util.List;
 
