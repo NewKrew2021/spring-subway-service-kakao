@@ -3,12 +3,12 @@ package subway.member.domain;
 public class LoginMember {
     private Long id;
     private String email;
-    private Integer age;
+    private Age age;
 
     public LoginMember() {
     }
 
-    public LoginMember(Long id, String email, Integer age) {
+    public LoginMember(Long id, String email, Age age) {
         this.id = id;
         this.email = email;
         this.age = age;
@@ -23,6 +23,6 @@ public class LoginMember {
     }
 
     public Integer getAge() {
-        return age;
+        return age.getAge();
     }
 }

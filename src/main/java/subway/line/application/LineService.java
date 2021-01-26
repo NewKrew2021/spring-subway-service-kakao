@@ -88,8 +88,4 @@ public class LineService {
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
     }
-
-    public List<Section> findAllSections() {
-        return sectionDao.findAll();
-    }
 }

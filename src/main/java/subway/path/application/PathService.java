@@ -4,8 +4,7 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.member.domain.LoginMember;
 import subway.path.domain.fare.FareCalculator;
-import subway.path.domain.fare.GeneralFareStrategy;
-import subway.path.domain.fare.LoginMemberFareStrategy;
+import subway.path.domain.fare.FareStrategyFactory;
 import subway.path.domain.path.Path;
 import subway.path.dto.PathDto;
 import subway.station.application.StationService;
@@ -27,8 +26,9 @@ public class PathService {
         int distance = path.getDistance();
         int extraFare = path.getExtraFare();
 
+
         FareCalculator fareCalculator = new FareCalculator(
-                loginMember != null ? new LoginMemberFareStrategy(distance, extraFare, loginMember) : new GeneralFareStrategy(distance,extraFare)
+                FareStrategyFactory.create(distance,extraFare,loginMember)
         );
 
         return new PathDto(path.getStations(), path.getDistance(), fareCalculator.getFare());

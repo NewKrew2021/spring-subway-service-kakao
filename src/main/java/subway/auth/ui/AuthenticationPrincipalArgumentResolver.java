@@ -8,6 +8,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.Age;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberResponse;
 
@@ -26,7 +27,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
@@ -34,7 +34,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             return null;
         }
         MemberResponse member = authService.findMemberByToken(token);
-        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+        return new LoginMember(member.getId(), member.getEmail(), new Age(member.getAge()));
     }
 
     private boolean loginIsRequired(MethodParameter parameter) {
