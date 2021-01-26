@@ -2,10 +2,13 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.exception.custom.NoSuchMemberException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
+
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -22,8 +25,8 @@ public class MemberService {
     }
 
     public MemberResponse findMember(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+        Optional<Member> member = Optional.ofNullable(memberDao.findById(id));
+        return MemberResponse.of(member.orElseThrow(NoSuchMemberException::new));
     }
 
     @Transactional
