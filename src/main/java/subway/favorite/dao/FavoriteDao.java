@@ -12,6 +12,22 @@ import java.util.stream.Collectors;
 @Repository
 public class FavoriteDao {
 
+    private final static String NAMING_FAVORITE_ID = "favorite_id";
+    private final static String NAMING_SOURCE_STATION_ID = "ss_id";
+    private final static String NAMING_TARGET_STATION_ID = "ts_id";
+    private final static String NAMING_SOURCE_STATION_NAME = "ss_name";
+    private final static String NAMING_TARGET_STATION_NAME = "ts_name";
+    private final static String SAVE_SQL = "insert into favorite (member_id, source_station_id, target_station_id) values (?, ?, ?)";
+    private final static String DELETE_BY_ID_SQL = "delete from FAVORITE where id = ? and member_id = ?";
+    private final static String SHOW_BY_MEMBER_ID_SQL = "select F.id as " + NAMING_FAVORITE_ID +", " +
+            "F.source_station_id as " + NAMING_SOURCE_STATION_ID + ", SS.name as " + NAMING_SOURCE_STATION_NAME +", " +
+            "F.target_station_id as " + NAMING_TARGET_STATION_ID +", TS.name as " + NAMING_TARGET_STATION_NAME +" " +
+            "from FAVORITE F \n " +
+            "left outer join STATION SS on F.source_station_id = SS.id " +
+            "left outer join STATION TS on F.target_station_id = TS.id " +
+            "where F.member_id = ?";
+
+
     private final JdbcTemplate jdbcTemplate;
 
     public FavoriteDao(JdbcTemplate jdbcTemplate) {
@@ -20,29 +36,20 @@ public class FavoriteDao {
 
 
     public void save(Long source, Long target, Long memberId) {
-        String sql = "insert into favorite (member_id, source_station_id, target_station_id) values (?, ?, ?)";
-        jdbcTemplate.update(sql, memberId, source, target);
+        jdbcTemplate.update(SAVE_SQL, memberId, source, target);
     }
 
     public Favorite showByMemberId(Long id) {
-        String sql = "select F.id as favorite_id, " +
-                "F.source_station_id as ss_id, SS.name as ss_name, " +
-                "F.target_station_id as ts_id, TS.name as ts_name " +
-                "from FAVORITE F \n " +
-                "left outer join STATION SS on F.source_station_id = SS.id " +
-                "left outer join STATION TS on F.target_station_id = TS.id " +
-                "where F.member_id = ?";
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(SHOW_BY_MEMBER_ID_SQL, new Object[]{id});
         return result.stream()
                 .map(it -> new Favorite(
-                        (Long) it.get("favorite_id"),
-                        new Station((Long) it.get("ss_id"), (String) it.get("ss_name")),
-                        new Station((Long) it.get("ts_id"), (String) it.get("ts_name"))
+                        (Long) it.get(NAMING_FAVORITE_ID),
+                        new Station((Long) it.get(NAMING_SOURCE_STATION_ID), (String) it.get(NAMING_SOURCE_STATION_NAME)),
+                        new Station((Long) it.get(NAMING_TARGET_STATION_ID), (String) it.get(NAMING_TARGET_STATION_NAME))
                 )).collect(Collectors.toList()).get(0);
     }
 
     public void deleteById(Long favoriteId, Long memberId) {
-        String sql = "delete from FAVORITE where id = ? and member_id = ?";
-        jdbcTemplate.update(sql, favoriteId, memberId);
+        jdbcTemplate.update(DELETE_BY_ID_SQL, favoriteId, memberId);
     }
 }
