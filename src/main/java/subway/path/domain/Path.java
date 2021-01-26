@@ -3,6 +3,7 @@ package subway.path.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.exceptions.NotExistException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.station.domain.Station;
@@ -16,6 +17,7 @@ public class Path {
 
     public Path(Station sourceStation, Station destStation, List<Line> lines) {
         GraphPath<Station, CustomWeightedEdge> graph = getGraph(sourceStation, destStation, lines);
+        validate(graph);
         this.stations = graph.getVertexList();
         this.distance = (int) graph.getWeight();
         this.extraFare = graph.getEdgeList()
@@ -32,6 +34,12 @@ public class Path {
             addVerticesAndEdge(graph, line);
         }
         return new DijkstraShortestPath(graph).getPath(sourceStation, destStation);
+    }
+
+    private void validate(GraphPath<Station, CustomWeightedEdge> graph) {
+        if(graph == null) {
+            throw new NotExistException("경로가 존재하지 않습니다.");
+        }
     }
 
     private void addVerticesAndEdge(WeightedMultigraph<Station, CustomWeightedEdge> graph, Line line) {
