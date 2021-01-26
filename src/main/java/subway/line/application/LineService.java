@@ -98,4 +98,10 @@ public class LineService {
     public int findExtraFare(Long lineId) {
         return lineDao.findExtraFareById(lineId);
     }
+
+    public List<Integer> findExtraFares(List<Long> lineIds) {
+        return lineIds.stream()
+                .map(this::findExtraFare)
+                .collect(Collectors.toList());
+    }
 }
