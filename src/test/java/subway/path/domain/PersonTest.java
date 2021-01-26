@@ -16,6 +16,7 @@ public class PersonTest {
         LoginMember youngTeen = new LoginMember(4L, "youngteen@email.com", 13);
         LoginMember teen = new LoginMember(5L, "teen@email.com", 18);
         LoginMember adult = new LoginMember(6L, "adult@email.com", 19);
+        LoginMember noLogin = null;
 
         assertThat(Person.of(newborn)).isEqualTo(Person.NEWBORN);
         assertThat(Person.of(youngChild)).isEqualTo(Person.CHILD);
@@ -23,5 +24,6 @@ public class PersonTest {
         assertThat(Person.of(youngTeen)).isEqualTo(Person.TEEN);
         assertThat(Person.of(teen)).isEqualTo(Person.TEEN);
         assertThat(Person.of(adult)).isEqualTo(Person.ADULT);
+        assertThat(Person.of(noLogin)).isEqualTo(Person.ADULT);
     }
 }
