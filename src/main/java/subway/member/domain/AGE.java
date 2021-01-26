@@ -1,5 +1,7 @@
 package subway.member.domain;
 
+import java.util.Arrays;
+
 public enum AGE {
     BABY(0, 0, 6),
     CHILD(0.5, 175, 13),
@@ -17,16 +19,10 @@ public enum AGE {
     }
 
     public static AGE getAge(int age) {
-        if (age < BABY.limitAge) {
-            return BABY;
-        }
-        if (age < CHILD.limitAge) {
-            return CHILD;
-        }
-        if (age < TEENAGER.limitAge) {
-            return TEENAGER;
-        }
-        return ADULT;
+        return Arrays.stream(values())
+                .filter(a -> a.limitAge > age)
+                .findFirst()
+                .orElse(ADULT);
     }
 
     public double getSale() {
