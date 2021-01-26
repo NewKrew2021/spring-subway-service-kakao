@@ -5,8 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import subway.auth.dto.TokenRequest;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exception.AuthorizationException;
-import subway.exception.LoginFailException;
-import subway.exception.TokenDecodingFail;
 import subway.member.dao.MemberDao;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
