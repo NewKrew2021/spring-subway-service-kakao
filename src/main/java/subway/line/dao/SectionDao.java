@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.member.domain.Member;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;

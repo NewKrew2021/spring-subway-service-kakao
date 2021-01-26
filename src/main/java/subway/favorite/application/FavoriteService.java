@@ -1,8 +1,6 @@
 package subway.favorite.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import subway.exception.AuthorizationException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
