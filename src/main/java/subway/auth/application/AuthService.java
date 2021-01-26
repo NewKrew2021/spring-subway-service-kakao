@@ -20,7 +20,7 @@ public class AuthService {
 
     public TokenResponse createAuth(String email, String password) {
         if(!memberDao.findByEmail(email).getPassword().equals(password)){
-            throw new InvalidMemberException("이메일이 없거나, 패스워드가 일치하지 않음");
+            throw new InvalidMemberException();
         }
         String token = jwtTokenProvider.createToken(email);
         return new TokenResponse(token);
@@ -32,7 +32,7 @@ public class AuthService {
             Member member = memberDao.findByEmail(payLoad);
             return member;
         }
-        throw new InvalidTokenException("유효한 토큰이 아닙니다.");
+        throw new InvalidTokenException();
     }
 
 }

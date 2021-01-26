@@ -59,7 +59,7 @@ public class MemberDao {
             String sql = "select * from MEMBER where email = ?";
             return jdbcTemplate.queryForObject(sql, rowMapper, email);
         } catch (EmptyResultDataAccessException e){
-            throw new InvalidMemberException("이메일이 없거나, 패스워드가 일치하지 않음");
+            throw new InvalidMemberException();
         }
     }
 
