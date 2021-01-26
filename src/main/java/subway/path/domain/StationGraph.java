@@ -3,6 +3,7 @@ package subway.path.domain;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.exception.custom.NoSuchPathException;
 import subway.line.domain.Line;
 import subway.path.domain.fare.AgeFareStrategy;
 import subway.path.domain.fare.AgeFareStrategyFactory;
@@ -50,7 +51,7 @@ public class StationGraph {
     private GraphPath<Station, SectionEdge> getShortestPath(Station source, Station target) {
         GraphPath<Station, SectionEdge> shortestPath = dijkstraShortestPath.getPath(source, target);
         if (shortestPath == null) {
-            throw new RuntimeException("경로가 없습니다.");
+            throw new NoSuchPathException();
         }
         return shortestPath;
     }

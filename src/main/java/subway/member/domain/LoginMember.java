@@ -1,6 +1,6 @@
 package subway.member.domain;
 
-import subway.exception.LoginFailException;
+import subway.exception.custom.AuthorizationException;
 
 public class LoginMember {
     private Long id;
@@ -18,7 +18,7 @@ public class LoginMember {
 
     private void validate() {
         if (id == null) {
-            throw new LoginFailException();
+            throw new AuthorizationException();
         }
     }
 

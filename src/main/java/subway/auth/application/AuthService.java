@@ -3,7 +3,7 @@ package subway.auth.application;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.exception.LoginFailException;
+import subway.exception.custom.AuthorizationException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
@@ -23,7 +23,7 @@ public class AuthService {
         if (member.getPassword().equals(tokenRequest.getPassword())) {
             return jwtTokenProvider.createToken(member.getEmail());
         }
-        throw new LoginFailException();
+        throw new AuthorizationException();
     }
 
     public LoginMember decode(String token) {
