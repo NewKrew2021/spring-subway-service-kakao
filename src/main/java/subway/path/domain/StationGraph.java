@@ -61,7 +61,10 @@ public class StationGraph {
     }
 
     private int calcLineFare(List<SectionEdge> sectionEdgeList) {
-        return sectionEdgeList.stream().map(SectionEdge::getExtraFare).max(Comparator.naturalOrder()).orElse(0);
+        return sectionEdgeList.stream()
+                .map(SectionEdge::getExtraFare)
+                .max(Comparator.naturalOrder())
+                .orElse(0);
     }
 
     private int calcDistanceFare(int distance) {

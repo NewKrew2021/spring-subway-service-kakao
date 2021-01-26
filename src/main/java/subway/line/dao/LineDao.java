@@ -40,7 +40,8 @@ public class LineDao {
     }
 
     public Line findById(Long id) {
-        String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as line_extra_fare," +
+        String sql = "select L.id as line_id, L.name as line_name," +
+                " L.color as line_color, L.extra_fare as line_extra_fare," +
                 "S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -60,7 +61,8 @@ public class LineDao {
     }
 
     public List<Line> findAll() {
-        String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as line_extra_fare, " +
+        String sql = "select L.id as line_id, L.name as line_name," +
+                " L.color as line_color, L.extra_fare as line_extra_fare, " +
                 "S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -70,7 +72,8 @@ public class LineDao {
                 "left outer join STATION DST on S.down_station_id = DST.id ";
 
         List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-        Map<Long, List<Map<String, Object>>> resultByLine = result.stream().collect(Collectors.groupingBy(it -> (Long) it.get("line_id")));
+        Map<Long, List<Map<String, Object>>> resultByLine = result.stream()
+                .collect(Collectors.groupingBy(it -> (Long) it.get("line_id")));
         return resultByLine.values().stream()
                 .map(this::mapLine)
                 .collect(Collectors.toList());
@@ -102,8 +105,10 @@ public class LineDao {
                 .map(it ->
                         new Section(
                                 (Long) it.getKey(),
-                                new Station((Long) it.getValue().get(0).get("UP_STATION_ID"), (String) it.getValue().get(0).get("UP_STATION_Name")),
-                                new Station((Long) it.getValue().get(0).get("DOWN_STATION_ID"), (String) it.getValue().get(0).get("DOWN_STATION_Name")),
+                                new Station((Long) it.getValue().get(0).get("UP_STATION_ID"),
+                                        (String) it.getValue().get(0).get("UP_STATION_Name")),
+                                new Station((Long) it.getValue().get(0).get("DOWN_STATION_ID"),
+                                        (String) it.getValue().get(0).get("DOWN_STATION_Name")),
                                 (int) it.getValue().get(0).get("SECTION_DISTANCE")))
                 .collect(Collectors.toList());
     }

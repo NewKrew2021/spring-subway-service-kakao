@@ -69,7 +69,8 @@ public class Sections {
         if (existSection.getDistance() <= newSection.getDistance()) {
             throw new CannotAddSectionException();
         }
-        this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(),
+                existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
     }
 
@@ -77,7 +78,8 @@ public class Sections {
         if (existSection.getDistance() <= newSection.getDistance()) {
             throw new CannotAddSectionException();
         }
-        this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(),
+                existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
     }
 

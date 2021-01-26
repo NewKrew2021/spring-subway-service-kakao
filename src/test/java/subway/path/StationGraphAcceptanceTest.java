@@ -32,6 +32,17 @@ public class StationGraphAcceptanceTest extends AcceptanceTest {
     private StationResponse 교대역;
     private StationResponse 남부터미널역;
 
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistance() {
+        //when
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(3L, 2L);
+
+        //then
+        올바른_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        총_거리와_소요_시간을_함께_응답됨(response, 5);
+    }
+
     public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target) {
         return RestAssured
                 .given().log().all()
@@ -41,7 +52,7 @@ public class StationGraphAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
-    public static void 적절한_경로_응답됨(ExtractableResponse<Response> response, ArrayList<StationResponse> expectedPath) {
+    public static void 올바른_경로_응답됨(ExtractableResponse<Response> response, ArrayList<StationResponse> expectedPath) {
         PathResponse pathResponse = response.as(PathResponse.class);
 
         List<Long> stationIds = pathResponse.getStations().stream()
@@ -81,16 +92,5 @@ public class StationGraphAcceptanceTest extends AcceptanceTest {
         삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5);
 
         지하철_구간_등록되어_있음(삼호선, 교대역, 남부터미널역, 3);
-    }
-
-    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-    @Test
-    void findPathByDistance() {
-        //when
-        ExtractableResponse<Response> response = 거리_경로_조회_요청(3L, 2L);
-
-        //then
-        적절한_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
-        총_거리와_소요_시간을_함께_응답됨(response, 5);
     }
 }

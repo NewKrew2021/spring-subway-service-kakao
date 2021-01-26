@@ -16,7 +16,7 @@ public class PathService {
 
     public PathResponse getPathInfo(Station source, Station target, int age) {
         StationGraph stationGraph = new StationGraph(lineDao.findAll());
-        return PathResponse.of(stationGraph.getPathInfo(source, target, age));
+        return PathResponse.from(stationGraph.getPathInfo(source, target, age));
     }
 }
 

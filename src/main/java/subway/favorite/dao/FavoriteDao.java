@@ -18,8 +18,10 @@ public class FavoriteDao {
     private final RowMapper<Favorite> favoriteRowMapper = (resultSet, rowNum) -> new Favorite(
             resultSet.getLong("id"),
             resultSet.getLong("member_id"),
-            new Station(resultSet.getLong("source_station_id"), resultSet.getString("source_station_name")),
-            new Station(resultSet.getLong("target_station_id"), resultSet.getString("target_station_name"))
+            new Station(resultSet.getLong("source_station_id"),
+                    resultSet.getString("source_station_name")),
+            new Station(resultSet.getLong("target_station_id"),
+                    resultSet.getString("target_station_name"))
     );
 
     public FavoriteDao(JdbcTemplate jdbcTemplate) {
@@ -30,7 +32,7 @@ public class FavoriteDao {
     }
 
     public Favorite saveFavorite(Favorite favorite) {
-        Map<String, Object> params = new HashMap();
+        Map<String, Object> params = new HashMap<>();
         params.put("member_id", favorite.getMemberId());
         params.put("source_station_id", favorite.getSourceStation().getId());
         params.put("target_station_id", favorite.getTargetStation().getId());

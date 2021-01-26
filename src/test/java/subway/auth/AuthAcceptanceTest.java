@@ -16,6 +16,7 @@ import java.util.Map;
 import static subway.member.MemberAcceptanceTest.회원_생성을_요청;
 import static subway.member.MemberAcceptanceTest.회원_정보_조회됨;
 
+@DisplayName("인증 인가 관련 기능")
 public class AuthAcceptanceTest extends AcceptanceTest {
     private static final String EMAIL = "email@email.com";
     private static final String PASSWORD = "password";

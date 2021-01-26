@@ -20,7 +20,7 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public static PathResponse of(PathInfo pathInfo) {
+    public static PathResponse from(PathInfo pathInfo) {
         return new PathResponse(
                 pathInfo.getStations().stream()
                         .map(StationResponse::of)

@@ -1,6 +1,8 @@
 package subway.path.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import subway.exception.custom.NoSuchPathException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
@@ -12,6 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("지하철 노선 탐색 관련 기능")
 public class StationGraphTest {
     private final Station 강남역 = new Station(1L, "강남");
     private final Station 정자역 = new Station(2L, "정자");
@@ -35,6 +38,7 @@ public class StationGraphTest {
 
     private final List<Line> lines = Arrays.asList(분당선, 중앙선, 일호선, 이호선);
 
+    @DisplayName("성인 길찾기 수행")
     @Test
     public void graphTest_20살() {
         StationGraph stationGraph = new StationGraph(lines);
@@ -45,6 +49,7 @@ public class StationGraphTest {
         assertThat(pathInfo.getFare()).isEqualTo(1550);
     }
 
+    @DisplayName("어린이 길찾기 수행")
     @Test
     public void graphTest_10살() {
         StationGraph stationGraph = new StationGraph(lines);
@@ -55,10 +60,11 @@ public class StationGraphTest {
         assertThat(pathInfo.getFare()).isEqualTo(950);
     }
 
+    @DisplayName("경로가 없는 경우 예외 발생")
     @Test
     public void noGraphTest() {
         StationGraph stationGraph = new StationGraph(lines);
-        assertThatThrownBy(() -> stationGraph.getPathInfo(죽전역, 강남역, 10)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> stationGraph.getPathInfo(죽전역, 강남역, 10)).isInstanceOf(NoSuchPathException.class);
     }
 
 }

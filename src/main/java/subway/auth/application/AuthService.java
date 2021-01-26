@@ -20,7 +20,7 @@ public class AuthService {
 
     public String login(TokenRequest tokenRequest) {
         Member member = memberDao.findByEmail(tokenRequest.getEmail());
-        if (member.getPassword().equals(tokenRequest.getPassword())) {
+        if (member.hasSamePassword(tokenRequest.getPassword())) {
             return jwtTokenProvider.createToken(member.getEmail());
         }
         throw new AuthorizationException();
