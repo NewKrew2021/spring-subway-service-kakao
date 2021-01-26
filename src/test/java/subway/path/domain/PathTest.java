@@ -1,4 +1,4 @@
-package subway.path;
+package subway.path.domain;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
