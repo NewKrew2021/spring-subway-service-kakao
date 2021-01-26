@@ -29,7 +29,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String token = AuthorizationExtractor.extract(request);
-        if (token == null || token.isEmpty()) {
+        if (token.isEmpty()) {
             return null;
         }
         return authService.findMemberByToken(token);
