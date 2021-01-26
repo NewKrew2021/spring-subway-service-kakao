@@ -4,6 +4,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
+import subway.path.domain.Fare;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Section;
@@ -14,25 +15,11 @@ import subway.station.dto.StationResponse;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class PathService {
-    public static final int DEFAULT_FARE = 1250;
-    public static final int DEFAULT_DISTANCE = 10;
-    public static final int EXTRA_DISTANCE = 50;
-    public static final int PER_DISTANCE1 = 5;
-    public static final int PER_DISTANCE2 = 8;
-    public static final int EXTRA_CHARGE = 100;
-    public static final int CHILD_MIN_AGE = 6;
-    public static final int TEENAGER_MAX_AGE = 18;
-    public static final int CHILD_MAX_AGE = 12;
-    public static final int DEDUCTION = 350;
-    public static final double CHILD_DISCOUNT_RATE = 0.5;
-    public static final double TEENAGER_DISCOUNT_RATE = 0.2;
-
     private final StationDao stationDao;
     private final SectionDao sectionDao;
     private final LineDao lineDao;
@@ -68,14 +55,11 @@ public class PathService {
     }
 
     protected int getFareByDistance(int distance) {
-        if (distance <= DEFAULT_DISTANCE) {
-            return DEFAULT_FARE;
-        }
-        if (distance <= EXTRA_DISTANCE) {
-            return DEFAULT_FARE + (distance - DEFAULT_DISTANCE + PER_DISTANCE1 - 1) / PER_DISTANCE1 * EXTRA_CHARGE;
-        }
-        return DEFAULT_FARE + (EXTRA_DISTANCE - DEFAULT_DISTANCE + PER_DISTANCE1 - 1) / PER_DISTANCE1 * EXTRA_CHARGE
-                + (distance - EXTRA_DISTANCE + PER_DISTANCE2 - 1) / PER_DISTANCE2 * EXTRA_CHARGE;
+        return Fare.getFareByDistance(distance);
+    }
+
+    public int fareWithDiscount(PathResponse pathResponse, LoginMember loginMember) {
+        return Fare.applyDiscount(loginMember.getAge(), pathResponse.getFare());
     }
 
     private WeightedMultigraph<Long, DefaultWeightedEdge> createGraph() {
@@ -92,21 +76,5 @@ public class PathService {
         }
 
         return graph;
-    }
-
-    public int fareWithDiscount(PathResponse pathResponse, LoginMember loginMember) {
-        int age = loginMember.getAge();
-        int fare = pathResponse.getFare();
-
-        if (age < CHILD_MIN_AGE) {
-            return fare;
-        }
-        if (age <= CHILD_MAX_AGE) {
-            return fare - (int) ((fare - DEDUCTION) * CHILD_DISCOUNT_RATE);
-        }
-        if (age <= TEENAGER_MAX_AGE) {
-            return fare - (int) ((fare - DEDUCTION) * TEENAGER_DISCOUNT_RATE);
-        }
-        return fare;
     }
 }

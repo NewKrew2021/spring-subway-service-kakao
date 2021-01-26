@@ -74,8 +74,8 @@ public class SectionDao {
 
     public List<Section> findAll() {
         String sql = "select S.id as id, UST.id as up_station_id, UST.name as up_station_name, " +
-                "DST.id as down_station_id, DST.name as down_station_name " +
-                "where SECTION S " +
+                "DST.id as down_station_id, DST.name as down_station_name, S.distance as distance " +
+                "from SECTION S " +
                 "left outer join STATION UST on S.up_station_id = UST.id " +
                 "left outer join STATION DST on S.down_station_id = DST.id";
 
