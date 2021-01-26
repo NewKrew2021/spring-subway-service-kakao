@@ -142,9 +142,9 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 토큰_포함_최단_경로_검색_요청(어린이, 남부터미널역, 교대역);
 
         // then
-        최단_경로_요금_조회됨(response, 800);
-        // 원래요금 : 1250원
-        // 350 + 900 * 0.5 = 800
+        최단_경로_요금_조회됨(response, 450);
+        // 기본 요금 : 1250원
+        // 900 * 0.5 = 450
         // 어린이: 운임에서 350원을 공제한 금액의 50%할인
     }
 
@@ -155,10 +155,11 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 최단_경로_검색_요청(교대역, 잠실역);
 
         // then
-        최단_경로_요금_조회됨(response, 1550);
+        최단_경로_요금_조회됨(response, 1200);
+        // 기본 요금 : 1250원
         // 이호선 + 500원
         // 거리초과 + 800원 (50km) + 200원 (66km - 50km)
-        // 350 + 2400 * 0.5 = 1550
+        // 2400 * 0.5 = 1200
     }
 
     @DisplayName("청소년 요금")
@@ -168,9 +169,9 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 토큰_포함_최단_경로_검색_요청(청소년, 남부터미널역, 교대역);
 
         // then
-        최단_경로_요금_조회됨(response, 1070);
-        // 원래요금 : 1250원
-        // 350 + 900 * 0.8 = 1070
+        최단_경로_요금_조회됨(response, 720);
+        // 기본 요금 : 1250원
+        // 900 * 0.8 = 720
         // 청소년: 운임에서 350원을 공제한 금액의 20%할인
     }
 
@@ -181,10 +182,11 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 최단_경로_검색_요청(교대역, 잠실역);
 
         // then
-        최단_경로_요금_조회됨(response, 2270);
+        최단_경로_요금_조회됨(response, 1920);
+        // 기본 요금 : 1250원
         // 이호선 + 500원
         // 거리초과 + 800원 (50km) + 200원 (66km - 50km)
-        // 350 + 2400 * 0.8 = 2270
+        // 2400 * 0.8 = 1920
     }
 
     @DisplayName("어른 요금")
@@ -195,7 +197,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
 
         // then
         최단_경로_요금_조회됨(response, 1250);
-        // 원래요금 : 1250원
+        // 기본 요금 : 1250원
     }
 
     private ExtractableResponse<Response> 최단_경로_검색_요청(StationResponse sourceStation, StationResponse targetStation) {
