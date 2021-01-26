@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
+import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 
 import java.util.HashMap;
@@ -38,15 +39,12 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     void myInfoWithBadBearerAuth() {
         회원_등록되어_있음(EMAIL, PASSWORD, AGE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("email", EMAIL + "OTHER");
-        params.put("password", PASSWORD);
+        TokenRequest tokenRequest = new TokenRequest(EMAIL + "OTHER", PASSWORD);
 
         RestAssured
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
+                .body(tokenRequest)
                 .when().post("/login/token")
                 .then().log().all()
                 .statusCode(HttpStatus.UNAUTHORIZED.value());
@@ -76,13 +74,11 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     }
 
     public static ExtractableResponse<Response> 로그인_요청(String email, String password) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
+        TokenRequest tokenRequest = new TokenRequest(email, password);
 
         return RestAssured.given().log().all().
                 contentType(MediaType.APPLICATION_JSON_VALUE).
-                body(params).
+                body(tokenRequest).
                 when().
                 post("/login/token").
                 then().
