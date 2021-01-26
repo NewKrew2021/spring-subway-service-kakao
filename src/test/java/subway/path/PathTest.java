@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.junit.jupiter.api.Test;
+import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
 import subway.path.domain.Path;
@@ -76,11 +77,13 @@ public class PathTest {
         path.addStations(stations);
 
         List<Section> sections = new ArrayList<>();
-        sections.add( new Section(강남역, 양재역, 10) );
-        sections.add( new Section(양재역, 교대역, 10) );
-        sections.add( new Section(강남역, 교대역, 15) );
+        sections.add(new Section(강남역, 양재역, 10));
+        sections.add(new Section(양재역, 교대역, 10));
+        sections.add(new Section(강남역, 교대역, 15));
 
-//        path.addEdges(new Sections(sections));
+        Line line = new Line(1L, "테스트용 라인", "테스트용 라인", 0, new Sections(sections));
+
+        path.addEdges(line);
 
         assertThat(path.containEdge(강남역, 양재역)).isTrue();
         assertThat(path.containEdge(양재역, 교대역)).isTrue();
@@ -103,11 +106,13 @@ public class PathTest {
         path.addStations(stations);
 
         List<Section> sections = new ArrayList<>();
-        sections.add( new Section(강남역, 양재역, 10) );
-        sections.add( new Section(양재역, 교대역, 10) );
-        sections.add( new Section(강남역, 교대역, 15) );
+        sections.add(new Section(강남역, 양재역, 10));
+        sections.add(new Section(양재역, 교대역, 10));
+        sections.add(new Section(강남역, 교대역, 15));
 
-//        path.addEdges(new Sections(sections));
+        Line line = new Line(1L, "테스트용 라인", "테스트용 라인", 0, new Sections(sections));
+
+        path.addEdges(line);
 
         GraphPath shortestPathGraph = path.findShortestPathGraph(강남역, 교대역);
         List<Station> shortestPath = shortestPathGraph.getVertexList();

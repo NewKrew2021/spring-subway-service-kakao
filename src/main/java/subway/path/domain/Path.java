@@ -27,10 +27,7 @@ public class Path {
             Station downStation = section.getDownStation();
             int extraFare = line.getExtraFare();
 
-            PathGraphEdge edge = graph.addEdge(upStation, downStation);
             graph.addEdge(upStation, downStation, new PathGraphEdge(section.getDistance(), extraFare));
-
-            graph.setEdgeWeight(edge, section.getDistance());
         }
     }
 

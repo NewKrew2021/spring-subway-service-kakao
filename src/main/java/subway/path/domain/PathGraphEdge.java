@@ -4,8 +4,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class PathGraphEdge extends DefaultWeightedEdge {
 
-    private final int distance;
-    private final int extraFare;
+    private int distance;
+    private int extraFare;
+
+    public PathGraphEdge() {
+    }
 
     public PathGraphEdge(int distance, int extraFare) {
         this.distance = distance;

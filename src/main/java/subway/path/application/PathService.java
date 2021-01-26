@@ -3,13 +3,15 @@ package subway.path.application;
 import org.jgrapht.GraphPath;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
-import subway.line.domain.Line;
 import subway.path.domain.Path;
 import subway.path.domain.PathGraphEdge;
 import subway.path.dto.PathResponse;
 import subway.station.dao.StationDao;
+import subway.station.domain.Station;
+import subway.station.dto.StationResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PathService {
@@ -34,7 +36,7 @@ public class PathService {
     private class PathBuilder {
 
         private final Path path = new Path();
-        private GraphPath graphPath;
+        private GraphPath<Station, PathGraphEdge> graphPath;
         private int fare;
 
         public PathBuilder initializePath() {
@@ -75,16 +77,21 @@ public class PathService {
 
         private int calculateFareByDistance(int distance) {
             if( distance > 50 ) {
-                return 1250 + 800 + (distance - 50) / 8 * 100;
+                int ceil = (int) Math.ceil((distance - 50) / 8.0);
+                return 1250 + 800 + ceil * 100;
             }
             if( distance > 10 ) {
-                return 1250 + (distance - 10) / 5 * 100;
+                int ceil = (int) Math.ceil((distance - 10) / 5.0);
+                return 1250 + ceil * 100;
             }
             return 1250;
         }
 
         public PathResponse makePathResponse() {
-            return new PathResponse(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
+            List<StationResponse> stationResponses = graphPath.getVertexList().stream()
+                    .map(StationResponse::of)
+                    .collect(Collectors.toList());
+            return new PathResponse(stationResponses, (int) graphPath.getWeight(), fare);
         }
     }
 
