@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 public enum AgeFare {
 
+    FREE(6, 1, 0),
     CHILD(13, 0.5, 350),
     TEEN(19, 0.2, 350),
     ADULT(10000, 0, 0);

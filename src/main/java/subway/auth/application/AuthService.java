@@ -13,6 +13,11 @@ import subway.member.domain.Member;
 
 @Service
 public class AuthService {
+
+    private static final String INVALID_LOGIN_MESSAGE = "유효하지 않은 로그인 정보입니다.";
+    private static final String INVALID_TOKEN_MESSAGE = "유효하지 않은 토큰입니다.";
+    private static final String NO_EXIST_EMAIL_MESSAGE = "존재하지 않는 이메일입니다.";
+
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberDao memberDao;
 
@@ -24,7 +29,7 @@ public class AuthService {
     public TokenResponse createToken(TokenRequest tokenRequest) {
         Member member = findMemberByEmail(tokenRequest.getEmail());
         if (!checkValidLogin(member, tokenRequest)) {
-            throw new AuthorizationException("유효하지 않은 로그인 정보입니다.");
+            throw new AuthorizationException(INVALID_LOGIN_MESSAGE);
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);
@@ -40,7 +45,7 @@ public class AuthService {
             String payload = jwtTokenProvider.getPayload(token);
             return LoginMember.of(findMemberByEmail(payload));
         } catch (MalformedJwtException e) {
-            throw new AuthorizationException("유효하지 않는 토큰입니다. : " + e.getMessage());
+            throw new AuthorizationException(INVALID_TOKEN_MESSAGE+" : "+e.getMessage());
         }
     }
 
@@ -48,7 +53,7 @@ public class AuthService {
         try {
             return memberDao.findByEmail(email);
         } catch (EmptyResultDataAccessException e) {
-            throw new AuthorizationException("존재하지 않는 이메일입니다. : " + e.getMessage());
+            throw new AuthorizationException(NO_EXIST_EMAIL_MESSAGE+" : "+e.getMessage());
         }
     }
 }

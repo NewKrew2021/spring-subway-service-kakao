@@ -7,12 +7,16 @@ import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationRequest;
 import subway.station.dto.StationResponse;
+import subway.station.exception.StationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class StationService {
+
+    private static final String FAILED_DELETE_MESSAGE = "해당 역으로 구성된 구간이 존재합니다.";
+
     private StationDao stationDao;
     private SectionDao sectionDao;
     private FavoriteDao favoriteDao;
@@ -42,7 +46,7 @@ public class StationService {
 
     public void deleteStationById(Long id) {
         if (sectionDao.findByStationId(id) > 0) {
-            throw new RuntimeException();
+            throw new StationException(FAILED_DELETE_MESSAGE);
         }
         favoriteDao.deleteFavoriteByStationId(id);
         stationDao.deleteById(id);
