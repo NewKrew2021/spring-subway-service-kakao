@@ -2,36 +2,35 @@ package subway.path.domain;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import subway.line.domain.Section;
 import subway.station.domain.Station;
 
 import java.util.List;
 
 public class SubwayGraph {
-    private final DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath;
+    private final DijkstraShortestPath<Station, SectionEdge> dijkstraShortestPath;
 
-    public SubwayGraph(List<Section> sections) {
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        makeGraph(sections, graph);
+    public SubwayGraph(List<SectionEdge> sectionEdges) {
+        WeightedMultigraph<Station, SectionEdge> graph = new WeightedMultigraph<>(SectionEdge.class);
+        makeGraph(sectionEdges, graph);
 
         dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
     public Path getShortestPath(Station source, Station target) {
-        GraphPath<Station, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(source, target);
-        return new Path(path.getVertexList(), (int) path.getWeight());
+        GraphPath<Station, SectionEdge> path = dijkstraShortestPath.getPath(source, target);
+        double pathWeight = dijkstraShortestPath.getPathWeight(source, target);
+        return new Path(path.getVertexList(), path.getEdgeList(), (int) pathWeight);
     }
 
-   private void makeGraph(List<Section> sections, WeightedMultigraph<Station, DefaultWeightedEdge> graph) {
-        for (Section section : sections) {
-            Station upStation = section.getUpStation();
-            Station downStation = section.getDownStation();
+    private void makeGraph(List<SectionEdge> sectionEdges, WeightedMultigraph<Station, SectionEdge> graph) {
+        for (SectionEdge sectionEdge : sectionEdges) {
+            Station upStation = sectionEdge.getV1();
+            Station downStation = sectionEdge.getV2();
 
             graph.addVertex(upStation);
             graph.addVertex(downStation);
-            graph.setEdgeWeight(graph.addEdge(upStation, downStation), section.getDistance());
+            graph.addEdge(upStation, downStation, sectionEdge);
         }
     }
 }

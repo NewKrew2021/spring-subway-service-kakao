@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exceptions.AuthorizationException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 
