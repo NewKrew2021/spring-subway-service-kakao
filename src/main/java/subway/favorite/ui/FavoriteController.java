@@ -4,18 +4,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.favorite.application.FavoriteService;
-import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.member.domain.LoginMember;
 import subway.station.application.StationService;
-import subway.station.dto.StationResponse;
 
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/favorites")
 public class FavoriteController {
     FavoriteService favoriteService;
     StationService stationService;
@@ -25,26 +24,23 @@ public class FavoriteController {
         this.stationService = stationService;
     }
 
-    @PostMapping("/favorites")
-    public ResponseEntity<Favorite> createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
-        Favorite favorite = favoriteService.createFavorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget());
-        return ResponseEntity.created(URI.create("/favorites/" + favorite.getId())).body(favorite);
+    @PostMapping
+    public ResponseEntity<FavoriteResponse> createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
+        FavoriteResponse favoriteResponse = FavoriteResponse.of(favoriteService.createFavorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget()));
+        return ResponseEntity.created(URI.create("/favorites/" + favoriteResponse.getId())).body(favoriteResponse);
     }
 
-    @GetMapping("/favorites")
+    @GetMapping
     public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember) {
-        List<Favorite> favorites = favoriteService.findAllFavorites(loginMember.getId());
-        List<FavoriteResponse> favoriteResponses = favorites.stream()
-                .map(favorite -> new FavoriteResponse(favorite.getId(),
-                        StationResponse.of(stationService.findStationById(favorite.getSourceStationId())),
-                        StationResponse.of(stationService.findStationById(favorite.getTargetStationId()))
-                ))
+        List<FavoriteResponse> favoriteResponses = favoriteService.findFavoritesByMemberId(loginMember.getId())
+                .stream()
+                .map(FavoriteResponse::of)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(favoriteResponses);
     }
 
-    @DeleteMapping("/favorites/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteFavorite(@AuthenticationPrincipal LoginMember loginMember, @PathVariable Long id) {
         favoriteService.deleteFavorite(id);
         return ResponseEntity.noContent().build();
