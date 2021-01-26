@@ -13,7 +13,9 @@ import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
 import subway.station.dto.StationResponse;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.auth.AuthAcceptanceTest.로그인되어_있음;
@@ -150,7 +152,8 @@ public class FareAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(String.format("/paths?source=%d&target=%d", sourceStation.getId(), targetStation.getId()))
+                .when().get(String.format("/paths?source=%d&target=%d&time=%s",
+                        sourceStation.getId(), targetStation.getId(), LocalDateTime.of(2021, 1, 26, 6, 30).format(DateTimeFormatter.ofPattern("uuuuMMddHHmm"))))
                 .then().log().all()
                 .extract();
     }
@@ -159,7 +162,8 @@ public class FareAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all().auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(String.format("/paths?source=%d&target=%d", sourceStation.getId(), targetStation.getId()))
+                .when().get(String.format("/paths?source=%d&target=%d&time=%s",
+                        sourceStation.getId(), targetStation.getId(), LocalDateTime.of(2021, 1, 26, 6, 30).format(DateTimeFormatter.ofPattern("uuuuMMddHHmm"))))
                 .then().log().all()
                 .extract();
     }

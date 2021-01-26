@@ -13,7 +13,9 @@ import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
 import subway.station.dto.StationResponse;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +53,7 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
 
         신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 10, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
         이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
-        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5, LocalTime.of(6, 0), LocalTime.of(22, 0), 50);
 
         지하철_구간_등록되어_있음(삼호선, 교대역, 남부터미널역, 3);
     }
@@ -60,18 +62,43 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         //when
-        ExtractableResponse<Response> response = 거리_경로_조회_요청(교대역.getId(), 양재역.getId());
+        ExtractableResponse<Response> response =
+                거리_경로_조회_요청(교대역.getId(), 양재역.getId(), LocalDateTime.of(2021, 1, 26, 6, 30));
 
         //then
         적절한_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
         총_거리와_소요_시간을_함께_응답됨(response, 5);
     }
 
-    public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target) {
+    @DisplayName("두 역의 최단 시간 경로를 조회한다.")
+    @Test
+    void findPathByArrivalTime() {
+        //when
+        ExtractableResponse<Response> response =
+                시간_경로_조회_요청(교대역.getId(), 양재역.getId(), LocalDateTime.of(2021, 1, 26, 6, 30));
+
+        //then
+//        적절한_경로_응답됨(response, Lists.newArrayList(교대역, 강남역, 양재역));
+//        총_거리와_소요_시간을_함께_응답됨(response, 20);
+        총_거리와_도착_시간을_함께_응답됨(response, LocalDateTime.of(2021, 1, 26, 6, 50));
+    }
+
+    public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target, LocalDateTime time) {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .when().get("/paths?source={sourceId}&target={targetId}&time={time}",
+                        source, target, time.format(DateTimeFormatter.ofPattern("uuuuMMddhhmm")))
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 시간_경로_조회_요청(long source, long target, LocalDateTime time) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}&type=ARRIVAL_TIME&time={time}",
+                        source, target, time.format(DateTimeFormatter.ofPattern("uuuuMMddhhmm")))
                 .then().log().all()
                 .extract();
     }
@@ -93,5 +120,10 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
     public static void 총_거리와_소요_시간을_함께_응답됨(ExtractableResponse<Response> response, int totalDistance) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(totalDistance);
+    }
+
+    private static void 총_거리와_도착_시간을_함께_응답됨(ExtractableResponse<Response> response, LocalDateTime time) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getArrivalAt()).isEqualTo(time.format(DateTimeFormatter.ofPattern("uuuuMMddhhmm")));
     }
 }
