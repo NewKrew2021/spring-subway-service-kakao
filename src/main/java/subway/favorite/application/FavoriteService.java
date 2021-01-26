@@ -2,11 +2,13 @@ package subway.favorite.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import subway.auth.exception.InvalidTokenException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.favorite.exception.FavoriteNotFoundException;
+import subway.member.domain.LoginMember;
 import subway.station.application.StationService;
 
 import java.util.List;
@@ -41,7 +43,11 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteFavoriteById(Long id) {
+    public void deleteFavoriteById(LoginMember loginMember, Long id) {
+        Favorite favorite = favoriteDao.getFavoriteById(id).orElseThrow(FavoriteNotFoundException::new);
+        if (!favorite.getId().equals(loginMember.getId())) {
+            throw new InvalidTokenException();
+        }
         favoriteDao.deleteById(id);
     }
 }

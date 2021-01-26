@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class FavoriteDao {
@@ -49,6 +50,16 @@ public class FavoriteDao {
                 "left outer join STATION S on F.source_station_id = S.id " +
                 "left outer join STATION T on F.target_station_id = T.id " +
                 "where F.member_id= ?;", rowMapper, memberId);
+    }
+
+    public Optional<Favorite> getFavoriteById(Long id) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject("select F.id as id, F.member_id as member_id," +
+                " S.id as source_id, S.name as source_name," +
+                " T.id as target_id, T.name as target_name " +
+                "from Favorite F \n" +
+                "left outer join STATION S on F.source_station_id = S.id " +
+                "left outer join STATION T on F.target_station_id = T.id " +
+                "where F.id= ?;", rowMapper, id));
     }
 
     public void deleteById(Long id) {
