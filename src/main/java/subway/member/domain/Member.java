@@ -1,6 +1,7 @@
 package subway.member.domain;
 
 public class Member {
+    public static final long DEFAULT_ID = 0L;
     private Long id;
     private String email;
     private String password;
@@ -9,23 +10,23 @@ public class Member {
     public Member() {
     }
 
-    public Member(Long id, String email, String password, Integer age) {
+    private Member(Long id, String email, String password, Integer age) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.age = age;
     }
 
-    public Member(Long id, String email, Integer age) {
-        this.id = id;
-        this.email = email;
-        this.age = age;
+    private Member(String email, String password, Integer age) {
+        this(DEFAULT_ID, email, password, age);
     }
 
-    public Member(String email, String password, Integer age) {
-        this.email = email;
-        this.password = password;
-        this.age = age;
+    public static Member of(Long id, String email, String password, Integer age) {
+        return new Member(id, email, password, age);
+    }
+
+    public static Member of(String email, String password, Integer age) {
+        return new Member(email, password, age);
     }
 
     public Long getId() {

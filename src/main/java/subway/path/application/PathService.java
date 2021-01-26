@@ -62,6 +62,4 @@ public class PathService {
         }
         return new DijkstraShortestPath(graph);
     }
-
-
 }
