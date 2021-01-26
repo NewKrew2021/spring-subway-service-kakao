@@ -16,6 +16,10 @@ import java.util.List;
 
 @Repository
 public class StationDao {
+    private static final String SELECT_FROM_STATION = "select * from STATION";
+    private static final String DELETE_FROM_STATION_WHERE_ID = "delete from STATION where id = ?";
+    private static final String SELECT_FROM_STATION_WHERE_ID = "select * from STATION where id = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertAction;
 
@@ -40,18 +44,18 @@ public class StationDao {
     }
 
     public List<Station> findAll() {
-        String sql = "select * from STATION";
+        String sql = SELECT_FROM_STATION;
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from STATION where id = ?";
+        String sql = DELETE_FROM_STATION_WHERE_ID;
         jdbcTemplate.update(sql, id);
     }
 
     public Station findById(Long id) {
         try {
-            String sql = "select * from STATION where id = ?";
+            String sql = SELECT_FROM_STATION_WHERE_ID;
             return jdbcTemplate.queryForObject(sql, rowMapper, id);
         } catch (EmptyResultDataAccessException e){
             throw new StationNotFoundException();
