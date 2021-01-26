@@ -1,8 +1,8 @@
-package subway.path.domain.fareStrategy;
+package subway.path.domain.farePolicy;
 
 import subway.member.domain.LoginMember;
 
-public class MemberStrategy implements FareStrategy {
+public class MemberPolicy implements FarePolicy {
 
     private static final int TEENAGER_MIN_AGE = 13;
     private static final int TEENAGER_MAX_AGE = 19;
@@ -10,11 +10,12 @@ public class MemberStrategy implements FareStrategy {
     private static final int TAX_CREDIT = 350;
     private static final double TEENAGER_DISCOUNT_RATE = 0.2;
     private static final double CHILD_DISCOUNT_RATE = 0.5;
+    public static final int NO_FARE = 0;
 
     private int fare;
     private LoginMember loginMember;
 
-    public MemberStrategy(int fare, LoginMember loginMember) {
+    public MemberPolicy(int fare, LoginMember loginMember) {
         this.fare = fare;
         this.loginMember = loginMember;
     }
@@ -25,13 +26,18 @@ public class MemberStrategy implements FareStrategy {
             return fare;
         }
 
-        if (isTeenager(loginMember.getAge())) {
-            return fare - getDiscountFare(TEENAGER_DISCOUNT_RATE);
+        if (loginMember.getAge() < CHILD_MIN_AGE) {
+            return NO_FARE;
         }
 
         if (isChild(loginMember.getAge())) {
             return fare - getDiscountFare(CHILD_DISCOUNT_RATE);
         }
+
+        if (isTeenager(loginMember.getAge())) {
+            return fare - getDiscountFare(TEENAGER_DISCOUNT_RATE);
+        }
+
         return fare;
     }
 

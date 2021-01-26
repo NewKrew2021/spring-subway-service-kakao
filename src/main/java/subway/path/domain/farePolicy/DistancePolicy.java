@@ -1,8 +1,8 @@
-package subway.path.domain.fareStrategy;
+package subway.path.domain.farePolicy;
 
 import org.jgrapht.GraphPath;
 
-public class DistanceStrategy implements FareStrategy {
+public class DistancePolicy implements FarePolicy {
     private static final int DIVIDE_UNIT_10_TO_50 = 5;
     private static final int DIVIDE_UNIT_OVER_50 = 8;
     private static final int MINIMUM_DISTANCE = 10;
@@ -14,7 +14,12 @@ public class DistanceStrategy implements FareStrategy {
     private int distance;
     private int fare;
 
-    public DistanceStrategy(int fare, GraphPath graphPath) {
+    public DistancePolicy(int fare, int distance) {
+        this.distance = distance;
+        this.fare = fare;
+    }
+
+    public DistancePolicy(int fare, GraphPath graphPath) {
         this.distance = (int) graphPath.getWeight();
         this.fare = fare;
     }
@@ -24,7 +29,6 @@ public class DistanceStrategy implements FareStrategy {
         if (distance > MINIMUM_DISTANCE && distance <= MAXIMUM_DISTANCE) {
             return fare + getAdditionalCost(MINIMUM_DISTANCE, DIVIDE_UNIT_10_TO_50);
         }
-
         if (distance > MAXIMUM_DISTANCE) {
             return MAXIMUM_INITIAL_FARE + fare + getAdditionalCost(MAXIMUM_DISTANCE, DIVIDE_UNIT_OVER_50);
         }
@@ -34,4 +38,6 @@ public class DistanceStrategy implements FareStrategy {
     private int getAdditionalCost(int defaultDistance, int divideUnit) {
         return (int) Math.round(ADDITIONAL_COST * (Math.ceil((double) (distance - defaultDistance) / divideUnit)));
     }
+
 }
+

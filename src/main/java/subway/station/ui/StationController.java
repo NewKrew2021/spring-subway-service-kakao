@@ -40,4 +40,5 @@ public class StationController {
     public ResponseEntity handleSQLException() {
         return ResponseEntity.badRequest().build();
     }
+
 }

@@ -13,11 +13,12 @@ public class WeightWithLine extends DefaultWeightedEdge {
     }
 
     @Override
-    protected double getWeight(){
+    protected double getWeight() {
         return distance;
     }
 
     public Line getLine() {
         return line;
     }
+
 }

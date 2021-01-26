@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.exception.InvalidMemberException;
+import subway.exception.StationNotFoundException;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
@@ -53,7 +54,7 @@ public class StationDao {
             String sql = "select * from STATION where id = ?";
             return jdbcTemplate.queryForObject(sql, rowMapper, id);
         } catch (EmptyResultDataAccessException e){
-            throw new RuntimeException("source, target이 일치하지 않습니다.");
+            throw new StationNotFoundException("해당 아이디의 역을 찾을 수 없습니다.");
         }
     }
 }

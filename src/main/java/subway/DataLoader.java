@@ -48,5 +48,6 @@ public class DataLoader implements CommandLineRunner {
         Member member = new Member("email@email.com", "password", 10);
         memberDao.insert(member);
     }
+
 }
 

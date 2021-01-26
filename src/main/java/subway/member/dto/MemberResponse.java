@@ -31,4 +31,5 @@ public class MemberResponse {
     public Integer getAge() {
         return age;
     }
+
 }

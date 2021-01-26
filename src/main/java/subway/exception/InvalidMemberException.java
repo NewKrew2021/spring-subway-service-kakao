@@ -4,4 +4,5 @@ public class InvalidMemberException extends RuntimeException{
     public InvalidMemberException(String error){
         super(error);
     }
+
 }

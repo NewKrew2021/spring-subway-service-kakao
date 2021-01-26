@@ -19,4 +19,5 @@ public class TokenRequest {
     public String getPassword() {
         return password;
     }
+
 }

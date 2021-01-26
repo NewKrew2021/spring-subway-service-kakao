@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
-import subway.favorite.service.FavoriteService;
+import subway.favorite.application.FavoriteService;
 import subway.member.domain.LoginMember;
 
 import java.net.URI;
@@ -43,4 +43,5 @@ public class FavoriteController {
         favoriteService.deleteFavorite(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

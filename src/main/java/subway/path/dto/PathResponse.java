@@ -41,4 +41,5 @@ public class PathResponse {
     public int getFare() {
         return fare;
     }
+
 }

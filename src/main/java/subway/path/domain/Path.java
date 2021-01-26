@@ -10,12 +10,6 @@ public class Path {
     private int distance;
     private Fare fare;
 
-    public Path(List<Station> stations, int distance, int fare) {
-        this.stations = stations;
-        this.distance = distance;
-        this.fare = new Fare(fare);
-    }
-
     public Path(ShortestGraph shortestGraph, LoginMember loginMember) {
         this.stations = shortestGraph.getGraphPath().getVertexList();
         this.distance = (int) shortestGraph.getGraphPath().getWeight();
@@ -33,4 +27,5 @@ public class Path {
     public List<Station> getStations() {
         return stations;
     }
+
 }

@@ -8,6 +8,7 @@ import subway.favorite.domain.Favorite;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -39,13 +40,14 @@ public class FavoriteDao {
         insertAction.execute(params);
     }
 
-    public Favorite findByUser(Long memberId){
+    public List<Favorite> findByUser(Long memberId){
         String sql = "select * from favorite where member_id = ?";
-        return jdbcTemplate.queryForObject(sql, favoriteRowMapper, memberId);
+        return jdbcTemplate.query(sql, favoriteRowMapper, memberId);
     }
 
     public void deleteFavorite(Long id) {
         String sql = "delete from favorite where id = ?";
         jdbcTemplate.update(sql, id);
     }
+
 }

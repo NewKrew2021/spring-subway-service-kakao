@@ -41,4 +41,5 @@ public class StationService {
     public List<Station> findStations() {
         return stationDao.findAll();
     }
+
 }

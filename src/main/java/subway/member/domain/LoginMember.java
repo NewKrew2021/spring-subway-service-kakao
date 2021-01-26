@@ -27,4 +27,5 @@ public class LoginMember {
     public Integer getAge() {
         return age;
     }
+
 }

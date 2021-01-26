@@ -51,4 +51,5 @@ public class LineResponse {
     public List<StationResponse> getStations() {
         return stations;
     }
+
 }

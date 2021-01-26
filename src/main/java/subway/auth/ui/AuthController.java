@@ -26,4 +26,5 @@ public class AuthController {
         TokenResponse tokenResponse = authService.createAuth(email, password);
         return ResponseEntity.ok().body(tokenResponse);
     }
+
 }

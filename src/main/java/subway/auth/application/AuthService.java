@@ -34,6 +34,7 @@ public class AuthService {
         }
         throw new InvalidTokenException("유효한 토큰이 아닙니다.");
     }
+
 }
 
 

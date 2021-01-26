@@ -25,4 +25,5 @@ public class AuthorizationExtractor {
 
         return null;
     }
+
 }

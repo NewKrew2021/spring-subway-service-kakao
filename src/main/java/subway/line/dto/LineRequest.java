@@ -51,4 +51,5 @@ public class LineRequest {
     public int getExtraFare() {
         return extraFare;
     }
+
 }

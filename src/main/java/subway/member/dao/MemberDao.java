@@ -62,4 +62,5 @@ public class MemberDao {
             throw new InvalidMemberException("이메일이 없거나, 패스워드가 일치하지 않음");
         }
     }
+
 }

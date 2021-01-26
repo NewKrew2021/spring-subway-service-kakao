@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionHandlers {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<String> invalidTokenHandle() {
@@ -17,4 +17,10 @@ public class ExceptionController {
     public ResponseEntity<String> invalidMemberHandle(){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @ExceptionHandler(StationNotFoundException.class)
+    public ResponseEntity<String> StationNotFoundHandle(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
 }

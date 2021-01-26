@@ -33,7 +33,7 @@ public class ShortestGraph {
     private void addGraph(WeightedMultigraph<Station, WeightWithLine> graph, Section section, Line line) {
         graph.addVertex(section.getUpStation());
         graph.addVertex(section.getDownStation());
-        graph.addEdge(section.getUpStation(), section.getDownStation(),  new WeightWithLine(section.getDistance(), line));
+        graph.addEdge(section.getUpStation(), section.getDownStation(), new WeightWithLine(section.getDistance(), line));
     }
 
     public GraphPath getGraphPath() {
