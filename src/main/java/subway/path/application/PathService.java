@@ -22,9 +22,7 @@ public class PathService {
         SectionsInAllLine sections = new Lines(lineService.findLines()).getSectionsInAllLine();
 
         PathGraph pathGraph = new PathGraph(sections);
-        Path shortestPath = pathGraph
-                .getPath(sections.findStation(source), sections.findStation(target));
-        return shortestPath;
+        return pathGraph.getPath(sections.findStation(source), sections.findStation(target));
     }
 
 

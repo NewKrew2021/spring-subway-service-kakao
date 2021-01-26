@@ -1,13 +1,8 @@
 package subway.path.domain;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.WeightedMultigraph;
 
 public class SubwayGraph<V, E> extends WeightedMultigraph {
-
-    public SubwayGraph(EdgeFactory ef) {
-        super(ef);
-    }
 
     public SubwayGraph(Class edgeClass) {
         super(edgeClass);

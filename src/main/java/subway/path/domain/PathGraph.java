@@ -11,8 +11,7 @@ public class PathGraph {
     SubwayGraph<Station, SubwayEdge> pathGraph;
 
     public PathGraph(SectionsInAllLine sections) {
-        SubwayGraph<Station, SubwayEdge> graph = new SubwayGraph(
-                SubwayEdge.class);
+        SubwayGraph<Station, SubwayEdge> graph = new SubwayGraph<>(SubwayEdge.class);
 
         sections.getSections()
                 .forEach(section -> {
