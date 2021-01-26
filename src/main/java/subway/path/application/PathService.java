@@ -3,6 +3,7 @@ package subway.path.application;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Lines;
+import subway.member.domain.LoginMember;
 import subway.path.domain.DiscountAge;
 import subway.path.domain.DistanceExtraFare;
 import subway.path.domain.SubwayPathGraph;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class PathService {
     private final int EXTRA_FARE_DEFAULT = 0;
+    private final int AGE_DEFAULT = 0;
     private final StationDao stationDao;
     private final LineDao lineDao;
 
@@ -52,6 +54,10 @@ public class PathService {
         }
 
         return maxLineExtraFare;
+    }
+
+    public int getLoginMemberAge(LoginMember loginMember){
+        return (loginMember != null) ? loginMember.getAge().intValue() : AGE_DEFAULT;
     }
 
 }
