@@ -20,23 +20,35 @@ public class AuthService {
         this.memberDao = memberDao;
     }
 
-    public TokenResponse createToken(TokenRequest tokenRequest) {
-        try {
-            memberDao.findByEmail(tokenRequest.getEmail())
-                    .checkValidPassword(tokenRequest.getPassword());
-        } catch (IncorrectResultSizeDataAccessException e) {
-            throw new LoginFailException();
-        }
+    public TokenResponse login(TokenRequest tokenRequest) {
+        authenticate(tokenRequest);
+        return createToken(tokenRequest);
+    }
+
+    private TokenResponse createToken(TokenRequest tokenRequest) {
         return new TokenResponse(jwtTokenProvider.createToken(tokenRequest.getEmail()));
     }
 
-    public Member getMemberByToken(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new AuthorizationFailException();
+    private void authenticate(TokenRequest tokenRequest) {
+        try {
+            Member member = memberDao.findByEmail(tokenRequest.getEmail());
+            member.checkValidPassword(tokenRequest.getPassword());
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new LoginFailException();
         }
+    }
+
+    public Member getMemberByToken(String token) {
+        validateToken(token);
         try {
             return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
         } catch (IncorrectResultSizeDataAccessException e) {
+            throw new AuthorizationFailException();
+        }
+    }
+
+    private void validateToken(String token) {
+        if (!jwtTokenProvider.validateToken(token)) {
             throw new AuthorizationFailException();
         }
     }
