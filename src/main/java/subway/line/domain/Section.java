@@ -3,6 +3,8 @@ package subway.line.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import subway.station.domain.Station;
 
+import java.util.Objects;
+
 public class Section extends DefaultWeightedEdge {
     private Long id;
     private Long lindId;
@@ -47,6 +49,19 @@ public class Section extends DefaultWeightedEdge {
 
     public int getDistance() {
         return distance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Section section = (Section) o;
+        return distance == section.distance && Objects.equals(lindId, section.lindId) && Objects.equals(upStation, section.upStation) && Objects.equals(downStation, section.downStation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lindId, upStation, downStation, distance);
     }
 
     @Override

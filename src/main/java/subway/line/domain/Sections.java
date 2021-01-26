@@ -141,7 +141,7 @@ public class Sections {
             Station newUpStation = downSection.get().getUpStation();
             Station newDownStation = upSection.get().getDownStation();
             int newDistance = upSection.get().getDistance() + downSection.get().getDistance();
-            sections.add(new Section(newUpStation, newDownStation, newDistance));
+            sections.add(new Section(upSection.get().getLindId(), newUpStation, newDownStation, newDistance));
         }
 
         upSection.ifPresent(it -> sections.remove(it));
