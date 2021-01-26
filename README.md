@@ -52,3 +52,28 @@ npm run dev
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blob/master/LICENSE) licensed.
+
+## 추가 기능
+### 추가 기능 정리
+- 최단경로 조회 API /paths?source={sourceId}&target={targetId}
+- 토큰 발급 API /login/token
+- 토큰 인증 API /member/me
+- 즐겨찾기 생성 API /favorites
+- 즐겨찾기 목록 조회 API /favorites
+- 즐겨찾기 삭제 API /favorites/{id}
+
+### 작성 File
+- AuthService       : 토큰 발급 service
+- AuthController    : 토큰 발급 API controller
+- AuthenticationPrincipalArgumentResolve : 토큰 조회시 유효성 확인 및 LoginMember객체 생성 추가
+- NoneAuthorizationException : 잘못된 인증 토큰 request 예외처리
+- FavoriteService   : 즐겨찾기 추가, 조회, 삭제 service
+- FavoriteDao       : 즐겨찾기 추가, 조회, 삭제 dao
+- Favorite          : 즐겨찾기 domain 객체
+- FavoriteController    : 즐겨찾기 추가, 조회, 삭제 controller
+- PathService       : 최단경로 조회 service
+- Path              : 최단경로 domain 객체
+- PathGraphEdge     : 최단경로 Edge 객체
+- PathController    : 최단경로 조회 controller
+- Line              : fare 추가
+- LineDao           : fare 관련 요소 추가
