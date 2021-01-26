@@ -13,8 +13,8 @@ public enum DistanceFare {
 
     private final int distance;
 
-    DistanceFare(int distance){
-        this.distance=distance;
+    DistanceFare(int distance) {
+        this.distance = distance;
     }
 
     public static int getDistanceFare(int distance) {

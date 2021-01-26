@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import subway.auth.application.AuthService;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
-import subway.member.exception.InvalidMemberException;
 import subway.auth.infrastructure.JwtTokenProvider;
 
 @RestController
 public class AuthController {
-    private AuthService authService;
+    private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired

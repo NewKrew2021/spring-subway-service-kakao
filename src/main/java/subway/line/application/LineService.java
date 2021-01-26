@@ -1,7 +1,6 @@
 package subway.line.application;
 
 import org.springframework.stereotype.Service;
-import subway.line.exception.SectionNotFoundException;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
@@ -9,6 +8,7 @@ import subway.line.domain.Section;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.line.exception.SectionNotFoundException;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class LineService {
-    private LineDao lineDao;
-    private SectionDao sectionDao;
-    private StationService stationService;
+    private final LineDao lineDao;
+    private final SectionDao sectionDao;
+    private final StationService stationService;
 
     public LineService(LineDao lineDao, SectionDao sectionDao, StationService stationService) {
         this.lineDao = lineDao;

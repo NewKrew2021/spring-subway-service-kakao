@@ -14,10 +14,10 @@ import java.util.Map;
 
 @Repository
 public class FavoriteDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert insertAction;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert insertAction;
 
-    private RowMapper<Favorite> rowMapper = (resultSet, rowNum) ->
+    private final RowMapper<Favorite> rowMapper = (resultSet, rowNum) ->
             Favorite.of(
                     resultSet.getLong("id"),
                     resultSet.getLong("member_id"),

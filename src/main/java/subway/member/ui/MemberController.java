@@ -1,11 +1,9 @@
 package subway.member.ui;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
-import subway.auth.exception.InvalidTokenException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberRequest;
@@ -15,8 +13,8 @@ import java.net.URI;
 
 @RestController
 public class MemberController {
-    private MemberService memberService;
-    private AuthService authService;
+    private final MemberService memberService;
+    private final AuthService authService;
 
     public MemberController(AuthService authService, MemberService memberService) {
         this.authService = authService;

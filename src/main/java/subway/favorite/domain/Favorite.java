@@ -3,7 +3,7 @@ package subway.favorite.domain;
 import subway.station.domain.Station;
 
 public class Favorite {
-    private static final Long DEFAULT_ID=0L;
+    private static final Long DEFAULT_ID = 0L;
     Long id;
     Long memberId;
     Station source;

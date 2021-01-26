@@ -2,11 +2,11 @@ package subway.favorite.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import subway.favorite.exception.FavoriteNotFoundException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
+import subway.favorite.exception.FavoriteNotFoundException;
 import subway.station.application.StationService;
 
 import java.util.List;
@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
-    private FavoriteDao favoriteDao;
-    private StationService stationService;
+    private final FavoriteDao favoriteDao;
+    private final StationService stationService;
 
     @Autowired
     public FavoriteService(FavoriteDao favoriteDao, StationService stationService) {
