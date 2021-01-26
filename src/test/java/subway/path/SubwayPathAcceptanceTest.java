@@ -23,7 +23,7 @@ import static subway.line.SectionAcceptanceTest.지하철_구간_등록되어_�
 import static subway.station.StationAcceptanceTest.지하철역_등록되어_있음;
 
 @DisplayName("지하철 경로 조회")
-public class PathAcceptanceTest extends AcceptanceTest {
+public class SubwayPathAcceptanceTest extends AcceptanceTest {
     private LineResponse 신분당선;
     private LineResponse 이호선;
     private LineResponse 삼호선;
@@ -59,7 +59,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         //when
-        ExtractableResponse<Response> response = 거리_경로_조회_요청(3L, 2L);
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(교대역.getId(), 양재역.getId());
 
         //then
         적절한_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));

@@ -1,15 +1,21 @@
 package subway.auth.infrastructure;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import subway.exceptions.UnauthorizedException;
 
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
+
     @Value("${security.jwt.token.secret-key}")
     private String secretKey;
+
     @Value("${security.jwt.token.expire-length}")
     private long validityInMilliseconds;
 
@@ -27,17 +33,14 @@ public class JwtTokenProvider {
     }
 
     public String getPayload(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-    }
-
-    public boolean validateToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
-            return !claims.getBody().getExpiration().before(new Date());
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
         } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            throw new UnauthorizedException();
         }
     }
 }
-

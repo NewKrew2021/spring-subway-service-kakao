@@ -10,9 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
 import subway.auth.dto.TokenResponse;
+import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
+import subway.favorite.dto.FavoriteResponse;
 import subway.line.dto.LineResponse;
 import subway.station.dto.StationResponse;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.auth.AuthAcceptanceTest.로그인되어_있음;
@@ -60,6 +66,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         // then
         즐겨찾기_생성됨(createResponse);
 
+        즐겨찾기_생성을_요청(사용자, 양재역, 정자역);
         // when
         ExtractableResponse<Response> findResponse = 즐겨찾기_목록_조회_요청(사용자);
         // then
@@ -68,7 +75,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> deleteResponse = 즐겨찾기_삭제_요청(사용자, createResponse);
         // then
-        즐겨찾기_삭제됨(deleteResponse);
+        즐겨찾기_삭제됨(사용자, deleteResponse);
     }
 
     public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(TokenResponse tokenResponse, StationResponse source, StationResponse target) {
@@ -110,10 +117,22 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
     }
 
     public static void 즐겨찾기_목록_조회됨(ExtractableResponse<Response> response) {
+        List<String> resultSourceNames = response.jsonPath().getList(".", FavoriteResponse.class).stream()
+                .map(favorite -> favorite.getSource().getName())
+                .collect(Collectors.toList());
+
+        List<String> resultTargetNames = response.jsonPath().getList(".", FavoriteResponse.class).stream()
+                .map(favorite -> favorite.getTarget().getName())
+                .collect(Collectors.toList());
+
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(resultSourceNames).isEqualTo(Arrays.asList("강남역", "양재역"));
+        assertThat(resultTargetNames).isEqualTo(Arrays.asList("정자역", "정자역"));
     }
 
-    public static void 즐겨찾기_삭제됨(ExtractableResponse<Response> response) {
+    public static void 즐겨찾기_삭제됨(TokenResponse tokenResponse, ExtractableResponse<Response> response) {
+        List<FavoriteResponse> list = 즐겨찾기_목록_조회_요청(tokenResponse).jsonPath().getList(".", FavoriteResponse.class);
+        assertThat(list).hasSize(1);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }
