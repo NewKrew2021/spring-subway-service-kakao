@@ -21,21 +21,30 @@ public class MemberStrategy implements FareStrategy {
 
     @Override
     public int getFare() {
-        if(loginMember == LoginMember.NOT_LOGIN_MEMBER) {
+        if (loginMember.equals(LoginMember.NOT_LOGIN_MEMBER)) {
             return fare;
         }
 
-        int age = loginMember.getAge();
-
-        if (age >= TEENAGER_MIN_AGE && age < TEENAGER_MAX_AGE) {
-            return fare - (int) Math.round((fare - TAX_CREDIT) * TEENAGER_DISCOUNT_RATE);
+        if (isTeenager(loginMember.getAge())) {
+            return fare - getDiscountFare(TEENAGER_DISCOUNT_RATE);
         }
 
-        if (age >= CHILD_MIN_AGE && age < TEENAGER_MIN_AGE) {
-            return fare - (int) Math.round((fare - TAX_CREDIT) * CHILD_DISCOUNT_RATE);
+        if (isChild(loginMember.getAge())) {
+            return fare - getDiscountFare(CHILD_DISCOUNT_RATE);
         }
-
         return fare;
+    }
+
+    private boolean isChild(int age) {
+        return age >= CHILD_MIN_AGE && age < TEENAGER_MIN_AGE;
+    }
+
+    private boolean isTeenager(int age) {
+        return age >= TEENAGER_MIN_AGE && age < TEENAGER_MAX_AGE;
+    }
+
+    private int getDiscountFare(double discountRate) {
+        return (int) Math.round((fare - TAX_CREDIT) * discountRate);
     }
 
 }

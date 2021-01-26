@@ -15,7 +15,9 @@ public class LineStrategy implements FareStrategy {
 
     public LineStrategy(int fare , GraphPath graphPath) {
         List<WeightWithLine> weightWithLines = graphPath.getEdgeList();
-        this.lines = weightWithLines.stream().map(WeightWithLine::getLine).collect(Collectors.toList());
+        this.lines = weightWithLines.stream()
+                .map(WeightWithLine::getLine)
+                .collect(Collectors.toList());
         this.fare = fare;
     }
 

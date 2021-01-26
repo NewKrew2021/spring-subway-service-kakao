@@ -22,12 +22,16 @@ public class DistanceStrategy implements FareStrategy {
     @Override
     public int getFare() {
         if (distance > MINIMUM_DISTANCE && distance <= MAXIMUM_DISTANCE) {
-            return (int)Math.round( fare + ADDITIONAL_COST * (Math.ceil( (double) (distance - MINIMUM_DISTANCE) / DIVIDE_UNIT_10_TO_50 )) );
+            return fare + getAdditionalCost(MINIMUM_DISTANCE, DIVIDE_UNIT_10_TO_50);
         }
 
         if (distance > MAXIMUM_DISTANCE) {
-            return MAXIMUM_INITIAL_FARE + (int)Math.round( fare + ADDITIONAL_COST * (Math.ceil( (double) (distance - MAXIMUM_DISTANCE) / DIVIDE_UNIT_OVER_50 )) );
+            return MAXIMUM_INITIAL_FARE + fare + getAdditionalCost(MAXIMUM_DISTANCE, DIVIDE_UNIT_OVER_50);
         }
         return fare + INITIAL_FARE;
+    }
+
+    private int getAdditionalCost(int defaultDistance, int divideUnit) {
+        return (int) Math.round(ADDITIONAL_COST * (Math.ceil((double) (distance - defaultDistance) / divideUnit)));
     }
 }
