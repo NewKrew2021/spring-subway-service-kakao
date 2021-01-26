@@ -24,6 +24,8 @@ public class PathController {
         if (loginMember == null) {
             return ResponseEntity.ok().body(pathResponse);
         }
-        return ResponseEntity.ok().body(pathService.discount(pathResponse, loginMember));
+
+        int newFare = pathService.fareWithDiscount(pathResponse, loginMember);
+        return ResponseEntity.ok().body(new PathResponse(pathResponse.getStations(), pathResponse.getDistance(), newFare));
     }
 }

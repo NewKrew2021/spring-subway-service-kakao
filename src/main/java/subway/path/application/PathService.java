@@ -93,19 +93,19 @@ public class PathService {
         return graph;
     }
 
-    public PathResponse discount(PathResponse pathResponse, LoginMember loginMember) {
+    public int fareWithDiscount(PathResponse pathResponse, LoginMember loginMember) {
         int age = loginMember.getAge();
         int fare = pathResponse.getFare();
 
         if (age < CHILD_MIN_AGE) {
-            return pathResponse;
+            return fare;
         }
         if (age <= CHILD_MAX_AGE) {
-            return new PathResponse(pathResponse.getStations(), pathResponse.getDistance(), fare - (int) ((fare - DEDUCTION) * CHILD_DISCOUNT_RATE));
+            return fare - (int) ((fare - DEDUCTION) * CHILD_DISCOUNT_RATE);
         }
         if (age <= TEENAGER_MAX_AGE) {
-            return new PathResponse(pathResponse.getStations(), pathResponse.getDistance(), fare - (int) ((fare - DEDUCTION) * TEENAGER_DISCOUNT_RATE));
+            return fare - (int) ((fare - DEDUCTION) * TEENAGER_DISCOUNT_RATE);
         }
-        return pathResponse;
+        return fare;
     }
 }

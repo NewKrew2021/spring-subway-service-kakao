@@ -41,8 +41,8 @@ class PathServiceTest {
     @DisplayName("나이에 따른 할인 운임을 계산한다.")
     @ParameterizedTest
     @MethodSource("provideLoginMember")
-    void discount(LoginMember loginMember, int fare) {
+    void fareWithDiscount(LoginMember loginMember, int fare) {
         PathResponse pathResponse = new PathResponse(null, 0, 5350);
-        assertThat(pathService.discount(pathResponse, loginMember).getFare()).isEqualTo(fare);
+        assertThat(pathService.fareWithDiscount(pathResponse, loginMember)).isEqualTo(fare);
     }
 }
