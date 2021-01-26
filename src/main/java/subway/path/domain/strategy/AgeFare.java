@@ -2,9 +2,9 @@ package subway.path.domain.strategy;
 
 import subway.member.domain.AGE;
 
-public class ageFare implements FareStrategy {
+public class AgeFare implements FareStrategy {
     private final AGE age;
-    public ageFare(AGE age) {
+    public AgeFare(AGE age) {
         this.age = age;
     }
 

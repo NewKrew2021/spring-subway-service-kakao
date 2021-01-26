@@ -4,11 +4,11 @@ import subway.path.domain.Vertex;
 
 import java.util.List;
 
-public class lineFare implements FareStrategy {
+public class LineFare implements FareStrategy {
     public static final int DEFAULT_EXTRA_FARE = 0;
     private final List<Vertex> vertexs;
 
-    public lineFare(List<Vertex> vertexs) {
+    public LineFare(List<Vertex> vertexs) {
         this.vertexs = vertexs;
     }
 

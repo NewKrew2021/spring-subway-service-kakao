@@ -9,9 +9,9 @@ import subway.line.domain.Line;
 import subway.member.domain.AGE;
 import subway.path.domain.Vertex;
 import subway.path.domain.strategy.FareStrategy;
-import subway.path.domain.strategy.ageFare;
-import subway.path.domain.strategy.distanceFare;
-import subway.path.domain.strategy.lineFare;
+import subway.path.domain.strategy.AgeFare;
+import subway.path.domain.strategy.DistanceFare;
+import subway.path.domain.strategy.LineFare;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.dto.StationResponse;
@@ -36,13 +36,13 @@ public class PathService {
 
         int distance = (int) dijkstraShortestPath.getPathWeight(Vertex.of(sourceId), Vertex.of(targetId));
         int fare = 0;
-        FareStrategy fareStrategy = new distanceFare(distance);
+        FareStrategy fareStrategy = new DistanceFare(distance);
         fare = fareStrategy.apply(fare);
 
-        fareStrategy = new lineFare(vertexs);
+        fareStrategy = new LineFare(vertexs);
         fare = fareStrategy.apply(fare);
 
-        fareStrategy = new ageFare(age);
+        fareStrategy = new AgeFare(age);
         fare = fareStrategy.apply(fare);
 
         return PathResponse.of(getStationResponses(vertexs), distance, fare);
