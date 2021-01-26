@@ -5,12 +5,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.favorite.service.FavoriteService;
 import subway.member.domain.LoginMember;
 
 import java.net.URI;
+import java.util.List;
 
 
 @RestController
@@ -24,7 +26,7 @@ public class FavoriteController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember,
+    public ResponseEntity<FavoriteResponse> createFavorite(@AuthenticationPrincipal LoginMember loginMember,
                                          @RequestBody FavoriteRequest favoriteRequest) {
         FavoriteResponse favoriteResponse = favoriteService.createFavorite(loginMember.getId(),
                 favoriteRequest.getSource(),
@@ -34,8 +36,8 @@ public class FavoriteController {
     }
 
     @GetMapping()
-    public ResponseEntity getFavorite(@AuthenticationPrincipal LoginMember loginMember){
-        return ResponseEntity.ok(favoriteService.getFavorite(loginMember.getId()));
+    public ResponseEntity<List<FavoriteResponse>> getFavorite(@AuthenticationPrincipal LoginMember loginMember){
+        return ResponseEntity.ok().body(favoriteService.getFavorite(loginMember.getId()));
     }
 
     @DeleteMapping("/{id}")
