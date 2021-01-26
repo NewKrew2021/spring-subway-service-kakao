@@ -3,14 +3,15 @@ package subway.path.application;
 import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.member.domain.LoginMember;
-import subway.path.domain.FareCalculator;
-import subway.path.domain.Path;
+import subway.path.domain.fare.FareCalculator;
+import subway.path.domain.fare.GeneralFareStrategy;
+import subway.path.domain.fare.LoginMemberFareStrategy;
+import subway.path.domain.path.Path;
 import subway.path.dto.PathDto;
 import subway.station.application.StationService;
 
 @Service
 public class PathService {
-    private final static int ADULT_AGE = 20;
     private final LineService lineService;
     private final StationService stationService;
 
@@ -25,8 +26,11 @@ public class PathService {
                 lineService.findLines());
         int distance = path.getDistance();
         int extraFare = path.getExtraFare();
-        int age = loginMember != null ? loginMember.getAge() : ADULT_AGE;
 
-        return new PathDto(path.getStations(), path.getDistance(), FareCalculator.getFare(distance, extraFare, age));
+        FareCalculator fareCalculator = new FareCalculator(
+                loginMember != null ? new LoginMemberFareStrategy(distance, extraFare, loginMember) : new GeneralFareStrategy(distance,extraFare)
+        );
+
+        return new PathDto(path.getStations(), path.getDistance(), fareCalculator.getFare());
     }
 }

@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.domain.path;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -25,7 +25,6 @@ public class Path {
                 .map(CustomWeightedEdge::getExtraFare)
                 .reduce((x, y) -> Math.max(x, y))
                 .get();
-//        경로가 없는 경우 예외 처리
     }
 
     private GraphPath<Station, CustomWeightedEdge> getGraph(Station sourceStation, Station destStation, List<Line> lines) {
