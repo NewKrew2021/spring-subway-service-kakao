@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
 import subway.member.domain.AGE;
-import subway.path.domain.DistanceFare;
 import subway.path.domain.Vertex;
+import subway.path.domain.strategy.FareStrategy;
+import subway.path.domain.strategy.ageFare;
+import subway.path.domain.strategy.distanceFare;
+import subway.path.domain.strategy.lineFare;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.dto.StationResponse;
@@ -18,8 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class PathService {
-    public static final int DEFAULT_EXTRA_FARE = 0;
-
     private final StationService stationService;
     private final LineService lineService;
 
@@ -34,18 +35,23 @@ public class PathService {
         List<Vertex> vertexs = dijkstraShortestPath.getPath(Vertex.of(sourceId), Vertex.of(targetId)).getVertexList();
 
         int distance = (int) dijkstraShortestPath.getPathWeight(Vertex.of(sourceId), Vertex.of(targetId));
-        int distanceFare = DistanceFare.getDistanceFare(distance);
-        int lineExtraFare = vertexs.stream()
-                .map(v -> v.getExtraFare())
-                .max(Integer::compare).orElse(DEFAULT_EXTRA_FARE);
+        int fare = 0;
+        FareStrategy fareStrategy = new distanceFare(distance);
+        fare = fareStrategy.apply(fare);
 
-        return PathResponse.of(vertexs.stream()
-                .map(vertex -> StationResponse.of(stationService.findStationById(vertex.getStationId())))
-                .collect(Collectors.toList()), distance, calculateFare(age, distanceFare, lineExtraFare));
+        fareStrategy = new lineFare(vertexs);
+        fare = fareStrategy.apply(fare);
+
+        fareStrategy = new ageFare(age);
+        fare = fareStrategy.apply(fare);
+
+        return PathResponse.of(getStationResponses(vertexs), distance, fare);
     }
 
-    private int calculateFare(AGE age, int distanceFare, int lineExtraFare) {
-        return (int) ((distanceFare + lineExtraFare) * age.getSale() + age.getDeduction());
+    private List<StationResponse> getStationResponses(List<Vertex> vertexs) {
+        return vertexs.stream()
+                .map(vertex -> StationResponse.of(stationService.findStationById(vertex.getStationId())))
+                .collect(Collectors.toList());
     }
 
     private DijkstraShortestPath getDijkstraShortestPath(List<Line> lines) {
