@@ -44,7 +44,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
     /**
      * 교대역  --- *2호선*(28) ---   강남역   --- *2호선*(38) ---   잠실역  --- *2호선*(8) --- 건대입구역
      * |                        |
-     * *3호선*(5)                 *신분당선*(80)
+     * *3호선*(5)                 *신분당선*(35)
      * |                        |
      * 남부터미널역  --- *3호선*(3) ---   양재역
      */
@@ -60,12 +60,11 @@ public class FareAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
         고속버스터미널역 = 지하철역_등록되어_있음("고속버스터미널역");
 
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 80, 900);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 35, 900);
         이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 28, 500);
         삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 남부터미널역, 5, 0);
 
         지하철_구간_등록되어_있음(삼호선, 남부터미널역, 양재역, 3);
-        지하철_구간_등록되어_있음(이호선, 강남역, 잠실역, 38);
         지하철_구간_등록되어_있음(이호선, 강남역, 잠실역, 38);
         지하철_구간_등록되어_있음(이호선, 잠실역, 건대입구역, 8);
 
@@ -130,9 +129,10 @@ public class FareAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> response = 최단_경로_검색_요청(양재역, 건대입구역);
 
         // then
-        최단_경로_요금_조회됨(response, 3950);
-        // 이호선 + 900원
-        // 거리초과 + 800원 (50km) + 1000원 (126km - 50km)
+        최단_경로_요금_조회됨(response, 3350);
+        // 기본 요금 : 1250원
+        // 신분당선 + 900원
+        // 거리초과 + 800원 (50km) + 400원 (81km - 50km)
     }
 
     @DisplayName("어린이 요금")
@@ -152,7 +152,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
     @Test
     void childFareTwo() {
         // when
-        ExtractableResponse<Response> response = 최단_경로_검색_요청(교대역, 잠실역);
+        ExtractableResponse<Response> response = 토큰_포함_최단_경로_검색_요청(어린이, 교대역, 잠실역);
 
         // then
         최단_경로_요금_조회됨(response, 1200);
@@ -179,7 +179,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
     @Test
     void youthFareTwo() {
         // when
-        ExtractableResponse<Response> response = 최단_경로_검색_요청(교대역, 잠실역);
+        ExtractableResponse<Response> response = 토큰_포함_최단_경로_검색_요청(청소년, 교대역, 잠실역);
 
         // then
         최단_경로_요금_조회됨(response, 1920);
