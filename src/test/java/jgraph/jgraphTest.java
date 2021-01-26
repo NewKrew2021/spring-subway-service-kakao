@@ -7,11 +7,6 @@ import org.junit.jupiter.api.Test;
 import subway.path.domain.Edge;
 import subway.station.domain.Station;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 

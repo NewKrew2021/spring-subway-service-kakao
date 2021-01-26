@@ -8,7 +8,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
-import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
