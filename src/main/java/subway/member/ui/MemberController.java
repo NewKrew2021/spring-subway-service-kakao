@@ -3,7 +3,6 @@ package subway.member.ui;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
-import subway.exceptions.AuthorizationException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberRequest;
@@ -45,27 +44,18 @@ public class MemberController {
 
     @GetMapping("/members/me")
     public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        if (loginMember == null) {
-            throw new AuthorizationException("Only members can use this feature");
-        }
         MemberResponse member = memberService.findMember(loginMember.getId());
         return ResponseEntity.ok().body(member);
     }
 
     @PutMapping("/members/me")
     public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
-        if (loginMember == null) {
-            throw new AuthorizationException("Only members can use this feature");
-        }
         memberService.updateMember(loginMember.getId(), param);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/me")
     public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        if (loginMember == null) {
-            throw new AuthorizationException("Only members can use this feature");
-        }
         memberService.deleteMember(loginMember.getId());
         return ResponseEntity.noContent().build();
     }

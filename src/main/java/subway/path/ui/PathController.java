@@ -20,7 +20,7 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> findShortestPath(@AuthenticationPrincipal LoginMember loginMember,
+    public ResponseEntity<PathResponse> findShortestPath(@AuthenticationPrincipal(isThrow = false) LoginMember loginMember,
                                                          @RequestParam("source") long sourceId,
                                                          @RequestParam("target") long targetId) {
         Path path = pathService.find(sourceId, targetId);

@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthenticationPrincipal {
     boolean required() default true;
+
+    boolean isThrow() default true;
 }
