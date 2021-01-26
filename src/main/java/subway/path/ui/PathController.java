@@ -35,7 +35,7 @@ public class PathController {
     public ResponseEntity<PathResponse> getPaths(HttpServletRequest request, @RequestParam Long source, @RequestParam Long target){
         String token = AuthorizationExtractor.extract(request);
         String email = null;
-        if(token != null){
+        if(token != null && jwtTokenProvider.validateToken(token)){
             email = jwtTokenProvider.getPayload(token);
         }
         PathResult result = pathService.findShortestPath(source, target, email);
