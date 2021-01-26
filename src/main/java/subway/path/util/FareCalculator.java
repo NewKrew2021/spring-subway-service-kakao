@@ -1,13 +1,12 @@
-package subway.util;
+package subway.path.util;
 
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.member.domain.LoginMember;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class FareUtil {
+public class FareCalculator {
     private static final int BASE_FARE = 1250;
     private static final int PERCENTAGE_VALUE = 100;
     private static final int DEDUCTION_FARE = 350;
@@ -18,19 +17,17 @@ public class FareUtil {
     private static final int OVER_FIFTY_KILOMETER_FARE = 800;
     private static final double MIDDLE_DISTANCE_DENOMINATOR = 5;
     private static final double HIGH_DISTANCE_DENOMINATOR = 8;
+    public static final int ZERO_FARE = 0;
 
-    public static int getTotalFare(LoginMember loginMember, int totalFare) {
-        if (loginMember.isTeenager()) {
-            totalFare -= (totalFare - DEDUCTION_FARE) * TEENAGER_SALE_RATE;
+    public static int getFinalFare(ComplimentaryAge complimentaryAge, int totalFare) {
+        if (complimentaryAge.isTargetOfFree()) {
+            return ZERO_FARE;
         }
-        if (loginMember.isChild()) {
-            totalFare -= (totalFare - DEDUCTION_FARE) * CHILD_SALE_RATE;
-        }
-
+        totalFare -= (totalFare - DEDUCTION_FARE) * complimentaryAge.getComplimentarySaleRate();
         return totalFare;
     }
 
-    public static int calculateDistanceFare(int totalDistance) {
+    public static int getDistanceFare(int totalDistance) {
         int distanceFare = BASE_FARE;
         if (BASIC_FARE_DISTANCE < totalDistance && totalDistance <= FIFTY_KILOMETER) {
             distanceFare += Math.ceil((totalDistance - BASIC_FARE_DISTANCE) / MIDDLE_DISTANCE_DENOMINATOR) * PERCENTAGE_VALUE;
@@ -41,7 +38,7 @@ public class FareUtil {
         return distanceFare;
     }
 
-    public static int getMaxExtraFare(List<Section> sections, List<Line> lines) {
+    public static int getLineExtraFare(List<Section> sections, List<Line> lines) {
         return lines.stream()
                 .filter(line -> sections.stream()
                         .anyMatch(section -> line.getSections().isExist(section)))

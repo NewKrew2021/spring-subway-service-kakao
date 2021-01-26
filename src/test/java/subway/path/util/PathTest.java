@@ -22,14 +22,18 @@ public class PathTest {
     Section section2;
     Section section3;
     Section section4;
-
+    Station station1;
+    Station station2;
+    Station station3;
+    Station station4;
+    Station station5;
     @BeforeEach
     void setUp() {
-        Station station1 = new Station(1L, "잠실");
-        Station station2 = new Station(2L, "강남");
-        Station station3 = new Station(3L, "정자");
-        Station station4 = new Station(4L, "판교");
-        Station station5 = new Station(5L, "야탑");
+        station1 = new Station(1L, "잠실");
+        station2 = new Station(2L, "강남");
+        station3 = new Station(3L, "정자");
+        station4 = new Station(4L, "판교");
+        station5 = new Station(5L, "야탑");
         section1 = new Section(station1, station2);
         section2 = new Section(station2, station3);
         section3 = new Section(station3, station4);
@@ -44,12 +48,12 @@ public class PathTest {
 
     @Test
     void 최단거리_리스트_테스트() {
-        assertThat(ShortestPathUtil.getShortestPath(dijkstraShortestPath, 1L, 5L)).isEqualTo(Arrays.asList(1L, 2L, 3L, 5L));
+        assertThat(ShortestPathUtil.getShortestPath(dijkstraShortestPath, station1,station5)).isEqualTo(Arrays.asList(station1,station2,station3,station5));
     }
 
     @Test
     void 최단거리_구간_테스트() {
-        List<Long> shotTestPath = ShortestPathUtil.getShortestPath(dijkstraShortestPath, 1L, 5L);
-        assertThat(ShortestPathUtil.getShortestPathSections(shotTestPath, stations)).isEqualTo(Arrays.asList(section1, section2, section4));
+        List<Station> shotTestPath = ShortestPathUtil.getShortestPath(dijkstraShortestPath, station1, station5);
+        assertThat(ShortestPathUtil.getShortestPathSections(shotTestPath)).isEqualTo(Arrays.asList(section1, section2, section4));
     }
 }
