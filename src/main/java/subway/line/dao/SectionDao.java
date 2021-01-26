@@ -26,14 +26,6 @@ public class SectionDao {
                 .withTableName("SECTION")
                 .usingGeneratedKeyColumns("id");
     }
-//
-//    private RowMapper<Section> rowMapper = (rs, rowNum) ->
-//            new Section(
-//                    rs.getLong("id"),
-//                    rs.getString("upS"),
-//                    rs.getString("password"),
-//                    rs.getInt("age")
-//            );
 
     public Section insert(Line line, Section section) {
         Map<String, Object> params = new HashMap();
@@ -46,7 +38,7 @@ public class SectionDao {
     }
 
     public void deleteByLineId(Long lineId) {
-        jdbcTemplate.update("delete from SECTION where line_id = ?", lineId);
+        jdbcTemplate.update(SectionQuery.DELETE_BY_LINE_ID.getQuery(), lineId);
     }
 
     public void insertSections(Line line) {
@@ -66,14 +58,7 @@ public class SectionDao {
     }
 
     public List<Section> findAll(){
-        String sql = "select S.id as section_id, S.distance as section_distance, " +
-                "UST.id as up_station_id, UST.name as up_station_name, " +
-                "DST.id as down_station_id, DST.name as down_station_name " +
-                "from SECTION S \n" +
-                "left outer join STATION UST on S.up_station_id = UST.id " +
-                "left outer join STATION DST on S.down_station_id = DST.id ";
-
-        return mapSections(jdbcTemplate.queryForList(sql));
+        return mapSections(jdbcTemplate.queryForList(SectionQuery.FIND_ALL.getQuery()));
     }
 
     public List<Section> mapSections(List<Map<String, Object>> result){
