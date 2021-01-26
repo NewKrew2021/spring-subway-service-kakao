@@ -28,8 +28,7 @@ public class FavoriteService {
 
         Favorite insertFavorite = favoriteDao.insert(new Favorite(sourceStation, targetStation, memberId));
 
-        return new FavoriteResponse(insertFavorite.getId(),
-                StationResponse.of(sourceStation), StationResponse.of(targetStation));
+        return FavoriteResponse.of(insertFavorite);
     }
 
     public void deleteFavorite(Long id) {

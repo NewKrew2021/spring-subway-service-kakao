@@ -36,7 +36,7 @@ public class FavoriteController {
     @GetMapping
     public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember){
         List<FavoriteResponse> favorites = favoriteService.findAllByUserId(loginMember.getId()).stream()
-                .map((Favorite favorite) -> new FavoriteResponse(favorite))
+                .map(favorite -> FavoriteResponse.of(favorite))
                 .collect(Collectors.toList());
         return ResponseEntity
                 .ok()

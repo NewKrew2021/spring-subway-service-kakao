@@ -8,16 +8,15 @@ public class FavoriteResponse {
     private StationResponse source;
     private StationResponse target;
 
-    public FavoriteResponse(Long id, StationResponse source, StationResponse target) {
+    private FavoriteResponse(Long id, StationResponse source, StationResponse target) {
         this.id = id;
         this.source = source;
         this.target = target;
     }
 
-    public FavoriteResponse(Favorite favorite){
-        this(favorite.getId(),
-                 StationResponse.of(favorite.getSource()),
-                StationResponse.of(favorite.getTarget()));
+    public static FavoriteResponse of(Favorite favorite) {
+        return new FavoriteResponse(favorite.getId(), StationResponse.of(favorite.getSource())
+                , StationResponse.of(favorite.getTarget()));
     }
 
     public Long getId() {
