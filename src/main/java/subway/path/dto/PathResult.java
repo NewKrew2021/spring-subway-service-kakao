@@ -1,26 +1,41 @@
 package subway.path.dto;
 
+import subway.path.domain.PathVertices;
 import subway.station.domain.Station;
 
 import java.util.List;
 
 public class PathResult {
-    private List<Station> stations;
+    private PathVertices pathVertices;
     private int distance;
+    private int fare;
 
     public PathResult() {
     }
-
-    public PathResult(List<Station> stations, int distance) {
-        this.stations = stations;
+    public PathResult(PathVertices pathVertices, int distance) {
+        this.pathVertices = pathVertices;
         this.distance = distance;
     }
 
-    public List<Station> getStations() {
-        return stations;
+    public PathResult(PathVertices pathVertices, int distance, int fare) {
+        this.pathVertices = pathVertices;
+        this.distance = distance;
+        this.fare = fare;
+    }
+
+    public PathVertices getPathVertices() {
+        return pathVertices;
     }
 
     public int getDistance() {
         return distance;
+    }
+
+    public void setFare(int fare){
+        this.fare = fare;
+    }
+
+    public int getFare() {
+        return fare;
     }
 }

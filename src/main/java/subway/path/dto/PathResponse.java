@@ -21,11 +21,12 @@ public class PathResponse {
     }
 
     public PathResponse(PathResult pathResult){
-        this.stations = pathResult.getStations()
+        this.stations = pathResult.getPathVertices().getPathVertexList()
                 .stream()
-                .map(i -> new StationResponse(i.getId(), i.getName()))
+                .map(i -> new StationResponse(i.getStation().getId(), i.getStation().getName()))
                 .collect(Collectors.toList());
         this.distance = pathResult.getDistance();
+        this.fare = pathResult.getFare();
     }
 
 

@@ -85,6 +85,7 @@ public class LineDao {
                 (Long) result.get(0).get("LINE_ID"),
                 (String) result.get(0).get("LINE_NAME"),
                 (String) result.get(0).get("LINE_COLOR"),
+                (int) result.get(0).get("LINE_EXTRA_FARE"),
                 new Sections(sections));
     }
 
