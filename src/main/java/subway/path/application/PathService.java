@@ -3,6 +3,7 @@ package subway.path.application;
 import org.jgrapht.GraphPath;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
+import subway.line.domain.Line;
 import subway.path.domain.Path;
 import subway.path.domain.PathGraphEdge;
 import subway.path.dto.PathResponse;
@@ -39,9 +40,15 @@ public class PathService {
     }
 
     public PathResponse findPathResponse(long sourceId, long targetId, int age) {
+        List<Station> stations = stationDao.findAll();
+        List<Line> lines = lineDao.findAll();
+        Station source = stationDao.findById(sourceId);
+        Station target = stationDao.findById(targetId);
+
         return new PathBuilder()
-                .initializePath()
-                .makeGraphPath(sourceId, targetId)
+                .initializePath(stations)
+                .addEdgesInPath(lines)
+                .makeGraphPath(source, target)
                 .calculateFare()
                 .discountBy(age)
                 .makePathResponse();
@@ -53,16 +60,18 @@ public class PathService {
         private GraphPath<Station, PathGraphEdge> graphPath;
         private int fare;
 
-        public PathBuilder initializePath() {
-            path.addStations(stationDao.findAll());
-            lineDao.findAll()
-                    .stream()
-                    .forEach(path::addEdges);
+        public PathBuilder initializePath(List<Station> stations) {
+            path.addStations(stations);
             return this;
         }
 
-        public PathBuilder makeGraphPath(long sourceId, long targetId) {
-            graphPath = path.findShortestPathGraph(stationDao.findById(sourceId), stationDao.findById(targetId));
+        public PathBuilder addEdgesInPath(List<Line> lines) {
+            lines.stream().forEach(path::addEdges);
+            return this;
+        }
+
+        public PathBuilder makeGraphPath(Station source, Station target) {
+            graphPath = path.findShortestPathGraph(source, target);
             return this;
         }
 
