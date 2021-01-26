@@ -2,7 +2,9 @@ package subway.line.domain;
 
 import subway.station.domain.Station;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class Line {
@@ -63,6 +65,22 @@ public class Line {
 
     public void removeSection(Station station) {
         sections.removeStation(station);
+    }
+
+    public LocalDateTime getNextDepartureTimeOf(LocalDateTime dateTime) {
+        LocalDateTime departureTime = LocalDateTime.of(dateTime.toLocalDate(), startTime);
+        while (departureTime.isBefore(dateTime)) {
+            departureTime = departureTime.plus(timeInterval, ChronoUnit.MINUTES);
+        }
+
+        requireBeforeEndTime(dateTime, departureTime);
+        return departureTime;
+    }
+
+    private void requireBeforeEndTime(LocalDateTime dateTime, LocalDateTime departureTime) {
+        if (departureTime.isAfter(LocalDateTime.of(dateTime.toLocalDate(), endTime))) {
+            throw new IllegalArgumentException("이 시간 이후로 출발하는 열차가 존재하지 않습니다");
+        }
     }
 
     public List<Station> getStations() {
