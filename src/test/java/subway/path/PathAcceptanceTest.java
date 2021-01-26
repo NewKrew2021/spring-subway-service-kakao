@@ -76,6 +76,18 @@ public class PathAcceptanceTest extends AcceptanceTest {
     경로가_조회되지_않음(response);
   }
 
+  @DisplayName("시작점과 종점이 같은 경로를 조회한다.")
+  @Test
+  void findSameStationPath() {
+    StationResponse 제주역 = 지하철역_등록되어_있음("제주역");
+    StationResponse 서귀포역 = 지하철역_등록되어_있음("서귀포역");
+
+    LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역,  10);
+
+    ExtractableResponse<Response> response = 거리_경로_조회_요청(1L, 1L);
+    경로가_조회되지_않음(response);
+  }
+
   public static void 경로가_조회되지_않음(ExtractableResponse<Response> response) {
     assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
   }
