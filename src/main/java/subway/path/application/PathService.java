@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
+import subway.member.domain.LoginMember;
 import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
@@ -28,7 +29,7 @@ public class PathService {
         this.lineService = lineService;
     }
 
-    public PathResponse getPath(Long sourceStationId, Long targetStationId) {
+    public PathResponse getPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
 
         WeightedMultigraph<Station, Section> graph = makeGraph();
 
@@ -48,17 +49,31 @@ public class PathService {
 
         fare += findDistanceFare((int) graphPath.getWeight());
 
+        if (loginMember != null) {
+            fare = applyAgeDiscount(fare, loginMember.getAge());
+        }
+
         Path path = new Path(graphPath.getVertexList(), (int) graphPath.getWeight(), fare);
 
         return PathResponse.of(path);
+    }
 
+    private int applyAgeDiscount(int fare, int age) {
+        if (age < 6) {
+            return 0;
+        } else if (age < 13) {
+            return (int) ((fare - 350) * 0.5);
+        } else if (age < 19) {
+            return (int) ((fare - 350) * 0.8);
+        }
+
+        return fare;
     }
 
     private int findDistanceFare(int distance) {
         if (distance <= 10) {
             return 0;
-        }
-        else if(distance <= 50) {
+        } else if (distance <= 50) {
             return ((distance - 11) / 5 + 1) * 100;
         }
 
