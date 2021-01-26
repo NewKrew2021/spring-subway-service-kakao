@@ -38,6 +38,21 @@ public class Line {
         this.extraFare = extraFare;
     }
 
+    public Line(Long id, String name, String color, int extraFare) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.extraFare = extraFare;
+    }
+
+    public Line(Long id, String name, String color, int extraFare, Sections sections) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.extraFare = extraFare;
+        this.sections = sections;
+    }
+
     public Long getId() {
         return id;
     }
