@@ -59,7 +59,7 @@ public class MemberDao {
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, email);
         } catch (EmptyResultDataAccessException e) {
-            throw new InvalidMemberException();
+            throw new InvalidMemberException("존재하지 않는 이메일입니다.");
         }
     }
 }

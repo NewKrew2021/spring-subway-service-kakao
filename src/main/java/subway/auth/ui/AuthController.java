@@ -1,6 +1,5 @@
 package subway.auth.ui;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +17,6 @@ public class AuthController {
     private AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
     public AuthController(AuthService authService, JwtTokenProvider jwtTokenProvider) {
         this.authService = authService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -29,7 +27,7 @@ public class AuthController {
         String email = tokenRequest.getEmail();
         String password = tokenRequest.getPassword();
         if (authService.checkInvalidMember(email, password)) {
-            throw new InvalidMemberException();
+            throw new InvalidMemberException("로그인 정보가 맞지 않습니다.");
         }
         return ResponseEntity.ok().body(new TokenResponse(jwtTokenProvider.createToken(email)));
     }

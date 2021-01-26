@@ -1,6 +1,5 @@
 package subway.auth.application;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.auth.exception.InvalidTokenException;
 import subway.auth.infrastructure.JwtTokenProvider;
@@ -12,7 +11,6 @@ public class AuthService {
     private final MemberDao memberDao;
     private JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
     public AuthService(MemberDao memberDao, JwtTokenProvider jwtTokenProvider) {
         this.memberDao = memberDao;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -20,20 +18,16 @@ public class AuthService {
 
 
     public boolean checkInvalidMember(String email, String password) {
-        Member member = memberDao.findByEmail(email);
-        if (isMember(password, member)) {
-            return false;
-        }
-        return true;
+        return !isMember(memberDao.findByEmail(email), password);
     }
 
-    private boolean isMember(String password, Member member) {
-        return member != null && member.validatePassword(password);
+    private boolean isMember(Member member, String password) {
+        return member != null && member.getPassword().equals(password);
     }
 
     public Member checkInvalidToken(String accessToken) {
         if (!jwtTokenProvider.validateToken(accessToken)) {
-            throw new InvalidTokenException();
+            throw new InvalidTokenException("인증토큰이 맞지않습니다.");
         }
         return memberDao.findByEmail(jwtTokenProvider.getPayload(accessToken));
     }

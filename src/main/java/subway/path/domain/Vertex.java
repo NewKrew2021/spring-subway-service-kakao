@@ -3,12 +3,17 @@ package subway.path.domain;
 import java.util.Objects;
 
 public class Vertex {
+    public static final int DEFAULT_EXTRA_FARE = 0;
     Long stationId;
     int extraFare;
 
     private Vertex(Long stationId, int extraFare) {
         this.stationId = stationId;
         this.extraFare = extraFare;
+    }
+
+    public static Vertex of(Long stationId) {
+        return new Vertex(stationId, DEFAULT_EXTRA_FARE);
     }
 
     public static Vertex of(Long stationId, int extraFare) {

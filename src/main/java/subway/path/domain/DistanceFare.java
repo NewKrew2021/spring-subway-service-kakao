@@ -21,7 +21,7 @@ public enum DistanceFare {
         if (distance <= TEN_KM.distance) {
             return DEFAULT_FARE;
         }
-        if (TEN_KM.distance < distance && distance <= FIFTY_KM.distance) {
+        if (distance <= FIFTY_KM.distance) {
             return DEFAULT_FARE + FARE_BY_FIVE_KM * ((distance - TEN_KM.distance + FIVE_KM.distance - 1) / FIVE_KM.distance);
         }
         return DEFAULT_FARE + FARE_BY_EIGHT_KM * ((distance - FIFTY_KM.distance + EIGHT_KM.distance - 1) / EIGHT_KM.distance)
