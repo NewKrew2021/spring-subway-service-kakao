@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.station.domain.Station;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,9 +40,9 @@ public class SubwayPathTest {
         잠실역 = new Station(4L, "잠실역");
         남부터미널역 = new Station(5L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "bg-red-600", 900);
-        이호선 = new Line("이호선", "bg-red-600", 500);
-        삼호선 = new Line("삼호선", "bg-red-600", 0);
+        신분당선 = new Line("신분당선", "bg-red-600", 900, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        이호선 = new Line("이호선", "bg-red-600", 500, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        삼호선 = new Line("삼호선", "bg-red-600", 0, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
 
         신분당선.addSection(강남역, 양재역, 20);
         이호선.addSection(교대역, 강남역, 28);

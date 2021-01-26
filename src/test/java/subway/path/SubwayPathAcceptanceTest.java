@@ -13,6 +13,7 @@ import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
 import subway.station.dto.StationResponse;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,9 +49,9 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
         교대역 = 지하철역_등록되어_있음("교대역");
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
 
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 10);
-        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10);
-        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 10, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
 
         지하철_구간_등록되어_있음(삼호선, 교대역, 남부터미널역, 3);
     }
