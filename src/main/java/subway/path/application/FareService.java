@@ -73,7 +73,7 @@ public class FareService {
 
     protected int discount(int fare, int age) {
         if (age < CHILD_MIN_AGE) {
-            return fare;
+            return 0;
         }
         if (age <= CHILD_MAX_AGE) {
             return fare - (int) ((fare - DEDUCTION) * CHILD_DISCOUNT_RATE);

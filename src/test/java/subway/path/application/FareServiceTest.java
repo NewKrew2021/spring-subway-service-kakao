@@ -23,7 +23,7 @@ class FareServiceTest {
 
     @DisplayName("나이에 따른 할인 운임을 계산한다.")
     @ParameterizedTest
-    @CsvSource({"5,5350", "6,2850", "12,2850", "13,4350", "18,4350", "19,5350"})
+    @CsvSource({"5,0", "6,2850", "12,2850", "13,4350", "18,4350", "19,5350"})
     void discount(int age, int discountedFare) {
         int fare = 5350;
         assertThat(fareService.discount(fare, age)).isEqualTo(discountedFare);

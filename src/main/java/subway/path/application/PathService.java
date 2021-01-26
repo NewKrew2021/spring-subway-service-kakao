@@ -40,7 +40,7 @@ public class PathService {
                 .collect(Collectors.toList()));
     }
 
-    public PathDto searchShortestPath(Long source, Long target) {
+    private PathDto searchShortestPath(Long source, Long target) {
         DijkstraShortestPath<Long, Integer> dijkstraShortestPath = new DijkstraShortestPath(createGraph());
         List<Long> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
         int distance = (int) dijkstraShortestPath.getPathWeight(source, target);
