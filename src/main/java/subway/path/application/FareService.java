@@ -63,7 +63,7 @@ public class FareService {
         return lineDao.findMaxExtraFareByIds(getLineIds(path));
     }
 
-    private List<Long> getLineIds(List<Long> path) {
+    protected List<Long> getLineIds(List<Long> path) {
         Set<Long> lineIds = new HashSet<>();
         for (int i = 1; i < path.size(); ++i) {
             lineIds.add(sectionDao.findLineIdByUpStationIdAndDownStationId(path.get(i - 1), path.get(i)));

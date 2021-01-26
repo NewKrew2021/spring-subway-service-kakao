@@ -1,18 +1,29 @@
 package subway.path.application;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import subway.line.dao.SectionDao;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class FareServiceTest {
 
-    @Autowired
+    @InjectMocks
     private FareService fareService;
+
+    @Mock
+    private SectionDao sectionDao;
 
     @DisplayName("거리에 따른 운임을 계산한다.")
     @ParameterizedTest
@@ -27,5 +38,19 @@ class FareServiceTest {
     void discount(int age, int discountedFare) {
         int fare = 5350;
         assertThat(fareService.discount(fare, age)).isEqualTo(discountedFare);
+    }
+
+    @DisplayName("path 정보를 통해 어떤 노선을 지나갔는지 구한다.")
+    @Test
+    void getLineIds() {
+        List<Long> path = Arrays.asList(1L, 5L, 3L, 4L, 6L);
+
+        // stub
+        when(sectionDao.findLineIdByUpStationIdAndDownStationId(1L, 5L)).thenReturn(4L);
+        when(sectionDao.findLineIdByUpStationIdAndDownStationId(5L, 3L)).thenReturn(3L);
+        when(sectionDao.findLineIdByUpStationIdAndDownStationId(3L, 4L)).thenReturn(1L);
+        when(sectionDao.findLineIdByUpStationIdAndDownStationId(4L, 6L)).thenReturn(1L);
+
+        assertThat(fareService.getLineIds(path)).containsExactlyInAnyOrder(4L, 3L, 1L);
     }
 }
