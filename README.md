@@ -52,3 +52,9 @@ npm run dev
 ## 📝 License
 
 This project is [MIT](https://github.com/next-step/spring-subway-admin-kakao/blob/master/LICENSE) licensed.
+
+## 구현 기능 목록
+
+- 출발역과 도착역 사이에 최단거리 경로 조회 기능
+  - 만약 경로가 존재하지 않으면 예외 처리
+  - 경로가 존재하면 경로와 최단거리를 반환
