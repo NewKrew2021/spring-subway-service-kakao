@@ -32,7 +32,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             return null;
         }
         if(!authService.checkToken(accessToken)) {
-            throw new InvalidTokenException("유효하지 않은 토큰입니다.");
+            throw new InvalidTokenException();
         }
         String email = authService.getPayload(accessToken);
         return authService.findByEmail(email);

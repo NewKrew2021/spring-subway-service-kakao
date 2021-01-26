@@ -10,10 +10,8 @@ import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.swing.text.html.Option;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -28,7 +26,7 @@ public class LineDao {
                 .usingGeneratedKeyColumns("id");
     }
 
-    public Line insert(Line line) {
+    public Optional<Line> insert(Line line) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", line.getId());
         params.put("name", line.getName());
@@ -36,10 +34,10 @@ public class LineDao {
         params.put("extra_fare", line.getFare());
 
         Long lineId = insertAction.executeAndReturnKey(params).longValue();
-        return new Line(lineId, line.getName(), line.getColor(), line.getFare());
+        return Optional.ofNullable(new Line(lineId, line.getName(), line.getColor(), line.getFare()));
     }
 
-    public Line findById(Long id) {
+    public Optional<Line> findById(Long id) {
         String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as fare, " +
                 "S.id as section_id, S.distance as section_distance, S.line_id as section_line_id, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
@@ -51,7 +49,7 @@ public class LineDao {
                 "WHERE L.id = ?";
 
         List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
-        return mapLine(result);
+        return Optional.ofNullable(mapLine(result));
     }
 
     public void update(Line newLine) {

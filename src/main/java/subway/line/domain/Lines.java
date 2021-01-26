@@ -32,7 +32,9 @@ public class Lines {
     }
 
     public int getTotalExtraFares(){
-        return lines.stream().mapToInt(Line::getFare).sum();
+        return lines.stream()
+                .mapToInt(Line::getFare)
+                .sum();
     }
 
 }

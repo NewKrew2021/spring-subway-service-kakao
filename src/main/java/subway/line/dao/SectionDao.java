@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -24,14 +25,14 @@ public class SectionDao {
                 .usingGeneratedKeyColumns("id");
     }
 
-    public Section insert(Section section) {
+    public Optional<Section> insert(Section section) {
         Map<String, Object> params = new HashMap();
         params.put("line_id", section.getLineId());
         params.put("up_station_id", section.getUpStation().getId());
         params.put("down_station_id", section.getDownStation().getId());
         params.put("distance", section.getDistance());
         Long sectionId = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-        return new Section(sectionId, section.getUpStation(), section.getDownStation(), section.getLineId(), section.getDistance());
+        return Optional.ofNullable(new Section(sectionId, section.getUpStation(), section.getDownStation(), section.getLineId(), section.getDistance()));
     }
 
     public void deleteByLineId(Long lineId) {

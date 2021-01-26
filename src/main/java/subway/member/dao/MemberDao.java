@@ -16,7 +16,6 @@ import javax.sql.DataSource;
 @Repository
 public class MemberDao {
     public static final String NOT_EXISTS_USER_INFO_ERROR_MESSAGE = "회원 정보가 존재하지 않습니다.";
-    public static final String INVALID_USER_INFO_ERROR_MESSAGE = "회원 정보가 올바르지 않습니다.";
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -69,7 +68,7 @@ public class MemberDao {
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, email);
         } catch (EmptyResultDataAccessException e) {
-            throw new InvalidUserInfoException(INVALID_USER_INFO_ERROR_MESSAGE);
+            throw new InvalidUserInfoException();
         }
     }
 }
