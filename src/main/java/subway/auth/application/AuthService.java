@@ -6,7 +6,6 @@ import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exception.AuthenticationException;
-import subway.exception.AuthorizationException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberResponse;
@@ -25,7 +24,7 @@ public class AuthService {
     public TokenResponse createToken(TokenRequest tokenRequest) {
         try {
             memberService.findMemberByEmail(tokenRequest.getEmail());
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | NullPointerException e) {
             throw new AuthenticationException("멤버 정보가 존재하지 않습니다.");
         }
         return new TokenResponse(jwtTokenProvider.createToken(tokenRequest.getEmail()));
@@ -33,7 +32,7 @@ public class AuthService {
 
     public LoginMember getLoginMember(String token) {
         if (!jwtTokenProvider.validateToken(token)) {
-            throw new AuthorizationException("유효하지 않은 토큰입니다.");
+            throw new AuthenticationException("유효하지 않은 토큰입니다.");
         }
         MemberResponse memberResponse = memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));
         return new LoginMember(memberResponse.getId(), memberResponse.getEmail(), memberResponse.getAge());

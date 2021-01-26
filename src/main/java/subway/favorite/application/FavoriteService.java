@@ -1,6 +1,7 @@
 package subway.favorite.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import subway.exception.AuthorizationException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
@@ -10,6 +11,7 @@ import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,13 +43,13 @@ public class FavoriteService {
 
     public void deleteFavorite(Long memberId, Long id) {
         if (!memberHasFavorite(memberId, id)) {
-            throw new AuthorizationException("등록된 즐겨찾기가 존재하지 않습니다.");
+            throw new InvalidParameterException("등록된 즐겨찾기가 존재하지 않습니다.");
         }
 
         favoriteDao.deleteById(id);
     }
 
     private boolean memberHasFavorite(Long memberId, Long id) {
-        return favoriteDao.findMemberIdById(id).equals(memberId);
+        return favoriteDao.findMemberIdById(id).contains(memberId);
     }
 }

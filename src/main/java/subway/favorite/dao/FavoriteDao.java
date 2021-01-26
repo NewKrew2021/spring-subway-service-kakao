@@ -45,13 +45,16 @@ public class FavoriteDao {
 
         List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, memberId);
         return result.stream()
-                .map(it -> mapFavorite(it))
+                .map(this::mapFavorite)
                 .collect(Collectors.toList());
     }
 
-    public Long findMemberIdById(Long id) {
+    public List<Long> findMemberIdById(Long id) {
         String sql = "select member_id from FAVORITE where id = ?";
-        return jdbcTemplate.queryForObject(sql, Long.class, id);
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, id);
+        return result.stream()
+                .map(memberId -> (Long) memberId.get("member_id"))
+                .collect(Collectors.toList());
     }
 
     private Favorite mapFavorite(Map<String, Object> result) {
