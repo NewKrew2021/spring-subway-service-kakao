@@ -1,4 +1,4 @@
-package subway.path;
+package subway.fare.domain;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
