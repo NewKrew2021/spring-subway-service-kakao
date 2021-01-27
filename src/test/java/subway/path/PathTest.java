@@ -104,7 +104,7 @@ public class PathTest {
         /**
          * 총요금 3050 - (3050 - 350) * 0.5 = 1700
          */
-        assertThat(path.getTotalFare(loginMember)).isEqualTo(1350);
+        assertThat(path.getTotalFare(loginMember)).isEqualTo(1700);
     }
 
     @Test

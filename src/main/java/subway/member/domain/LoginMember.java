@@ -12,8 +12,13 @@ public class LoginMember {
     private Long id;
     private String email;
     private Integer age;
+    private boolean loggedIn = true;
 
     public LoginMember() {
+    }
+
+    public LoginMember(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
     public LoginMember(Long id, String email, Integer age) {
@@ -32,6 +37,10 @@ public class LoginMember {
 
     public Integer getAge() {
         return age;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 
     public double getDiscountRate() {

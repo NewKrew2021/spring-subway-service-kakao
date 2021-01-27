@@ -9,6 +9,7 @@ import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.exceptions.InvalidTokenException;
 import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,7 +30,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
         String accessToken = AuthorizationExtractor.extract(httpServletRequest);
         if(accessToken == null || accessToken.equals("null")) {
-            return null;
+            return new LoginMember(false);
         }
         if(!authService.checkToken(accessToken)) {
             throw new InvalidTokenException();
