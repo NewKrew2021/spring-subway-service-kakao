@@ -1,5 +1,6 @@
 package subway.path.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Line;
@@ -16,6 +17,7 @@ public class PathService {
     private final LineService lineService;
     private final StationService stationService;
 
+    @Autowired
     public PathService(LineService lineService, StationService stationService) {
         this.lineService = lineService;
         this.stationService = stationService;

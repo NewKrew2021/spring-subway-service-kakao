@@ -33,7 +33,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = AuthorizationExtractor.extract(webRequest.getNativeRequest(HttpServletRequest.class));
         if (loginRequired(parameter) && token == null) {
-            return new UnauthorizedException();
+            throw new UnauthorizedException();
         }
         if (token == null) {
             return LoginMember.NOT_LOGINED;
