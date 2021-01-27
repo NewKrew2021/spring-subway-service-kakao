@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
+import subway.path.domain.path.graph.SubwayGraph;
 import subway.station.domain.Station;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 
@@ -50,14 +52,14 @@ public class SubwayPathTest {
         삼호선.addSection(교대역, 남부터미널역, 5);
         삼호선.addSection(남부터미널역, 양재역, 2);
 
-        graph = SubwayGraph.from(Arrays.asList(신분당선, 이호선, 삼호선));
+        graph = SubwayGraph.from(Arrays.asList(신분당선, 이호선, 삼호선), PathType.DISTANCE);
     }
 
     @DisplayName("남부터미널역에서 강남역을 가는 경로")
     @Test
     void testPath1() {
         // when
-        SubwayPath subwayPath = graph.getPath(남부터미널역, 강남역);
+        SubwayPath subwayPath = graph.getPath(남부터미널역, 강남역, LocalDateTime.now());
 
         // then
         assertThat(subwayPath.getStations()).isEqualTo(Arrays.asList(남부터미널역, 양재역, 강남역));
@@ -69,7 +71,7 @@ public class SubwayPathTest {
     @Test
     void testPath2() {
         //when
-        SubwayPath subwayPath = graph.getPath(교대역, 잠실역);
+        SubwayPath subwayPath = graph.getPath(교대역, 잠실역, LocalDateTime.now());
 
         //then
         assertThat(subwayPath.getStations()).isEqualTo(Arrays.asList(교대역, 남부터미널역, 양재역, 강남역, 잠실역));

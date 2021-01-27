@@ -52,8 +52,8 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
 
         신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 10, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
-        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
-        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5, LocalTime.of(6, 0), LocalTime.of(22, 0), 50);
+        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10, LocalTime.of(6, 5), LocalTime.of(22, 0), 10);
+        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5, LocalTime.of(6, 0), LocalTime.of(22, 0), 60);
 
         지하철_구간_등록되어_있음(삼호선, 교대역, 남부터미널역, 3);
     }
@@ -78,9 +78,9 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
                 시간_경로_조회_요청(교대역.getId(), 양재역.getId(), LocalDateTime.of(2021, 1, 26, 6, 30));
 
         //then
-//        적절한_경로_응답됨(response, Lists.newArrayList(교대역, 강남역, 양재역));
-//        총_거리와_소요_시간을_함께_응답됨(response, 20);
-        총_거리와_도착_시간을_함께_응답됨(response, LocalDateTime.of(2021, 1, 26, 6, 50));
+        적절한_경로_응답됨(response, Lists.newArrayList(교대역, 강남역, 양재역));
+        총_거리와_소요_시간을_함께_응답됨(response, 20);
+        총_거리와_도착_시간을_함께_응답됨(response, LocalDateTime.of(2021, 1, 26, 6, 55));
     }
 
     public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target, LocalDateTime time) {

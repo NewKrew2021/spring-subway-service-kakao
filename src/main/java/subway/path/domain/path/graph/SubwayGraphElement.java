@@ -1,9 +1,9 @@
-package subway.path.domain.path;
+package subway.path.domain.path.graph;
 
-import subway.path.domain.path.graph.GraphElement;
+import subway.path.domain.path.DistanceLineEdge;
 import subway.station.domain.Station;
 
-public class SubwayGraphElement implements GraphElement<Station, DistanceLineEdge> {
+public class SubwayGraphElement {
 
     private final Station source;
     private final Station target;
@@ -15,17 +15,14 @@ public class SubwayGraphElement implements GraphElement<Station, DistanceLineEdg
         this.edge = edge;
     }
 
-    @Override
     public Station getSource() {
         return source;
     }
 
-    @Override
     public Station getTarget() {
         return target;
     }
 
-    @Override
     public DistanceLineEdge getEdge() {
         return edge;
     }
