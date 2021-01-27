@@ -1,10 +1,13 @@
 package subway.favorite.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
+import subway.line.exception.InvalidStationIdException;
 import subway.station.dao.StationDao;
+import subway.station.domain.Station;
 
 import java.util.List;
 
@@ -21,13 +24,24 @@ public class FavoriteService {
     }
 
     public Favorite createFavorite(Long memberId, Long sourceStationId, Long targetStationId) {
+        Station sourceStation = getStation(sourceStationId);
+        Station targetStation = getStation(targetStationId);
+
         Favorite result = favoriteDao.insert(memberId, sourceStationId, targetStationId);
 
         return new Favorite(
                 result.getId(),
                 result.getMemberId(),
-                stationDao.findById(result.getSourceStationId()),
-                stationDao.findById(result.getTargetStationId()));
+                sourceStation,
+                targetStation);
+    }
+
+    private Station getStation(Long id) {
+        try {
+            return stationDao.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new InvalidStationIdException(id);
+        }
     }
 
     public List<Favorite> findFavoritesByMemberId(Long memberId) {
