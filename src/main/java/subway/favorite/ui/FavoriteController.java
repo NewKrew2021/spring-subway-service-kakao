@@ -3,7 +3,7 @@ package subway.favorite.ui;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
-import subway.favorite.application.FavoriteService;
+import subway.favorite.service.FavoriteService;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.member.domain.LoginMember;

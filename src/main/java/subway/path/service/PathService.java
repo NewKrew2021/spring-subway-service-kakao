@@ -1,4 +1,4 @@
-package subway.path.application;
+package subway.path.service;
 
 import org.springframework.stereotype.Service;
 import subway.line.dao.SectionDao;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
-import subway.path.application.PathService;
+import subway.path.service.PathService;
 import subway.path.domain.Path;
 import subway.path.domain.Person;
 import subway.path.dto.PathResponse;

@@ -9,7 +9,7 @@ import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exceptions.AuthorizationException;
-import subway.member.application.MemberService;
+import subway.member.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 

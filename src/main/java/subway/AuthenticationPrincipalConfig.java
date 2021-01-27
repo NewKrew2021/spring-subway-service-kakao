@@ -6,7 +6,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.auth.ui.AuthenticationPrincipalArgumentResolver;
-import subway.member.application.MemberService;
+import subway.member.service.MemberService;
 
 import java.util.List;
 

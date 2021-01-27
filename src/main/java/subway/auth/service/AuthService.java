@@ -1,4 +1,4 @@
-package subway.auth.application;
+package subway.auth.service;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
