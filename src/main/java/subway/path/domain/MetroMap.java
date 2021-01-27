@@ -7,18 +7,18 @@ import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class ShortestPath {
+public class MetroMap {
     DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath;
-    List<Section> shortestSection;
-    List<Station> shortestPathStations;
 
-    public ShortestPath(List<Line> lines, Station source, Station target) {
+    public MetroMap() {
+    }
+
+    public MetroMap(List<Line> lines) {
         this.dijkstraShortestPath = getDijkstra(lines);
-        this.shortestPathStations = setShortestPath(source, target);
-        this.shortestSection = setShortestPathSections();
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> getDijkstra(List<Line> lines) {
@@ -33,27 +33,18 @@ public class ShortestPath {
         return new DijkstraShortestPath<>(graph);
     }
 
-    private List<Station> setShortestPath(Station source, Station target) {
+    public List<Station> getShortestPath(Station source, Station target) {
         return this.dijkstraShortestPath.getPath(source, target).getVertexList();
     }
 
-    private List<Section> setShortestPathSections() {
-        List<Section> sections = new ArrayList<>();
-        for (int i = 0; i < shortestPathStations.size() - 1; i++) {
-            sections.add(new Section(shortestPathStations.get(i), shortestPathStations.get(i + 1)));
-        }
-        return sections;
+    public List<Section> getShortestPathSections(Station source, Station target) {
+        List<Station> shortestPathStations = getShortestPath(source, target);
+        return IntStream.range(0, shortestPathStations.size())
+                .mapToObj(it -> new Section(shortestPathStations.get(it), shortestPathStations.get(it + 1)))
+                .collect(Collectors.toList());
     }
 
-    public List<Station> getShortestPathStations() {
-        return shortestPathStations;
-    }
-
-    public List<Section> getShortestSection() {
-        return shortestSection;
-    }
-
-    public int getTotalDistance() {
-        return 0;
+    public int getTotalDistance(Station source, Station target) {
+        return (int) dijkstraShortestPath.getPathWeight(source, target);
     }
 }

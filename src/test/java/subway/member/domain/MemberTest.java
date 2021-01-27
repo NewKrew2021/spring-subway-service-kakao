@@ -1,11 +1,13 @@
 package subway.member.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.exception.WrongInputDataException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@DisplayName("멤버 유닛 테스트")
 public class MemberTest {
 
     @Test
