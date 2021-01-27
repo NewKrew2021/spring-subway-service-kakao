@@ -40,15 +40,14 @@ public class SubwayMap {
         List<Station> orderedStations = createGraph(sections).getPath(source, destination).getVertexList();
         List<DirectedSection> directedSections = new ArrayList<>();
 
-        int maxFare = Integer.MIN_VALUE;
         for (int i = 0; i < orderedStations.size() - 1; i++) {
             Station sourceStation = orderedStations.get(i);
             Station targetStation = orderedStations.get(i + 1);
             DirectedSection directedSection = new DirectedSection(findSection(sections, sourceStation, targetStation), sourceStation);
-            maxFare = Math.max(maxFare, getExtraFare(sourceStation, targetStation));
             directedSections.add(directedSection);
         }
-        return new DirectedSections(directedSections, maxFare);
+        return new DirectedSections(directedSections,
+                ExtraFare.of(this, directedSections));
     }
 
     private DijkstraShortestPath<Station, DefaultWeightedEdge> createGraph(List<Section> sections) {

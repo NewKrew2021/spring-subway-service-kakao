@@ -8,7 +8,7 @@ public class Line {
     private Long id;
     private String name;
     private String color;
-    private int extraFare;
+    private ExtraFare extraFare = ExtraFare.of(0);
     private Sections sections = new Sections();
 
     public Line() {
@@ -27,7 +27,7 @@ public class Line {
     public Line(String name, String color, int extraFare) {
         this.name = name;
         this.color = color;
-        this.extraFare = extraFare;
+        this.extraFare = ExtraFare.of(extraFare);
     }
 
     public Line(Long id, String name, String color, Sections sections) {
@@ -37,7 +37,7 @@ public class Line {
 
     public Line(Long id, String name, String color, int extraFare, Sections sections) {
         this(id, name, color, sections);
-        this.extraFare = extraFare;
+        this.extraFare = ExtraFare.of(extraFare);
     }
 
     public Long getId() {
@@ -57,7 +57,7 @@ public class Line {
     }
 
     public int getExtraFare() {
-        return extraFare;
+        return extraFare.getValue();
     }
 
     public void update(Line line) {

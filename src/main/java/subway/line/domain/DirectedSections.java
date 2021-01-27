@@ -14,26 +14,31 @@ public class DirectedSections extends Section {
     private static final int DEFAULT_PRICE = 1250;
     private static final int ADDITIONAL_PRICE = 100;
     private final List<DirectedSection> sections;
-    private final int maxExtraFare;
+    private final ExtraFare maxExtraFare;
 
-    public DirectedSections(List<DirectedSection> sections, int maxExtraFare) {
+    public DirectedSections(List<DirectedSection> sections, ExtraFare maxExtraFare) {
         this.sections = sections;
         this.maxExtraFare = maxExtraFare;
     }
 
     public int getMaxExtraFare() {
-        return maxExtraFare;
+        return maxExtraFare.getValue();
     }
 
     public int getPrice() {
         int distance = getDistance();
         if (distance <= MIN_DISTANCE) {
-            return DEFAULT_PRICE + maxExtraFare;
+            return DEFAULT_PRICE + maxExtraFare.getValue();
         }
         if (distance <= MAX_DISTANCE) {
-            return DEFAULT_PRICE + under50Bonus(distance) * ADDITIONAL_PRICE + maxExtraFare;
+            return DEFAULT_PRICE +
+                    under50Bonus(distance) * ADDITIONAL_PRICE +
+                    maxExtraFare.getValue();
         }
-        return DEFAULT_PRICE + (MAX_DISTANCE - MIN_DISTANCE) / 5 * ADDITIONAL_PRICE + over50Bonus(distance) * ADDITIONAL_PRICE + maxExtraFare;
+        return DEFAULT_PRICE +
+                (MAX_DISTANCE - MIN_DISTANCE) / 5 * ADDITIONAL_PRICE +
+                over50Bonus(distance) * ADDITIONAL_PRICE +
+                maxExtraFare.getValue();
     }
 
     public int under50Bonus(int distance) {
