@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/favorites")
 public class FavoriteController {
-    // TODO: 즐겨찾기 기능 구현하기
     private FavoriteService favoriteService;
 
     public FavoriteController(FavoriteService favoriteService) {
@@ -35,7 +34,7 @@ public class FavoriteController {
         return ResponseEntity.created(URI.create("/favorites/" + favoriteResponse.getId())).body(favoriteResponse);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<FavoriteResponse>> getFavorite(@AuthenticationPrincipal LoginMember loginMember){
         return ResponseEntity.ok().body(favoriteService.getFavorite(loginMember.getId()));
     }

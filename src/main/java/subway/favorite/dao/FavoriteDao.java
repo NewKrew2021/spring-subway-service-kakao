@@ -13,6 +13,9 @@ import java.util.Map;
 
 @Repository
 public class FavoriteDao {
+    public static final String FIND_FAVORITE_BY_MEMBER_ID = "select * from favorite where member_id = ?";
+    public static final String DELETE_FAVORITE = "delete from favorite where id = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertAction;
 
@@ -41,12 +44,10 @@ public class FavoriteDao {
     }
 
     public List<Favorite> findByUser(Long memberId){
-        String sql = "select * from favorite where member_id = ?";
-        return jdbcTemplate.query(sql, favoriteRowMapper, memberId);
+        return jdbcTemplate.query(FIND_FAVORITE_BY_MEMBER_ID, favoriteRowMapper, memberId);
     }
 
     public void deleteFavorite(Long id) {
-        String sql = "delete from favorite where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_FAVORITE, id);
     }
 }

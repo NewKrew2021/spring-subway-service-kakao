@@ -15,6 +15,10 @@ import java.util.List;
 
 @Repository
 public class StationDao {
+    public static final String FIND_AlL_STATION = "select * from STATION";
+    public static final String DELETE_STATION = "delete from STATION where id = ?";
+    public static final String FIND_STATION_BY_STATION_ID = "select * from STATION where id = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertAction;
 
@@ -39,19 +43,16 @@ public class StationDao {
     }
 
     public List<Station> findAll() {
-        String sql = "select * from STATION";
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(FIND_AlL_STATION, rowMapper);
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from STATION where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_STATION, id);
     }
 
     public Station findById(Long id) {
         try {
-            String sql = "select * from STATION where id = ?";
-            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+            return jdbcTemplate.queryForObject(FIND_STATION_BY_STATION_ID, rowMapper, id);
         } catch (EmptyResultDataAccessException e){
             throw new RuntimeException("source, target이 일치하지 않습니다.");
         }

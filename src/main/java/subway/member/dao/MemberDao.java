@@ -14,6 +14,11 @@ import javax.sql.DataSource;
 
 @Repository
 public class MemberDao {
+    public static final String FIND_MEMBER_BY_MEMBER_ID = "select * from MEMBER where id = ?";
+    public static final String UPDATE_MEMBER = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
+    public static final String DELETE_MEMBER = "delete from MEMBER where id = ?";
+    public static final String FIND_MEMBER_BY_EMAIL = "select * from MEMBER where email = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 
@@ -40,24 +45,20 @@ public class MemberDao {
     }
 
     public void update(Member member) {
-        String sql = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
-        jdbcTemplate.update(sql, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
+        jdbcTemplate.update(UPDATE_MEMBER, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from MEMBER where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_MEMBER, id);
     }
 
     public Member findById(Long id) {
-        String sql = "select * from MEMBER where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(FIND_MEMBER_BY_MEMBER_ID, rowMapper, id);
     }
 
     public Member findByEmail(String email) {
         try {
-            String sql = "select * from MEMBER where email = ?";
-            return jdbcTemplate.queryForObject(sql, rowMapper, email);
+            return jdbcTemplate.queryForObject(FIND_MEMBER_BY_EMAIL, rowMapper, email);
         } catch (EmptyResultDataAccessException e){
             throw new InvalidMemberException("이메일이 없거나, 패스워드가 일치하지 않음");
         }
