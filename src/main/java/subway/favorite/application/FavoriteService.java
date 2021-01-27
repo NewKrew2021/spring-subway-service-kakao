@@ -11,7 +11,6 @@ import subway.station.domain.Station;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class FavoriteService {
 
@@ -30,8 +29,8 @@ public class FavoriteService {
         return FavoriteResponse.of(favorite, sourceStation, targetStation);
     }
 
-    public void deleteFavorite(long id) {
-        favoriteDao.deleteById(id);
+    public void deleteFavorite(long id, long memberId) {
+        favoriteDao.deleteById(id, memberId);
     }
 
     public List<FavoriteResponse> findFavorites(long memberId) {

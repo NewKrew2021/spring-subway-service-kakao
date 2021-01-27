@@ -14,8 +14,8 @@ public class FavoriteResponse {
 
     public FavoriteResponse(Long id, Station sourceStation, Station targetStation) {
         this.id = id;
-        this.source = StationResponse.of(sourceStation);
-        this.target = StationResponse.of(targetStation);
+        this.source = StationResponse.from(sourceStation);
+        this.target = StationResponse.from(targetStation);
     }
 
     public static FavoriteResponse of(Favorite favorite, Station sourceStation, Station targetStation) {
