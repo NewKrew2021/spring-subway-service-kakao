@@ -1,6 +1,6 @@
 package subway.path.application;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.member.domain.LoginMember;
@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component
+@Service
 public class FareService {
     // fare 계산 관련
     public static final int DEFAULT_FARE = 1250;
