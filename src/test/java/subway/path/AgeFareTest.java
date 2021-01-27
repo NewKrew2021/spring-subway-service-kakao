@@ -9,6 +9,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AgeFareTest {
 
+    @DisplayName("6세 미만 할인 요금 (~ 6세)")
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 4, 5})
+    void discountFareForBaby(int age) {
+        AgeFare ageFare = AgeFare.getAgeFare(age);
+
+        assertThat(ageFare.calculateDiscountFareByAge(2000)).isEqualTo(2000);
+    }
+
     @DisplayName("어린이 할인 요금 (6 ~ 12세)")
     @ParameterizedTest
     @ValueSource(ints = {6, 7, 11, 12})
