@@ -27,9 +27,9 @@ public class PathBuilder {
     public static final int MAX_FARE_OF_SHORT_RANGE = 800;
 
     private final Path path = new Path();
-    private List<Station> stations;
     private GraphPath<Station, PathGraphEdge> graphPath;
-    private int fare;
+    protected List<Station> stations;
+    protected int fare;
 
     public PathBuilder initializePath(List<Station> stations, List<Line> lines) {
         this.stations = stations;
