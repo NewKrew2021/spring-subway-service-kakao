@@ -1,34 +1,34 @@
 package subway.member.ui;
 
-import subway.auth.domain.AuthenticationPrincipal;
-import subway.member.domain.LoginMember;
-import subway.member.application.MemberService;
-import subway.member.dto.MemberRequest;
-import subway.member.dto.MemberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberRequest;
+import subway.member.dto.MemberResponse;
 
 import java.net.URI;
 
 @RestController
 @RequestMapping("/members")
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
-    @PostMapping()
-    public ResponseEntity createMember(@RequestBody MemberRequest request) {
-        MemberResponse member = memberService.createMember(request);
-        return ResponseEntity.created(URI.create("/members/" + member.getId())).build();
+    @PostMapping
+    public ResponseEntity<Void> createMember(@RequestBody MemberRequest request) {
+        MemberResponse response = memberService.createMember(request);
+        return ResponseEntity.created(URI.create("/members/" + response.getId())).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberResponse> findMember(@PathVariable Long id) {
-        MemberResponse member = memberService.findMember(id);
-        return ResponseEntity.ok().body(member);
+        MemberResponse response = memberService.findMember(id);
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/{id}")
@@ -45,8 +45,8 @@ public class MemberController {
 
     @GetMapping("/me")
     public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
-        MemberResponse member = memberService.findMember(loginMember.getId());
-        return ResponseEntity.ok().body(member);
+        MemberResponse response = memberService.findMember(loginMember.getId());
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/me")

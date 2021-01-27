@@ -11,7 +11,7 @@ import subway.member.domain.LoginMember;
 import java.net.URI;
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping("/favorites")
 public class FavoriteController {
     private final FavoriteService favoriteService;
@@ -20,13 +20,13 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> createFavorites(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
         FavoriteResponse response = favoriteService.createFavorite(favoriteRequest, loginMember.getId());
         return ResponseEntity.created(URI.create("/favorites/" + response.getId())).build();
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<FavoriteResponse>> showFavorites(@AuthenticationPrincipal LoginMember loginMember) {
         List<FavoriteResponse> responses = favoriteService.findFavorites(loginMember.getId());
         return ResponseEntity.ok(responses);

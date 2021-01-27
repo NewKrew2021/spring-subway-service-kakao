@@ -73,7 +73,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         // given
         StationResponse 오이도역 = 지하철역_등록되어_있음("오이도역");
         StationResponse 당고개역 = 지하철역_등록되어_있음("당고개역");
-        LineResponse 사호선 = 지하철_노선_등록되어_있음("사호선","bg-blue-700",오이도역,당고개역,200);
+        LineResponse 사호선 = 지하철_노선_등록되어_있음("사호선", "bg-blue-700", 오이도역, 당고개역, 200);
 
         // when
         ExtractableResponse<Response> response = 거리_경로_조회_요청(2L, 5L);

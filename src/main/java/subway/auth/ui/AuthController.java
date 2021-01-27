@@ -12,7 +12,7 @@ import subway.auth.dto.TokenResponse;
 @RestController
 @RequestMapping("/login")
 public class AuthController {
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
@@ -20,7 +20,7 @@ public class AuthController {
 
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest) {
-        TokenResponse tokenResponse = authService.createToken(tokenRequest);
-        return ResponseEntity.ok(tokenResponse);
+        TokenResponse response = authService.createToken(tokenRequest);
+        return ResponseEntity.ok(response);
     }
 }
