@@ -3,6 +3,7 @@ package subway.member.application;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.exceptions.AuthorizationException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
@@ -29,15 +30,13 @@ public class MemberService {
     }
 
     public LoginMember findMemberByEmail(String email) {
-        Member member;
-
         try {
+            Member member;
             member = memberDao.findByEmail(email);
-        } catch (DataAccessException ignored) {
-            return null;
+            return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+        } catch (DataAccessException e) {
+            throw new AuthorizationException("등록되지 않은 사용자입니다.");
         }
-
-        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 
     @Transactional

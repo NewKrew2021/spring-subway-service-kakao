@@ -22,11 +22,11 @@ public class FavoriteService {
         Favorite favorite = new Favorite(memberId, favoriteRequest.getSource(), favoriteRequest.getTarget());
 
         if (favorite.getSourceStationId() == favorite.getTargetStationId()) {
-            throw new FavoriteSameArgumentException();
+            throw new FavoriteSameArgumentException("출발지와 도착지는 달라야 합니다.");
         }
 
         if (favoriteDao.favoriteExists(favorite)) {
-            throw new FavoriteDuplicateException();
+            throw new FavoriteDuplicateException("이미 등록되어 있는 즐겨찾기 입니다.");
         }
 
         return favoriteDao.insert(favorite);

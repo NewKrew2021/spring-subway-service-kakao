@@ -29,13 +29,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+        AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
-        if (!jwtTokenProvider.validateToken(token)) {
-            AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
-            if (auth.isThrow()) {
-                throw new AuthorizationException("");
+
+        if(token == null){
+            if(auth.isThrow()){
+                throw new AuthorizationException("로그인이 필요한 기능입니다.");
             }
             return null;
+        }
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new AuthorizationException("유효한 token이 아닙니다.");
         }
 
         return memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));

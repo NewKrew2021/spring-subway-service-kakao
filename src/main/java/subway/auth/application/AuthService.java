@@ -21,7 +21,7 @@ public class AuthService {
 
     public TokenResponse createToken(TokenRequest request) {
         if (!userExists(request.getEmail(), request.getPassword())) {
-            throw new AuthorizationException();
+            throw new AuthorizationException("이메일과 패스워드가 일치하지 않습니다.");
         }
 
         String token = jwtTokenProvider.createToken(request.getEmail());
@@ -33,10 +33,9 @@ public class AuthService {
 
         try {
             member = memberDao.findByEmail(email);
+            return member.getEmail().equals(email) && member.getPassword().equals(password);
         } catch (DataAccessException e) {
             throw new AuthorizationException(e.getMessage());
         }
-
-        return member.getEmail().equals(email) && member.getPassword().equals(password);
     }
 }
