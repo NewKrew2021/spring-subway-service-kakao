@@ -3,6 +3,7 @@ package subway.line.domain;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.line.exception.LineNotFoundException;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
@@ -27,12 +28,10 @@ public class SubwayMap {
 
     public int getExtraFare(Station stationA, Station stationB) {
         Optional<Line> lineOptional = lines.stream()
-                .filter((line) -> !line.getSections().getSections().stream()
-                        .filter(section -> section.contains(stationA) && section.contains(stationB))
-                        .findAny().equals(Optional.empty())
+                .filter((line) -> line.getSections().hasStations(stationA,stationB)
                 ).findFirst();
 
-        if (!lineOptional.isPresent()) throw new RuntimeException();
+        if (!lineOptional.isPresent()) throw new LineNotFoundException();
         return lineOptional.get().getExtraFare();
     }
 
