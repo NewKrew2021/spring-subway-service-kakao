@@ -29,7 +29,7 @@ public class FavoriteDao {
                     rs.getLong("target_station_id"));
 
     public long insert(Favorite favorite) {
-        String sql = "insert into favorite(member_id, source_station_id, target_station_id) values(?, ?, ?)";
+        String sql = "insert into FAVORITE(member_id, source_station_id, target_station_id) values(?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(con -> {
@@ -47,9 +47,9 @@ public class FavoriteDao {
     public List<Favorite> findFavoritesByMemberId(long memberId) {
         String sql = "select F.id, F.member_id, " +
                 "SST.id as source_station_id, TST.id as target_station_id " +
-                "from favorite F " +
-                "left outer join station SST on F.source_station_id = SST.id " +
-                "left outer join station TST on F.target_station_id = TST.id " +
+                "from FAVORITE F " +
+                "left outer join STATION SST on F.source_station_id = SST.id " +
+                "left outer join STATION TST on F.target_station_id = TST.id " +
                 "WHERE F.member_id = ?";
 
         return jdbcTemplate.query(sql, favoriteMapper, memberId);
@@ -64,7 +64,7 @@ public class FavoriteDao {
     }
 
     public void deleteById(long favoriteId) {
-        String sql = "delete from favorite where id = ?";
+        String sql = "delete from FAVORITE where id = ?";
         int affectedRows = jdbcTemplate.update(sql, favoriteId);
 
         if (affectedRows != 1) {
