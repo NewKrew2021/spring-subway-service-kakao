@@ -8,8 +8,6 @@ import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.exception.InvalidMemberException;
 
-import java.util.Optional;
-
 @Service
 public class AuthService {
     private final MemberDao memberDao;
@@ -23,8 +21,8 @@ public class AuthService {
 
 
     public void checkInvalidMember(String email, String password) {
-        Optional<Member> member = memberDao.findByEmail(email);
-        if (!isMember(password, member.orElseThrow(() -> new InvalidMemberException()))) {
+        Member member = memberDao.findByEmail(email).orElseThrow(InvalidMemberException::new);
+        if (!isMember(password, member)) {
             throw new InvalidMemberException();
         }
     }
@@ -37,7 +35,7 @@ public class AuthService {
         if (!jwtTokenProvider.validateToken(accessToken)) {
             throw new InvalidTokenException();
         }
-        Optional<Member> member = memberDao.findByEmail(jwtTokenProvider.getPayload(accessToken));
-        return member.orElseThrow(() -> new InvalidMemberException());
+        Member member = memberDao.findByEmail(jwtTokenProvider.getPayload(accessToken)).orElseThrow(InvalidMemberException::new);
+        return member;
     }
 }
