@@ -26,7 +26,7 @@ public class PathController {
                                                          @RequestParam("source") long sourceId,
                                                          @RequestParam("target") long targetId) {
         Path path = pathService.find(sourceId, targetId);
-        int fare = pathService.calculateFare(path, Person.of(loginMember));
+        int fare = pathService.calculateFare(path, Person.of(loginMember.getAge()));
         return ResponseEntity.ok(PathResponse.of(path, fare));
     }
 }

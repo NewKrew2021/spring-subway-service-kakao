@@ -1,7 +1,5 @@
 package subway.path.domain;
 
-import subway.member.domain.LoginMember;
-
 import java.util.stream.Stream;
 
 public enum Person {
@@ -23,13 +21,9 @@ public enum Person {
         this.maxAge = maxAge;
     }
 
-    public static Person of(LoginMember loginMember) {
-        if (loginMember == null) {
-            return ADULT;
-        }
-
+    public static Person of(long age) {
         return Stream.of(values())
-                .filter(value -> value.isInAge(loginMember))
+                .filter(value -> value.isInAge(age))
                 .findFirst()
                 .orElse(ADULT);
     }
@@ -46,7 +40,7 @@ public enum Person {
         return minAge;
     }
 
-    private boolean isInAge(LoginMember loginMember) {
-        return minAge <= loginMember.getAge() && loginMember.getAge() < maxAge;
+    private boolean isInAge(long age) {
+        return minAge <= age && age < maxAge;
     }
 }
