@@ -4,9 +4,9 @@ import java.util.stream.Stream;
 
 public enum DistanceFare {
 
-    OVER_FIFTY_KM(51, 8, 100, 2050),
-    OVER_TEN_KM(11, 5, 100, 1250),
-    DEFAULT(1, 10, 1250, 0);
+    OVER_FIFTY_KM(51, 8, 100, 800),
+    OVER_TEN_KM(11, 5, 100, 0),
+    DEFAULT(1, 10, 0, 0);
 
     private final int basisDistance;
     private final int unitDistance;

@@ -152,10 +152,9 @@ public class Sections {
         this.sections.addAll(sections.sections);
     }
 
-    public Section getSection(Station upStation, Station downStation) {
+    public Section findSectionContainStations(Station upStation, Station downStation) {
         return sections.stream()
-                .filter(section -> (section.getUpStation().equals(upStation) && section.getDownStation().equals(downStation))
-                || (section.getDownStation().equals(upStation) && section.getUpStation().equals(downStation)))
+                .filter(section -> section.isExactlyContainStations(upStation, downStation))
                 .findFirst().get();
     }
 

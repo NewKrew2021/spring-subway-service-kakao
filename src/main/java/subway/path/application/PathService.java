@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
+import subway.path.domain.Fare;
 import subway.path.domain.Path;
 import subway.path.domain.ShortestPathExplorer;
 import subway.path.domain.SubwayGraph;
@@ -32,11 +33,13 @@ public class PathService {
         Station target = stationDao.findById(targetId);
         Path path = shortestPathExplorer.exploreShortestPath(lines, source, target);
 
-        path.applyDistanceFarePolicy();
+        Fare fare = new Fare();
+        fare.applyDistanceFarePolicy(path.getDistance());
+        fare.applyExtraFareOfLine(path.getStations(), lines);
         if (loginMember != null) {
-            path.applyAgeFarePolicy(loginMember.getAge());
+            fare.applyAgeFarePolicy(loginMember.getAge());
         }
 
-        return PathResponse.of(path);
+        return PathResponse.of(path, fare);
     }
 }

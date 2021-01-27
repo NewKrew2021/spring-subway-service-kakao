@@ -45,7 +45,7 @@ public class StationService {
     }
 
     public void deleteStationById(Long id) {
-        if (sectionDao.findByStationId(id) > 0) {
+        if (sectionDao.countSectionsByStationId(id) > 0) {
             throw new StationException(FAILED_DELETE_MESSAGE);
         }
         favoriteDao.deleteFavoriteByStationId(id);

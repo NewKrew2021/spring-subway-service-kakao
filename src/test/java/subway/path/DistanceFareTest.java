@@ -15,7 +15,7 @@ public class DistanceFareTest {
     void defaultDistance(int distance) {
         DistanceFare distanceFare = DistanceFare.getDistanceFare(distance);
 
-        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(1250);
+        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(0);
     }
 
     @DisplayName("1번의 추가 운임 (10km 초과 50km 이내)")
@@ -24,7 +24,7 @@ public class DistanceFareTest {
     void overTenKm_OneTime(int distance) {
         DistanceFare distanceFare = DistanceFare.getDistanceFare(distance);
 
-        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(1350);
+        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(100);
     }
 
     @DisplayName("8번의 추가 운임 (10km 초과 50km 이내)")
@@ -33,7 +33,7 @@ public class DistanceFareTest {
     void overTenKm_EightTime(int distance) {
         DistanceFare distanceFare = DistanceFare.getDistanceFare(distance);
 
-        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(2050);
+        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(800);
     }
 
     @DisplayName("1번의 추가 운임 (50km 초과)")
@@ -42,7 +42,7 @@ public class DistanceFareTest {
     void overFifty_OneTime(int distance) {
         DistanceFare distanceFare = DistanceFare.getDistanceFare(distance);
 
-        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(2150);
+        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(900);
     }
 
     @DisplayName("2번의 추가 운임 (50km 초과)")
@@ -51,6 +51,6 @@ public class DistanceFareTest {
     void overFifty_TwoTime(int distance) {
         DistanceFare distanceFare = DistanceFare.getDistanceFare(distance);
 
-        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(2250);
+        assertThat(distanceFare.calculateExtraFareByDistance(distance)).isEqualTo(1000);
     }
 }

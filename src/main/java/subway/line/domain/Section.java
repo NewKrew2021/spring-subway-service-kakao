@@ -39,4 +39,9 @@ public class Section {
     public int getDistance() {
         return distance;
     }
+
+    public boolean isExactlyContainStations(Station upStation, Station downStation) {
+        return (this.upStation.equals(upStation) && this.downStation.equals(downStation))
+                || (this.downStation.equals(upStation) && this.upStation.equals(downStation));
+    }
 }

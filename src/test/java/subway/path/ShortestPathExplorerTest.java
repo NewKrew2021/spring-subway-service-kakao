@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
+import subway.path.domain.Fare;
 import subway.path.domain.Path;
 import subway.path.domain.ShortestPathExplorer;
 import subway.path.domain.SubwayGraph;
@@ -56,7 +57,7 @@ public class ShortestPathExplorerTest {
         subwayGraph = new SubwayGraph(lines);
     }
 
-    @DisplayName("최단 경로의 역, 거리, 노선 추가 요금")
+    @DisplayName("최단 경로의 역, 거리")
     @Test
     void findShortestPath() {
         ShortestPathExplorer shortestPathExplorer = new ShortestPathExplorer(subwayGraph);
@@ -65,6 +66,17 @@ public class ShortestPathExplorerTest {
 
         assertThat(path.getStations()).containsExactly(양재역, 도곡역, 선릉역);
         assertThat(path.getDistance()).isEqualTo(22);
-        assertThat(path.getFare()).isEqualTo(300);
+    }
+
+    @DisplayName("최단 경로의 최대 노선 추가 요금")
+    @Test
+    void findMaxExtraFare() {
+        Fare fare = new Fare();
+        ShortestPathExplorer shortestPathExplorer = new ShortestPathExplorer(subwayGraph);
+
+        Path path = shortestPathExplorer.exploreShortestPath(lines, 양재역, 선릉역);
+        fare.applyExtraFareOfLine(path.getStations(), lines);
+
+        assertThat(fare.getFare()).isEqualTo(Fare.BASIC_FARE + 300);
     }
 }
