@@ -10,7 +10,6 @@ import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 

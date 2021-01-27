@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import subway.exceptions.NotExistsDataException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
-import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.member.domain.LoginMember;
 import subway.station.application.StationService;

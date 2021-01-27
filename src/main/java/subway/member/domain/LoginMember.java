@@ -8,6 +8,7 @@ public class LoginMember {
     public static final int MAXIMUM_CHILD_AGE = 12;
     public static final int MINIMUM_TEENAGER_AGE = 13;
     public static final int MAXIMUM_TEENAGER_AGE = 18;
+
     private Long id;
     private String email;
     private Integer age;

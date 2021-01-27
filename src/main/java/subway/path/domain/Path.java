@@ -3,7 +3,6 @@ package subway.path.domain;
 import subway.member.domain.LoginMember;
 import subway.path.util.FareUtil;
 import subway.station.domain.Station;
-import subway.station.dto.StationResponse;
 
 import java.util.List;
 
