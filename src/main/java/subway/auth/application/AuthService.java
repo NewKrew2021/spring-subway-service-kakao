@@ -22,18 +22,15 @@ public class AuthService {
     }
 
     public TokenResponse createToken(TokenRequest request) {
-        if (!userExists(request.getEmail(), request.getPassword())) {
-            throw new UnauthenticatedException("Incorrect password");
-        }
+        Member member = getMemberIfExists(request.getEmail(), request.getPassword());
 
-        String token = jwtTokenProvider.createToken(request.getEmail());
+        String token = jwtTokenProvider.createToken(Long.toString(member.getId()));
         return new TokenResponse(token);
     }
 
-    private boolean userExists(String email, String password) {
+    private Member getMemberIfExists(String email, String password) {
         try {
-            Member member = memberDao.findByEmail(email);
-            return member.getEmail().equals(email) && member.getPassword().equals(password);
+            return memberDao.findByEmailAndPassword(email, password);
         } catch (DataAccessException e) {
             throw new UnauthenticatedException("Incorrect email or password\n" + e.getMessage());
         }

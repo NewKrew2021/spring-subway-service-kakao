@@ -11,8 +11,6 @@ import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exceptions.UnauthenticatedException;
 import subway.member.application.MemberService;
-import subway.member.domain.LoginMember;
-import subway.path.domain.Person;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,8 +33,10 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String token = AuthorizationExtractor.extract(request);
+
         if (jwtTokenProvider.validateToken(token)) {
-            return memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));
+            Long memberId = Long.parseLong(jwtTokenProvider.getPayload(token));
+            return memberService.findLoginMember(memberId);
         }
 
         AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
@@ -44,6 +44,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             throw new UnauthenticatedException("Must login before using this service: " + request.getContextPath());
         }
 
-        return new LoginMember(0L, "guest", Person.ADULT.getMinAge());
+        return MemberService.guestMember;
     }
 }

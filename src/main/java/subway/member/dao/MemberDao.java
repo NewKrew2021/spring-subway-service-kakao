@@ -53,8 +53,8 @@ public class MemberDao {
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
-    public Member findByEmail(String email) {
-        String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+    public Member findByEmailAndPassword(String email, String password) {
+        String sql = "select id, email, age from MEMBER where email = ? and password = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper, email, password);
     }
 }
