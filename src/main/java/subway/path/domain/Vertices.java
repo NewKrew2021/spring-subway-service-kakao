@@ -14,9 +14,4 @@ public class Vertices {
         return Collections.unmodifiableList(vertices);
     }
 
-    public int getExtraFare() {
-        return vertices.stream()
-                .map(v -> v.getExtraFare())
-                .max(Integer::compare).orElse(Vertex.DEFAULT_EXTRA_FARE);
-    }
 }

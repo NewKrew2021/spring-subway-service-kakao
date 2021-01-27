@@ -7,6 +7,7 @@ import subway.line.domain.Line;
 import subway.member.domain.AGE;
 import subway.path.domain.Dijksatra;
 import subway.path.domain.DistanceFare;
+import subway.path.domain.Edges;
 import subway.path.domain.Vertices;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
@@ -31,9 +32,10 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         Dijksatra dijksatra = new Dijksatra(lines);
         Vertices vertices = new Vertices(dijksatra.getPathVertices(sourceId, targetId));
+        Edges edges = new Edges(dijksatra.getPathEdges(sourceId, targetId));
         int distance = dijksatra.getPathWeight(sourceId, targetId);
         int distanceFare = DistanceFare.getDistanceFare(distance);
-        int lineExtraFare = vertices.getExtraFare();
+        int lineExtraFare = edges.getExtraFare();
         return PathResponse.of(vertices.getVertices().stream()
                 .map(vertex -> StationResponse.of(stationService.findStationById(vertex.getStationId())))
                 .collect(Collectors.toList()), distance, calculateFare(age, distanceFare, lineExtraFare));

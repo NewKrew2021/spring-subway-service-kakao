@@ -4,30 +4,19 @@ import java.util.Objects;
 
 public class Vertex {
     private final Long stationId;
-    private final int extraFare;
-    public static final int DEFAULT_EXTRA_FARE = 0;
 
-    private Vertex(Long stationId, int extraFare) {
+    private Vertex(Long stationId) {
         this.stationId = stationId;
-        this.extraFare = extraFare;
-    }
-
-
-    public static Vertex of(Long stationId, int extraFare) {
-        return new Vertex(stationId, extraFare);
     }
 
     public static Vertex of(Long stationId) {
-        return new Vertex(stationId, DEFAULT_EXTRA_FARE);
+        return new Vertex(stationId);
     }
 
     public Long getStationId() {
         return stationId;
     }
 
-    public int getExtraFare() {
-        return extraFare;
-    }
 
     @Override
     public boolean equals(Object o) {

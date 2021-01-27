@@ -2,6 +2,7 @@ package subway.line.domain;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.path.domain.Edge;
 import subway.path.domain.Vertex;
 import subway.station.domain.Station;
 
@@ -100,14 +101,14 @@ public class Line {
         return sections.getStations();
     }
 
-    public void fillPath(WeightedMultigraph<Vertex, DefaultWeightedEdge> graph) {
+    public void fillPath(WeightedMultigraph<Vertex, Edge> graph) {
         for (Section section : sections.getSections()) {
-            Vertex v1 = Vertex.of(section.getUpStation().getId(), extraFare);
-            Vertex v2 = Vertex.of(section.getDownStation().getId(), extraFare);
+            Vertex v1 = Vertex.of(section.getUpStation().getId());
+            Vertex v2 = Vertex.of(section.getDownStation().getId());
             graph.addVertex(v1);
             graph.addVertex(v2);
-            graph.setEdgeWeight(graph.addEdge(v1, v2), section.getDistance());
-            graph.setEdgeWeight(graph.addEdge(v2, v1), section.getDistance());
+            graph.addEdge(v1, v2,new Edge(section.getDistance(),extraFare));
+            graph.addEdge(v2, v1,new Edge(section.getDistance(),extraFare));
         }
     }
 }
