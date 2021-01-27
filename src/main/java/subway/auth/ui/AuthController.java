@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import subway.auth.application.AuthService;
+import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 
 import java.util.Map;
 
 @RestController
 public class AuthController {
-    // TODO: 로그인(토큰 발급) 요청 처리하기
     private AuthService authService;
 
     public AuthController(AuthService authService){
@@ -20,9 +20,9 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login/token", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TokenResponse> createAuth(@RequestBody Map<String, String> params){
-        String email = params.get("email");
-        String password = params.get("password");
+    public ResponseEntity<TokenResponse> createAuth(@RequestBody TokenRequest tokenRequest){
+        String email = tokenRequest.getEmail();
+        String password = tokenRequest.getPassword();
         TokenResponse tokenResponse = authService.createAuth(email, password);
         return ResponseEntity.ok().body(tokenResponse);
     }
