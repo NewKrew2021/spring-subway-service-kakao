@@ -5,7 +5,10 @@ import subway.station.domain.Station;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Line {
     private Long id;
@@ -67,20 +70,35 @@ public class Line {
         sections.removeStation(station);
     }
 
-    public LocalDateTime getNextDepartureTimeOf(LocalDateTime dateTime) {
+    public Optional<LocalDateTime> getNextDepartureTimeOf(LocalDateTime dateTime) {
         LocalDateTime departureTime = LocalDateTime.of(dateTime.toLocalDate(), startTime);
         while (departureTime.isBefore(dateTime)) {
             departureTime = departureTime.plus(timeInterval, ChronoUnit.MINUTES);
         }
 
-        requireBeforeEndTime(dateTime, departureTime);
-        return departureTime;
+        if (departureTime.isAfter(LocalDateTime.of(dateTime.toLocalDate(), endTime))) {
+            return Optional.empty();
+        }
+        return Optional.of(departureTime);
     }
 
-    private void requireBeforeEndTime(LocalDateTime dateTime, LocalDateTime departureTime) {
-        if (departureTime.isAfter(LocalDateTime.of(dateTime.toLocalDate(), endTime))) {
-            throw new IllegalArgumentException("이 시간 이후로 출발하는 열차가 존재하지 않습니다");
+    public List<LocalTime> getDepartureTimesOf(Station station) {
+        int totalDuration = sections.getTotalDurationUntil(station);
+        return getAllDepartureTimes().stream()
+                .map(time -> time.plus(totalDuration, ChronoUnit.MINUTES))
+                .collect(Collectors.toList());
+    }
+
+    private List<LocalTime> getAllDepartureTimes() {
+        List<LocalTime> departureTimes = new ArrayList<>();
+        for (
+                LocalTime time = startTime;
+                time.isBefore(endTime) || time.equals(endTime);
+                time = time.plus(timeInterval, ChronoUnit.MINUTES)
+        ) {
+            departureTimes.add(time);
         }
+        return departureTimes;
     }
 
     public List<Station> getStations() {
