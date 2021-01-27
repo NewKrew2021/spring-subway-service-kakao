@@ -4,25 +4,19 @@ public class Member {
     private Long id;
     private String email;
     private String password;
-    private Integer age;
+    private Age age;
 
     public Member() {
     }
 
-    public Member(Long id, String email, String password, Integer age) {
+    public Member(Long id, String email, String password, Age age) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.age = age;
     }
 
-    public Member(Long id, String email, Integer age) {
-        this.id = id;
-        this.email = email;
-        this.age = age;
-    }
-
-    public Member(String email, String password, Integer age) {
+    public Member(String email, String password, Age age) {
         this.email = email;
         this.password = password;
         this.age = age;
@@ -41,6 +35,6 @@ public class Member {
     }
 
     public Integer getAge() {
-        return age;
+        return age.getAge();
     }
 }

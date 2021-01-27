@@ -2,9 +2,8 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
+import subway.member.domain.Age;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
@@ -30,11 +29,19 @@ public class MemberService {
 
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), new Age(memberRequest.getAge())));
     }
 
     @Transactional
     public void deleteMember(Long id) {
         memberDao.deleteById(id);
+    }
+
+    public boolean isInValidMember(String email, String password) {
+        return memberDao.isNotExistsMemberByEmailAndPassword(email, password);
+    }
+
+    public Member findMemberByEmail(String email) {
+        return memberDao.findByEmail(email);
     }
 }
