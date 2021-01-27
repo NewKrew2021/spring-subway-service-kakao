@@ -2,9 +2,11 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.exception.UnAuthorizedException;
 import subway.line.domain.Line;
 import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
+import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
@@ -28,6 +30,11 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
+    public LoginMember findLoginMember(String email) {
+        Member member =memberDao.findByEmail(email).orElseThrow(RuntimeException::new);
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+    }
+
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
         memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
@@ -36,5 +43,13 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long id) {
         memberDao.deleteById(id);
+    }
+
+    public LoginMember login(String email, String password) {
+        Member member = memberDao.findByEmail(email).orElseThrow(UnAuthorizedException::new);
+        if (!member.getPassword().equals(password)) {
+            throw new UnAuthorizedException("Email or Password not correct");
+        }
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 }
