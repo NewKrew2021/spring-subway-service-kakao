@@ -1,14 +1,12 @@
 package subway.path.domain.path.graph;
 
 import subway.line.domain.Line;
-import subway.path.domain.path.SubwayGraphEdge;
 import subway.path.domain.path.PathType;
 import subway.path.domain.path.SubwayPath;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SubwayMap {
 
@@ -19,25 +17,7 @@ public class SubwayMap {
     }
 
     public static SubwayMap from(List<Line> lines, PathType pathType) {
-        return new SubwayMap(pathType.getGraphInitializer().apply(getGraphElements(lines)));
-    }
-
-    private static List<SubwayGraphElement> getGraphElements(List<Line> lines) {
-        return lines.stream()
-                .map(SubwayMap::toElements)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-    }
-
-    private static List<SubwayGraphElement> toElements(Line line) {
-        return line.getSections()
-                .stream()
-                .map(section -> new SubwayGraphElement(
-                        section.getUpStation(),
-                        section.getDownStation(),
-                        new SubwayGraphEdge(section.getDistance(), section.getDuration(), line)
-                ))
-                .collect(Collectors.toList());
+        return new SubwayMap(pathType.getGraphInitializer().apply(lines));
     }
 
     public SubwayPath getPath(Station source, Station target, LocalDateTime departureTime) {

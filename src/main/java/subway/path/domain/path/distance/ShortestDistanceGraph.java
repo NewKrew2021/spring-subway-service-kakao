@@ -3,10 +3,11 @@ package subway.path.domain.path.distance;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.line.domain.Line;
 import subway.path.domain.path.SubwayGraphEdge;
+import subway.path.domain.path.graph.GraphUtil;
 import subway.path.domain.path.graph.PathAndArrival;
 import subway.path.domain.path.graph.SubwayGraph;
-import subway.path.domain.path.graph.SubwayGraphElement;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
@@ -20,14 +21,8 @@ public class ShortestDistanceGraph implements SubwayGraph {
         this.graph = graph;
     }
 
-    public static ShortestDistanceGraph initialize(List<SubwayGraphElement> graphElements) {
-        Graph<Station, SubwayGraphEdge> graph = new WeightedMultigraph<>(SubwayGraphEdge.class);
-        for (SubwayGraphElement element : graphElements) {
-            graph.addVertex(element.getSource());
-            graph.addVertex(element.getTarget());
-            graph.addEdge(element.getSource(), element.getTarget(), element.getEdge());
-        }
-        return new ShortestDistanceGraph(graph);
+    public static ShortestDistanceGraph initialize(List<Line> lines) {
+        return new ShortestDistanceGraph(GraphUtil.initializeGraph(new WeightedMultigraph<>(SubwayGraphEdge.class), lines));
     }
 
     @Override

@@ -3,9 +3,10 @@ package subway.path.domain.path.time;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.Multigraph;
+import subway.line.domain.Line;
 import subway.path.domain.path.SubwayGraphEdge;
+import subway.path.domain.path.graph.GraphUtil;
 import subway.path.domain.path.graph.PathAndArrival;
-import subway.path.domain.path.graph.SubwayGraphElement;
 import subway.path.domain.path.graph.SubwayGraph;
 import subway.station.domain.Station;
 
@@ -20,14 +21,8 @@ public class ShortestTimeGraph implements SubwayGraph {
         this.graph = graph;
     }
 
-    public static ShortestTimeGraph initialize(List<SubwayGraphElement> graphElements) {
-        Graph<Station, SubwayGraphEdge> graph = new Multigraph<>(SubwayGraphEdge.class);
-        for (SubwayGraphElement element : graphElements) {
-            graph.addVertex(element.getSource());
-            graph.addVertex(element.getTarget());
-            graph.addEdge(element.getSource(), element.getTarget(), element.getEdge());
-        }
-        return new ShortestTimeGraph(graph);
+    public static ShortestTimeGraph initialize(List<Line> lines) {
+        return new ShortestTimeGraph(GraphUtil.initializeGraph(new Multigraph<>(SubwayGraphEdge.class), lines));
     }
 
     @Override
