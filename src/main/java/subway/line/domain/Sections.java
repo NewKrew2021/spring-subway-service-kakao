@@ -142,9 +142,10 @@ public class Sections {
         downSection.ifPresent(it -> sections.remove(it));
     }
 
-    public List<Long> getLineIds() {
+    public List<Long> getDistinctLineIds() {
         return getSections().stream()
                 .map(Section::getLindId)
+                .distinct()
                 .collect(Collectors.toList());
     }
 }

@@ -40,8 +40,8 @@ public class PathService {
                         stationService.findStationById(targetStationId));
 
         int distance = (int) graphPath.getWeight();
-        List<Long> lineIds = new Sections(graphPath.getEdgeList()).getLineIds();
-        int fare = fareService.findFare(lineIds, distance, loginMember);
+        List<Long> distinctLineIds = new Sections(graphPath.getEdgeList()).getDistinctLineIds();
+        int fare = fareService.findFare(distinctLineIds, distance, loginMember);
 
         return PathResponse.of(new Path(graphPath.getVertexList(), distance, fare));
     }

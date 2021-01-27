@@ -1,6 +1,7 @@
 package subway.line.domain;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.station.domain.Station;
 
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 public class LineTest {
 
@@ -37,42 +37,34 @@ public class LineTest {
     }
 
     @Test
+    @DisplayName("새로운 구간을 추가한다")
     public void addSection1() {
         Section newSection = new Section(2L, 1L, 서초역, 방배역, 10);
 
         이호선.addSection(newSection);
 
-        assertThat(이호선.getSections().getSections().get(1)).isEqualTo(newSection);
+        assertThat(이호선.getSections().getSections()).contains(newSection);
     }
 
     @Test
-    public void addSection2() {
-        Section newSection = new Section(2L, 1L, 서초역, 방배역, 10);
-
-        이호선.addSection(서초역, 방배역, 10);
-
-        assertThat(이호선.getSections().getSections().get(1)).isEqualTo(newSection);
-    }
-
-    @Test
+    @DisplayName("한쪽 끝에 있는 역을 지운다")
     public void removeSection1() {
         Section newSection = new Section(2L, 1L, 서초역, 방배역, 10);
 
         이호선.addSection(newSection);
         이호선.removeSection(방배역);
 
-        assertThat(이호선.getSections().getSections().size()).isEqualTo(1);
-        assertThat(이호선.getSections().getSections().get(0)).isEqualTo(section);
+        assertThat(이호선.getSections().getSections()).containsExactly(section);
     }
 
     @Test
+    @DisplayName("중간에 있는 역을 지운다")
     public void removeSection2() {
         Section newSection = new Section(2L, 1L, 서초역, 방배역, 10);
         이호선.addSection(newSection);
         이호선.removeSection(서초역);
 
-        assertThat(이호선.getSections().getSections().size()).isEqualTo(1);
-        assertThat(이호선.getSections().getSections().get(0)).isEqualTo(
+        assertThat(이호선.getSections().getSections()).containsExactly(
                 new Section(2L, 1L, 강남역, 방배역, 20)
         );
     }

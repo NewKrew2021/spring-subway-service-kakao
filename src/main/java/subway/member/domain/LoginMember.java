@@ -1,14 +1,9 @@
 package subway.member.domain;
 
-import subway.member.dto.MemberResponse;
-
 public class LoginMember {
     private Long id;
     private String email;
     private Integer age;
-
-    public LoginMember() {
-    }
 
     public LoginMember(Long id, String email, Integer age) {
         this.id = id;
