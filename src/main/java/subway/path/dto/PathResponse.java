@@ -21,10 +21,10 @@ public class PathResponse {
     }
 
     public static PathResponse of(Path path) {
-        return new PathResponse(path.getStations(), path.getDistance(), path.getTotalFare());
+        return new PathResponse(StationResponse.listOf(path.getStations()), path.getDistance(), path.getTotalFare());
     }
     public static PathResponse of(Path path, LoginMember loginMember) {
-        return new PathResponse(path.getStations(), path.getDistance(), path.getTotalFare(loginMember));
+        return new PathResponse(StationResponse.listOf(path.getStations()), path.getDistance(), path.getTotalFare(loginMember));
     }
 
     public List<StationResponse> getStations() {

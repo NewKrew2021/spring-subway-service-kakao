@@ -24,8 +24,8 @@ public class FavoriteService {
         this.stationService = stationService;
     }
 
-    public FavoriteResponse createFavorite(LoginMember loginMember, FavoriteRequest favoriteRequest) {
-        Favorite favorite = favoriteDao.save(new Favorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget()))
+    public FavoriteResponse createFavorite(LoginMember loginMember, Long source, Long target) {
+        Favorite favorite = favoriteDao.save(new Favorite(loginMember.getId(), source, target))
                 .orElseThrow(() -> new NotExistsDataException("즐겨찾기 저장에 실패했습니다."));
         return new FavoriteResponse(favorite.getId(),
                 StationResponse.of(stationService.findStationById(favorite.getSource())),

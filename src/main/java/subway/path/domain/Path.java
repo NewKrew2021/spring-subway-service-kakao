@@ -2,6 +2,7 @@ package subway.path.domain;
 
 import subway.member.domain.LoginMember;
 import subway.path.util.FareUtil;
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
@@ -10,17 +11,17 @@ public class Path {
 
     public static final int DEDUCTIONS = 350;
     public static final int BASE_MONEY = 1250;
-    private List<StationResponse> stations;
+    private List<Station> stations;
     private int distance;
     private int extraFare;
 
-    public Path(List<StationResponse> stations, int distance, int extraFare) {
+    public Path(List<Station> stations, int distance, int extraFare) {
         this.stations = stations;
         this.distance = distance;
         this.extraFare = extraFare;
     }
 
-    public List<StationResponse> getStations() {
+    public List<Station> getStations() {
         return stations;
     }
 
