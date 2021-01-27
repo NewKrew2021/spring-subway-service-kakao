@@ -16,6 +16,7 @@ public class SectionsInAllLineTest {
     Station 망포역 = new Station(2L, "망포역");
     Station 역삼역 = new Station(3L, "역삼역");
     Station 수원역 = new Station(4L, "수원역");
+    Station 제주역 = new Station(5L, "제주역");
 
     Section 강남_망포 = new Section(1L, 강남역, 망포역, 5);
     Section 망포_역삼 = new Section(2L, 망포역, 역삼역, 5);
@@ -43,12 +44,12 @@ public class SectionsInAllLineTest {
     @DisplayName("섹션들에 역이 포함되어 있는지 테스트")
     @Test
     void findStationTest() {
-        SectionsInAllLine sections = new SectionsInAllLine(Stream.of(강남_망포, 망포_역삼).map(section -> new SectionWithFare(0, section)).collect(Collectors.toList()));
+        SectionsInAllLine sections = SectionsInAllLine.of(Arrays.asList(수인선));
 
         assertThat(sections.findStation(강남역.getId())).isEqualTo(강남역);
         assertThat(sections.findStation(망포역.getId())).isEqualTo(망포역);
         assertThat(sections.findStation(역삼역.getId())).isEqualTo(역삼역);
 
-        assertThatThrownBy(() -> sections.findStation(수원역.getId())).isInstanceOf(InvalidStationIdException.class);
+        assertThatThrownBy(() -> sections.findStation(제주역.getId())).isInstanceOf(InvalidStationIdException.class);
     }
 }

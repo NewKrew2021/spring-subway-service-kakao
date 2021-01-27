@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import subway.line.domain.Section;
-import subway.line.domain.SectionWithFare;
-import subway.line.domain.SectionsInAllLine;
+import subway.line.domain.*;
 import subway.path.exceptions.InvalidPathException;
 import subway.station.domain.Station;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,6 +31,10 @@ public class PathTest {
     Section 망포_수원 = new Section(4L, 망포역, 수원역, 5);
     Section 제주_서귀포 = new Section(5L, 제주역, 서귀포역, 5);
 
+    Line 분당선 = new Line(1L, "분당선", "yellow", new Sections(Arrays.asList(강남_망포, 망포_역삼)));
+    Line 신분당선 = new Line(2L, "신분당선", "red", new Sections(Arrays.asList(판교_망포, 망포_수원)));
+    Line 제주선 = new Line(3L, "제주선", "blue", new Sections(Arrays.asList(제주_서귀포)));
+
     SectionsInAllLine sections;
     PathGraph pathGraph;
 
@@ -46,9 +49,7 @@ public class PathTest {
     // 강남 - 망포 - 역삼
     @BeforeEach
     void setUp() {
-        sections = new SectionsInAllLine(Stream.of(강남_망포, 망포_역삼, 판교_망포, 망포_수원, 제주_서귀포)
-                .map(section -> new SectionWithFare(0, section))
-                .collect(Collectors.toList()));
+        sections = SectionsInAllLine.of(Arrays.asList(분당선, 신분당선, 제주선));
         pathGraph = new PathGraph(sections);
     }
 

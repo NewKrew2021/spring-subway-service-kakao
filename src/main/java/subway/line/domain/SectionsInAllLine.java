@@ -14,7 +14,7 @@ public class SectionsInAllLine {
   private final List<SectionWithFare> sections;
   private final Map<Long, Station> stationMap;
 
-  public SectionsInAllLine(List<SectionWithFare> sections) {
+  private SectionsInAllLine(List<SectionWithFare> sections) {
     this.sections = sections;
     this.stationMap = createStationMap();
   }
