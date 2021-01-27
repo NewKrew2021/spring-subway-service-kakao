@@ -1,5 +1,6 @@
-package subway;
+package subway.configurations;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -15,11 +16,12 @@ import subway.station.domain.Station;
 @Component
 @Profile("!test")
 public class DataLoader implements CommandLineRunner {
-    private StationDao stationDao;
-    private LineDao lineDao;
-    private SectionDao sectionDao;
-    private MemberDao memberDao;
+    private final StationDao stationDao;
+    private final LineDao lineDao;
+    private final SectionDao sectionDao;
+    private final MemberDao memberDao;
 
+    @Autowired
     public DataLoader(StationDao stationDao, LineDao lineDao, SectionDao sectionDao, MemberDao memberDao) {
         this.stationDao = stationDao;
         this.lineDao = lineDao;
@@ -49,4 +51,3 @@ public class DataLoader implements CommandLineRunner {
         memberDao.insert(member);
     }
 }
-
