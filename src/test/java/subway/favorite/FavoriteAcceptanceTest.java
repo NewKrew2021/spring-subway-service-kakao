@@ -62,6 +62,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> findResponse = 즐겨찾기_목록_조회_요청(사용자);
+
         // then
         즐겨찾기_목록_조회됨(findResponse);
 
