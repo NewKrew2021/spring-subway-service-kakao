@@ -12,6 +12,7 @@ import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class StationDao {
@@ -50,11 +51,7 @@ public class StationDao {
         jdbcTemplate.update(DELETE_STATION, id);
     }
 
-    public Station findById(Long id) {
-        try {
-            return jdbcTemplate.queryForObject(FIND_STATION_BY_STATION_ID, rowMapper, id);
-        } catch (EmptyResultDataAccessException e){
-            throw new RuntimeException("source, target이 일치하지 않습니다.");
-        }
+    public Optional<Station> findById(Long id) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_STATION_BY_STATION_ID, rowMapper, id));
     }
 }

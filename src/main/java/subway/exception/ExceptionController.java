@@ -17,4 +17,9 @@ public class ExceptionController {
     public ResponseEntity<String> invalidMemberHandle(){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @ExceptionHandler(InvalidStationException.class)
+    public ResponseEntity<String> invalidStationHandle(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }

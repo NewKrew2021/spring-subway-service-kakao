@@ -1,6 +1,7 @@
 package subway.station.application;
 
 import org.springframework.stereotype.Service;
+import subway.exception.InvalidStationException;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationRequest;
@@ -23,7 +24,9 @@ public class StationService {
     }
 
     public Station findStationById(Long id) {
-        return stationDao.findById(id);
+        return stationDao.findById(id)
+                .filter(station -> station.hasSameId(id))
+                .orElseThrow(InvalidStationException::new);
     }
 
     public List<StationResponse> findAllStationResponses() {
