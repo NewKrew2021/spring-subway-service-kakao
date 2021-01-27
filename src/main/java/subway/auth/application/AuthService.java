@@ -30,7 +30,7 @@ public class AuthService {
     public LoginMember decode(String token) {
         if (jwtTokenProvider.validateToken(token)) {
             String email = jwtTokenProvider.getPayload(token);
-            Member member = memberDao.findByEmail(email).orElseThrow(AuthorizationException::new);
+            Member member = memberDao.findByEmail(email).orElse(new Member());
             return LoginMember.from(member);
         }
         return new LoginMember();
