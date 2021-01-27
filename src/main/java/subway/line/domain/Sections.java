@@ -1,5 +1,6 @@
 package subway.line.domain;
 
+import subway.common.domain.Distance;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
@@ -67,18 +68,18 @@ public class Sections {
     }
 
     private void replaceSectionWithUpStation(Section newSection, Section existSection) {
-        if (existSection.getDistance() <= newSection.getDistance()) {
+        if (!newSection.isShorter(existSection)) {
             throw new RuntimeException();
         }
-        this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(Section.of(existSection.getUpStation(), newSection.getUpStation(), existSection.getDifferenceOfDistance(newSection)));
         this.sections.remove(existSection);
     }
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
-        if (existSection.getDistance() <= newSection.getDistance()) {
+        if (!newSection.isShorter(existSection)) {
             throw new RuntimeException();
         }
-        this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(Section.of(newSection.getDownStation(), existSection.getDownStation(), existSection.getDifferenceOfDistance(newSection)));
         this.sections.remove(existSection);
     }
 
@@ -133,8 +134,8 @@ public class Sections {
         if (upSection.isPresent() && downSection.isPresent()) {
             Station newUpStation = downSection.get().getUpStation();
             Station newDownStation = upSection.get().getDownStation();
-            int newDistance = upSection.get().getDistance() + downSection.get().getDistance();
-            sections.add(new Section(newUpStation, newDownStation, newDistance));
+            Distance newDistance = upSection.get().getSumOfDistance(downSection.get());
+            sections.add(Section.of(newUpStation, newDownStation, newDistance));
         }
 
         upSection.ifPresent(it -> sections.remove(it));

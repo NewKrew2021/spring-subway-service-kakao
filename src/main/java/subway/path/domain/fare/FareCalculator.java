@@ -1,5 +1,7 @@
 package subway.path.domain.fare;
 
+import subway.common.domain.Fare;
+
 public class FareCalculator {
     private final FareStrategy fareStrategy;
 
@@ -7,7 +9,7 @@ public class FareCalculator {
         this.fareStrategy = fareStrategy;
     }
 
-    public int getFare() {
+    public Fare getFare() {
         return fareStrategy.getFare();
     }
 }

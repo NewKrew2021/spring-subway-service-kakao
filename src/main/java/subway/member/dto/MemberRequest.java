@@ -1,7 +1,5 @@
 package subway.member.dto;
 
-import subway.member.domain.Member;
-
 public class MemberRequest {
     private String email;
     private String password;
@@ -26,9 +24,5 @@ public class MemberRequest {
 
     public Integer getAge() {
         return age;
-    }
-
-    public Member toMember() {
-        return new Member(email, password, age);
     }
 }

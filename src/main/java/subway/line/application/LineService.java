@@ -1,6 +1,8 @@
 package subway.line.application;
 
 import org.springframework.stereotype.Service;
+import subway.common.domain.Distance;
+import subway.common.domain.Fare;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
@@ -16,9 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class LineService {
-    private LineDao lineDao;
-    private SectionDao sectionDao;
-    private StationService stationService;
+    private final LineDao lineDao;
+    private final SectionDao sectionDao;
+    private final StationService stationService;
 
     public LineService(LineDao lineDao, SectionDao sectionDao, StationService stationService) {
         this.lineDao = lineDao;
@@ -27,7 +29,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(), request.getExtraFare()));
+        Line persistLine = lineDao.insert(Line.of(request.getName(), request.getColor(), Fare.from(request.getExtraFare())));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }
@@ -36,7 +38,7 @@ public class LineService {
         if (request.getUpStationId() != null && request.getDownStationId() != null) {
             Station upStation = stationService.findStationById(request.getUpStationId());
             Station downStation = stationService.findStationById(request.getDownStationId());
-            Section section = new Section(upStation, downStation, request.getDistance());
+            Section section = Section.of(upStation, downStation, Distance.from(request.getDistance()));
             return sectionDao.insert(line, section);
         }
         return null;
@@ -62,8 +64,8 @@ public class LineService {
         return lineDao.findById(id);
     }
 
-    public void updateLine(Long id, LineRequest lineUpdateRequest) {
-        lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor(), lineUpdateRequest.getExtraFare()));
+    public void updateLine(Long id, LineRequest request) {
+        lineDao.update(Line.of(id, request.getName(), request.getColor(), Fare.from(request.getExtraFare())));
     }
 
     public void deleteLineById(Long id) {
@@ -74,7 +76,7 @@ public class LineService {
         Line line = findLineById(lineId);
         Station upStation = stationService.findStationById(request.getUpStationId());
         Station downStation = stationService.findStationById(request.getDownStationId());
-        line.addSection(upStation, downStation, request.getDistance());
+        line.addSection(upStation, downStation, Distance.from(request.getDistance()));
 
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);

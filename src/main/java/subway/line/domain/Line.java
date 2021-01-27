@@ -1,49 +1,40 @@
 package subway.line.domain;
 
+import subway.common.domain.Distance;
+import subway.common.domain.Fare;
 import subway.station.domain.Station;
 
 import java.util.List;
 
 public class Line {
-    private Long id;
-    private String name;
-    private String color;
-    private int extraFare;
-    private Sections sections = new Sections();
+    private final Long id;
+    private final String name;
+    private final String color;
+    private final Fare extraFare;
+    private final Sections sections;
 
-    public Line() {
-    }
-
-    public Line(String name, String color) {
-        this.name = name;
-        this.color = color;
-    }
-
-    public Line(String name, String color, int extraFare) {
-        this.name = name;
-        this.color = color;
-        this.extraFare = extraFare;
-    }
-
-    public Line(Long id, String name, String color) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-    }
-
-    public Line(Long id, String name, String color, int extraFare) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.extraFare = extraFare;
-    }
-
-    public Line(Long id, String name, String color, int extraFare, Sections sections) {
+    private Line(Long id, String name, String color, Fare extraFare, Sections sections) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.extraFare = extraFare;
         this.sections = sections;
+    }
+
+    private Line(Long id, String name, String color, Fare extraFare) {
+        this(id, name, color, extraFare, new Sections());
+    }
+
+    public static Line of(Long id, String name, String color, Fare extraFare, Sections sections) {
+        return new Line(id, name, color, extraFare, sections);
+    }
+
+    public static Line of(Long id, String name ,String color, Fare extraFare) {
+        return new Line(id, name, color, extraFare);
+    }
+
+    public static Line of(String name, String color, Fare extraFare) {
+        return new Line(null, name, color, extraFare);
     }
 
     public Long getId() {
@@ -58,7 +49,7 @@ public class Line {
         return color;
     }
 
-    public int getExtraFare() {
+    public Fare getExtraFare() {
         return extraFare;
     }
 
@@ -66,21 +57,14 @@ public class Line {
         return sections;
     }
 
-
-    public void update(Line line) {
-        this.name = line.getName();
-        this.color = line.getColor();
-        this.extraFare = line.getExtraFare();
-    }
-
-    public void addSection(Station upStation, Station downStation, int distance) {
-        Section section = new Section(id, upStation, downStation, distance);
+    public void addSection(Station upStation, Station downStation, Distance distance) {
+        Section section = Section.of(id, upStation, downStation, distance);
         sections.addSection(section);
     }
 
     public void addSection(Section section) {
         if (section == null) {
-            return;
+            throw new IllegalArgumentException("비어있는 구간을 노선에 추가할 수 없습니다.");
         }
         sections.addSection(section);
     }

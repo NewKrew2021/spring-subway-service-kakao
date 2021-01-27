@@ -2,6 +2,7 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.common.domain.Age;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -9,7 +10,7 @@ import subway.member.dto.MemberResponse;
 
 @Service
 public class MemberService {
-    private MemberDao memberDao;
+    private final MemberDao memberDao;
 
     public MemberService(MemberDao memberDao) {
         this.memberDao = memberDao;
@@ -17,18 +18,18 @@ public class MemberService {
 
     @Transactional
     public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
-        return MemberResponse.of(member);
+        Member member = memberDao.insert(Member.of(request.getEmail(), request.getPassword(), Age.from(request.getAge())));
+        return MemberResponse.from(member);
     }
 
     public MemberResponse findMember(Long id) {
         Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+        return MemberResponse.from(member);
     }
 
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+        memberDao.update(Member.of(id, memberRequest.getEmail(), memberRequest.getPassword(), Age.from(memberRequest.getAge())));
     }
 
     @Transactional

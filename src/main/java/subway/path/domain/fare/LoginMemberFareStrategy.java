@@ -1,27 +1,31 @@
 package subway.path.domain.fare;
 
-import subway.member.domain.Age;
-import subway.member.domain.AgeGroup;
+import subway.common.domain.Age;
+import subway.common.domain.Distance;
+import subway.common.domain.Fare;
+import subway.common.domain.AgeGroup;
 import subway.member.domain.LoginMember;
 
-public class LoginMemberFareStrategy extends GeneralFareStrategy {
-    private final LoginMember loginMember;
+public class LoginMemberFareStrategy extends DefaultFareStrategy {
+    private final Fare fare;
 
-    public LoginMemberFareStrategy(int distance, int extraFare, LoginMember loginMember) {
+    public LoginMemberFareStrategy(Distance distance, Fare extraFare, LoginMember loginMember) {
         super(distance, extraFare);
-        this.loginMember = loginMember;
+        this.fare = calculateFare(loginMember);
+    }
+
+    private Fare calculateFare(LoginMember loginMember) {
+        return getDiscountedFareByAge(super.getFare(), loginMember.getAge());
+    }
+
+    private Fare getDiscountedFareByAge(Fare fare, Age age) {
+        AgeGroup ageGroup = AgeGroup.from(age);
+        DiscountConstantsByAgeGroup discountConstants = DiscountConstantsByAgeGroup.from(ageGroup);
+        return fare.sub(fare.sub(discountConstants.DEDUCTION_AMOUNT).multiply(discountConstants.DISCOUNT_RATE));
     }
 
     @Override
-    public int getFare() {
-        return getDiscountedFare(super.getFare());
-    }
-
-    private int getDiscountedFare(int fare) {
-        Age age = new Age(loginMember.getAge());
-        AgeGroup ageGroup = AgeGroup.of(age);
-
-        DiscountConstantsByAgeGroup discountConstants = DiscountConstantsByAgeGroup.of(ageGroup);
-        return fare - (int) ((fare - discountConstants.DEDUCTION_AMOUNT) * discountConstants.DISCOUNT_RATE);
+    public Fare getFare() {
+        return fare;
     }
 }
