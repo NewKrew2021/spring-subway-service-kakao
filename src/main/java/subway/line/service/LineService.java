@@ -1,4 +1,4 @@
-package subway.line.application;
+package subway.line.service;
 
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
@@ -45,7 +45,7 @@ public class LineService {
     public List<LineResponse> findLineResponses() {
         List<Line> persistLines = findLines();
         return persistLines.stream()
-                .map(line -> LineResponse.of(line))
+                .map(LineResponse::of)
                 .collect(Collectors.toList());
     }
 
