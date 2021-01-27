@@ -19,7 +19,7 @@ public class FavoriteResponse {
     }
 
     public static FavoriteResponse of(Favorite favorite, Station sourceStation, Station targetStation) {
-        return new FavoriteResponse(favorite.getId(),sourceStation, targetStation);
+        return new FavoriteResponse(favorite.getId(), sourceStation, targetStation);
     }
 
     public Long getId() {

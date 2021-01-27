@@ -16,7 +16,7 @@ public class LineResponse {
     public LineResponse() {
     }
 
-    public LineResponse(Long id, String name, String color, int extraFare, List<StationResponse> stations) {
+    private LineResponse(Long id, String name, String color, int extraFare, List<StationResponse> stations) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -24,17 +24,11 @@ public class LineResponse {
         this.stations = stations;
     }
 
-    public static LineResponse of(Line line) {
+    public static LineResponse from(Line line) {
         List<StationResponse> stations = line.getStations().stream()
                 .map(it -> StationResponse.of(it))
                 .collect(Collectors.toList());
         return new LineResponse(line.getId(), line.getName(), line.getColor(), line.getExtraFare(), stations);
-    }
-
-    public static List<LineResponse> listOf(List<Line> lines) {
-        return lines.stream()
-                .map(LineResponse::of)
-                .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -49,7 +43,9 @@ public class LineResponse {
         return color;
     }
 
-    public int getExtraFare() { return extraFare; }
+    public int getExtraFare() {
+        return extraFare;
+    }
 
     public List<StationResponse> getStations() {
         return stations;

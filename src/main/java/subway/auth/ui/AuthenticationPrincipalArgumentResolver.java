@@ -30,7 +30,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
-        if (!loginIsRequired(parameter) && token==null) {
+        if (!loginIsRequired(parameter) && token == null) {
             return null;
         }
         MemberResponse member = authService.findMemberByToken(token);
