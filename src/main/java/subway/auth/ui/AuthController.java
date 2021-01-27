@@ -13,6 +13,8 @@ import subway.member.application.MemberService;
 @RestController
 public class AuthController {
 
+    public static final String BAD_REQUEST_MESSAGE = "부적절한 요청입니다.";
+    public static final String USER_NOT_EXIST_MESSAGE = "존재하지 않는 유저입니다.";
     private final AuthService authService;
     private final MemberService memberService;
 
@@ -24,11 +26,11 @@ public class AuthController {
     @PostMapping("/login/token")
     public ResponseEntity tokenLogin(@RequestBody TokenRequest tokenRequest) {
         if (!tokenRequest.isValidRequest()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("부적절한 요청입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BAD_REQUEST_MESSAGE);
         }
 
         if (!memberService.isPossibleLogin(tokenRequest)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 유저입니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(USER_NOT_EXIST_MESSAGE);
         }
 
         TokenResponse tokenResponse = authService.createToken(tokenRequest);
