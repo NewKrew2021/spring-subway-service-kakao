@@ -3,6 +3,8 @@ package subway.common.domain;
 import subway.common.exception.NegativeNumberException;
 import subway.common.exception.NotExistException;
 
+import java.util.Objects;
+
 public class Fare {
     private final int fare;
 
@@ -33,18 +35,37 @@ public class Fare {
     }
 
     public static Fare add(Fare f1, Fare f2) {
+        if (f1 == null || f2 == null) {
+            throw new NotExistException("존재하지 않는 요금은 연산할 수 없습니다.");
+        }
         return new Fare(f1.fare + f2.fare);
     }
 
     public Fare sub(Fare f) {
+        if (f == null) {
+            throw new NotExistException("존재하지 않는 요금은 연산할 수 없습니다.");
+        }
         return new Fare(fare - f.fare);
     }
 
-    public Fare multiply(int count) {
-        return new Fare(fare * count);
+    public Fare multiply(int number) {
+        return new Fare(fare * number);
     }
 
     public Fare multiply(double number) {
         return new Fare((int) (fare * number));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fare fare1 = (Fare) o;
+        return fare == fare1.fare;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fare);
     }
 }
