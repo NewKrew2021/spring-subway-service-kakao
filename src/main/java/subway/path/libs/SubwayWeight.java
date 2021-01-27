@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.libs;
 
 public class SubwayWeight {
 

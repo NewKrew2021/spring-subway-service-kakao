@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Lines;
 import subway.line.domain.SectionsInAllLine;
+import subway.member.domain.LoginMember;
 import subway.path.domain.Path;
 import subway.path.domain.PathGraph;
 
@@ -25,5 +26,11 @@ public class PathService {
         return pathGraph.getPath(sections.findStation(source), sections.findStation(target));
     }
 
+    public int getDistance(Path path) {
+        return path.getDistance();
+    }
 
+    public int getFare(Path path, LoginMember loginMember) {
+        return path.getFare(loginMember.getAge());
+    }
 }

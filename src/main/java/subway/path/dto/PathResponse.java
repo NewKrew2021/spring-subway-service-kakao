@@ -1,8 +1,10 @@
 package subway.path.dto;
 
+import subway.path.domain.Path;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PathResponse {
 
@@ -10,18 +12,23 @@ public class PathResponse {
     private int distance;
     private int fare;
 
-    public PathResponse() {
+    private PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int distance) {
-        this.stations = stations;
-        this.distance = distance;
-    }
-
-    public PathResponse(List<StationResponse> stations, int distance, int fare) {
+    private PathResponse(List<StationResponse> stations, int distance, int fare) {
         this.stations = stations;
         this.distance = distance;
         this.fare = fare;
+    }
+
+    public static PathResponse of(Path path, int distance, int fare) {
+        return new PathResponse(
+                path.getStations()
+                        .stream()
+                        .map(StationResponse::of)
+                        .collect(Collectors.toList()),
+                distance,
+                fare);
     }
 
     public List<StationResponse> getStations() {

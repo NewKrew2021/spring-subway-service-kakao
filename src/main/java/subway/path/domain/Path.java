@@ -2,6 +2,7 @@ package subway.path.domain;
 
 import org.jgrapht.GraphPath;
 import subway.path.exceptions.InvalidPathException;
+import subway.path.libs.SubwayEdge;
 import subway.station.domain.Station;
 
 import java.util.List;

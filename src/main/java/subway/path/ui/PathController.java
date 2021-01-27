@@ -11,9 +11,6 @@ import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
-import subway.station.dto.StationResponse;
-
-import java.util.stream.Collectors;
 
 @RestController
 public class PathController {
@@ -30,21 +27,11 @@ public class PathController {
                                                          @RequestParam Long target,
                                                          @AuthenticationPrincipal(required = false) LoginMember loginMember) {
         Path shortestPath = pathService.getShortestPath(source, target);
-
-        PathResponse pathResponse = new PathResponse(
-                shortestPath.getStations()
-                        .stream()
-                        .map(StationResponse::of)
-                        .collect(Collectors.toList()), shortestPath.getDistance(),
-                shortestPath.getFare(loginMember.getAge()));
+        PathResponse pathResponse = PathResponse.of(
+                shortestPath,
+                pathService.getDistance(shortestPath),
+                pathService.getFare(shortestPath, loginMember));
 
         return ResponseEntity.ok(pathResponse);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity exceptionHandle(Exception e) {
-        e.printStackTrace();
-
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
