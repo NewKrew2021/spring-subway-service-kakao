@@ -4,7 +4,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.graph.GraphWalk;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
-import subway.path.domain.path.SubwayGraphEdge;
+import subway.path.domain.path.SubwayEdge;
 import subway.path.domain.path.graph.PathAndArrival;
 import subway.station.domain.Station;
 
@@ -54,23 +54,23 @@ class ShortestTimePathFinderTest {
         이호선.addSection(의정부역, 잠실역, 6);
         칠호선.addSection(잠실역, 서현역, 5);
 
-        GraphPath<Station, SubwayGraphEdge> shortestTimePath = new GraphWalk<>(
+        GraphPath<Station, SubwayEdge> shortestTimePath = new GraphWalk<>(
                 null,
                 삼송역,
                 서현역,
                 Arrays.asList(삼송역, 지축역, 서현역),
-                Arrays.asList(new SubwayGraphEdge(5, 5, 삼호선), new SubwayGraphEdge(20, 20, 삼호선)),
+                Arrays.asList(new SubwayEdge(5, 5, 삼호선), new SubwayEdge(20, 20, 삼호선)),
                 25
         );
-        GraphPath<Station, SubwayGraphEdge> shortestDistancePath = new GraphWalk<>(
+        GraphPath<Station, SubwayEdge> shortestDistancePath = new GraphWalk<>(
                 null,
                 삼송역,
                 서현역,
                 Arrays.asList(삼송역, 의정부역, 잠실역, 서현역),
                 Arrays.asList(
-                        new SubwayGraphEdge(3, 3, 일호선),
-                        new SubwayGraphEdge(5, 5, 이호선),
-                        new SubwayGraphEdge(5, 5, 칠호선)
+                        new SubwayEdge(3, 3, 일호선),
+                        new SubwayEdge(5, 5, 이호선),
+                        new SubwayEdge(5, 5, 칠호선)
                 ),
                 13
         );

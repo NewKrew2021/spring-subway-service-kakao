@@ -1,8 +1,7 @@
-package subway.path.domain.path.graph;
+package subway.path.domain.path;
 
 import subway.line.domain.Line;
-import subway.path.domain.path.PathType;
-import subway.path.domain.path.SubwayPath;
+import subway.path.domain.path.graph.SubwayGraph;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;

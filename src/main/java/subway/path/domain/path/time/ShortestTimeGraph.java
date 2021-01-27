@@ -4,7 +4,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.Multigraph;
 import subway.line.domain.Line;
-import subway.path.domain.path.SubwayGraphEdge;
+import subway.path.domain.path.SubwayEdge;
 import subway.path.domain.path.graph.GraphUtil;
 import subway.path.domain.path.graph.PathAndArrival;
 import subway.path.domain.path.graph.SubwayGraph;
@@ -15,14 +15,14 @@ import java.util.List;
 
 public class ShortestTimeGraph implements SubwayGraph {
 
-    private final Graph<Station, SubwayGraphEdge> graph;
+    private final Graph<Station, SubwayEdge> graph;
 
-    private ShortestTimeGraph(Graph<Station, SubwayGraphEdge> graph) {
+    private ShortestTimeGraph(Graph<Station, SubwayEdge> graph) {
         this.graph = graph;
     }
 
     public static ShortestTimeGraph initialize(List<Line> lines) {
-        return new ShortestTimeGraph(GraphUtil.initializeGraph(new Multigraph<>(SubwayGraphEdge.class), lines));
+        return new ShortestTimeGraph(GraphUtil.initializeGraph(new Multigraph<>(SubwayEdge.class), lines));
     }
 
     @Override

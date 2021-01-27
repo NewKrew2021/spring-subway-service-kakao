@@ -6,7 +6,7 @@ import subway.member.domain.LoginMember;
 import subway.path.domain.fare.FareCalculator;
 import subway.path.domain.path.PathType;
 import subway.path.domain.path.PathValue;
-import subway.path.domain.path.graph.SubwayMap;
+import subway.path.domain.path.SubwayMap;
 import subway.path.domain.path.SubwayPath;
 import subway.station.application.StationService;
 
