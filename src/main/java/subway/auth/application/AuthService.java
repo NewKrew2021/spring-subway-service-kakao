@@ -1,6 +1,7 @@
 package subway.auth.application;
 
 import org.springframework.stereotype.Service;
+import subway.auth.dto.TokenRequest;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exceptions.UnauthorizedException;
 import subway.member.application.MemberService;
@@ -17,9 +18,9 @@ public class AuthService {
         this.memberService = memberService;
     }
 
-    public String createToken(String email, String password) {
-        Member member = memberService.findAuthenticatedMember(email, password);
-        return jwtTokenProvider.createToken(member.getEmail());
+    public String login(TokenRequest tokenRequest) {
+        Member member = memberService.findAuthenticatedMember(tokenRequest.getEmail(), tokenRequest.getPassword());
+        return jwtTokenProvider.createToken(String.valueOf(member.getId()));
     }
 
     public LoginMember getLoginMember(String token) {
