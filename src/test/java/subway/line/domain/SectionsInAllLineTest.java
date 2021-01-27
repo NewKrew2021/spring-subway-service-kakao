@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class LinesTest {
+public class SectionsInAllLineTest {
     Station 강남역 = new Station(1L, "강남역");
     Station 망포역 = new Station(2L, "망포역");
     Station 역삼역 = new Station(3L, "역삼역");
@@ -32,8 +32,8 @@ public class LinesTest {
     @DisplayName("모든 라인 내 모든 섹션을 반환한다.")
     @Test
     void getSectionsInAllLineTest() {
-        Lines lines = new Lines(Arrays.asList(수인선, 신분당선));
-        assertThat(lines.getSectionsInAllLine()
+        SectionsInAllLine sections = SectionsInAllLine.of(Arrays.asList(수인선, 신분당선));
+        assertThat(sections
                 .getSections()
                 .stream()
                 .map(SectionWithFare::getSection)

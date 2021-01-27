@@ -19,6 +19,15 @@ public class SectionsInAllLine {
     this.stationMap = createStationMap();
   }
 
+  public static SectionsInAllLine of(List<Line> lines) {
+    return new SectionsInAllLine(lines.stream()
+            .flatMap(line -> line.getSections()
+                    .getSections()
+                    .stream()
+                    .map(section -> new SectionWithFare(line.getExtraFare(), section)))
+            .collect(Collectors.toList()));
+  }
+
   public List<SectionWithFare> getSections() {
     return sections;
   }

@@ -39,7 +39,7 @@ public class Path {
     public int getFare(int age) {
         int fare = BASE_FARE + getMaxLineExtraFare() + getDistanceExtraFare();
         AgeGroup ageGroup = AgeGroup.getAgeGroup(age);
-        if(ageGroup.equals(AgeGroup.TODDLER)) {
+        if(ageGroup == AgeGroup.TODDLER) {
             return 0;
         }
         return (int) Math.floor((fare - NON_DISCOUNTABLE_BASE_FARE) * ageGroup.getFareRate() + NON_DISCOUNTABLE_BASE_FARE);
