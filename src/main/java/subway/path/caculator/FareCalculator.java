@@ -1,4 +1,4 @@
-package subway.path.util;
+package subway.path.caculator;
 
 import subway.line.domain.Line;
 import subway.line.domain.Section;

@@ -1,4 +1,4 @@
-package subway.path.util;
+package subway.path.caculator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

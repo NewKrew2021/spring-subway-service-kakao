@@ -2,7 +2,7 @@ package subway.path.domain;
 
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.util.FareCalculator;
+import subway.path.caculator.FareCalculator;
 import subway.station.domain.Station;
 
 import java.util.List;
