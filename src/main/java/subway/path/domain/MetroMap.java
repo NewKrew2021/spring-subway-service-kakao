@@ -39,7 +39,7 @@ public class MetroMap {
 
     public List<Section> getShortestPathSections(Station source, Station target) {
         List<Station> shortestPathStations = getShortestPath(source, target);
-        return IntStream.range(0, shortestPathStations.size())
+        return IntStream.range(0, shortestPathStations.size() - 1)
                 .mapToObj(it -> new Section(shortestPathStations.get(it), shortestPathStations.get(it + 1)))
                 .collect(Collectors.toList());
     }

@@ -7,7 +7,7 @@ import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
 import subway.path.domain.KakaoMap;
 import subway.path.dto.PathResponse;
-import subway.path.util.ComplimentaryAge;
+import subway.path.domain.ComplimentaryAge;
 import subway.station.dao.StationDao;
 import subway.station.dto.StationResponse;
 

@@ -1,4 +1,4 @@
-package subway.path.util;
+package subway.path.domain;
 
 import subway.exception.WrongInputDataException;
 

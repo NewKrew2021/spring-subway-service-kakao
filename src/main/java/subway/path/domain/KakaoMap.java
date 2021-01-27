@@ -2,7 +2,6 @@ package subway.path.domain;
 
 import subway.line.domain.Line;
 import subway.line.domain.Section;
-import subway.path.util.ComplimentaryAge;
 import subway.path.util.FareCalculator;
 import subway.station.domain.Station;
 
