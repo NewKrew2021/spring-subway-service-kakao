@@ -1,11 +1,9 @@
 package subway.member.domain;
-public class LoginMember {
-    private Long id;
-    private String email;
-    private Integer age;
 
-    private LoginMember() {
-    }
+public class LoginMember {
+    private final  Long id;
+    private final String email;
+    private final Integer age;
 
     private LoginMember(Long id, String email, Integer age) {
         this.id = id;

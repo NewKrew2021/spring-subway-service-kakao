@@ -35,8 +35,15 @@ public class PathTest {
     SectionsInAllLine sections;
     PathGraph pathGraph;
 
+    /**          판교역
+     *             |
+     *  강남역 --- 망포역 --- 역삼역
+     *             |
+     *           수원역
+     *
+     *   제주역 ----------- 서귀포역
+     */
     // 강남 - 망포 - 역삼
-    // 판교 - 망포 - 수원
     @BeforeEach
     void setUp() {
         sections = new SectionsInAllLine(Stream.of(강남_망포, 망포_역삼, 판교_망포, 망포_수원, 제주_서귀포)

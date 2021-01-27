@@ -9,9 +9,11 @@ import com.google.common.collect.Lists;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,100 +27,104 @@ import subway.station.dto.StationResponse;
 @DisplayName("지하철 경로 조회")
 public class PathAcceptanceTest extends AcceptanceTest {
 
-  private LineResponse 신분당선;
-  private LineResponse 이호선;
-  private LineResponse 삼호선;
-  private StationResponse 강남역;
-  private StationResponse 양재역;
-  private StationResponse 교대역;
-  private StationResponse 남부터미널역;
+    private LineResponse 신분당선;
+    private LineResponse 이호선;
+    private LineResponse 삼호선;
+    private StationResponse 강남역;
+    private StationResponse 양재역;
+    private StationResponse 교대역;
+    private StationResponse 남부터미널역;
 
-  /**
-   * 교대역    --- *2호선* ---   강남역 |                        | *3호선*                   *신분당선* | | 남부터미널역
-   * --- *3호선* ---   양재
-   */
-  @BeforeEach
-  public void setUp() {
-    super.setUp();
+    /**
+     * 교대역    --- *2호선* ---   강남역
+     *  |                        |
+     * *3호선*                   *신분당선*
+     *  |                        |
+     * 남부터미널역 --- *3호선* ---  양재역
+     */
 
-    강남역 = 지하철역_등록되어_있음("강남역");
-    양재역 = 지하철역_등록되어_있음("양재역");
-    교대역 = 지하철역_등록되어_있음("교대역");
-    남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
 
-    신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 10);
-    이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10);
-    삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5);
+        강남역 = 지하철역_등록되어_있음("강남역");
+        양재역 = 지하철역_등록되어_있음("양재역");
+        교대역 = 지하철역_등록되어_있음("교대역");
+        남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
 
-    지하철_구간_등록되어_있음(삼호선, 교대역, 남부터미널역, 3);
-  }
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 10);
+        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 10);
+        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 양재역, 5);
 
-  @DisplayName("두 역의 최단 거리 경로를 조회한다.")
-  @Test
-  void findPathByDistance() {
-    //when
-    ExtractableResponse<Response> response = 거리_경로_조회_요청(3L, 2L);
+        지하철_구간_등록되어_있음(삼호선, 교대역, 남부터미널역, 3);
+    }
 
-    //then
-    적절한_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
-    총_거리와_소요_시간을_함께_응답됨(response, 5);
-  }
+    @DisplayName("두 역의 최단 거리 경로를 조회한다.")
+    @Test
+    void findPathByDistance() {
+        //when
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(3L, 2L);
 
-  @DisplayName("연결되지 않은 두 역을 조회한다.")
-  @Test
-  void findUnconnectedPath() {
-    StationResponse 제주역 = 지하철역_등록되어_있음("제주역");
-    StationResponse 서귀포역 = 지하철역_등록되어_있음("서귀포역");
+        //then
+        적절한_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
+        총_거리와_소요_시간을_함께_응답됨(response, 5);
+    }
 
-    LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역,  10);
+    @DisplayName("연결되지 않은 두 역을 조회한다.")
+    @Test
+    void findUnconnectedPath() {
+        StationResponse 제주역 = 지하철역_등록되어_있음("제주역");
+        StationResponse 서귀포역 = 지하철역_등록되어_있음("서귀포역");
 
-    ExtractableResponse<Response> response = 거리_경로_조회_요청(1L, 5L);
-    경로가_조회되지_않음(response);
-  }
+        LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역, 10);
 
-  @DisplayName("시작점과 종점이 같은 경로를 조회한다.")
-  @Test
-  void findSameStationPath() {
-    StationResponse 제주역 = 지하철역_등록되어_있음("제주역");
-    StationResponse 서귀포역 = 지하철역_등록되어_있음("서귀포역");
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(1L, 5L);
+        경로가_조회되지_않음(response);
+    }
 
-    LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역,  10);
+    @DisplayName("시작점과 종점이 같은 경로를 조회한다.")
+    @Test
+    void findSameStationPath() {
+        StationResponse 제주역 = 지하철역_등록되어_있음("제주역");
+        StationResponse 서귀포역 = 지하철역_등록되어_있음("서귀포역");
 
-    ExtractableResponse<Response> response = 거리_경로_조회_요청(1L, 1L);
-    경로가_조회되지_않음(response);
-  }
+        LineResponse 제주선 = 지하철_노선_등록되어_있음("제주선", "bg-red-600", 제주역, 서귀포역, 10);
 
-  public static void 경로가_조회되지_않음(ExtractableResponse<Response> response) {
-    assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-  }
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(1L, 1L);
+        경로가_조회되지_않음(response);
+    }
 
-  public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target) {
-    return RestAssured
-        .given().log().all()
-        .accept(MediaType.APPLICATION_JSON_VALUE)
-        .when().get("/paths?source={sourceId}&target={targetId}", source, target)
-        .then().log().all()
-        .extract();
-  }
+    public static void 경로가_조회되지_않음(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
 
-  public static void 적절한_경로_응답됨(ExtractableResponse<Response> response,
-      ArrayList<StationResponse> expectedPath) {
-    PathResponse pathResponse = response.as(PathResponse.class);
+    public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target) {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/paths?source={sourceId}&target={targetId}", source, target)
+                .then().log().all()
+                .extract();
+    }
 
-    List<Long> stationIds = pathResponse.getStations().stream()
-        .map(StationResponse::getId)
-        .collect(Collectors.toList());
+    public static void 적절한_경로_응답됨(ExtractableResponse<Response> response,
+                                  ArrayList<StationResponse> expectedPath) {
+        PathResponse pathResponse = response.as(PathResponse.class);
 
-    List<Long> expectedPathIds = expectedPath.stream()
-        .map(StationResponse::getId)
-        .collect(Collectors.toList());
+        List<Long> stationIds = pathResponse.getStations().stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
 
-    assertThat(stationIds).containsExactlyElementsOf(expectedPathIds);
-  }
+        List<Long> expectedPathIds = expectedPath.stream()
+                .map(StationResponse::getId)
+                .collect(Collectors.toList());
 
-  public static void 총_거리와_소요_시간을_함께_응답됨(ExtractableResponse<Response> response,
-      int totalDistance) {
-    PathResponse pathResponse = response.as(PathResponse.class);
-    assertThat(pathResponse.getDistance()).isEqualTo(totalDistance);
-  }
+        assertThat(stationIds).containsExactlyElementsOf(expectedPathIds);
+    }
+
+    public static void 총_거리와_소요_시간을_함께_응답됨(ExtractableResponse<Response> response,
+                                           int totalDistance) {
+        PathResponse pathResponse = response.as(PathResponse.class);
+        assertThat(pathResponse.getDistance()).isEqualTo(totalDistance);
+    }
 }

@@ -12,8 +12,8 @@ public class Path {
     private final int FARE_PER_DISTANCE = 100;
     private final int MIDDLE_DISTANCE_LIMIT = 10;
     private final int FAR_DISTANCE_LIMIT = 50;
-    private final double FARE_INCREASE_MIDDLE_DISTANCE = 5.0d;
-    private final double FARE_INCREASE_FAR_DISTANCE = 8.0d;
+    private final double FARE_INCREASE_MIDDLE_DISTANCE = 5d;
+    private final double FARE_INCREASE_FAR_DISTANCE = 8d;
 
     private final GraphPath<Station, SubwayEdge> path;
 
