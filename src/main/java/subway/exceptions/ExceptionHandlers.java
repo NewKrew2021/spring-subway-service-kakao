@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class ExceptionHandlers {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NoSuchElementException.class)
-    public void noElement() {
+    @ExceptionHandler({NoSuchElementException.class, IllegalArgumentException.class})
+    public void incorrectBehavior() {
     }
 }
