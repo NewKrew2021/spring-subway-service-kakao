@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import subway.auth.exception.InvalidTokenException;
 import subway.favorite.exception.FavoriteNotFoundException;
+import subway.line.exception.DuplicateLineNameException;
 import subway.line.exception.SectionNotFoundException;
 import subway.member.exception.InvalidMemberException;
+import subway.station.exception.DuplicateStationNameException;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
@@ -22,7 +24,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(SQLException.class)
     public ResponseEntity handleSQLException() {
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ExceptionHandler(FavoriteNotFoundException.class)
@@ -45,4 +47,13 @@ public class ExceptionControllerAdvice {
         return ResponseEntity.badRequest().build();
     }
 
+    @ExceptionHandler(DuplicateLineNameException.class)
+    public ResponseEntity<Void> DuplicateLineName() {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(DuplicateStationNameException.class)
+    public ResponseEntity<Void> DuplicateStationName() {
+        return ResponseEntity.badRequest().build();
+    }
 }

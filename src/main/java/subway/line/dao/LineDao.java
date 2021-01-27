@@ -106,6 +106,11 @@ public class LineDao {
                 .collect(Collectors.toList());
     }
 
+    public int countByName(String name){
+        String sql="select count(*) from line where name=?";
+        return jdbcTemplate.queryForObject(sql,Integer.class,name);
+    }
+
     public void deleteById(Long id) {
         jdbcTemplate.update("delete from Line where id = ?", id);
     }

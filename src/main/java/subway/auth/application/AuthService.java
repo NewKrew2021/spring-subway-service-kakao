@@ -30,7 +30,7 @@ public class AuthService {
     }
 
     private boolean isMember(String password, Member member) {
-        return member.validatePassword(password);
+        return member.isSamePassword(password);
     }
 
     public Member checkInvalidToken(String accessToken) {

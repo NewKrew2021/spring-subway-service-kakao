@@ -50,4 +50,9 @@ public class StationDao {
         String sql = "select * from STATION where id = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
+
+    public int countByName(String name) {
+        String sql = "select count(*) from STATION where name = ?";
+        return jdbcTemplate.queryForObject(sql,Integer.class,name);
+    }
 }

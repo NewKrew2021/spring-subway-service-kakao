@@ -8,6 +8,7 @@ import subway.line.domain.Section;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.line.exception.DuplicateLineNameException;
 import subway.line.exception.SectionNotFoundException;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class LineService {
+    private final int NOT_DUPLICATED=0;
     private final LineDao lineDao;
     private final SectionDao sectionDao;
     private final StationService stationService;
@@ -28,6 +30,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
+        isSameLine(request.getName());
         Line persistLine = lineDao.insert(Line.of(request.getName(), request.getColor(), request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
@@ -88,6 +91,12 @@ public class LineService {
 
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
+    }
+
+    private void isSameLine(String name){
+        if(lineDao.countByName(name)!=NOT_DUPLICATED){
+            throw new DuplicateLineNameException();
+        }
     }
 
 }
