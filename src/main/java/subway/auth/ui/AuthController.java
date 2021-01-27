@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.service.AuthService;
-import subway.member.application.MemberService;
+import subway.member.service.MemberService;
 
 @RestController
 public class AuthController {
