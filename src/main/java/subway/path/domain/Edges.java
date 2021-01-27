@@ -1,6 +1,5 @@
 package subway.path.domain;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Edges {
@@ -8,10 +7,6 @@ public class Edges {
 
     public Edges(List<Edge> edges) {
         this.edges = edges;
-    }
-
-    public List<Edge> getEdges() {
-        return Collections.unmodifiableList(edges);
     }
 
     public int getExtraFare() {
