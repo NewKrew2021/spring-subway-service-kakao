@@ -16,6 +16,10 @@ public class LoginMember {
         this.age = age;
     }
 
+    public static LoginMember from(Member member) {
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+    }
+
     private void validate() {
         if (id == null) {
             throw new AuthorizationException();

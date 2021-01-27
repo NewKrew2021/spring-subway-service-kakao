@@ -19,7 +19,8 @@ public class AuthService {
     }
 
     public String login(TokenRequest tokenRequest) {
-        Member member = memberDao.findByEmail(tokenRequest.getEmail());
+        Member member = memberDao.findByEmail(tokenRequest.getEmail())
+                .orElseThrow(AuthorizationException::new);
         if (member.hasSamePassword(tokenRequest.getPassword())) {
             return jwtTokenProvider.createToken(member.getEmail());
         }
@@ -29,8 +30,8 @@ public class AuthService {
     public LoginMember decode(String token) {
         if (jwtTokenProvider.validateToken(token)) {
             String email = jwtTokenProvider.getPayload(token);
-            Member member = memberDao.findByEmail(email);
-            return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+            Member member = memberDao.findByEmail(email).orElseThrow(AuthorizationException::new);
+            return LoginMember.from(member);
         }
         return new LoginMember();
     }

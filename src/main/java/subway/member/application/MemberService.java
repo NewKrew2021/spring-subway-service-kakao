@@ -25,7 +25,7 @@ public class MemberService {
     }
 
     public MemberResponse findMember(Long id) {
-        Optional<Member> member = Optional.ofNullable(memberDao.findById(id));
+        Optional<Member> member = memberDao.findById(id);
         return MemberResponse.of(member.orElseThrow(NoSuchMemberException::new));
     }
 

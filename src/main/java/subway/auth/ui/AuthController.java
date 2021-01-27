@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import subway.auth.application.AuthService;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
-import subway.exception.custom.AuthorizationException;
 
 @RestController
 @RequestMapping("/login")
@@ -21,11 +20,7 @@ public class AuthController {
 
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest tokenRequest) {
-        try {
-            String accessToken = authService.login(tokenRequest);
-            return ResponseEntity.ok().body(new TokenResponse(accessToken));
-        } catch (Exception e) {
-            throw new AuthorizationException();
-        }
+        String accessToken = authService.login(tokenRequest);
+        return ResponseEntity.ok().body(new TokenResponse(accessToken));
     }
 }
