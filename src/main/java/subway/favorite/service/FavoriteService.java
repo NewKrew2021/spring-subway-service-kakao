@@ -23,8 +23,8 @@ public class FavoriteService {
     }
 
     public FavoriteResponse createFavorite(Long id, Long sourceId, Long targetId){
-        Station sourceStation = stationDao.findById(sourceId);
-        Station targetStation = stationDao.findById(targetId);
+        Station sourceStation = stationDao.findById(sourceId).get();
+        Station targetStation = stationDao.findById(targetId).get();
         favoriteDao.insert(id, sourceId, targetId);
 
         return  new FavoriteResponse(id, StationResponse.of(sourceStation), StationResponse.of(targetStation));
@@ -33,17 +33,10 @@ public class FavoriteService {
     public List<FavoriteResponse> getFavorite(Long memberId) {
         List<Favorite> favorites = favoriteDao.findByUser(memberId);
         return favorites.stream()
-                .map(favorite -> getFavoriteResponse(favorite,
-                                stationDao.findById(favorite.getSourceStationId()),
-                                stationDao.findById(favorite.getTargetStationId())))
+                .map(favorite -> FavoriteResponse.of(favorite.getId(),
+                                stationDao.findById(favorite.getSourceStationId()).get(),
+                                stationDao.findById(favorite.getTargetStationId()).get()))
                 .collect(Collectors.toList());
-    }
-
-    private FavoriteResponse getFavoriteResponse(Favorite favorite, Station source, Station target){
-        return new FavoriteResponse(favorite.getId(),
-                new StationResponse(source.getId(), source.getName()),
-                new StationResponse(target.getId(), target.getName()));
-
     }
 
     public void deleteFavorite(Long id) {
