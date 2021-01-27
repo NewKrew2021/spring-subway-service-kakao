@@ -2,8 +2,6 @@ package subway.line.domain;
 
 import subway.station.domain.Station;
 
-import java.util.List;
-
 public class SectionWithFare {
     private final int extraFare;
     private final Section section;
@@ -11,10 +9,6 @@ public class SectionWithFare {
     public SectionWithFare(int extraFare, Section section) {
         this.extraFare = extraFare;
         this.section = section;
-    }
-
-    public List<Station> getStations() {
-        return section.getStations();
     }
 
     public int getExtraFare() {

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import subway.line.exception.InvalidStationIdException;
 import subway.station.domain.Station;
@@ -24,7 +25,7 @@ public class SectionsInAllLine {
 
   private Map<Long, Station> createStationMap() {
     return sections.stream()
-        .flatMap(section -> section.getStations().stream())
+        .flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation()))
         .distinct()
         .collect(Collectors.toMap(Station::getId, Function.identity()));
   }
