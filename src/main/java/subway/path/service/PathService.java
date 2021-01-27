@@ -1,4 +1,4 @@
-package subway.path.application;
+package subway.path.service;
 
 import org.jgrapht.GraphPath;
 import org.springframework.stereotype.Service;

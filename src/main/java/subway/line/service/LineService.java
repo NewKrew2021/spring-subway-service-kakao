@@ -8,8 +8,8 @@ import subway.line.domain.Section;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
-import subway.station.application.StationService;
 import subway.station.domain.Station;
+import subway.station.service.StationService;
 
 import java.util.List;
 import java.util.stream.Collectors;
