@@ -1,10 +1,9 @@
-package subway.member.application;
+package subway.member.service;
 
-import org.springframework.dao.DataAccessException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import subway.member.dao.MemberDao;
-import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
@@ -13,6 +12,7 @@ import subway.member.dto.MemberResponse;
 public class MemberService {
     private MemberDao memberDao;
 
+    @Autowired
     public MemberService(MemberDao memberDao) {
         this.memberDao = memberDao;
     }
@@ -23,21 +23,8 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
-    public MemberResponse findMember(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
-    }
-
-    public LoginMember findMemberByEmail(String email) {
-        Member member;
-
-        try {
-            member = memberDao.findByEmail(email);
-        } catch (DataAccessException ignored) {
-            return null;
-        }
-
-        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+    public Member findMemberById(Long id) {
+        return memberDao.findById(id);
     }
 
     @Transactional

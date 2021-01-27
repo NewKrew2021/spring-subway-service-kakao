@@ -1,14 +1,10 @@
-package subway.exceptions;
+package subway.favorite.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class FavoriteDuplicateException extends RuntimeException {
-    public FavoriteDuplicateException() {
-        super();
-    }
-
     public FavoriteDuplicateException(String message) {
         super(message);
     }

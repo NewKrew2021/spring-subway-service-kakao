@@ -7,11 +7,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteResponse;
+import subway.favorite.exceptions.FavoriteNotFoundException;
 import subway.station.dto.StationResponse;
 
 import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Repository
 public class FavoriteDao {
@@ -61,20 +61,18 @@ public class FavoriteDao {
     }
 
     public boolean favoriteExists(Favorite favorite) {
-        String sql = "select EXISTS" +
-                " (select * from favorite where member_id = ? and source_station_id = ? and target_station_id = ?)" +
-                " as success";
+        String sql = "select count(*) from favorite where member_id = ? and source_station_id = ? and target_station_id = ?";
 
         return jdbcTemplate.queryForObject(sql, int.class, favorite.getMemberId(),
                 favorite.getSourceStationId(), favorite.getTargetStationId()) != 0;
     }
 
-    public void deleteById(long favoriteId) {
-        String sql = "delete from favorite where id = ?";
-        int affectedRows = jdbcTemplate.update(sql, favoriteId);
+    public void deleteById(long memberId, long favoriteId) {
+        String sql = "delete from favorite where id = ? and member_id = ?";
+        int affectedRows = jdbcTemplate.update(sql, favoriteId, memberId);
 
         if (affectedRows != 1) {
-            throw new NoSuchElementException("Could not find favorite with id: %d" + favoriteId);
+            throw new FavoriteNotFoundException("삭제 요청한 아이디에 맞는 즐겨찾기가 없습니다. id: " + favoriteId);
         }
     }
 }

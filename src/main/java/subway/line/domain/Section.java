@@ -1,6 +1,5 @@
 package subway.line.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import subway.station.domain.Station;
 
 public class Section {
@@ -11,14 +10,13 @@ public class Section {
     private final int distance;
 
     public Section(Station upStation, Station downStation, int distance) {
-        this(0L, 0L, upStation, downStation, distance);
+        this(null, null, upStation, downStation, distance);
     }
 
     public Section(Long lineId, Station upStation, Station downStation, int distance) {
-        this(0L, lineId, upStation, downStation, distance);
+        this(null, lineId, upStation, downStation, distance);
     }
 
-    @JsonCreator
     public Section(Long id, Long lineId, Station upStation, Station downStation, int distance) {
         this.id = id;
         this.lineId = lineId;

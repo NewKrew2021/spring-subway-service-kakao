@@ -34,6 +34,6 @@ public class SectionEdge extends DefaultWeightedEdge {
 
     @Override
     protected double getWeight() {
-        return distance + fare / 10000.0;
+        return distance + (fare / 100000.0);
     }
 }

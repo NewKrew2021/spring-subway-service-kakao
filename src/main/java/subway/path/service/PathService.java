@@ -1,5 +1,6 @@
-package subway.path.application;
+package subway.path.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.dao.SectionDao;
 import subway.path.domain.Path;
@@ -21,6 +22,7 @@ public class PathService {
         }
     }
 
+    @Autowired
     public PathService(SectionDao sectionDao, StationDao stationDao) {
         this.sectionDao = sectionDao;
         this.stationDao = stationDao;
