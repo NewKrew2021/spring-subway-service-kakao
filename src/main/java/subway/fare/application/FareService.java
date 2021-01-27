@@ -1,7 +1,10 @@
-package subway.fare;
+package subway.fare.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import subway.fare.domain.AgeFarePolicy;
+import subway.fare.domain.DistanceFarePolicy;
+import subway.fare.domain.LineFarePolicy;
 import subway.line.application.LineService;
 import subway.member.domain.LoginMember;
 

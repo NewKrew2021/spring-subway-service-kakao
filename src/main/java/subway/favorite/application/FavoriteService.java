@@ -36,7 +36,7 @@ public class FavoriteService {
         return FavoriteResponse.listOf(favoriteDao.findByMemberId(memberId));
     }
 
-    public void deleteFavoriteById(Long id) {
-        favoriteDao.deleteById(id);
+    public void deleteByIdMemberAndId(Long id, Long memberId) {
+        favoriteDao.deleteByIdMemberAndId(id, memberId);
     }
 }

@@ -1,6 +1,7 @@
-package subway.fare;
+package subway.fare.domain;
 
 public class DistanceFarePolicy {
+
     public static final int FIRST_INTERVAL_THRESHOLD = 10;
     public static final int SECOND_INTERVAL_THRESHOLD = 50;
 

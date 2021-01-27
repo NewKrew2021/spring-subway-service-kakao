@@ -1,5 +1,6 @@
 package subway.station.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
@@ -14,6 +15,7 @@ public class StationService {
 
     private StationDao stationDao;
 
+    @Autowired
     public StationService(StationDao stationDao) {
         this.stationDao = stationDao;
     }

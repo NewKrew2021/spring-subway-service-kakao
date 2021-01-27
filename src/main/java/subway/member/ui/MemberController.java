@@ -1,27 +1,24 @@
 package subway.member.ui;
 
-import subway.auth.application.AuthService;
-import subway.auth.domain.AuthenticationPrincipal;
-import subway.auth.infrastructure.AuthorizationExtractor;
-import subway.member.domain.LoginMember;
-import subway.member.application.MemberService;
-import subway.member.dto.MemberRequest;
-import subway.member.dto.MemberResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberRequest;
+import subway.member.dto.MemberResponse;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 
 @RestController
 public class MemberController {
 
     private MemberService memberService;
-    private AuthService authService;
 
-    public MemberController(MemberService memberService, AuthService authService) {
+    @Autowired
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.authService = authService;
     }
 
     @PostMapping("/members")
@@ -37,7 +34,8 @@ public class MemberController {
     }
 
     @PutMapping("/members/{id}")
-    public ResponseEntity<MemberResponse> updateMember(@PathVariable Long id, @RequestBody MemberRequest param) {
+    public ResponseEntity<MemberResponse> updateMember(@PathVariable Long id,
+                                                       @RequestBody MemberRequest param) {
         memberService.updateMember(id, param);
         return ResponseEntity.ok().build();
     }
@@ -55,7 +53,8 @@ public class MemberController {
     }
 
     @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember,
+                                                             @RequestBody MemberRequest param) {
         memberService.updateMember(loginMember.getId(), param);
         return ResponseEntity.ok().build();
     }

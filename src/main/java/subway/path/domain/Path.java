@@ -16,10 +16,6 @@ public class Path {
         this.fare = fare;
     }
 
-    public Path(List<Station> stations, int distance) {
-        this(stations, distance, 0);
-    }
-
     public List<Station> getStations() {
         return stations;
     }

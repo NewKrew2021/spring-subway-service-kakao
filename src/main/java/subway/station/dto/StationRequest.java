@@ -3,6 +3,7 @@ package subway.station.dto;
 import subway.station.domain.Station;
 
 public class StationRequest {
+
     private String name;
 
     public StationRequest() {

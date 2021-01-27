@@ -1,4 +1,4 @@
-package subway.fare;
+package subway.fare.domain;
 
 public class AgeFarePolicy {
     public static int applyAgeDiscount(int fare, int age) {

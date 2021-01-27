@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class FavoriteDao {
@@ -76,8 +75,8 @@ public class FavoriteDao {
     }
 
 
-    public void deleteById(Long id) {
-        String sql = "delete from FAVORITE where id = ?";
-        jdbcTemplate.update(sql, id);
+    public void deleteByIdMemberAndId(Long id, Long memberId) {
+        String sql = "delete from FAVORITE where id = ? and member_id = ?";
+        jdbcTemplate.update(sql, id, memberId);
     }
 }

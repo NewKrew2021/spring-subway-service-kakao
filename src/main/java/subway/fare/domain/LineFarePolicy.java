@@ -1,4 +1,4 @@
-package subway.fare;
+package subway.fare.domain;
 
 import java.util.List;
 

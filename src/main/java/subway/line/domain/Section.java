@@ -6,14 +6,12 @@ import subway.station.domain.Station;
 import java.util.Objects;
 
 public class Section extends DefaultWeightedEdge {
+
     private Long id;
     private Long lindId;
     private Station upStation;
     private Station downStation;
     private int distance;
-
-    public Section() {
-    }
 
     public Section(Station upStation, Station downStation, int distance) {
         this(null, null, upStation, downStation, distance);

@@ -1,4 +1,4 @@
-package subway.fare;
+package subway.fare.domain;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public enum AgeGrade {
         this.deduction = deduction;
     }
 
-    public static AgeGrade of(int age){
+    public static AgeGrade of(int age) {
         return Arrays.stream(values())
                 .filter(grade -> age <= grade.age)
                 .findFirst()

@@ -6,7 +6,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import subway.fare.FareService;
+import subway.fare.application.FareService;
 import subway.line.application.LineService;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
@@ -34,39 +34,28 @@ public class PathService {
 
     public PathResponse getPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
 
-        WeightedMultigraph<Station, Section> graph = makeGraph();
-
-        DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
-
-
-        GraphPath graphPath = dijkstraShortestPath.getPath(
-                stationService.findStationById(sourceStationId),
-                stationService.findStationById(targetStationId)
-        );
+        GraphPath graphPath =
+                DijkstraShortestPath.findPathBetween(makeGraph(),
+                        stationService.findStationById(sourceStationId),
+                        stationService.findStationById(targetStationId));
 
         int distance = (int) graphPath.getWeight();
-        Sections sections = new Sections(graphPath.getEdgeList());
+        List<Long> lineIds = new Sections(graphPath.getEdgeList()).getLineIds();
+        int fare = fareService.findFare(lineIds, distance, loginMember);
 
-        int fare = fareService.findFare(sections.getLineIds(), distance, loginMember);
-
-        Path path = new Path(graphPath.getVertexList(), distance, fare);
-
-        return PathResponse.of(path);
+        return PathResponse.of(new Path(graphPath.getVertexList(), distance, fare));
     }
 
     private WeightedMultigraph<Station, Section> makeGraph() {
 
         Sections sections = lineService.findAllSections();
-
         List<Station> stations = stationService.findAll();
 
         WeightedMultigraph<Station, Section> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
 
         stations.forEach(graph::addVertex);
-
-        for (Section section : sections.getSections()) {
-            graph.addEdge(section.getUpStation(), section.getDownStation(), section);
-        }
+        sections.getSections().forEach(section ->
+                graph.addEdge(section.getUpStation(), section.getDownStation(), section));
 
         return graph;
     }

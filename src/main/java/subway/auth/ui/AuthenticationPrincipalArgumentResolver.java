@@ -14,6 +14,7 @@ import subway.member.dto.MemberResponse;
 import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
     private AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
