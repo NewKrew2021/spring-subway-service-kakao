@@ -18,7 +18,7 @@ public class AuthService {
     }
 
     public String createToken(String email, String password) {
-        Member member = memberService.findAuthorizedMember(email, password);
+        Member member = memberService.findAuthenticatedMember(email, password);
         return jwtTokenProvider.createToken(member.getEmail());
     }
 

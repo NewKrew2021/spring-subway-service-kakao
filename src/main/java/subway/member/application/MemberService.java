@@ -2,7 +2,7 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.exceptions.UnauthorizedException;
+import subway.exceptions.UnauthenticatedException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
@@ -38,15 +38,15 @@ public class MemberService {
         memberDao.deleteById(id);
     }
 
-    public Member findAuthorizedMember(String email, String password) {
+    public Member findAuthenticatedMember(String email, String password) {
         return memberDao.findByEmail(email)
                 .filter(member -> member.hasSamePassword(password))
-                .orElseThrow(UnauthorizedException::new);
+                .orElseThrow(UnauthenticatedException::new);
     }
 
     public LoginMember findLoginMember(String email) {
         return memberDao.findByEmail(email)
                 .map(LoginMember::new)
-                .orElseThrow(UnauthorizedException::new);
+                .orElseThrow(UnauthenticatedException::new);
     }
 }
