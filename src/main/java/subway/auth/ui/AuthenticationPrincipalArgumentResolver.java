@@ -12,8 +12,6 @@ import subway.auth.infrastructure.AuthorizationExtractor;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
-import subway.member.domain.LoginMember;
-import subway.member.domain.Member;
 import subway.auth.exception.InvalidTokenException;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
@@ -35,7 +33,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             return authService.findMember(accessToken);
         } catch (InvalidTokenException e) {
             validateLoginMemberNecessary(parameter.getParameterAnnotation(AuthenticationPrincipal.class));
-            return LoginMember.of(new Member(null, null, null, 20));
+            return null;
         }
     }
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
+import subway.path.domain.AgeGroup;
 import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
 import subway.station.dto.StationResponse;
@@ -30,7 +31,8 @@ public class PathController {
                                                           .stream()
                                                           .map(StationResponse::of)
                                                           .collect(Collectors.toList());
-    int fare = shortestPath.getFare(loginMember.getAge());
+    AgeGroup ageGroup = loginMember == null ? AgeGroup.ADULT : AgeGroup.getAgeGroup(loginMember.getAge());
+    int fare = shortestPath.getFare(ageGroup);
 
     return ResponseEntity.ok(new PathResponse(stationResponses, shortestPath.getDistance(), fare));
   }

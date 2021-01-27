@@ -36,12 +36,11 @@ public class Path {
         return (int) path.getWeight();
     }
 
-    public int getFare(int age) {
-        int fare = BASE_FARE + getMaxLineExtraFare() + getDistanceExtraFare();
-        AgeGroup ageGroup = AgeGroup.getAgeGroup(age);
+    public int getFare(AgeGroup ageGroup) {
         if(ageGroup == AgeGroup.TODDLER) {
             return 0;
         }
+        int fare = BASE_FARE + getMaxLineExtraFare() + getDistanceExtraFare();
         return (int) Math.floor((fare - NON_DISCOUNTABLE_BASE_FARE) * ageGroup.getFareRate() + NON_DISCOUNTABLE_BASE_FARE);
     }
 

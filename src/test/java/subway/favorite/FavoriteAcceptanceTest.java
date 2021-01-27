@@ -49,26 +49,66 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         지하철_구간_등록되어_있음(신분당선, 양재역, 정자역, 3);
 
         회원_등록되어_있음(EMAIL, PASSWORD, 20);
-        사용자 = 로그인되어_있음(EMAIL, PASSWORD);
     }
 
-    @DisplayName("즐겨찾기를 관리한다.")
+    @DisplayName("즐겨찾기를 생성한다.")
     @Test
-    void manageMember() {
+    void createFavorite() {
         // when
+        사용자 = 로그인되어_있음(EMAIL, PASSWORD);
         ExtractableResponse<Response> createResponse = 즐겨찾기_생성을_요청(사용자, 강남역, 정자역);
         // then
         즐겨찾기_생성됨(createResponse);
+    }
 
+    @DisplayName("즐겨찾기 목록을 조회한다.")
+    @Test
+    void findFavorite() {
         // when
+        사용자 = 로그인되어_있음(EMAIL, PASSWORD);
         ExtractableResponse<Response> findResponse = 즐겨찾기_목록_조회_요청(사용자);
         // then
         즐겨찾기_목록_조회됨(findResponse);
+    }
 
+    @DisplayName("즐겨찾기를 삭제한다.")
+    @Test
+    void removeFavorite() {
         // when
+        사용자 = 로그인되어_있음(EMAIL, PASSWORD);
+        ExtractableResponse<Response> createResponse = 즐겨찾기_생성을_요청(사용자, 강남역, 정자역);
         ExtractableResponse<Response> deleteResponse = 즐겨찾기_삭제_요청(사용자, createResponse);
         // then
         즐겨찾기_삭제됨(deleteResponse);
+    }
+
+    @DisplayName("로그인 하지 않은 사용자가 즐겨찾기에 접근한다.")
+    @Test
+    void unauthorizedCreateFavorite() {
+        // when
+        ExtractableResponse<Response> createResponse = 미인증_즐겨찾기_생성을_요청(강남역, 정자역);
+        // then
+        인증오류_발생됨(createResponse);
+    }
+
+    @DisplayName("로그인 하지 않은 사용자가 즐겨찾기에 접근한다.")
+    @Test
+    void unauthorizedFindFavorite() {
+        // when
+        ExtractableResponse<Response> findResponse = 미인증_즐겨찾기_목록_조회_요청();
+        // then
+        인증오류_발생됨(findResponse);
+    }
+
+    @DisplayName("로그인 하지 않은 사용자가 즐겨찾기에 접근한다.")
+    @Test
+    void unauthorizedRemoveFavorite() {
+        // when
+        사용자 = 로그인되어_있음(EMAIL, PASSWORD);
+        ExtractableResponse<Response> createResponse = 즐겨찾기_생성을_요청(사용자, 강남역, 정자역);
+        ExtractableResponse<Response> removeResponse = 미인증_즐겨찾기_삭제_요청(createResponse);
+        //then
+        인증오류_발생됨(removeResponse);
     }
 
     public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(TokenResponse tokenResponse, StationResponse source, StationResponse target) {
@@ -77,6 +117,18 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all()
                 .auth().oauth2(tokenResponse.getAccessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(favoriteRequest)
+                .when().post("/favorites")
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 미인증_즐겨찾기_생성을_요청(StationResponse source, StationResponse target) {
+        FavoriteRequest favoriteRequest = new FavoriteRequest(source.getId(), target.getId());
+
+        return RestAssured
+                .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(favoriteRequest)
                 .when().post("/favorites")
@@ -94,12 +146,31 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> 미인증_즐겨찾기_목록_조회_요청() {
+        return RestAssured
+                .given().log().all()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/favorites")
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> 즐겨찾기_삭제_요청(TokenResponse tokenResponse, ExtractableResponse<Response> response) {
         String uri = response.header("Location");
 
         return RestAssured
                 .given().log().all()
                 .auth().oauth2(tokenResponse.getAccessToken())
+                .when().delete(uri)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> 미인증_즐겨찾기_삭제_요청(ExtractableResponse<Response> response) {
+        String uri = response.header("Location");
+
+        return RestAssured
+                .given().log().all()
                 .when().delete(uri)
                 .then().log().all()
                 .extract();
@@ -115,5 +186,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     public static void 즐겨찾기_삭제됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    public static void 인증오류_발생됨(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 }
