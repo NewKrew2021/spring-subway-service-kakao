@@ -1,14 +1,18 @@
 package subway.path.domain;
 
 
+import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
-import subway.path.domain.fareStrategy.DistanceStrategy;
-import subway.path.domain.fareStrategy.FareStrategy;
-import subway.path.domain.fareStrategy.LineStrategy;
-import subway.path.domain.fareStrategy.MemberStrategy;
+import subway.path.domain.fareStrategy.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Fare {
     private final int INITIAL_FARE = 1250;
+    private static final int TEENAGER_MIN_AGE = 13;
+    private static final int TEENAGER_MAX_AGE = 19;
+    private static final int CHILD_MIN_AGE = 6;
 
     private int fare;
 
@@ -20,12 +24,28 @@ public class Fare {
         this.fare = makeFare(shortestGraph, loginMember);
     }
 
-
     public int makeFare(ShortestGraph shortestGraph, LoginMember loginMember) {
         int fare = INITIAL_FARE;
-        fare = new DistanceStrategy(fare, shortestGraph.getGraphPath()).getFare();
-        fare = new LineStrategy(fare, shortestGraph.getGraphPath()).getFare();
-        fare = new MemberStrategy(fare, loginMember).getFare();
+        List<WeightWithLine> weightWithLines = shortestGraph.getGraphPath().getEdgeList();
+        List<Line> lines = weightWithLines.stream()
+                .map(WeightWithLine::getLine)
+                .collect(Collectors.toList());
+
+        fare = new DefaultFareStrategy(fare,
+                (int)shortestGraph.getGraphPath().getWeight(),
+                lines).getFare();
+        if (loginMember.equals(LoginMember.NOT_LOGIN_MEMBER)) {
+            return fare;
+        }
+
+        if (loginMember.getAge() >= CHILD_MIN_AGE && loginMember.getAge() < TEENAGER_MIN_AGE){
+            fare = new ChildFareStrategy(fare).getFare();
+        }
+
+        if (loginMember.getAge() >= TEENAGER_MIN_AGE && loginMember.getAge() < TEENAGER_MAX_AGE){
+            fare = new TeenagerFareStrategy(fare).getFare();
+        }
+
         return fare;
     }
 

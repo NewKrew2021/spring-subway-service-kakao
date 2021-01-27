@@ -6,7 +6,6 @@ import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
 import subway.path.domain.Path;
 import subway.path.domain.ShortestGraph;
-import subway.path.domain.Fare;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
