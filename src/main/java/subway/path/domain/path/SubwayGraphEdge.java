@@ -19,8 +19,8 @@ public class SubwayGraphEdge extends DefaultWeightedEdge {
         return distance;
     }
 
-    public int getDistance() {
-        return distance;
+    public int getDuration() {
+        return duration;
     }
 
     public Line getLine() {

@@ -1,13 +1,12 @@
 package subway.path.domain.path.distance;
 
 import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.path.domain.path.SubwayGraphEdge;
 import subway.path.domain.path.graph.PathAndArrival;
-import subway.path.domain.path.graph.SubwayGraphElement;
 import subway.path.domain.path.graph.SubwayGraph;
+import subway.path.domain.path.graph.SubwayGraphElement;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
@@ -33,17 +32,7 @@ public class ShortestDistanceGraph implements SubwayGraph {
 
     @Override
     public PathAndArrival getPath(Station source, Station target, LocalDateTime departureTime) {
-        return new PathAndArrival() {
-            @Override
-            public GraphPath<Station, SubwayGraphEdge> getPath() {
-                return new DijkstraShortestPath<>(graph).getPath(source, target);
-            }
-
-            // TODO: 최단거리 도착 시간 구현
-            @Override
-            public LocalDateTime getArrivalTime() {
-                return departureTime;
-            }
-        };
+        // TODO: 도착 시간 구현
+        return new PathAndArrival(new DijkstraShortestPath<>(graph).getPath(source, target), departureTime);
     }
 }

@@ -32,7 +32,7 @@ public class ShortestTimeGraph implements SubwayGraph {
 
     @Override
     public PathAndArrival getPath(Station source, Station target, LocalDateTime departureTime) {
-        return new ShortestTimePaths(new KShortestPaths<>(graph, 1000).getPaths(source, target))
+        return new ShortestTimePathFinder(new KShortestPaths<>(graph, 1000).getPaths(source, target))
                 .getPath(departureTime);
     }
 }

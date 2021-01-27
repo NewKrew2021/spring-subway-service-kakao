@@ -6,9 +6,21 @@ import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 
-public interface PathAndArrival {
+public class PathAndArrival {
 
-    GraphPath<Station, SubwayGraphEdge> getPath();
+    private final GraphPath<Station, SubwayGraphEdge> path;
+    private final LocalDateTime arrivalTime;
 
-    LocalDateTime getArrivalTime();
+    public PathAndArrival(GraphPath<Station, SubwayGraphEdge> path, LocalDateTime arrivalTime) {
+        this.path = path;
+        this.arrivalTime = arrivalTime;
+    }
+
+    public GraphPath<Station, SubwayGraphEdge> getPath() {
+        return path;
+    }
+
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
+    }
 }

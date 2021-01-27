@@ -80,7 +80,7 @@ public class SubwayPathAcceptanceTest extends AcceptanceTest {
         //then
         적절한_경로_응답됨(response, Lists.newArrayList(교대역, 강남역, 양재역));
         총_거리와_소요_시간을_함께_응답됨(response, 20);
-        총_거리와_도착_시간을_함께_응답됨(response, LocalDateTime.of(2021, 1, 26, 6, 55));
+        총_거리와_도착_시간을_함께_응답됨(response, LocalDateTime.of(2021, 1, 26, 7, 0));
     }
 
     public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target, LocalDateTime time) {
