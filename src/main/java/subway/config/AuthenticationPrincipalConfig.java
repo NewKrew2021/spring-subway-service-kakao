@@ -1,4 +1,4 @@
-package subway;
+package subway.config;
 
 import subway.auth.application.AuthService;
 import subway.auth.ui.AuthenticationPrincipalArgumentResolver;
