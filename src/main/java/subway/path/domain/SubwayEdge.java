@@ -3,14 +3,20 @@ package subway.path.domain;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class SubwayEdge extends DefaultWeightedEdge {
-    SubwayWeight weight;
+    private final int extraFare;
+    private final int distance;
+
+    public SubwayEdge(int distance, int extraFare) {
+        this.distance = distance;
+        this.extraFare = extraFare;
+    }
 
     @Override
     protected double getWeight() {
-        return weight.getDistance();
+        return distance;
     }
 
     public int getFare() {
-        return weight.getExtraFare();
+        return extraFare;
     }
 }

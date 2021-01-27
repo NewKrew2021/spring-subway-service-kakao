@@ -1,5 +1,6 @@
 package subway.path.ui;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +26,12 @@ public class PathController {
   public ResponseEntity<PathResponse> findShortestPath(@RequestParam Long source, @RequestParam Long target,
                                                        @AuthenticationPrincipal(required = false) LoginMember loginMember) {
     Path shortestPath = pathService.getShortestPath(source, target);
+    List<StationResponse> stationResponses = shortestPath.getStations()
+                                                          .stream()
+                                                          .map(StationResponse::of)
+                                                          .collect(Collectors.toList());
+    int fare = shortestPath.getFare(loginMember.getAge());
 
-    PathResponse pathResponse = new PathResponse(
-        shortestPath.getStations()
-            .stream()
-            .map(StationResponse::of)
-            .collect(Collectors.toList()), shortestPath.getDistance(), shortestPath.getFare(loginMember.getAge()));
-    return ResponseEntity.ok(pathResponse);
+    return ResponseEntity.ok(new PathResponse(stationResponses, shortestPath.getDistance(), fare));
   }
 }
