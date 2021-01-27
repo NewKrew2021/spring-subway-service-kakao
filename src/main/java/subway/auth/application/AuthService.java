@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.exceptions.AuthorizationException;
+import subway.exceptions.UnauthenticatedException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 
@@ -23,7 +23,7 @@ public class AuthService {
 
     public TokenResponse createToken(TokenRequest request) {
         if (!userExists(request.getEmail(), request.getPassword())) {
-            throw new AuthorizationException();
+            throw new UnauthenticatedException("Incorrect password");
         }
 
         String token = jwtTokenProvider.createToken(request.getEmail());
@@ -35,7 +35,7 @@ public class AuthService {
             Member member = memberDao.findByEmail(email);
             return member.getEmail().equals(email) && member.getPassword().equals(password);
         } catch (DataAccessException e) {
-            throw new AuthorizationException(e.getMessage());
+            throw new UnauthenticatedException("Incorrect email or password\n" + e.getMessage());
         }
     }
 }

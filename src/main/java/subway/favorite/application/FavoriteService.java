@@ -23,15 +23,19 @@ public class FavoriteService {
     public long insert(long memberId, FavoriteRequest favoriteRequest) {
         Favorite favorite = new Favorite(memberId, favoriteRequest.getSource(), favoriteRequest.getTarget());
 
+        checkIsCorrectFavorite(favorite);
+
+        return favoriteDao.insert(favorite);
+    }
+
+    private void checkIsCorrectFavorite(Favorite favorite) {
         if (favorite.getSourceStationId() == favorite.getTargetStationId()) {
-            throw new FavoriteSameArgumentException();
+            throw new FavoriteSameArgumentException("Source and target stations cannot be equal");
         }
 
         if (favoriteDao.favoriteExists(favorite)) {
-            throw new FavoriteDuplicateException();
+            throw new FavoriteDuplicateException("Member has already added this section");
         }
-
-        return favoriteDao.insert(favorite);
     }
 
     public List<FavoriteResponse> find(long memberId) {

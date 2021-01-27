@@ -9,8 +9,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.exceptions.AuthorizationException;
+import subway.exceptions.UnauthenticatedException;
 import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+import subway.path.domain.Person;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,15 +33,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
-        if (!jwtTokenProvider.validateToken(token)) {
-            AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
-            if (auth.required()) {
-                throw new AuthorizationException("");
-            }
-            return null;
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        String token = AuthorizationExtractor.extract(request);
+        if (jwtTokenProvider.validateToken(token)) {
+            return memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));
         }
 
-        return memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));
+        AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        if (auth.required()) {
+            throw new UnauthenticatedException("Must login before using this service: " + request.getContextPath());
+        }
+
+        return new LoginMember(0L, "guest", Person.ADULT.getMinAge());
     }
 }

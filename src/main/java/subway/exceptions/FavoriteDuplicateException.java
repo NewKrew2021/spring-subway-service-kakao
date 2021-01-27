@@ -5,10 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class FavoriteDuplicateException extends RuntimeException {
-    public FavoriteDuplicateException() {
-        super();
-    }
-
     public FavoriteDuplicateException(String message) {
         super(message);
     }
