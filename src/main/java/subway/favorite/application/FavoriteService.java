@@ -5,6 +5,7 @@ import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
+import subway.member.domain.LoginMember;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -30,8 +31,8 @@ public class FavoriteService {
         return FavoriteResponse.of(favorite, sourceStation, targetStation);
     }
 
-    public void deleteFavorite(long id) {
-        favoriteDao.deleteById(id);
+    public void deleteFavorite(long id, LoginMember loginMember) {
+        favoriteDao.deleteByIdAndMemberId(id, loginMember.getId());
     }
 
     public List<FavoriteResponse> findFavorites(long memberId) {
