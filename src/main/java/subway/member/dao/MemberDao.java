@@ -9,13 +9,19 @@ import org.springframework.stereotype.Repository;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class MemberDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert simpleJdbcInsert;
+    public static final String UPDATE_QUERY = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
+    public static final String DELETE_BY_ID_QUERY = "delete from MEMBER where id = ?";
+    public static final String FIND_BY_ID_QUERY = "select * from MEMBER where id = ?";
+    public static final String FIND_BY_EMAIL_QUERY = "select * from MEMBER where email = ?";
+    public static final String EXISTS_QUERY = "select * from MEMBER where email = ? and password = ? limit 1";
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
 
-    private RowMapper<Member> rowMapper = (rs, rowNum) ->
+    private final RowMapper<Member> rowMapper = (rs, rowNum) ->
             new Member(
                     rs.getLong("id"),
                     rs.getString("email"),
@@ -38,22 +44,23 @@ public class MemberDao {
     }
 
     public void update(Member member) {
-        String sql = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
-        jdbcTemplate.update(sql, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
+        jdbcTemplate.update(UPDATE_QUERY, member.getEmail(), member.getPassword(), member.getAge(), member.getId());
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from MEMBER where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
     }
 
     public Member findById(Long id) {
-        String sql = "select * from MEMBER where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(FIND_BY_ID_QUERY, rowMapper, id);
     }
 
     public Member findByEmail(String email) {
-        String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        return jdbcTemplate.queryForObject(FIND_BY_EMAIL_QUERY, rowMapper, email);
+    }
+
+    public boolean isExist(String email, String password) {
+        List<Member> result = jdbcTemplate.query(EXISTS_QUERY, rowMapper, email, password);
+        return !result.isEmpty();
     }
 }

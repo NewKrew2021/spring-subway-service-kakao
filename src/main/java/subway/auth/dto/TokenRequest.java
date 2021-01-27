@@ -12,6 +12,10 @@ public class TokenRequest {
         this.password = password;
     }
 
+    public boolean isValidRequest() {
+        return !email.isEmpty() && !password.isEmpty();
+    }
+
     public String getEmail() {
         return email;
     }

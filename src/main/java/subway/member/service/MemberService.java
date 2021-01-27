@@ -1,9 +1,8 @@
-package subway.member.application;
+package subway.member.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
+import subway.auth.dto.TokenRequest;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -36,5 +35,9 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long id) {
         memberDao.deleteById(id);
+    }
+
+    public boolean isPossibleLogin(TokenRequest tokenRequest) {
+        return memberDao.isExist(tokenRequest.getEmail(), tokenRequest.getPassword());
     }
 }
