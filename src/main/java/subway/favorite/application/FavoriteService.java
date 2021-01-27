@@ -45,7 +45,7 @@ public class FavoriteService {
 
     public void deleteFavoriteById(LoginMember loginMember, Long id) {
         Favorite favorite = favoriteDao.getFavoriteById(id).orElseThrow(FavoriteNotFoundException::new);
-        if (!favorite.getId().equals(loginMember.getId())) {
+        if (!favorite.getMemberId().equals(loginMember.getId())) {
             throw new InvalidTokenException();
         }
         favoriteDao.deleteById(id);

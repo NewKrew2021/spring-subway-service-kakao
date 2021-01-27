@@ -96,7 +96,6 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     public static ExtractableResponse<Response> 즐겨찾기_삭제_요청(TokenResponse tokenResponse, ExtractableResponse<Response> response) {
         String uri = response.header("Location");
-
         return RestAssured
                 .given().log().all()
                 .auth().oauth2(tokenResponse.getAccessToken())

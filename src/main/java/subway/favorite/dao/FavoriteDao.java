@@ -1,10 +1,12 @@
 package subway.favorite.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.favorite.domain.Favorite;
+import subway.favorite.exception.FavoriteNotFoundException;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
@@ -39,7 +41,7 @@ public class FavoriteDao {
         params.put("source_station_id", favorite.getSource().getId());
         params.put("target_station_id", favorite.getTarget().getId());
         Long favoriteId = insertAction.executeAndReturnKey(params).longValue();
-        return Favorite.of(favoriteId, favorite.getSource(), favorite.getTarget());
+        return Favorite.of(favoriteId, favorite.getMemberId(), favorite.getSource(), favorite.getTarget());
     }
 
     public List<Favorite> getFavorite(Long memberId) {
@@ -53,13 +55,17 @@ public class FavoriteDao {
     }
 
     public Optional<Favorite> getFavoriteById(Long id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject("select F.id as id, F.member_id as member_id," +
-                " S.id as source_id, S.name as source_name," +
-                " T.id as target_id, T.name as target_name " +
-                "from Favorite F \n" +
-                "left outer join STATION S on F.source_station_id = S.id " +
-                "left outer join STATION T on F.target_station_id = T.id " +
-                "where F.id= ?;", rowMapper, id));
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject("select F.id as id, F.member_id as member_id," +
+                    " S.id as source_id, S.name as source_name," +
+                    " T.id as target_id, T.name as target_name " +
+                    "from Favorite F " +
+                    "left outer join STATION S on F.source_station_id = S.id " +
+                    "left outer join STATION T on F.target_station_id = T.id " +
+                    "where F.id= ?;", rowMapper, id));
+        } catch (EmptyResultDataAccessException e) {
+            throw new FavoriteNotFoundException();
+        }
     }
 
     public void deleteById(Long id) {
