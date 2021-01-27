@@ -6,7 +6,11 @@ import java.util.List;
 
 public class Path {
     private static final int DEFAULT_FARE = 1250;
-    private static final int EXTRA_FARE_PER_DISTANCE = 100;
+    private static final int EXTRA_FARE_PER_UNIT_DISTANCE = 100;
+    private static final int SECTION_BOUNDARY = 50;
+    private static final double FIRST_SECTION_DIVIDE_UNIT = 5.0;
+    private static final double SECOND_SECTION_DIVIDE_UNIT = 8.0;
+    private static final int DISTANCE_FREE_OF_CHARGE = 10;
     private final List<Station> path;
     private final List<SectionEdge> sectionEdges;
     private final int distance;
@@ -41,7 +45,30 @@ public class Path {
     }
 
     private int calculateDistanceExtraFare() {
-        return (int) Math.ceil(Math.max(Math.min(distance, 50) - 10, 0) / 5.0) * EXTRA_FARE_PER_DISTANCE
-                + (int) Math.ceil(Math.max(distance - 50, 0) / 8.0) * EXTRA_FARE_PER_DISTANCE;
+        return fareOfFirstBoundary() + fareOfSecondBoundary();
+    }
+
+    private int fareOfFirstBoundary() {
+        int chargingDistance = Math.min(distance, SECTION_BOUNDARY) - DISTANCE_FREE_OF_CHARGE;
+        if (isNegative(chargingDistance)) {
+            return 0;
+        }
+
+        int chargeUnits = (int) Math.ceil(chargingDistance / FIRST_SECTION_DIVIDE_UNIT);
+        return chargeUnits * EXTRA_FARE_PER_UNIT_DISTANCE;
+    }
+
+    private int fareOfSecondBoundary() {
+        int chargingDistance = distance - SECTION_BOUNDARY;
+        if (isNegative(chargingDistance)) {
+            return 0;
+        }
+
+        int chargeUnits = (int) Math.ceil(chargingDistance / SECOND_SECTION_DIVIDE_UNIT);
+        return chargeUnits * EXTRA_FARE_PER_UNIT_DISTANCE;
+    }
+
+    private boolean isNegative(int chargingDistance) {
+        return chargingDistance < 0;
     }
 }

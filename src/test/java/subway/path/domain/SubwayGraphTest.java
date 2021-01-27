@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayGraphTest {
     @Test
-    void graph_normal() {
+    void graphNormal() {
         Station start = new Station(6L, "start");
         Station v1 = new Station(1L, "v1");
         Station v2 = new Station(2L, "v2");
@@ -49,7 +49,7 @@ public class SubwayGraphTest {
     }
 
     @Test
-    void graph_same_distance() {
+    void graphSameDistance() {
         Station start = new Station(1L, "start");
         Station middle = new Station(2L, "middle");
         Station end = new Station(3L, "end");
