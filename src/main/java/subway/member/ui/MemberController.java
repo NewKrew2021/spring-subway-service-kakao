@@ -23,13 +23,13 @@ public class MemberController {
 
     @PostMapping("/members")
     public ResponseEntity createMember(@RequestBody MemberRequest request) {
-        MemberResponse member = memberService.createMember(request);
+        MemberResponse member = MemberResponse.of(memberService.createMember(request));
         return ResponseEntity.created(URI.create("/members/" + member.getId())).build();
     }
 
     @GetMapping("/members/{id}")
     public ResponseEntity<MemberResponse> findMember(@PathVariable Long id) {
-        MemberResponse member = memberService.findMemberById(id);
+        MemberResponse member = MemberResponse.of(memberService.findMemberById(id));
         return ResponseEntity.ok().body(member);
     }
 
@@ -49,7 +49,7 @@ public class MemberController {
     @GetMapping("/members/me")
     public ResponseEntity<MemberResponse> findMemberOfMine(
             @AuthenticationPrincipal LoginMember loginMember) {
-        MemberResponse member = memberService.findMemberById(loginMember.getId());
+        MemberResponse member = MemberResponse.of(memberService.findMemberById(loginMember.getId()));
         return ResponseEntity.ok().body(member);
     }
 

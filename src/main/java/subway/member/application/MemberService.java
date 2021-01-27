@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.auth.exception.NoSuchEmailException;
+import subway.auth.exception.LoginException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -21,21 +21,19 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
-        return MemberResponse.of(member);
+    public Member createMember(MemberRequest request) {
+        return memberDao.insert(request.toMember());
     }
 
-    public MemberResponse findMemberById(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+    public Member findMemberById(Long id) {
+        return memberDao.findById(id);
     }
 
-    public Member findMemberByEmail(String email) {
+    public Member findMemberByEmailAndPassword(String email, String password) {
         try {
-            return memberDao.findByEmail(email);
+            return memberDao.findByEmailAndPassword(email, password);
         } catch (EmptyResultDataAccessException exception) {
-            throw new NoSuchEmailException();
+            throw new LoginException();
         }
     }
 
