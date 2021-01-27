@@ -7,6 +7,11 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.exceptions.InvalidTokenException;
+import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.LoginMember;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private AuthService authService;
@@ -20,10 +25,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
-        return null;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
+        String accessToken = AuthorizationExtractor.extract(httpServletRequest);
+        if(accessToken == null || accessToken.equals("null")) {
+            return new LoginMember(false);
+        }
+        if(!authService.checkToken(accessToken)) {
+            throw new InvalidTokenException();
+        }
+        String email = authService.getPayload(accessToken);
+        return authService.findByEmail(email);
     }
 }

@@ -1,0 +1,47 @@
+package subway.path.domain;
+
+import subway.member.domain.LoginMember;
+import subway.path.util.FareUtil;
+import subway.station.domain.Station;
+
+import java.util.List;
+
+public class Path {
+
+    public static final int DEDUCTIONS = 350;
+    public static final int BASE_MONEY = 1250;
+    private List<Station> stations;
+    private int distance;
+    private int extraFare;
+
+    public Path(List<Station> stations, int distance, int extraFare) {
+        this.stations = stations;
+        this.distance = distance;
+        this.extraFare = extraFare;
+    }
+
+    public List<Station> getStations() {
+        return stations;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public int getExtraFare() {
+        return extraFare;
+    }
+
+    public int getTotalFare() {
+        int totalFare = extraFare + FareUtil.calculateDistanceFare(distance, BASE_MONEY);
+        return totalFare;
+    }
+
+    public int getTotalFare(LoginMember loginMember) {
+        return discountAmount(getTotalFare(), loginMember);
+    }
+
+    public int discountAmount(int totalFare, LoginMember loginMember) {
+        return totalFare - (int) ((totalFare - DEDUCTIONS) * loginMember.getDiscountRate());
+    }
+}

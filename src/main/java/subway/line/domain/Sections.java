@@ -70,7 +70,7 @@ public class Sections {
         if (existSection.getDistance() <= newSection.getDistance()) {
             throw new RuntimeException();
         }
-        this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getLineId(),existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
     }
 
@@ -78,7 +78,7 @@ public class Sections {
         if (existSection.getDistance() <= newSection.getDistance()) {
             throw new RuntimeException();
         }
-        this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(),existSection.getLineId(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
     }
 
@@ -118,7 +118,7 @@ public class Sections {
                 .orElse(null);
     }
 
-    public void removeStation(Station station) {
+    public void removeStation(Line line, Station station) {
         if (sections.size() <= 1) {
             throw new RuntimeException();
         }
@@ -134,7 +134,7 @@ public class Sections {
             Station newUpStation = downSection.get().getUpStation();
             Station newDownStation = upSection.get().getDownStation();
             int newDistance = upSection.get().getDistance() + downSection.get().getDistance();
-            sections.add(new Section(newUpStation, newDownStation, newDistance));
+            sections.add(new Section(newUpStation, newDownStation,line.getId(), newDistance));
         }
 
         upSection.ifPresent(it -> sections.remove(it));

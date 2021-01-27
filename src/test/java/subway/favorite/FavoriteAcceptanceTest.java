@@ -107,6 +107,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     public static void 즐겨찾기_생성됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.header("Location")).isNotBlank();
     }
 
     public static void 즐겨찾기_목록_조회됨(ExtractableResponse<Response> response) {
