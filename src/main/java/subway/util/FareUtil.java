@@ -10,9 +10,6 @@ import java.util.List;
 public class FareUtil {
     private static final int BASE_FARE = 1250;
     private static final int HUNDRED = 100;
-    private static final int DEDUCTION_FARE = 350;
-    private static final double TEENAGER_SALE_RATE = 0.2;
-    private static final double CHILD_SALE_RATE = 0.5;
     private static final int BASIC_FARE_DISTANCE = 10;
     private static final int EXTRA_FARE_DISTANCE = 50;
     private static final int OVER_EXTRA_DISTANCE_FARE = 800;
@@ -20,14 +17,15 @@ public class FareUtil {
     private static final double HIGH_DISTANCE_DENOMINATOR = 8;
 
     public static int getTotalFare(LoginMember loginMember, int totalFare) {
+        FareStrategy fareStrategy = new DefaultFareStrategy();
         if (loginMember.isTeenager()) {
-            totalFare -= (totalFare - DEDUCTION_FARE) * TEENAGER_SALE_RATE;
+            fareStrategy = new TeenagerFareStrategy();
         }
         if (loginMember.isChild()) {
-            totalFare -= (totalFare - DEDUCTION_FARE) * CHILD_SALE_RATE;
+            fareStrategy = new ChildFareStrategy();
         }
 
-        return totalFare;
+        return fareStrategy.getTotalFare(loginMember, totalFare);
     }
 
     public static int calculateDistanceFare(int totalDistance) {

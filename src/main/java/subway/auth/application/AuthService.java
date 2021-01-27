@@ -5,21 +5,22 @@ import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exception.AuthorizationFailException;
+import subway.member.application.MemberService;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 
 @Service
 public class AuthService {
     private JwtTokenProvider jwtTokenProvider;
-    private MemberDao memberDao;
+    private MemberService memberService;
 
-    public AuthService(JwtTokenProvider jwtTokenProvider, MemberDao memberDao) {
+    public AuthService(JwtTokenProvider jwtTokenProvider, MemberService memberService) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.memberDao = memberDao;
+        this.memberService = memberService;
     }
 
     public TokenResponse createToken(TokenRequest tokenRequest) {
-        memberDao.findByEmail(tokenRequest.getEmail())
+        memberService.findByEmail(tokenRequest.getEmail())
                 .checkValidMember(new Member(tokenRequest.getEmail(), tokenRequest.getPassword()));
         return new TokenResponse(jwtTokenProvider.createToken(tokenRequest.getEmail()));
     }
@@ -28,6 +29,6 @@ public class AuthService {
         if (!jwtTokenProvider.validateToken(token)) {
             throw new AuthorizationFailException();
         }
-        return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
+        return memberService.findByEmail(jwtTokenProvider.getPayload(token));
     }
 }

@@ -1,26 +1,33 @@
-package subway.util;
+package subway.line.domain;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import subway.line.domain.Line;
-import subway.line.domain.Section;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
-import java.util.Map;
-
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ShortestPathUtil {
-    public static List getShortestPath(DijkstraShortestPath dijkstraShortestPath, Long source, Long target) {
+public class Lines {
+    private final List<Line> lines;
+
+    public Lines(List<Line> lines) {
+        this.lines = lines;
+    }
+
+    public List<Line> getLines() {
+        return lines;
+    }
+
+    public List getShortestPath(DijkstraShortestPath dijkstraShortestPath, Long source, Long target) {
         List shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
         return shortestPath;
     }
 
-    public static DijkstraShortestPath getDijkstraShortestPath(List<Line> lines) {
+    public DijkstraShortestPath getDijkstraShortestPath() {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph
                 = new WeightedMultigraph(DefaultWeightedEdge.class);
 
@@ -34,7 +41,7 @@ public class ShortestPathUtil {
         return new DijkstraShortestPath(graph);
     }
 
-    public static List<Section> getShortestPathSections(List<Long> shortestPath, List<Station> stations) {
+    public List<Section> getShortestPathSections(List<Long> shortestPath, List<Station> stations) {
         List<Section> sections = new ArrayList<>();
         Map<Long, Station> mapStations = stations.stream()
                 .collect(Collectors.toMap(Station::getId, Function.identity()));

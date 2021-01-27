@@ -20,7 +20,6 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    // TODO: 즐겨찾기 기능 구현하기
     @PostMapping
     public ResponseEntity createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
         FavoriteResponse favoriteResponse = favoriteService.create(loginMember, favoriteRequest);

@@ -17,10 +17,6 @@ public class Member {
     }
 
     public Member(String email, String password) {
-        String emailRule = EMAIL_RULE;
-        if (!email.matches(emailRule)) {
-            throw new WrongEmailFormatException();
-        }
         this.email = email;
         this.password = password;
     }
@@ -57,6 +53,12 @@ public class Member {
     public void checkValidMember(Member member) {
         if (!this.equals(member)) {
             throw new LoginFailException();
+        }
+    }
+
+    public void checkValidEmail() {
+        if (!email.matches(EMAIL_RULE)) {
+            throw new WrongEmailFormatException();
         }
     }
 
