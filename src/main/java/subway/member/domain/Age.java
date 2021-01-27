@@ -13,8 +13,8 @@ public class Age {
     }
 
     private void validate(int age) {
-        if(age < 0) {
-            throw new IllegalArgumentException("나이는 음수가 될 수 없습니다.");
+        if(age <= 0) {
+            throw new IllegalArgumentException("나이는 0살보다 커야합니다.");
         }
     }
 }

@@ -1,13 +1,13 @@
 package subway.path.domain.fare;
 
 public class GeneralFareStrategy implements FareStrategy {
-    private static final int BASIC_FARE = 1250;
-    private static final int ADDITIONAL_FARE_PER_DISTANCE = 100;
-    private static final int FIVE_KM = 5;
-    private static final int EIGHT_KM = 8;
-    private static final int TEN_KM = 10;
-    private static final int FIFTY_KM = 50;
-    private static final int FORTY_KM = 40;
+    static final int BASIC_FARE = 1250;
+    static final int ADDITIONAL_FARE_PER_DISTANCE = 100;
+    static final int FIVE_KM = 5;
+    static final int EIGHT_KM = 8;
+    static final int TEN_KM = 10;
+    static final int FIFTY_KM = 50;
+    static final int FORTY_KM = 40;
 
     private final int fare;
 
