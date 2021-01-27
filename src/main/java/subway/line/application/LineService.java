@@ -8,6 +8,8 @@ import subway.line.domain.Section;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.line.exception.DuplicateLineNameException;
+import subway.line.exception.SectionNotFoundException;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -16,9 +18,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class LineService {
-    private LineDao lineDao;
-    private SectionDao sectionDao;
-    private StationService stationService;
+    private final int NOT_DUPLICATED=0;
+    private final LineDao lineDao;
+    private final SectionDao sectionDao;
+    private final StationService stationService;
 
     public LineService(LineDao lineDao, SectionDao sectionDao, StationService stationService) {
         this.lineDao = lineDao;
@@ -27,7 +30,8 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor()));
+        isSameLine(request.getName());
+        Line persistLine = lineDao.insert(Line.of(request.getName(), request.getColor(), request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }
@@ -39,7 +43,7 @@ public class LineService {
             Section section = new Section(upStation, downStation, request.getDistance());
             return sectionDao.insert(line, section);
         }
-        return null;
+        throw new SectionNotFoundException();
     }
 
     public List<LineResponse> findLineResponses() {
@@ -63,7 +67,7 @@ public class LineService {
     }
 
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
-        lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
+        lineDao.update(Line.of(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor(), lineUpdateRequest.getExtraFare()));
     }
 
     public void deleteLineById(Long id) {
@@ -87,6 +91,12 @@ public class LineService {
 
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
+    }
+
+    private void isSameLine(String name){
+        if(lineDao.countByName(name)!=NOT_DUPLICATED){
+            throw new DuplicateLineNameException();
+        }
     }
 
 }

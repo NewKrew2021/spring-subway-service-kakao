@@ -1,10 +1,11 @@
 package subway;
 
-import subway.auth.application.AuthService;
-import subway.auth.ui.AuthenticationPrincipalArgumentResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import subway.auth.application.AuthService;
+import subway.auth.ui.AuthenticationPrincipalArgumentResolver;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 public class AuthenticationPrincipalConfig implements WebMvcConfigurer {
     private final AuthService authService;
 
+    @Autowired
     public AuthenticationPrincipalConfig(AuthService authService) {
         this.authService = authService;
     }

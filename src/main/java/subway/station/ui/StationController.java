@@ -8,12 +8,11 @@ import subway.station.dto.StationRequest;
 import subway.station.dto.StationResponse;
 
 import java.net.URI;
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 public class StationController {
-    private StationService stationService;
+    private final StationService stationService;
 
     public StationController(StationService stationService) {
         this.stationService = stationService;
@@ -36,8 +35,4 @@ public class StationController {
         return ResponseEntity.noContent().build();
     }
 
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity handleSQLException() {
-        return ResponseEntity.badRequest().build();
-    }
 }
