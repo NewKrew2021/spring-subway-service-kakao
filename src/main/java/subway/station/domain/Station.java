@@ -13,10 +13,6 @@ public class Station {
         this.name = name;
     }
 
-    public Station(String name) {
-        this.name = name;
-    }
-
     public StationResponse toResponse() {
         return new StationResponse(id, name);
     }

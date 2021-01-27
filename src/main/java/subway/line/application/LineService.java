@@ -9,6 +9,7 @@ import subway.line.domain.Section;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.line.vo.LineAttributes;
 import subway.path.application.PathService;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
@@ -65,8 +66,10 @@ public class LineService {
         return lineDao.findById(id);
     }
 
-    public void updateLine(Long id, LineRequest lineUpdateRequest) {
-        lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
+    public void updateLine(Long id, LineAttributes attributes) {
+        Line line = lineDao.findById(id);
+        line.changeToNewAttributes(attributes.getName(), attributes.getColor(), attributes.getExtraFare());
+        lineDao.update(line);
     }
 
     public void deleteLineById(Long id) {
@@ -97,8 +100,8 @@ public class LineService {
         PathService.newlyUpdated();
     }
 
-    private Line insertAndSet(LineRequest request) {
-        Line newLine = lineDao.insert(new Line(request.getName(), request.getColor(), request.getExtraFare()));
+    private Line insertAndSet(LineRequest lineRequest) {
+        Line newLine = lineDao.insert(lineRequest);
         PathService.newlyUpdated();
         return newLine;
     }

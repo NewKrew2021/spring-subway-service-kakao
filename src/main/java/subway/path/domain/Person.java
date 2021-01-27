@@ -42,6 +42,10 @@ public enum Person {
         return deduction;
     }
 
+    public int getMinAge() {
+        return minAge;
+    }
+
     private boolean isInAge(LoginMember loginMember) {
         return minAge <= loginMember.getAge() && loginMember.getAge() < maxAge;
     }
