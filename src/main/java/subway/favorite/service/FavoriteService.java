@@ -1,4 +1,4 @@
-package subway.favorite.application;
+package subway.favorite.service;
 
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
@@ -20,7 +20,7 @@ public class FavoriteService {
     }
 
     public FavoriteResponse showFavoriteByMemberId(Long id) {
-        Favorite favorite = favoriteDao.showByMemberId(id);
+        Favorite favorite = favoriteDao.findById(id);
         return new FavoriteResponse(favorite.getId(), favorite.getSource(), favorite.getTarget());
     }
 

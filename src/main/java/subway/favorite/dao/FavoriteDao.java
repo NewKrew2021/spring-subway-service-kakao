@@ -12,27 +12,32 @@ import java.util.stream.Collectors;
 @Repository
 public class FavoriteDao {
 
+    public static final String SAVE_BY_ID_QUERY =
+            "insert into favorite " +
+                    "(member_id, source_station_id, target_station_id) " +
+                    "values (?, ?, ?)";
+
+    public static final String FIND_BY_ID_QUERY =
+            "select F.id as favorite_id, " +
+                    "F.source_station_id as ss_id, SS.name as ss_name, " +
+                    "F.target_station_id as ts_id, TS.name as ts_name " +
+                    "from FAVORITE F \n " +
+                    "left outer join STATION SS on F.source_station_id = SS.id " +
+                    "left outer join STATION TS on F.target_station_id = TS.id " +
+                    "where F.member_id = ?";
+
     private final JdbcTemplate jdbcTemplate;
 
     public FavoriteDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     public void save(Long source, Long target, Long memberId) {
-        String sql = "insert into favorite (member_id, source_station_id, target_station_id) values (?, ?, ?)";
-        jdbcTemplate.update(sql, memberId, source, target);
+        jdbcTemplate.update(SAVE_BY_ID_QUERY, memberId, source, target);
     }
 
-    public Favorite showByMemberId(Long id) {
-        String sql = "select F.id as favorite_id, " +
-                "F.source_station_id as ss_id, SS.name as ss_name, " +
-                "F.target_station_id as ts_id, TS.name as ts_name " +
-                "from FAVORITE F \n " +
-                "left outer join STATION SS on F.source_station_id = SS.id " +
-                "left outer join STATION TS on F.target_station_id = TS.id " +
-                "where F.member_id = ?";
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+    public Favorite findById(Long id) {
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(FIND_BY_ID_QUERY, new Object[]{id});
         return result.stream()
                 .map(it -> new Favorite(
                         (Long) it.get("favorite_id"),
