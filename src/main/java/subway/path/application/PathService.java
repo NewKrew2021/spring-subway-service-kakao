@@ -1,6 +1,7 @@
 package subway.path.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import subway.line.application.LineService;
 import subway.member.domain.LoginMember;
 import subway.path.domain.fare.FareCalculator;
@@ -19,6 +20,7 @@ public class PathService {
         this.stationService = stationService;
     }
 
+    @Transactional(readOnly = true)
     public PathDto findPath(long sourceId, long destId, LoginMember loginMember) {
         Path path = new Path(stationService.findStationById(sourceId),
                 stationService.findStationById(destId),
