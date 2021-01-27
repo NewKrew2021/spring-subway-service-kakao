@@ -1,7 +1,7 @@
 package subway.path.domain.path.time;
 
 import org.jgrapht.GraphPath;
-import subway.path.domain.path.DistanceLineEdge;
+import subway.path.domain.path.SubwayGraphEdge;
 import subway.path.domain.path.graph.PathAndArrival;
 import subway.station.domain.Station;
 
@@ -10,9 +10,9 @@ import java.util.List;
 
 public class ShortestTimePaths {
 
-    private final List<GraphPath<Station, DistanceLineEdge>> graphPaths;
+    private final List<GraphPath<Station, SubwayGraphEdge>> graphPaths;
 
-    public ShortestTimePaths(List<GraphPath<Station, DistanceLineEdge>> graphPaths) {
+    public ShortestTimePaths(List<GraphPath<Station, SubwayGraphEdge>> graphPaths) {
         this.graphPaths = graphPaths;
     }
 
@@ -21,7 +21,7 @@ public class ShortestTimePaths {
         return new PathAndArrival() {
             // TODO: 최단 시간 도착 경로 구현
             @Override
-            public GraphPath<Station, DistanceLineEdge> getPath() {
+            public GraphPath<Station, SubwayGraphEdge> getPath() {
                 return graphPaths.get(0);
             }
 

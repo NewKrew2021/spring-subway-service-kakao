@@ -1,15 +1,15 @@
 package subway.path.domain.path.graph;
 
-import subway.path.domain.path.DistanceLineEdge;
+import subway.path.domain.path.SubwayGraphEdge;
 import subway.station.domain.Station;
 
 public class SubwayGraphElement {
 
     private final Station source;
     private final Station target;
-    private final DistanceLineEdge edge;
+    private final SubwayGraphEdge edge;
 
-    public SubwayGraphElement(Station source, Station target, DistanceLineEdge edge) {
+    public SubwayGraphElement(Station source, Station target, SubwayGraphEdge edge) {
         this.source = source;
         this.target = target;
         this.edge = edge;
@@ -23,7 +23,7 @@ public class SubwayGraphElement {
         return target;
     }
 
-    public DistanceLineEdge getEdge() {
+    public SubwayGraphEdge getEdge() {
         return edge;
     }
 }

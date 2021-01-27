@@ -24,7 +24,7 @@ public class SubwayPath {
     }
 
     public static SubwayPath from(PathAndArrival subwayPath) {
-        GraphPath<Station, DistanceLineEdge> path = subwayPath.getPath();
+        GraphPath<Station, SubwayGraphEdge> path = subwayPath.getPath();
         return new SubwayPath(
                 path.getVertexList(),
                 (int) path.getWeight(),
@@ -33,9 +33,9 @@ public class SubwayPath {
         );
     }
 
-    private static List<Line> getLines(List<DistanceLineEdge> edges) {
+    private static List<Line> getLines(List<SubwayGraphEdge> edges) {
         return edges.stream()
-                .map(DistanceLineEdge::getLine)
+                .map(SubwayGraphEdge::getLine)
                 .collect(Collectors.toList());
     }
 

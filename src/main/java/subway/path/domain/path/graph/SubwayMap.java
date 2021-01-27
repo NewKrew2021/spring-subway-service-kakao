@@ -1,7 +1,7 @@
 package subway.path.domain.path.graph;
 
 import subway.line.domain.Line;
-import subway.path.domain.path.DistanceLineEdge;
+import subway.path.domain.path.SubwayGraphEdge;
 import subway.path.domain.path.PathType;
 import subway.path.domain.path.SubwayPath;
 import subway.station.domain.Station;
@@ -35,7 +35,7 @@ public class SubwayMap {
                 .map(section -> new SubwayGraphElement(
                         section.getUpStation(),
                         section.getDownStation(),
-                        new DistanceLineEdge(section.getDistance(), line)
+                        new SubwayGraphEdge(section.getDistance(), section.getDuration(), line)
                 ))
                 .collect(Collectors.toList());
     }
