@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.member.domain.Age;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
@@ -20,7 +21,7 @@ public class MemberDao {
                     rs.getLong("id"),
                     rs.getString("email"),
                     rs.getString("password"),
-                    rs.getInt("age")
+                    new Age(rs.getInt("age"))
             );
 
 
@@ -34,7 +35,7 @@ public class MemberDao {
     public Member insert(Member member) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
         Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-        return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
+        return new Member(id, member.getEmail(), member.getPassword(), new Age(member.getAge()));
     }
 
     public void update(Member member) {

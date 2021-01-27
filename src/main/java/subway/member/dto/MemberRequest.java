@@ -1,5 +1,6 @@
 package subway.member.dto;
 
+import subway.member.domain.Age;
 import subway.member.domain.Member;
 
 public class MemberRequest {
@@ -29,6 +30,6 @@ public class MemberRequest {
     }
 
     public Member toMember() {
-        return new Member(email, password, age);
+        return new Member(email, password, new Age(age));
     }
 }

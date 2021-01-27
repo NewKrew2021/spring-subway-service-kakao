@@ -8,6 +8,7 @@ import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.member.dao.MemberDao;
+import subway.member.domain.Age;
 import subway.member.domain.Member;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
@@ -45,7 +46,7 @@ public class DataLoader implements CommandLineRunner {
         이호선.addSection(new Section(역삼역, 잠실역, 10));
         sectionDao.insertSections(이호선);
 
-        Member member = new Member("email@email.com", "password", 10);
+        Member member = new Member("email@email.com", "password", new Age(10));
         memberDao.insert(member);
     }
 }
