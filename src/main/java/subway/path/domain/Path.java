@@ -2,24 +2,24 @@ package subway.path.domain;
 
 import subway.member.domain.LoginMember;
 import subway.path.util.FareUtil;
-import subway.station.dto.StationResponse;
+import subway.station.domain.Station;
 
 import java.util.List;
 
 public class Path {
 
     public static final int DEDUCTIONS = 350;
-    private final List<StationResponse> stations;
+    private final List<Station> stations;
     private final int distance;
     private final int extraFare;
 
-    public Path(List<StationResponse> stations, int distance, int extraFare) {
+    public Path(List<Station> stations, int distance, int extraFare) {
         this.stations = stations;
         this.distance = distance;
         this.extraFare = extraFare;
     }
 
-    public List<StationResponse> getStations() {
+    public List<Station> getStations() {
         return stations;
     }
 

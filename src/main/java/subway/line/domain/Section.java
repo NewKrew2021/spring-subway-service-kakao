@@ -15,16 +15,16 @@ public class Section extends DefaultWeightedEdge {
     public Section() {
     }
 
-    public Section(Long id, Station upStation, Station downStation,long lineId, int distance) {
-        this(upStation, downStation,lineId,distance);
+    public Section(Long id, Station upStation, Station downStation, long lineId, int distance) {
         this.id = id;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.lineId = lineId;
+        this.distance = distance;
     }
 
     public Section(Station upStation, Station downStation, long lineId, int distance) {
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
-        this.lineId = lineId;
+        this(null, upStation, downStation, lineId, distance);
     }
 
     public Long getId() {

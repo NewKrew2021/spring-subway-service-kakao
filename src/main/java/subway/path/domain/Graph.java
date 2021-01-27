@@ -5,7 +5,6 @@ import org.jgrapht.graph.WeightedMultigraph;
 import subway.exceptions.NotExistsDataException;
 import subway.line.domain.Section;
 import subway.station.domain.Station;
-import subway.station.dto.StationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,12 +21,9 @@ public class Graph {
         dijkstraShortestPath = new DijkstraShortestPath<>(graph);
     }
 
-    public List<StationResponse> getPathStations(Station sourceStation, Station targetStation) {
+    public List<Station> getPathStations(Station sourceStation, Station targetStation) {
         try {
-            List<Station> stations = dijkstraShortestPath.getPath(sourceStation, targetStation).getVertexList();
-            return stations.stream()
-                    .map(StationResponse::of)
-                    .collect(Collectors.toList());
+            return dijkstraShortestPath.getPath(sourceStation, targetStation).getVertexList();
         } catch (NullPointerException e) {
             throw new NotExistsDataException(NO_MATCHING_PATH_EXCEPTION_ERROR_MESSAGE);
         }

@@ -2,6 +2,7 @@ package subway.path.dto;
 
 import subway.member.domain.LoginMember;
 import subway.path.domain.Path;
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public class PathResponse {
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int distance, int fare) {
-        this.stations = stations;
+    public PathResponse(List<Station> stations, int distance, int fare) {
+        this.stations = StationResponse.listOf(stations);
         this.distance = distance;
         this.fare = fare;
     }
@@ -23,6 +24,7 @@ public class PathResponse {
     public static PathResponse of(Path path) {
         return new PathResponse(path.getStations(), path.getDistance(), path.getTotalFare());
     }
+
     public static PathResponse of(Path path, LoginMember loginMember) {
         return new PathResponse(path.getStations(), path.getDistance(), path.getTotalFare(loginMember));
     }
