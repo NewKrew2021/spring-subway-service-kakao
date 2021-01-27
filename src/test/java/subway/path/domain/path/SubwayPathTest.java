@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
-import subway.path.domain.path.graph.SubwayGraph;
+import subway.path.domain.path.graph.SubwayMap;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ public class SubwayPathTest {
     private Line 이호선;
     private Line 삼호선;
 
-    private SubwayGraph graph;
+    private SubwayMap graph;
 
     /**
      * 교대역  --- *2호선*(28) ---   강남역   --- *2호선*(38) ---   잠실역
@@ -52,7 +52,7 @@ public class SubwayPathTest {
         삼호선.addSection(교대역, 남부터미널역, 5);
         삼호선.addSection(남부터미널역, 양재역, 2);
 
-        graph = SubwayGraph.from(Arrays.asList(신분당선, 이호선, 삼호선), PathType.DISTANCE);
+        graph = SubwayMap.from(Arrays.asList(신분당선, 이호선, 삼호선), PathType.DISTANCE);
     }
 
     @DisplayName("남부터미널역에서 강남역을 가는 경로")

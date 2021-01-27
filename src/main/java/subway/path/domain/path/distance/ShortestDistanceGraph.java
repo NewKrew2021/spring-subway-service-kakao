@@ -7,28 +7,28 @@ import org.jgrapht.graph.WeightedMultigraph;
 import subway.path.domain.path.DistanceLineEdge;
 import subway.path.domain.path.graph.PathAndArrival;
 import subway.path.domain.path.graph.SubwayGraphElement;
-import subway.path.domain.path.graph.SubwayGraphPath;
+import subway.path.domain.path.graph.SubwayGraph;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ShortestDistancePathGraph implements SubwayGraphPath {
+public class ShortestDistanceGraph implements SubwayGraph {
 
     private final Graph<Station, DistanceLineEdge> graph;
 
-    private ShortestDistancePathGraph(Graph<Station, DistanceLineEdge> graph) {
+    private ShortestDistanceGraph(Graph<Station, DistanceLineEdge> graph) {
         this.graph = graph;
     }
 
-    public static ShortestDistancePathGraph initialize(List<SubwayGraphElement> graphElements) {
+    public static ShortestDistanceGraph initialize(List<SubwayGraphElement> graphElements) {
         Graph<Station, DistanceLineEdge> graph = new WeightedMultigraph<>(DistanceLineEdge.class);
         for (SubwayGraphElement element : graphElements) {
             graph.addVertex(element.getSource());
             graph.addVertex(element.getTarget());
             graph.addEdge(element.getSource(), element.getTarget(), element.getEdge());
         }
-        return new ShortestDistancePathGraph(graph);
+        return new ShortestDistanceGraph(graph);
     }
 
     @Override
