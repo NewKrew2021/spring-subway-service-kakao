@@ -1,6 +1,7 @@
 package subway.auth.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
@@ -32,6 +33,7 @@ public class AuthService {
         return MemberResponse.from(member);
     }
 
+    @Transactional
     public TokenResponse createToken(TokenRequest tokenRequest) {
         if (checkInvalidLogin(tokenRequest.getEmail(), tokenRequest.getPassword())) {
             throw new AuthorizationException("일치하는 회원정보가 없습니다.");

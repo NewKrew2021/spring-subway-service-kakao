@@ -28,8 +28,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(Member.of(id, memberRequest.getEmail(), memberRequest.getPassword(), Age.from(memberRequest.getAge())));
+    public void updateMember(Long id, MemberRequest request) {
+        memberDao.update(Member.of(id, request.getEmail(), request.getPassword(), Age.from(request.getAge())));
     }
 
     @Transactional
