@@ -1,7 +1,5 @@
 package subway.path.util;
 
-import subway.member.domain.LoginMember;
-
 public class LoginMemberAgeFare {
 
     private static final int MIN_AGE_CHILD = 6;
@@ -11,8 +9,7 @@ public class LoginMemberAgeFare {
     private static final double CHILD_DISCOUNT_RATE = 0.5;
     private static final double TEENAGER_DISCOUNT_RATE = 0.2;
 
-    public static int getFare(LoginMember loginMember, int fare) {
-        int age = loginMember.getAge();
+    public static int getFare(int age, int fare) {
         if (age < MIN_AGE_CHILD) {
             return 0;
         }
