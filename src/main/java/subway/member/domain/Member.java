@@ -43,4 +43,8 @@ public class Member {
     public Integer getAge() {
         return age;
     }
+
+    public boolean hasSameEmail(String email){
+        return this.email.equals(email);
+    }
 }

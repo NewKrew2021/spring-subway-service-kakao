@@ -2,6 +2,7 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.exception.InvalidMemberException;
 import subway.line.domain.Line;
 import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
@@ -26,6 +27,12 @@ public class MemberService {
     public MemberResponse findMember(Long id) {
         Member member = memberDao.findById(id);
         return MemberResponse.of(member);
+    }
+
+    public Member findByEmail(String email){
+        return memberDao.findByEmail(email)
+                .filter(member -> member.hasSameEmail(email))
+                .orElseThrow(InvalidMemberException::new);
     }
 
     @Transactional

@@ -11,6 +11,7 @@ import subway.exception.InvalidMemberException;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
 @Repository
 public class MemberDao {
@@ -56,11 +57,11 @@ public class MemberDao {
         return jdbcTemplate.queryForObject(FIND_MEMBER_BY_MEMBER_ID, rowMapper, id);
     }
 
-    public Member findByEmail(String email) {
+    public Optional<Member> findByEmail(String email) {
         try {
-            return jdbcTemplate.queryForObject(FIND_MEMBER_BY_EMAIL, rowMapper, email);
+            return Optional.of(jdbcTemplate.queryForObject(FIND_MEMBER_BY_EMAIL, rowMapper, email));
         } catch (EmptyResultDataAccessException e){
-            throw new InvalidMemberException("이메일이 없거나, 패스워드가 일치하지 않음");
+            return Optional.empty();
         }
     }
 }
