@@ -34,7 +34,7 @@ public class FavoriteDao {
         return new Favorite(lineId, favorite.getMemberId(), favorite.getSourceStation(), favorite.getTargetStation());
     }
 
-    public List<Favorite> findById(Long memberId) {
+    public List<Favorite> findByMemberId(Long memberId) {
         String sql = "select F.id as favorite_id, member_id, " +
                 "SRC.id as source_station_id, SRC.name as source_station_name, " +
                 "TRG.id as target_station_id, TRG.name as target_station_name " +

@@ -30,7 +30,7 @@ public class FavoriteService {
     }
 
     public List<FavoriteResponse> findFavoriteByMemberId(LoginMember loginMember) {
-        List<Favorite> favorites = favoriteDao.findById(loginMember.getId());
+        List<Favorite> favorites = favoriteDao.findByMemberId(loginMember.getId());
         return favorites.stream()
                 .map(FavoriteResponse::of)
                 .collect(Collectors.toList());
