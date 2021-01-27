@@ -17,7 +17,7 @@ public class FareCalculator {
         fare += LineFare.getFare(lines);
 
         if (loginMember.isLogined()) {
-            fare = LoginMemberAgeFare.getFare(loginMember.getAge(), fare);
+            fare = AgeFare.getFare(loginMember.getAge(), fare);
         }
         return fare;
     }

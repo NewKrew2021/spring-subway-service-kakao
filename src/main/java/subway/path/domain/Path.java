@@ -21,7 +21,7 @@ public class Path {
         this.graphPath = graphPath;
     }
 
-    public static Path from(List<Line> lines, Station source, Station target) {
+    public static Path of(List<Line> lines, Station source, Station target) {
         WeightedMultigraph<Station, DistanceLineEdge> graph = new WeightedMultigraph<>(DistanceLineEdge.class);
         for (Line line : lines) {
             for (Section section : line.getSections()) {

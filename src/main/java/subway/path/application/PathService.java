@@ -27,8 +27,8 @@ public class PathService {
 
         List<Line> lines = lineService.findLines();
 
-        Path path = Path.from(lines, stationService.findStationById(source), stationService.findStationById(target));
+        Path path = Path.of(lines, stationService.findStationById(source), stationService.findStationById(target));
 
-        return new PathValue(path.getStations(), path.getDistance(), path.getFare(loginMember));
+        return PathValue.of(path, loginMember);
     }
 }

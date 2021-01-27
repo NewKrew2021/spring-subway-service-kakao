@@ -1,7 +1,5 @@
 package subway.path.domain;
 
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +58,7 @@ public class PathTest {
     @Test
     void testPath1() {
         // when
-        Path path = Path.from(lines, 남부터미널역, 강남역);
+        Path path = Path.of(lines, 남부터미널역, 강남역);
         LoginMember 어른 = new LoginMember(1L, "test", 30);
 
         // then
@@ -73,7 +71,7 @@ public class PathTest {
     @Test
     void testPath2() {
         //when
-        Path path = Path.from(lines, 교대역, 잠실역);
+        Path path = Path.of(lines, 교대역, 잠실역);
 
         //then
         LoginMember 어른 = new LoginMember(1L, "test", 30);

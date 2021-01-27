@@ -4,20 +4,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import subway.member.domain.LoginMember;
-import subway.path.util.LoginMemberAgeFare;
 
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class LoginMemberAgeFareTest {
+class AgeFareTest {
 
 
     @ParameterizedTest
     @MethodSource("generateLoginMember")
     void getFare(LoginMember loginMember, int fare, int expected){
         //when
-        int result = LoginMemberAgeFare.getFare(loginMember, fare);
+        int result = AgeFare.getFare(loginMember.getAge(), fare);
 
         //then
         assertThat(result).isEqualTo(expected);

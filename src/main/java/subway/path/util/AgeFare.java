@@ -1,6 +1,6 @@
 package subway.path.util;
 
-public class LoginMemberAgeFare {
+public class AgeFare {
 
     private static final int MIN_AGE_CHILD = 6;
     private static final int MIN_AGE_TEENAGER = 13;
