@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class StationService {
-    private StationDao stationDao;
+    private final StationDao stationDao;
 
     public StationService(StationDao stationDao) {
         this.stationDao = stationDao;
     }
 
     public StationResponse saveStation(StationRequest stationRequest) {
-        Station station = stationDao.insert(stationRequest.toStation());
-        return StationResponse.of(station);
+        Station station = stationDao.insert(Station.from(stationRequest.getName()));
+        return StationResponse.from(station);
     }
 
     public Station findStationById(Long id) {
@@ -30,7 +30,7 @@ public class StationService {
         List<Station> stations = stationDao.findAll();
 
         return stations.stream()
-                .map(StationResponse::of)
+                .map(StationResponse::from)
                 .collect(Collectors.toList());
     }
 

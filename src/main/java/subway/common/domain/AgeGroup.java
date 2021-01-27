@@ -1,4 +1,4 @@
-package subway.member.domain;
+package subway.common.domain;
 
 import java.util.Arrays;
 
@@ -15,7 +15,7 @@ public enum AgeGroup {
         this.ageRange = range;
     }
 
-    public static AgeGroup of(Age age) {
+    public static AgeGroup from(Age age) {
         return Arrays.stream(AgeGroup.values())
                 .filter(ageGroup -> ageGroup.ageRange.isBelong(age.getAge()))
                 .findAny()
