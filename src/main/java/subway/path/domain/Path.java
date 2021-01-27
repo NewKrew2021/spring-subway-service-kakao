@@ -6,15 +6,19 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.Sections;
 import subway.path.dto.PathResult;
-import subway.station.domain.Station;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Path {
 
     WeightedMultigraph<PathVertex, DefaultWeightedEdge> graph
             = new WeightedMultigraph(DefaultWeightedEdge.class);
+
+    private static final int BASIC_FARE = 1250;
+    private static final int EXTRA_FARE_DISTANCE_FIRST = 10;
+    private static final int EXTRA_FARE_DISTANCE_SECOND = 50;
+    private static final int EXTRA_FARE_DISTANCE_FIRST_UNIT = 5;
+    private static final int EXTRA_FARE_DISTANCE_SECOND_UNIT = 8;
+    private static final int EXTRA_FARE_UNIT = 100;
 
     private PathVertices pathVertices;
 
@@ -39,19 +43,16 @@ public class Path {
         int distance = (int) result.getWeight();
         return new PathResult(new PathVertices(vertexList), distance);
     }
-//    기본운임(10㎞ 이내) : 기본운임 1,250원
-//    이용 거리초과 시 추가운임 부과
-//    10km 초과 ∼ 50km 까지(5km 마다 100원)
-//    50km 초과 시 (8km 마다 100원)
     public int getBasicFare(int distance) {
-        int result = 1250;
+        int result = BASIC_FARE;
 
-        if (distance > 10 && distance <= 50) {
-            result += (int) Math.ceil((double)(distance - 10) / 5) * 100;
+        if (distance > EXTRA_FARE_DISTANCE_FIRST && distance <= EXTRA_FARE_DISTANCE_SECOND) {
+            result += (int) Math.ceil((double)(distance - EXTRA_FARE_DISTANCE_FIRST) / EXTRA_FARE_DISTANCE_FIRST_UNIT) * EXTRA_FARE_UNIT;
         }
 
-        if (distance > 50) {
-            result += (int) Math.ceil((double)(distance - 50) / 8) * 100 + 800;
+        if (distance > EXTRA_FARE_DISTANCE_SECOND) {
+            result += (int) Math.ceil((double)(distance - EXTRA_FARE_DISTANCE_SECOND) / EXTRA_FARE_DISTANCE_SECOND_UNIT) * EXTRA_FARE_UNIT
+                    + ((EXTRA_FARE_DISTANCE_SECOND - EXTRA_FARE_DISTANCE_FIRST) / EXTRA_FARE_DISTANCE_FIRST_UNIT) * EXTRA_FARE_UNIT;
         }
         return result;
     }

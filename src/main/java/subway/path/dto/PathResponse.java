@@ -14,12 +14,6 @@ public class PathResponse {
     public PathResponse() {
     }
 
-    public PathResponse(List<StationResponse> stations, int distance) {
-        this.stations = stations;
-        this.distance = distance;
-        this.fare = fare;
-    }
-
     public PathResponse(PathResult pathResult){
         this.stations = pathResult.getPathVertices().getPathVertexList()
                 .stream()

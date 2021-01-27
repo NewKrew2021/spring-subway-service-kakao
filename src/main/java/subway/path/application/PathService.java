@@ -5,6 +5,7 @@ import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Sections;
 import subway.member.dao.MemberDao;
+import subway.member.domain.AGE;
 import subway.path.domain.Path;
 import subway.path.domain.PathVertices;
 import subway.path.dto.PathResult;
@@ -55,19 +56,8 @@ public class PathService {
 //    어린이: 운임에서 350원을 공제한 금액의 50%할인
 //    6세 미만: 무임
     private int discount(int age, int fare){
-        if(age < 6){
-            return 0;
-        }
-
-        if(age >=6 && age < 13){
-            return (int) ((fare - 350) * 0.5) + 350;
-        }
-
-        if(age >= 13 && age < 19){
-            return (int) ((fare - 350) * 0.8) + 350;
-        }
-
-        return fare;
+        AGE ageStatus = AGE.getAgeStatus(age);
+        return (int)((fare - ageStatus.getDeduction()) * ageStatus.getSaleRate()) + ageStatus.getDeduction();
     }
 
 }
