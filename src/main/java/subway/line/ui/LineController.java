@@ -1,5 +1,6 @@
 package subway.line.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.line.application.LineService;
@@ -17,6 +18,7 @@ public class LineController {
 
     private final LineService lineService;
 
+    @Autowired
     public LineController(LineService lineService) {
         this.lineService = lineService;
     }

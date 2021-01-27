@@ -1,5 +1,6 @@
 package subway.favorite.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ public class FavoriteController {
     FavoriteService favoriteService;
     StationService stationService;
 
+    @Autowired
     public FavoriteController(FavoriteService favoriteService, StationService stationService) {
         this.favoriteService = favoriteService;
         this.stationService = stationService;

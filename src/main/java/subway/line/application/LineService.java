@@ -1,5 +1,6 @@
 package subway.line.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
@@ -21,6 +22,7 @@ public class LineService {
     private final SectionDao sectionDao;
     private final StationService stationService;
 
+    @Autowired
     public LineService(LineDao lineDao, SectionDao sectionDao, StationService stationService) {
         this.lineDao = lineDao;
         this.sectionDao = sectionDao;

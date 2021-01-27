@@ -1,5 +1,6 @@
 package subway.member.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ public class MemberService {
 
     private final MemberDao memberDao;
 
+    @Autowired
     public MemberService(MemberDao memberDao) {
         this.memberDao = memberDao;
     }

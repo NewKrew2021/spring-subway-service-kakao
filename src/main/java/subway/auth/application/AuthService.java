@@ -1,5 +1,6 @@
 package subway.auth.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.auth.exception.InvalidPasswordException;
 import subway.auth.exception.InvalidTokenException;
@@ -14,6 +15,7 @@ public class AuthService {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
     public AuthService(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
