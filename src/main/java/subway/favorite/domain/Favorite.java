@@ -1,12 +1,15 @@
 package subway.favorite.domain;
 
+import subway.member.domain.Member;
+import subway.station.domain.Station;
+
 public class Favorite {
     private Long id;
-    private Long memberId;
-    private Long sourceStationId;
-    private Long targetStationId;
+    private Member memberId;
+    private Station sourceStationId;
+    private Station targetStationId;
 
-    public Favorite(Long id, Long memberId, Long sourceStationId, Long targetStationId){
+    public Favorite(Long id, Member memberId, Station sourceStationId, Station targetStationId){
         this.id = id;
         this.memberId = memberId;
         this.sourceStationId = sourceStationId;
@@ -17,15 +20,15 @@ public class Favorite {
         return id;
     }
 
-    public Long getMemberId(){
+    public Member getMemberId(){
         return memberId;
     }
 
-    public Long getSourceStationId(){
+    public Station getSourceStationId(){
         return sourceStationId;
     }
 
-    public Long getTargetStationId(){
+    public Station getTargetStationId(){
         return targetStationId;
     }
 }

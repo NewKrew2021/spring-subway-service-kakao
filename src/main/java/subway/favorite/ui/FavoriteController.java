@@ -13,6 +13,7 @@ import subway.member.domain.LoginMember;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -36,7 +37,12 @@ public class FavoriteController {
 
     @GetMapping
     public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember){
-        return ResponseEntity.ok().body(favoriteService.getFavorite(loginMember.getId()));
+        List<FavoriteResponse> favoriteResponses = favoriteService.getFavorite(loginMember.getId()).stream()
+                .map(favorite -> FavoriteResponse.of(favorite.getId(),
+                        favorite.getSourceStationId(),
+                        favorite.getTargetStationId()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(favoriteResponses);
     }
 
     @DeleteMapping("/{id}")
