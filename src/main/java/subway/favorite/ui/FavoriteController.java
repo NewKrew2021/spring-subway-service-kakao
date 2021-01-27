@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.favorite.application.FavoriteService;
+import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.member.domain.LoginMember;
@@ -28,7 +29,8 @@ public class FavoriteController {
 
     @PostMapping
     public ResponseEntity<FavoriteResponse> createFavorite(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest) {
-        FavoriteResponse favoriteResponse = FavoriteResponse.of(favoriteService.createFavorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget()));
+        Favorite favorite = favoriteService.createFavorite(loginMember.getId(), favoriteRequest);
+        FavoriteResponse favoriteResponse = FavoriteResponse.of(favorite);
         return ResponseEntity.created(URI.create("/favorites/" + favoriteResponse.getId())).body(favoriteResponse);
     }
 

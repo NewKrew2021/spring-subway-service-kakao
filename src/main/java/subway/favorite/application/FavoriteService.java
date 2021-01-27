@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
+import subway.favorite.dto.FavoriteRequest;
 import subway.line.exception.InvalidStationIdException;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
@@ -14,8 +15,8 @@ import java.util.List;
 @Service
 public class FavoriteService {
 
-    FavoriteDao favoriteDao;
-    StationDao stationDao;
+    private final FavoriteDao favoriteDao;
+    private final StationDao stationDao;
 
     @Autowired
     public FavoriteService(FavoriteDao favoriteDao, StationDao stationDao) {
@@ -23,11 +24,11 @@ public class FavoriteService {
         this.stationDao = stationDao;
     }
 
-    public Favorite createFavorite(Long memberId, Long sourceStationId, Long targetStationId) {
-        Station sourceStation = getStation(sourceStationId);
-        Station targetStation = getStation(targetStationId);
+    public Favorite createFavorite(Long memberId, FavoriteRequest favoriteRequest) {
+        Station sourceStation = getStation(favoriteRequest.getSource());
+        Station targetStation = getStation(favoriteRequest.getTarget());
 
-        Favorite result = favoriteDao.insert(memberId, sourceStationId, targetStationId);
+        Favorite result = favoriteDao.insert(memberId, favoriteRequest.getSource(), favoriteRequest.getTarget());
 
         return new Favorite(
                 result.getId(),

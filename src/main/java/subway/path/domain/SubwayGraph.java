@@ -10,7 +10,7 @@ public class SubwayGraph<V, E> extends WeightedMultigraph {
 
     public void setEdgeWeight(E e, SubwayWeight weight) {
         assert (e instanceof SubwayEdge) : e.getClass();
-        ((SubwayEdge) e).weight = weight;
+        ((SubwayEdge) e).setWeight(weight);
     }
 
     @Override

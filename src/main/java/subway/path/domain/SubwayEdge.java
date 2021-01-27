@@ -4,7 +4,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class SubwayEdge extends DefaultWeightedEdge {
 
-    SubwayWeight weight;
+    private SubwayWeight weight;
 
     @Override
     protected double getWeight() {
@@ -13,5 +13,9 @@ public class SubwayEdge extends DefaultWeightedEdge {
 
     public int getFare() {
         return weight.getFare();
+    }
+
+    public void setWeight(SubwayWeight weight) {
+        this.weight = weight;
     }
 }

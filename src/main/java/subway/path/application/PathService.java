@@ -11,7 +11,7 @@ import subway.path.domain.PathGraph;
 @Service
 public class PathService {
 
-    LineService lineService;
+    private final LineService lineService;
 
     @Autowired
     public PathService(LineService lineService) {
