@@ -1,8 +1,11 @@
 package subway.favorite.application;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import subway.exceptions.AuthorizationException;
 import subway.exceptions.FavoriteDuplicateException;
 import subway.exceptions.FavoriteSameArgumentException;
+import subway.exceptions.InvalidRequestException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
@@ -38,5 +41,24 @@ public class FavoriteService {
 
     public void delete(long favoriteId) {
         favoriteDao.deleteById(favoriteId);
+    }
+
+    public void checkValidRequest(FavoriteRequest favoriteRequest) {
+        if(favoriteRequest == null){
+            throw new InvalidRequestException("request body에 정보가 없습니다.");
+        }
+        favoriteRequest.checkValidation();
+    }
+
+    public void checkValidUser(Long loginId, long favoriteId) {
+        long memberId;
+        try{
+            memberId = favoriteDao.findById(favoriteId).getMemberId();
+        } catch(DataAccessException e){
+            throw new InvalidRequestException("존재하지 않는 즐겨찾기 입니다.");
+        }
+        if(memberId != loginId){
+            throw new AuthorizationException("해당 즐겨찾기에 접근할 수 없는 사용자 입니다.");
+        }
     }
 }

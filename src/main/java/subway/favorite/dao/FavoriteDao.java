@@ -60,6 +60,18 @@ public class FavoriteDao {
         return jdbcTemplate.query(sql, favoriteMapper, memberId);
     }
 
+    public Favorite findById(long favoriteId){
+        String sql = "select * from favorite where id = ?";
+        return jdbcTemplate.queryForObject(sql,
+                (rs, rowNum) -> new Favorite(
+                        rs.getLong("id"),
+                        rs.getLong("member_id"),
+                        rs.getLong("source_station_id"),
+                        rs.getLong("target_station_id")
+                ),
+                favoriteId);
+    }
+
     public boolean favoriteExists(Favorite favorite) {
         String sql = "select EXISTS" +
                 " (select * from favorite where member_id = ? and source_station_id = ? and target_station_id = ?)" +
