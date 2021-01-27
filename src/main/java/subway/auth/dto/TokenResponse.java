@@ -1,11 +1,11 @@
 package subway.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class TokenResponse {
-    private String accessToken;
+    private final String accessToken;
 
-    public TokenResponse() {
-    }
-
+    @JsonCreator
     public TokenResponse(String accessToken) {
         this.accessToken = accessToken;
     }

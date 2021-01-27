@@ -1,5 +1,6 @@
 package subway.auth.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -14,9 +15,10 @@ import subway.member.application.MemberService;
 import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private MemberService memberService;
-    private JwtTokenProvider jwtTokenProvider;
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
     public AuthenticationPrincipalArgumentResolver(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.memberService = memberService;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -32,7 +34,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
         if (!jwtTokenProvider.validateToken(token)) {
             AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
-            if (auth.isThrow()) {
+            if (auth.required()) {
                 throw new AuthorizationException("");
             }
             return null;

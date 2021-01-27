@@ -1,5 +1,6 @@
 package subway.favorite.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,6 +18,11 @@ import java.util.NoSuchElementException;
 public class FavoriteDao {
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    public FavoriteDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     private final RowMapper<FavoriteResponse> favoriteMapper = (rs, rowNum) ->
             new FavoriteResponse(
                     rs.getLong("id"),
@@ -27,10 +33,6 @@ public class FavoriteDao {
                             rs.getLong("target_station_id"),
                             rs.getString("target_station_name"))
             );
-
-    public FavoriteDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public long insert(Favorite favorite) {
         String sql = "insert into favorite(member_id, source_station_id, target_station_id) values(?, ?, ?)";

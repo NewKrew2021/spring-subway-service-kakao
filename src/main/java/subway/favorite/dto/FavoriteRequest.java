@@ -1,12 +1,12 @@
 package subway.favorite.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class FavoriteRequest {
-    private Long source;
-    private Long target;
+    private final Long source;
+    private final Long target;
 
-    public FavoriteRequest() {
-    }
-
+    @JsonCreator
     public FavoriteRequest(Long source, Long target) {
         this.source = source;
         this.target = target;

@@ -9,13 +9,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
-    private List<Section> sections = new ArrayList<>();
+    private final List<Section> sections;
 
     public List<Section> getSections() {
         return sections;
     }
 
     public Sections() {
+        sections = new ArrayList<>();
     }
 
     public Sections(List<Section> sections) {
@@ -102,7 +103,7 @@ public class Sections {
 
     private Section findUpEndSection() {
         List<Station> downStations = this.sections.stream()
-                .map(it -> it.getDownStation())
+                .map(Section::getDownStation)
                 .collect(Collectors.toList());
 
         return this.sections.stream()
@@ -137,7 +138,7 @@ public class Sections {
             sections.add(new Section(newUpStation, newDownStation, newDistance));
         }
 
-        upSection.ifPresent(it -> sections.remove(it));
-        downSection.ifPresent(it -> sections.remove(it));
+        upSection.ifPresent(sections::remove);
+        downSection.ifPresent(sections::remove);
     }
 }

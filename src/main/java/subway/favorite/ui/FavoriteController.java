@@ -1,5 +1,6 @@
 package subway.favorite.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import java.util.List;
 public class FavoriteController {
     private final FavoriteService favoriteService;
 
+    @Autowired
     public FavoriteController(FavoriteService favoriteService) {
         this.favoriteService = favoriteService;
     }

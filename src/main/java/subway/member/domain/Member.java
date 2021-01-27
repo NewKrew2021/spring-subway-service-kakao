@@ -1,22 +1,17 @@
 package subway.member.domain;
 
 public class Member {
-    private Long id;
-    private String email;
-    private String password;
-    private Integer age;
+    private final Long id;
+    private final String email;
+    private final String password;
+    private final Integer age;
 
-    public Member() {
+    public Member(String email, String password, Integer age) {
+        this(0L, email, password, age);
     }
 
     public Member(Long id, String email, String password, Integer age) {
         this.id = id;
-        this.email = email;
-        this.password = password;
-        this.age = age;
-    }
-
-    public Member(String email, String password, Integer age) {
         this.email = email;
         this.password = password;
         this.age = age;

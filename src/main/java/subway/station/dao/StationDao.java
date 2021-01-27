@@ -1,5 +1,6 @@
 package subway.station.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -13,16 +14,10 @@ import java.util.List;
 
 @Repository
 public class StationDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert insertAction;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert insertAction;
 
-    private final RowMapper<Station> rowMapper = (rs, rowNum) ->
-            new Station(
-                    rs.getLong("id"),
-                    rs.getString("name")
-            );
-
-
+    @Autowired
     public StationDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.insertAction = new SimpleJdbcInsert(dataSource)
@@ -30,8 +25,14 @@ public class StationDao {
                 .usingGeneratedKeyColumns("id");
     }
 
-    public Station insert(Station station) {
-        SqlParameterSource params = new BeanPropertySqlParameterSource(station);
+    private final RowMapper<Station> rowMapper = (rs, rowNum) ->
+            new Station(
+                    rs.getLong("id"),
+                    rs.getString("name")
+            );
+
+    public Station insert(String name) {
+        SqlParameterSource params = new MapSqlParameterSource("name", name);
         Long id = insertAction.executeAndReturnKey(params).longValue();
         return new Station(id, station.getName());
     }

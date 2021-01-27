@@ -1,5 +1,6 @@
 package subway.favorite.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.exceptions.FavoriteDuplicateException;
 import subway.exceptions.FavoriteSameArgumentException;
@@ -14,6 +15,7 @@ import java.util.List;
 public class FavoriteService {
     private final FavoriteDao favoriteDao;
 
+    @Autowired
     public FavoriteService(FavoriteDao favoriteDao) {
         this.favoriteDao = favoriteDao;
     }

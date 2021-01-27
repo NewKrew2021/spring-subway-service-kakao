@@ -1,5 +1,6 @@
 package subway.path.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.dao.SectionDao;
 import subway.path.domain.Path;
@@ -15,15 +16,16 @@ public class PathService {
     private static SubwayGraph subwayGraph;
     public static boolean isUpdated = false;
 
+    @Autowired
+    public PathService(SectionDao sectionDao, StationDao stationDao) {
+        this.sectionDao = sectionDao;
+        this.stationDao = stationDao;
+    }
+
     public static void newlyUpdated() {
         synchronized (PathService.class) {
             isUpdated = false;
         }
-    }
-
-    public PathService(SectionDao sectionDao, StationDao stationDao) {
-        this.sectionDao = sectionDao;
-        this.stationDao = stationDao;
     }
 
     public Path find(long sourceId, long targetId) {

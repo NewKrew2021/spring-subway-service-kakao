@@ -1,5 +1,6 @@
 package subway.member.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -12,8 +13,16 @@ import javax.sql.DataSource;
 
 @Repository
 public class MemberDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert simpleJdbcInsert;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
+
+    @Autowired
+    public MemberDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("member")
+                .usingGeneratedKeyColumns("id");
+    }
 
     private final RowMapper<Member> rowMapper = (rs, rowNum) ->
             new Member(
@@ -22,14 +31,6 @@ public class MemberDao {
                     rs.getString("password"),
                     rs.getInt("age")
             );
-
-
-    public MemberDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("member")
-                .usingGeneratedKeyColumns("id");
-    }
 
     public Member insert(Member member) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
