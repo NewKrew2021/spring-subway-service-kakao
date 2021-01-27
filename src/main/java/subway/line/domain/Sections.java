@@ -48,7 +48,8 @@ public class Sections {
     }
 
     public boolean isExist(Section section) {
-        return sections.stream().anyMatch(s -> (s.getUpStation().equals(section.getUpStation()) && s.getDownStation().equals(section.getDownStation()))
+        return sections.stream()
+                .anyMatch(s -> (s.getUpStation().equals(section.getUpStation()) && s.getDownStation().equals(section.getDownStation()))
                 || (s.getUpStation().equals(section.getDownStation()) && s.getDownStation().equals(section.getUpStation())));
     }
 
