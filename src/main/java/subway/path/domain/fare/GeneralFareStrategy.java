@@ -16,18 +16,10 @@ public class GeneralFareStrategy implements FareStrategy {
     }
 
     private int calculateFare(int distance, int extraFare) {
-        return getFareByDistance(distance) + extraFare;
+        return BASIC_FARE + farePerDistance(distance) + extraFare;
     }
 
-    private int getFareByDistance(int distance) {
-        return getFareUnder10() + getFareOver10(distance);
-    }
-
-    private int getFareUnder10() {
-        return BASIC_FARE;
-    }
-
-    private int getFareOver10(int distance) {
+    private int farePerDistance(int distance) {
         return (getCountOver50(distance) + getCountOver10Under50(distance)) * ADDITIONAL_FARE_PER_DISTANCE;
     }
 

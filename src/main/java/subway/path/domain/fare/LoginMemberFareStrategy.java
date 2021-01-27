@@ -20,8 +20,6 @@ public class LoginMemberFareStrategy extends GeneralFareStrategy {
     private int getDiscountedFare(int fare) {
         Age age = new Age(loginMember.getAge());
         AgeGroup ageGroup = AgeGroup.of(age);
-
-        DiscountConstantsByAgeGroup discountConstants = DiscountConstantsByAgeGroup.of(ageGroup);
-        return fare - (int) ((fare - discountConstants.DEDUCTION_AMOUNT) * discountConstants.DISCOUNT_RATE);
+        return fare - (int) ((fare - ageGroup.getDeduction()) * ageGroup.getDiscountRate());
     }
 }
