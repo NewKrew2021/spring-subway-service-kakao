@@ -1,6 +1,8 @@
 package subway.favorite.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import subway.favorite.domain.Favorite;
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 public class FavoriteResponse {
@@ -13,6 +15,12 @@ public class FavoriteResponse {
         this.id = id;
         this.source = source;
         this.target = target;
+    }
+
+    public static FavoriteResponse of(Favorite favorite, Station sourceStation,
+                                      Station targetStation) {
+        return new FavoriteResponse(favorite.getId(), StationResponse.of(sourceStation),
+                StationResponse.of(targetStation));
     }
 
     public Long getId() {

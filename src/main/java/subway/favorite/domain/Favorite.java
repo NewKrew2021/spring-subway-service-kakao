@@ -7,10 +7,7 @@ public class Favorite {
     private final long targetStationId;
 
     public Favorite(long memberId, long sourceStationId, long targetStationId) {
-        this.id = 0L;
-        this.memberId = memberId;
-        this.sourceStationId = sourceStationId;
-        this.targetStationId = targetStationId;
+        this(0L, memberId, sourceStationId, targetStationId);
     }
 
     public Favorite(long id, long memberId, long sourceStationId, long targetStationId) {

@@ -2,7 +2,6 @@ package subway.path.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import subway.path.domain.Path;
-import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class PathResponse {
 
     public static PathResponse of(Path path, int fare) {
         return new PathResponse(path.getPath().stream()
-                .map(Station::toResponse)
+                .map(StationResponse::of)
                 .collect(Collectors.toList()), path.getDistance(), fare);
     }
 
