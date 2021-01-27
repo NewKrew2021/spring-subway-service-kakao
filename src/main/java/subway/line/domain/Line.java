@@ -70,18 +70,6 @@ public class Line {
         sections.removeStation(station);
     }
 
-    public Optional<LocalDateTime> getNextDepartureTimeOf(LocalDateTime dateTime) {
-        LocalDateTime departureTime = LocalDateTime.of(dateTime.toLocalDate(), startTime);
-        while (departureTime.isBefore(dateTime)) {
-            departureTime = departureTime.plus(timeInterval, ChronoUnit.MINUTES);
-        }
-
-        if (departureTime.isAfter(LocalDateTime.of(dateTime.toLocalDate(), endTime))) {
-            return Optional.empty();
-        }
-        return Optional.of(departureTime);
-    }
-
     public List<LocalTime> getDepartureTimesOf(Station station) {
         int totalDuration = sections.getTotalDurationUntil(station);
         return getAllDepartureTimes().stream()
