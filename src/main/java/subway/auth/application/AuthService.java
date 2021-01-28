@@ -36,7 +36,7 @@ public class AuthService {
         } catch (IncorrectResultSizeDataAccessException e) {
             throw new LoginFailException();
         }
-        if (member.equalPassword(tokenRequest.getPassword())) {
+        if (!member.equalPassword(tokenRequest.getPassword())) {
             throw new LoginFailException();
         }
     }
