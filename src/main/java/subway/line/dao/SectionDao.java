@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public class SectionDao {
+    private static final String DELETE_FROM_SECTION_WHERE_LINE_ID = "delete from SECTION where line_id = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 
@@ -35,7 +37,7 @@ public class SectionDao {
     }
 
     public void deleteByLineId(Long lineId) {
-        jdbcTemplate.update("delete from SECTION where line_id = ?", lineId);
+        jdbcTemplate.update(DELETE_FROM_SECTION_WHERE_LINE_ID, lineId);
     }
 
     public void insertSections(Line line) {
@@ -53,4 +55,5 @@ public class SectionDao {
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
+
 }

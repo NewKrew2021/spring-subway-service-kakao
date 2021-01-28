@@ -23,7 +23,8 @@ public class LineController {
 
     @PostMapping
     public ResponseEntity createLine(@RequestBody LineRequest lineRequest) {
-        LineResponse line = lineService.saveLine(lineRequest);
+        LineResponse line = lineService.saveLine(lineRequest.getName(), lineRequest.getColor(), lineRequest.getExtraFare(),
+                lineRequest.getUpStationId(), lineRequest.getDownStationId(), lineRequest.getDistance());
         return ResponseEntity.created(URI.create("/lines/" + line.getId())).body(line);
     }
 
@@ -39,7 +40,7 @@ public class LineController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateLine(@PathVariable Long id, @RequestBody LineRequest lineUpdateRequest) {
-        lineService.updateLine(id, lineUpdateRequest);
+        lineService.updateLine(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor());
         return ResponseEntity.ok().build();
     }
 
@@ -51,7 +52,7 @@ public class LineController {
 
     @PostMapping("/{lineId}/sections")
     public ResponseEntity addLineStation(@PathVariable Long lineId, @RequestBody SectionRequest sectionRequest) {
-        lineService.addLineStation(lineId, sectionRequest);
+        lineService.addLineStation(lineId, sectionRequest.getUpStationId(), sectionRequest.getDownStationId(), sectionRequest.getDistance());
         return ResponseEntity.ok().build();
     }
 
@@ -65,4 +66,5 @@ public class LineController {
     public ResponseEntity handleSQLException() {
         return ResponseEntity.badRequest().build();
     }
+
 }

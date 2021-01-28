@@ -100,7 +100,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all()
                 .auth().oauth2(tokenResponse.getAccessToken())
-                .when().delete(uri)
+                .when().delete(uri) // "/favorites1"
                 .then().log().all()
                 .extract();
     }

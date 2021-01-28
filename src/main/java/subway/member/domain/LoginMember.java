@@ -1,6 +1,8 @@
 package subway.member.domain;
 
 public class LoginMember {
+    public static LoginMember NOT_LOGIN_MEMBER = new LoginMember();
+
     private Long id;
     private String email;
     private Integer age;
@@ -25,4 +27,5 @@ public class LoginMember {
     public Integer getAge() {
         return age;
     }
+
 }

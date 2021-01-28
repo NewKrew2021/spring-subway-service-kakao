@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
+import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static subway.member.MemberAcceptanceTest.회원_생성을_요청;
-import static subway.member.MemberAcceptanceTest.회원_정보_조회됨;
+import static subway.member.MemberAcceptanceTest.*;
 
 public class AuthAcceptanceTest extends AcceptanceTest {
     private static final String EMAIL = "email@email.com";
@@ -39,15 +39,12 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @Test
     void myInfoWithBadBearerAuth() {
         회원_등록되어_있음(EMAIL, PASSWORD, AGE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("email", EMAIL + "OTHER");
-        params.put("password", PASSWORD);
+        TokenRequest tokenRequest = new TokenRequest(EMAIL + "OTHER", PASSWORD);
 
         RestAssured
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(params)
+                .body(tokenRequest)
                 .when().post("/login/token")
                 .then().log().all()
                 .statusCode(HttpStatus.UNAUTHORIZED.value());
@@ -77,13 +74,11 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     }
 
     public static ExtractableResponse<Response> 로그인_요청(String email, String password) {
-        Map<String, String> params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
+        TokenRequest tokenRequest = new TokenRequest(email, password);
 
         return RestAssured.given().log().all().
                 contentType(MediaType.APPLICATION_JSON_VALUE).
-                body(params).
+                body(tokenRequest).
                 when().
                 post("/login/token").
                 then().
@@ -92,15 +87,5 @@ public class AuthAcceptanceTest extends AcceptanceTest {
                 extract();
     }
 
-    public static ExtractableResponse<Response> 내_회원_정보_조회_요청(TokenResponse tokenResponse) {
-        return RestAssured.given().log().all().
-                auth().oauth2(tokenResponse.getAccessToken()).
-                accept(MediaType.APPLICATION_JSON_VALUE).
-                when().
-                get("/members/me").
-                then().
-                log().all().
-                statusCode(HttpStatus.OK.value()).
-                extract();
-    }
+
 }
