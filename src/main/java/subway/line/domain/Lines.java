@@ -29,7 +29,7 @@ public class Lines {
         return new DijkstraShortestPath(graph);
     }
 
-    public List<Vertex> getVertexs(Long sourceId, Long targetId) {
+    public List<Vertex> getVertices(Long sourceId, Long targetId) {
         return dijkstraShortestPath.getPath(Vertex.of(sourceId), Vertex.of(targetId)).getVertexList();
     }
 

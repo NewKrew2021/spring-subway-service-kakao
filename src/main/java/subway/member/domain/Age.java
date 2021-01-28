@@ -36,4 +36,8 @@ public enum Age {
     public int getDeduction() {
         return deduction;
     }
+
+    public int discount(int fare) {
+        return (int) (fare * getSale() + getDeduction());
+    }
 }

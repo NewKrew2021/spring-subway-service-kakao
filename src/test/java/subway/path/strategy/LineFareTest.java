@@ -6,9 +6,9 @@ import subway.line.domain.Line;
 import subway.line.domain.Lines;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
-import subway.path.domain.Vertex;
-import subway.path.domain.strategy.FareStrategy;
-import subway.path.domain.strategy.LineFare;
+import subway.path.domain.Vertices;
+import subway.path.domain.fare.strategy.FareStrategy;
+import subway.path.domain.fare.strategy.LineFare;
 import subway.station.domain.Station;
 
 import java.util.Arrays;
@@ -34,12 +34,12 @@ public class LineFareTest {
                 Line.of(1L, "8호선", "bg-red-600", 1000, new Sections(sections2))
         ));
 
-        List<Vertex> vertexs = lines.getVertexs(1L, 2L);
-        FareStrategy fareStrategy = new LineFare(vertexs);
-        assertThat(fareStrategy.apply(1000)).isEqualTo(1400);
+        Vertices vertices = Vertices.of(lines.getVertices(1L, 2L));
+        FareStrategy fareStrategy = new LineFare(vertices);
+        assertThat(fareStrategy.getExtraFare()).isEqualTo(400);
 
-        vertexs = lines.getVertexs(1L, 3L);
-        fareStrategy = new LineFare(vertexs);
-        assertThat(fareStrategy.apply(1000)).isEqualTo(2000);
+        vertices = Vertices.of(lines.getVertices(1L, 3L));
+        fareStrategy = new LineFare(vertices);
+        assertThat(fareStrategy.getExtraFare()).isEqualTo(1000);
     }
 }

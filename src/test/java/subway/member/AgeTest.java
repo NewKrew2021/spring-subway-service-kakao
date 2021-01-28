@@ -11,11 +11,26 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AgeTest {
+    @DisplayName("나이 할인 요금 테스트")
+    @ParameterizedTest
+    @MethodSource("ageFareParameter")
+    void ageDiscount(Age age, int fare) {
+        assertThat(age.discount(1350)).isEqualTo(fare);
+    }
+
+    static Stream<Arguments> ageFareParameter() {
+        return Stream.of(
+                Arguments.arguments(Age.BABY, 0),
+                Arguments.arguments(Age.CHILD, 850),
+                Arguments.arguments(Age.TEENAGER, 1150),
+                Arguments.arguments(Age.ADULT, 1350)
+        );
+    }
 
     @DisplayName("회원 나이를 파악한다..")
     @ParameterizedTest
     @MethodSource("ageParameter")
-    void 나이확인(int age, Age ageEnum) {
+    void confirmAge(int age, Age ageEnum) {
         assertThat(Age.getAge(age)).isEqualTo(ageEnum);
     }
 

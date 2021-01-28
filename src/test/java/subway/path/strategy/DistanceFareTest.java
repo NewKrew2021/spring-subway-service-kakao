@@ -4,8 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import subway.path.domain.strategy.DistanceFare;
-import subway.path.domain.strategy.FareStrategy;
+import subway.path.domain.fare.strategy.DistanceFare;
+import subway.path.domain.fare.strategy.FareStrategy;
 
 import java.util.stream.Stream;
 
@@ -17,7 +17,7 @@ public class DistanceFareTest {
     @MethodSource("distanceFareParameter")
     void distanceExtraFare(int distance, int fare) {
         FareStrategy fareStrategy = new DistanceFare(distance);
-        assertThat(fareStrategy.apply(0)).isEqualTo(fare);
+        assertThat(fareStrategy.getExtraFare()).isEqualTo(fare);
     }
 
     static Stream<Arguments> distanceFareParameter() {

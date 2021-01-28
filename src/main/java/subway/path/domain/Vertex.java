@@ -3,29 +3,29 @@ package subway.path.domain;
 import java.util.Objects;
 
 public class Vertex {
-    public static final int DEFAULT_EXTRA_FARE = 0;
+    public static final int DEFAULT_LINE_EXTRA_FARE = 0;
     Long stationId;
-    int extraFare;
+    int lineExtraFare;
 
     private Vertex(Long stationId, int extraFare) {
         this.stationId = stationId;
-        this.extraFare = extraFare;
+        this.lineExtraFare = extraFare;
     }
 
     public static Vertex of(Long stationId) {
-        return new Vertex(stationId, DEFAULT_EXTRA_FARE);
+        return new Vertex(stationId, DEFAULT_LINE_EXTRA_FARE);
     }
 
-    public static Vertex of(Long stationId, int extraFare) {
-        return new Vertex(stationId, extraFare);
+    public static Vertex of(Long stationId, int lineExtraFare) {
+        return new Vertex(stationId, lineExtraFare);
     }
 
     public Long getStationId() {
         return stationId;
     }
 
-    public int getExtraFare() {
-        return extraFare;
+    public int getLineExtraFare() {
+        return lineExtraFare;
     }
 
     @Override

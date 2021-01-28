@@ -1,4 +1,4 @@
-package subway.path.domain.strategy;
+package subway.path.domain.fare.strategy;
 
 public class DistanceFare implements FareStrategy {
     private static final int FIVE_KM = 5;
@@ -9,7 +9,7 @@ public class DistanceFare implements FareStrategy {
     private static final int FARE_BY_FIVE_KM = 100;
     private static final int FARE_BY_EIGHT_KM = 100;
     private static final int FIFTY_KM_DEDUCTION = 800;
-    private static final int DEFAULT_FARE = 1250;
+    public static final int DEFAULT_FARE = 1250;
 
     private final int distance;
 
@@ -21,7 +21,7 @@ public class DistanceFare implements FareStrategy {
         if (distance <= TEN_KM) {
             return DEFAULT_FARE;
         }
-        if (distance <= FIFTY_KM) {
+        if (TEN_KM < distance && distance <= FIFTY_KM) {
             return DEFAULT_FARE + FARE_BY_FIVE_KM * ((distance - TEN_KM + FIVE_KM - 1) / FIVE_KM);
         }
         return DEFAULT_FARE + FARE_BY_EIGHT_KM * ((distance - FIFTY_KM + EIGHT_KM - 1) / EIGHT_KM)
@@ -29,7 +29,7 @@ public class DistanceFare implements FareStrategy {
     }
 
     @Override
-    public int apply(int fare) {
-        return fare + getDistanceFare();
+    public int getExtraFare() {
+        return getDistanceFare();
     }
 }
