@@ -2,6 +2,7 @@ package subway.line.domain;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
 import subway.member.domain.LoginMember;
 import subway.member.domain.LoginMemberType;
 import subway.station.domain.Station;
@@ -21,16 +22,40 @@ public class DirectedSections extends Section {
     private final Station destination;
     private final DijkstraShortestPath<Station, DefaultWeightedEdge> graph;
 
-    public DirectedSections(List<DirectedSection> sections, Station source, Station destination,DijkstraShortestPath<Station, DefaultWeightedEdge> graph,ExtraFare maxExtraFare) {
-        this.sections = sections;
+    public DirectedSections(SubwayMap subwayMap, Station source, Station destination) {
         this.source = source;
         this.destination = destination;
-        this.maxExtraFare = maxExtraFare;
-        this.graph = graph;
+        List<Section> sections = subwayMap.findAllSections();
+        graph = createGraph(sections);
+        List<Station> orderedStations = graph.getPath(source, destination).getVertexList();
+        this.sections = new ArrayList<>();
+        for (int i = 0; i < orderedStations.size() - 1; i++) {
+            Station sourceStation = orderedStations.get(i);
+            Station targetStation = orderedStations.get(i + 1);
+            DirectedSection directedSection = new DirectedSection(findSection(sections, sourceStation, targetStation), sourceStation);
+            this.sections.add(directedSection);
+        }
+        this.maxExtraFare = ExtraFare.of(subwayMap, this.sections);
     }
 
-    public int getMaxExtraFare() {
-        return maxExtraFare.getValue();
+    private DijkstraShortestPath<Station, DefaultWeightedEdge> createGraph(List<Section> sections) {
+        WeightedMultigraph<Station, DefaultWeightedEdge> graph =
+                new WeightedMultigraph<>(DefaultWeightedEdge.class);
+
+        for (Section section : sections) {
+            graph.addVertex(section.getUpStation());
+            graph.addVertex(section.getDownStation());
+            graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance());
+        }
+
+        return new DijkstraShortestPath<>(graph);
+    }
+
+    private Section findSection(List<Section> sections, Station stationA, Station stationB) {
+        return sections.stream()
+                .filter(section -> section.contains(stationA) && section.contains(stationB))
+                .findAny()
+                .orElseThrow(IllegalStateException::new);
     }
 
     public int getPrice() {
@@ -72,7 +97,7 @@ public class DirectedSections extends Section {
     }
 
     public int getDistance() {
-        return (int) graph.getPathWeight(source,destination);
+        return (int) graph.getPathWeight(source, destination);
     }
 
     public List<Station> getStations() {
