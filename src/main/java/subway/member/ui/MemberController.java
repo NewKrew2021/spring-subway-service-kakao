@@ -1,5 +1,6 @@
 package subway.member.ui;
 
+import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
 import subway.member.application.MemberService;
 import subway.member.dto.MemberRequest;
@@ -25,7 +26,7 @@ public class MemberController {
 
     @GetMapping("/members/{id}")
     public ResponseEntity<MemberResponse> findMember(@PathVariable Long id) {
-        MemberResponse member = memberService.findMember(id);
+        MemberResponse member = memberService.findMemberById(id);
         return ResponseEntity.ok().body(member);
     }
 
@@ -42,19 +43,19 @@ public class MemberController {
     }
 
     @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(LoginMember loginMember) {
-        MemberResponse member = memberService.findMember(loginMember.getId());
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        MemberResponse member = memberService.findMemberById(loginMember.getId());
         return ResponseEntity.ok().body(member);
     }
 
     @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(LoginMember loginMember, @RequestBody MemberRequest param) {
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
         memberService.updateMember(loginMember.getId(), param);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/me")
-    public ResponseEntity<MemberResponse> deleteMemberOfMine(LoginMember loginMember) {
+    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
         memberService.deleteMember(loginMember.getId());
         return ResponseEntity.noContent().build();
     }

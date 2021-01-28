@@ -1,7 +1,9 @@
 package subway.member.application;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.auth.exception.NoSuchEmailException;
 import subway.line.domain.Line;
 import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
@@ -23,9 +25,21 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
-    public MemberResponse findMember(Long id) {
+    public MemberResponse findMemberById(Long id) {
         Member member = memberDao.findById(id);
         return MemberResponse.of(member);
+    }
+
+    public Member findMemberByEmail(String email) {
+        try {
+            return memberDao.findByEmail(email);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new NoSuchEmailException();
+        }
+    }
+
+    public String loginMember(String email, String password) {
+        return memberDao.login(email, password);
     }
 
     @Transactional
