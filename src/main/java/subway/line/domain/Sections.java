@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
-    public static final int MIN_SIZE = 1;
+    private static final int MIN_SIZE = 1;
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {

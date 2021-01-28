@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MetroMap {
+public class MetroShortcutExplorer {
     DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath;
 
-    public MetroMap() {
+    public MetroShortcutExplorer() {
     }
 
-    public MetroMap(List<Line> lines) {
+    public MetroShortcutExplorer(List<Line> lines) {
         this.dijkstraShortestPath = getDijkstra(lines);
     }
 

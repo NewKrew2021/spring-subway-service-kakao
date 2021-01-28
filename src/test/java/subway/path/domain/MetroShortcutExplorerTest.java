@@ -13,7 +13,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 유닛 테스트")
-public class MetroMapTest {
+public class MetroShortcutExplorerTest {
     MetroNavigator metroNavigator;
     Station station1;
     Station station2;

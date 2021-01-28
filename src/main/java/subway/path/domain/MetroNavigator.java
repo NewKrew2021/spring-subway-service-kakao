@@ -10,7 +10,7 @@ import java.util.List;
 public class MetroNavigator {
     private List<Line> lines;
     private ComplimentaryAge complimentaryAge;
-    private MetroMap metroMap;
+    private MetroShortcutExplorer metroShortcutExplorer;
     private Station source;
     private Station target;
 
@@ -23,11 +23,11 @@ public class MetroNavigator {
         this.source = source;
         this.target = target;
         this.complimentaryAge = complimentaryAge;
-        this.metroMap = new MetroMap(lines);
+        this.metroShortcutExplorer = new MetroShortcutExplorer(lines);
     }
 
     public List<Station> getShortestPath() {
-        return metroMap.getShortestPath(source, target);
+        return metroShortcutExplorer.getShortestPath(source, target);
     }
 
     public int getTotalFare() {
@@ -37,10 +37,10 @@ public class MetroNavigator {
     }
 
     public List<Section> getShortestPathSections() {
-        return metroMap.getShortestPathSections(source, target);
+        return metroShortcutExplorer.getShortestPathSections(source, target);
     }
 
     public int getTotalDistance() {
-        return metroMap.getTotalDistance(source, target);
+        return metroShortcutExplorer.getTotalDistance(source, target);
     }
 }

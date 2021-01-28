@@ -6,7 +6,7 @@ import subway.station.domain.Station;
 import java.util.Objects;
 
 public class Section {
-    public static final int MIN_DISTANCE = 1;
+    private static final int MIN_DISTANCE = 1;
     private Long id;
     private Station upStation;
     private Station downStation;

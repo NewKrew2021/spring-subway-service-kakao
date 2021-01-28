@@ -20,7 +20,6 @@ public class Favorite {
     public Favorite(Long id, Long memberId, Long sourceStationId, Long targetStationId) {
         this(memberId, sourceStationId, targetStationId);
         this.id = id;
-
     }
 
     public Long getId() {
