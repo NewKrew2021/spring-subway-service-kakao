@@ -1,31 +1,37 @@
 package subway.favorite.domain;
 
+import subway.member.domain.Member;
+import subway.station.domain.Station;
+
 public class Favorite {
     private Long id;
-    private Long memberId;
-    private Long sourceStationId;
-    private Long targetStationId;
+    private Member member;
+    private Station sourceStation;
+    private Station targetStation;
 
-    public Favorite(Long id, Long memberId, Long sourceStationId, Long targetStationId){
+    public Favorite(Long id, Member member, Station sourceStation, Station targetStation){
         this.id = id;
-        this.memberId = memberId;
-        this.sourceStationId = sourceStationId;
-        this.targetStationId = targetStationId;
+        this.member = member;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
     }
+
+
 
     public Long getId(){
         return id;
     }
 
-    public Long getMemberId(){
-        return memberId;
+    public Member getMember(){
+        return member;
     }
 
-    public Long getSourceStationId(){
-        return sourceStationId;
+    public Station getSourceStation(){
+        return sourceStation;
     }
 
-    public Long getTargetStationId(){
-        return targetStationId;
+    public Station getTargetStation(){
+        return targetStation;
     }
+
 }

@@ -45,24 +45,20 @@ public class MemberDao {
     }
 
     public void update(Member member) {
-        String sql = UPDATE_MEMBER_SET_EMAIL_PASSWORD_AGE_WHERE_ID;
-        jdbcTemplate.update(sql, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
+        jdbcTemplate.update(UPDATE_MEMBER_SET_EMAIL_PASSWORD_AGE_WHERE_ID, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
     }
 
     public void deleteById(Long id) {
-        String sql = DELETE_FROM_MEMBER_WHERE_ID;
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_FROM_MEMBER_WHERE_ID, id);
     }
 
     public Member findById(Long id) {
-        String sql = SELECT_FROM_MEMBER_WHERE_ID;
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(SELECT_FROM_MEMBER_WHERE_ID, rowMapper, id);
     }
 
     public Member findByEmail(String email) {
         try {
-            String sql = SELECT_FROM_MEMBER_WHERE_EMAIL;
-            return jdbcTemplate.queryForObject(sql, rowMapper, email);
+            return jdbcTemplate.queryForObject(SELECT_FROM_MEMBER_WHERE_EMAIL, rowMapper, email);
         } catch (EmptyResultDataAccessException e){
             throw new InvalidMemberException();
         }

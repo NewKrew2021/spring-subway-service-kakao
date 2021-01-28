@@ -59,15 +59,13 @@ public class LineDao {
     }
 
     public Line findById(Long id) {
-        String sql = FIND_BY_ID_SQL;
 
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, new Object[]{id});
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(FIND_BY_ID_SQL, new Object[]{id});
         return mapLine(result);
     }
 
     public void update(Line newLine) {
-        String sql = UPDATE_LINE_SET_NAME_COLOR_WHERE_ID;
-        jdbcTemplate.update(sql, new Object[]{newLine.getName(), newLine.getColor(), newLine.getId()});
+        jdbcTemplate.update(UPDATE_LINE_SET_NAME_COLOR_WHERE_ID, new Object[]{newLine.getName(), newLine.getColor(), newLine.getId()});
     }
 
     public List<Line> findAll() {

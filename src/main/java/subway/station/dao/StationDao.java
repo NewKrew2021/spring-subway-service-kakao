@@ -44,19 +44,16 @@ public class StationDao {
     }
 
     public List<Station> findAll() {
-        String sql = SELECT_FROM_STATION;
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(SELECT_FROM_STATION, rowMapper);
     }
 
     public void deleteById(Long id) {
-        String sql = DELETE_FROM_STATION_WHERE_ID;
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_FROM_STATION_WHERE_ID, id);
     }
 
     public Station findById(Long id) {
         try {
-            String sql = SELECT_FROM_STATION_WHERE_ID;
-            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+            return jdbcTemplate.queryForObject(SELECT_FROM_STATION_WHERE_ID, rowMapper, id);
         } catch (EmptyResultDataAccessException e){
             throw new StationNotFoundException();
         }

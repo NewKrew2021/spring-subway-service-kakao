@@ -3,10 +3,10 @@ package subway.favorite.application;
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
-import subway.favorite.dto.FavoriteResponse;
+import subway.member.dao.MemberDao;
+import subway.member.domain.Member;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
-import subway.station.dto.StationResponse;
 
 import java.util.List;
 
@@ -14,21 +14,23 @@ import java.util.List;
 public class FavoriteService {
     private FavoriteDao favoriteDao;
     private StationDao stationDao;
+    private MemberDao memberDao;
 
-    public FavoriteService(FavoriteDao favoriteDao, StationDao stationDao) {
+    public FavoriteService(FavoriteDao favoriteDao, StationDao stationDao, MemberDao memberDao) {
         this.favoriteDao = favoriteDao;
         this.stationDao = stationDao;
+        this.memberDao = memberDao;
     }
 
-    public FavoriteResponse createFavorite(Long id, Long sourceId, Long targetId) {
+    public Favorite createFavorite(Long memberId, Long sourceId, Long targetId) {
+        Member member = memberDao.findById(memberId);
         Station sourceStation = stationDao.findById(sourceId);
         Station targetStation = stationDao.findById(targetId);
-        favoriteDao.insert(id, sourceId, targetId);
-
-        return new FavoriteResponse(id, StationResponse.of(sourceStation), StationResponse.of(targetStation));
+        Long id = favoriteDao.insert(memberId, sourceId, targetId);
+        return new Favorite(id, member, sourceStation, targetStation);
     }
 
-    public List<Favorite> getFavorite(Long memberId) {
+    public List<Favorite> getFavorites(Long memberId) {
         return favoriteDao.findByUser(memberId);
     }
 
