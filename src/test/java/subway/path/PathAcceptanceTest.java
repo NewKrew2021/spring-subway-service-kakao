@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
 import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
     @Test
     void findPathByDistance() {
         //when
-        ExtractableResponse<Response> response = 거리_경로_조회_요청(3L, 2L);
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(교대역.getId(), 양재역.getId());
 
         //then
         적절한_경로_응답됨(response, Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -79,7 +80,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
 
         List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
+                .map(Station::getId)
                 .collect(Collectors.toList());
 
         List<Long> expectedPathIds = expectedPath.stream()

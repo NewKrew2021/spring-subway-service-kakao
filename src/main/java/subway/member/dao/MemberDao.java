@@ -1,5 +1,6 @@
 package subway.member.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.Option;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 @Repository
 public class MemberDao {
@@ -47,13 +51,21 @@ public class MemberDao {
         jdbcTemplate.update(sql, id);
     }
 
-    public Member findById(Long id) {
+    public Optional<Member> findOneById(Long id) {
         String sql = "select * from MEMBER where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
-    public Member findByEmail(String email) {
+    public Optional<Member> findOneByEmail(String email) {
         String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, email));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 }
