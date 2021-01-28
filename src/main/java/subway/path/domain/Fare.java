@@ -1,5 +1,9 @@
 package subway.path.domain;
 
+import subway.line.domain.Line;
+
+import java.util.List;
+
 public class Fare {
     private static final int DEFAULT_FARE = 1250;
     private static final int DEFAULT_DISTANCE = 10;
@@ -36,5 +40,11 @@ public class Fare {
             return fare - (int) ((fare - DEDUCTION) * TEENAGER_DISCOUNT_RATE);
         }
         return fare;
+    }
+
+    public static int getExtraFare(List<Line> lines) {
+        return lines.stream()
+                .map(Line::getExtraFare)
+                .reduce(0, Integer::max);
     }
 }

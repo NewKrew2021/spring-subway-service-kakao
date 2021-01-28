@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
+import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
 
 @RestController
@@ -20,12 +21,12 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> searchShortestPath(@AuthenticationPrincipal LoginMember loginMember, @RequestParam Long source, @RequestParam Long target) {
-        PathResponse pathResponse = pathService.searchShortestPath(source, target);
+        Path path = pathService.searchShortestPath(source, target);
         if (loginMember == null) {
-            return ResponseEntity.ok().body(pathResponse);
+            return ResponseEntity.ok().body(PathResponse.of(path));
         }
 
-        int newFare = pathService.fareWithDiscount(pathResponse, loginMember);
-        return ResponseEntity.ok().body(new PathResponse(pathResponse.getStations(), pathResponse.getDistance(), newFare));
+        Path newPath = path.discountedPath(loginMember);
+        return ResponseEntity.ok().body(PathResponse.of(newPath));
     }
 }

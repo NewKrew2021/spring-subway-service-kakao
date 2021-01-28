@@ -1,24 +1,23 @@
-package subway.path.application;
+package subway.path.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import subway.AcceptanceTest;
 import subway.member.domain.LoginMember;
-import subway.path.dto.PathResponse;
+import subway.station.domain.Station;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PathServiceTest extends AcceptanceTest {
-
-    @Autowired
-    private PathService pathService;
+public class PathTest extends AcceptanceTest {
+    private Station 강남역 = new Station("강남역");
+    private Station 양재역 = new Station("양재역");
+    private Station 교대역 = new Station("교대역");
+    private Path path = new Path(Arrays.asList(강남역, 양재역, 교대역), 100, 5350);
 
     private static Stream<Arguments> provideLoginMember() {
         return Stream.of(
@@ -31,18 +30,11 @@ class PathServiceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("거리에 따른 운임을 계산한다.")
-    @ParameterizedTest
-    @CsvSource({"10,1250", "11,1350", "15,1350", "50,2050", "51,2150", "58,2150"})
-    void getFareByDistance(int distance, int fare) {
-        assertThat(pathService.getFareByDistance(distance)).isEqualTo(fare);
-    }
-
     @DisplayName("나이에 따른 할인 운임을 계산한다.")
     @ParameterizedTest
     @MethodSource("provideLoginMember")
-    void fareWithDiscount(LoginMember loginMember, int fare) {
-        PathResponse pathResponse = new PathResponse(null, 0, 5350);
-        assertThat(pathService.fareWithDiscount(pathResponse, loginMember)).isEqualTo(fare);
+    void discountedPath(LoginMember loginMember, int fare) {
+        Path newPath = path.discountedPath(loginMember);
+        assertThat(newPath.getFare()).isEqualTo(fare);
     }
 }
