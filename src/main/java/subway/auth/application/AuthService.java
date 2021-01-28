@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exceptions.UnauthenticatedException;
-import subway.exceptions.UnauthorizedException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.domain.Member;

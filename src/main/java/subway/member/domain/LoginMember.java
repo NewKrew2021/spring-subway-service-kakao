@@ -1,6 +1,7 @@
 package subway.member.domain;
 
 public class LoginMember {
+    private static final String ADMIN = "admin";
     public static final LoginMember NOT_LOGINED = new LoginMember();
 
     private Long id;
@@ -22,6 +23,10 @@ public class LoginMember {
 
     public boolean isLogined() {
         return !this.equals(NOT_LOGINED);
+    }
+
+    public boolean isAdmin() {
+        return email.equals(ADMIN);
     }
 
     public Long getId() {
