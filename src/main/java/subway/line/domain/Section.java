@@ -7,33 +7,30 @@ import java.util.Objects;
 
 public class Section {
     private static final int MIN_DISTANCE = 1;
-    private Long id;
-    private Station upStation;
-    private Station downStation;
-    private int distance;
-
-    public Section() {
-    }
+    private final Long id;
+    private final Station upStation;
+    private final Station downStation;
+    private final int distance;
 
     public Section(Long id, Station upStation, Station downStation, int distance) {
-        this(upStation, downStation, distance);
-        this.id = id;
-    }
-
-    public Section(Station upStation, Station downStation, int distance) {
-        this(upStation, downStation);
+        if (upStation.equals(downStation)) {
+            throw new WrongInputDataException("역이 잘못 입력되었습니다.");
+        }
         if (distance < MIN_DISTANCE) {
             throw new WrongInputDataException("거리가 잘못 입력되었습니다.");
         }
         this.distance = distance;
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.id = id;
+    }
+
+    public Section(Station upStation, Station downStation, int distance) {
+        this(null, upStation, downStation, distance);
     }
 
     public Section(Station upStation, Station downStation) {
-        if (upStation.equals(downStation)) {
-            throw new WrongInputDataException("역이 잘못 입력되었습니다.");
-        }
-        this.upStation = upStation;
-        this.downStation = downStation;
+        this(null, upStation, downStation, MIN_DISTANCE);
     }
 
     public Long getId() {
