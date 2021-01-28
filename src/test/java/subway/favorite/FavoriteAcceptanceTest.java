@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
@@ -71,6 +73,33 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         즐겨찾기_삭제됨(deleteResponse);
     }
 
+    @DisplayName("유효하지 않은 토큰으로 즐겨찾기 기능에 접근한다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"1234567890", ""})
+    void manageMember2(String token) {
+        // when
+        ExtractableResponse<Response> createResponse = 즐겨찾기_생성을_요청(사용자, 강남역, 정자역);
+        // then
+        즐겨찾기_생성됨(createResponse);
+
+        사용자 = new TokenResponse(token);
+
+        // when
+        ExtractableResponse<Response> createResponse2 = 즐겨찾기_생성을_요청(사용자, 강남역, 정자역);
+        // then
+        즐겨찾기_요청_거부됨(createResponse2);
+
+        // when
+        ExtractableResponse<Response> findResponse = 즐겨찾기_목록_조회_요청(사용자);
+        // then
+        즐겨찾기_요청_거부됨(findResponse);
+
+        // when
+        ExtractableResponse<Response> deleteResponse = 즐겨찾기_삭제_요청(사용자, createResponse);
+        // then
+        즐겨찾기_요청_거부됨(deleteResponse);
+    }
+
     public static ExtractableResponse<Response> 즐겨찾기_생성을_요청(TokenResponse tokenResponse, StationResponse source, StationResponse target) {
         FavoriteRequest favoriteRequest = new FavoriteRequest(source.getId(), target.getId());
 
@@ -115,5 +144,9 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
 
     public static void 즐겨찾기_삭제됨(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    public static void 즐겨찾기_요청_거부됨(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 }

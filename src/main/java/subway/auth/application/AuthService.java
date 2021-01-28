@@ -40,7 +40,7 @@ public class AuthService {
             String payload = jwtTokenProvider.getPayload(token);
             return LoginMember.of(findMemberByEmail(payload));
         } catch (MalformedJwtException e) {
-            throw new AuthorizationException("유효하지 않는 토큰입니다. : " + e.getMessage());
+            throw new AuthorizationException("유효하지 않은 토큰입니다. : " + e.getMessage());
         }
     }
 
@@ -50,5 +50,9 @@ public class AuthService {
         } catch (EmptyResultDataAccessException e) {
             throw new AuthorizationException("존재하지 않는 이메일입니다. : " + e.getMessage());
         }
+    }
+
+    public boolean validateToken(String token) {
+        return jwtTokenProvider.validateToken(token);
     }
 }
