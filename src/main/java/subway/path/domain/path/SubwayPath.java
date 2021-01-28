@@ -1,12 +1,11 @@
 package subway.path.domain.path;
 
-import org.jgrapht.GraphPath;
 import subway.line.domain.Line;
+import subway.path.domain.path.graph.SubwayGraphPath;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SubwayPath {
 
@@ -22,19 +21,8 @@ public class SubwayPath {
         this.arrivalTime = arrivalTime;
     }
 
-    public static SubwayPath of(GraphPath<Station, SubwayEdge> path, LocalDateTime arrivalTime) {
-        return new SubwayPath(
-                path.getVertexList(),
-                (int) path.getWeight(),
-                getLines(path.getEdgeList()),
-                arrivalTime
-        );
-    }
-
-    private static List<Line> getLines(List<SubwayEdge> edges) {
-        return edges.stream()
-                .map(SubwayEdge::getLine)
-                .collect(Collectors.toList());
+    public static SubwayPath of(SubwayGraphPath path, LocalDateTime arrivalTime) {
+        return new SubwayPath(path.getStations(), path.getTotalDistance(), path.getLines(), arrivalTime);
     }
 
     public List<Station> getStations() {

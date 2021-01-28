@@ -25,13 +25,22 @@ public class ShortestDistanceMap implements SubwayMap {
 
     @Override
     public SubwayPath getPath(Station source, Station target, LocalDateTime departureTime) {
-        // TODO: 도착 시간 구현
+        SubwayGraphPath path = getShortestPath(source, target);
+        return SubwayPath.of(path, getArrivalTime(path, departureTime));
+    }
+
+    private SubwayGraphPath getShortestPath(Station source, Station target) {
         try {
-            return SubwayPath.of(new DijkstraShortestPath<>(graph).getPath(source, target), departureTime);
+            return new SubwayGraphPath(new DijkstraShortestPath<>(graph).getPath(source, target));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("시작역 또는 종착역이 그래프에 존재하지 않습니다");
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("시작역에서 종착역으로 가는 최단 경로가 존재하지 않습니다");
         }
+    }
+
+    private LocalDateTime getArrivalTime(SubwayGraphPath path, LocalDateTime departureTime) {
+        return path.findArrivalTime(departureTime)
+                .orElseThrow(() -> new IllegalArgumentException("당일 도착하는 경로가 존재하지 않습니다"));
     }
 }
