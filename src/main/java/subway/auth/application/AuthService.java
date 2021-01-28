@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
-import subway.exception.AuthorizationFailException;
+import subway.exception.AuthenticationFailException;
 import subway.exception.LoginFailException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
@@ -43,13 +43,13 @@ public class AuthService {
         try {
             return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
         } catch (IncorrectResultSizeDataAccessException e) {
-            throw new AuthorizationFailException();
+            throw new AuthenticationFailException();
         }
     }
 
     private void validateToken(String token) {
         if (!jwtTokenProvider.validateToken(token)) {
-            throw new AuthorizationFailException();
+            throw new AuthenticationFailException();
         }
     }
 }

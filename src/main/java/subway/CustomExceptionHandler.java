@@ -14,8 +14,8 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    @ExceptionHandler(AuthorizationFailException.class)
-    public ResponseEntity<String> authorizationFail() {
+    @ExceptionHandler(AuthenticationFailException.class)
+    public ResponseEntity<String> authenticationFail() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 실패하였습니다.");
     }
 

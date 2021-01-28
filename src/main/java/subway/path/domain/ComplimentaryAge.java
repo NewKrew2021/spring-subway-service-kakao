@@ -5,7 +5,11 @@ import subway.exception.WrongInputDataException;
 import java.util.stream.Stream;
 
 public enum ComplimentaryAge {
-    TODDLER(0, 5, 1), CHILD(6, 12, 0.5), TEENAGER(13, 18, 0.2), ADULT(19, 64, 0), ELDER(65, 1000, 1);
+    TODDLER(0, 5, 1),
+    CHILD(6, 12, 0.5),
+    TEENAGER(13, 18, 0.2),
+    ADULT(19, 64, 0),
+    ELDER(65, 1000, 1);
 
     private final int minAge;
     private final int maxAge;
