@@ -47,17 +47,12 @@ public class FavoriteDao {
     }
 
     public List<Favorite> findAll(Long memberId) {
-        String sql = "select * from favorite where member_id = ?";
+        String sql = FavoriteDaoQuery.FIND_ALL_QUERY;
         return jdbcTemplate.query(sql, rowMapper, memberId);
     }
 
-    public Favorite findById(Long id){
-        String sql = "select * from favorite where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
-    }
-
     public void deleteById(Long favoriteId) {
-        String sql = "delete from favorite where id = ?";
+        String sql = FavoriteDaoQuery.DELETE_BY_ID_QUERY;
         jdbcTemplate.update(sql, favoriteId);
     }
 }

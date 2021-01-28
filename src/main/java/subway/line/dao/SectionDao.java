@@ -49,7 +49,7 @@ public class SectionDao {
     }
 
     public void deleteByLineId(Long lineId) {
-        jdbcTemplate.update("delete from SECTION where line_id = ?", lineId);
+        jdbcTemplate.update(SectionDaoQuery.DELETE_BY_LINE_ID_QUERY, lineId);
     }
 
     public void insertSections(Line line) {
@@ -66,10 +66,5 @@ public class SectionDao {
                 .collect(Collectors.toList());
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
-    }
-
-    public Sections findAll(){
-        String sql = "select * from SECTION";
-        return new Sections(jdbcTemplate.query(sql, rowMapper));
     }
 }

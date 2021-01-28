@@ -41,22 +41,22 @@ public class MemberDao {
     }
 
     public void update(Member member) {
-        String sql = MemberDaoQuery.updateQuery;
+        String sql = MemberDaoQuery.UPDATE_QUERY;
         jdbcTemplate.update(sql, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
     }
 
     public void deleteById(Long id) {
-        String sql = MemberDaoQuery.deleteByIdQuery;
+        String sql = MemberDaoQuery.DELETE_BY_ID_QUERY;
         jdbcTemplate.update(sql, id);
     }
 
     public Member findById(Long id) {
-        String sql = MemberDaoQuery.findByIdQuery;
+        String sql = MemberDaoQuery.FIND_BY_ID_QUERY;
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     public Optional<Member> findByEmail(String email) {
-        String sql = MemberDaoQuery.findByEmailQuery;
+        String sql = MemberDaoQuery.FIND_BY_EMAIL_QUERY;
         try{
             return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, email));
         }catch (EmptyResultDataAccessException e){
