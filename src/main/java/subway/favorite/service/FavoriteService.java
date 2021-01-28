@@ -5,6 +5,7 @@ import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
+import subway.member.domain.LoginMember;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 
@@ -30,7 +31,13 @@ public class FavoriteService {
         return FavoriteResponse.of(insertFavorite);
     }
 
-    public void deleteFavorite(Long id) {
+    public void deleteFavorite(LoginMember loginMember, Long id) {
+        favoriteDao.findAllByUserId(loginMember.getId())
+                .stream()
+                .filter(favorite -> favorite.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("타인의 즐겨찾기는 삭제할 수 없습니다."));
+
         favoriteDao.delete(id);
     }
 

@@ -16,8 +16,9 @@ public class ExceptionAdvice {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity handleSQLException() {
+    @ExceptionHandler({SQLException.class, IllegalStateException.class})
+    public ResponseEntity handleBadRequest() {
         return ResponseEntity.badRequest().build();
     }
+
 }
