@@ -11,6 +11,7 @@ import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exceptions.UnauthenticatedException;
 import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,6 +45,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             throw new UnauthenticatedException("Must login before using this service: " + request.getContextPath());
         }
 
-        return MemberService.guestMember;
+        return LoginMember.guestMember;
     }
 }

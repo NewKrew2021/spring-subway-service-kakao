@@ -9,11 +9,9 @@ import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
-import subway.path.domain.Person;
 
 @Service
 public class MemberService {
-    public static final LoginMember guestMember = new LoginMember(0L, "guest", Person.ADULT.getMinAge());
     private final MemberDao memberDao;
 
     @Autowired
@@ -37,7 +35,7 @@ public class MemberService {
             Member member = memberDao.findById(id);
             return new LoginMember(member.getId(), member.getEmail(), member.getAge());
         } catch (DataAccessException ignored) {
-            return guestMember;
+            return LoginMember.guestMember;
         }
     }
 
