@@ -20,7 +20,7 @@ import static subway.line.SectionAcceptanceTest.지하철_구간_등록되어_�
 import static subway.member.MemberAcceptanceTest.회원_생성을_요청;
 import static subway.station.StationAcceptanceTest.지하철역_등록되어_있음;
 
-@DisplayName("지하철 경로 조회")
+@DisplayName("지하철 요금 조회")
 public class FareAcceptanceTest extends AcceptanceTest {
     public static final String 어른_이메일 = "adult@email.com";
     public static final String 청소년_이메일 = "youth@email.com";
@@ -43,7 +43,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
     /**
      * 교대역  --- *2호선*(28) ---   강남역   --- *2호선*(38) ---   잠실역
      * |                        |
-     * *3호선*(5)                 *신분당선*(20)
+     * *3호선*(5)                 *신분당선*(80)
      * |                        |
      * 남부터미널역  --- *3호선*(3) ---   양재역
      */

@@ -10,8 +10,8 @@ public class LineResponse {
     private Long id;
     private String name;
     private String color;
-    private int extraFare;
     private List<StationResponse> stations;
+
 
     public LineResponse(Long id, String name, String color, List<StationResponse> stations) {
         this.id = id;
@@ -27,11 +27,6 @@ public class LineResponse {
         return new LineResponse(line.getId(), line.getName(), line.getColor(), stations);
     }
 
-    public static List<LineResponse> listOf(List<Line> lines) {
-        return lines.stream()
-                .map(LineResponse::of)
-                .collect(Collectors.toList());
-    }
 
     public Long getId() {
         return id;
