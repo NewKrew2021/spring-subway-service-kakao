@@ -31,10 +31,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                                        WebDataBinderFactory binderFactory) {
 
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
-        if (!authService.validateToken(token)) {
-            return null;
+        Member member = null;
+
+        if (authService.validateToken(token)) {
+            member = authService.findMemberByToken(token);
         }
-        Member member = authService.findMemberByToken(token);
-        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+
+        return LoginMember.of(member);
     }
 }

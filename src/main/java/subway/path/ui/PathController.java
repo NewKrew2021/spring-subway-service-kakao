@@ -25,11 +25,11 @@ public class PathController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PathResponse> getShortestPath(
-            @AuthenticationPrincipal LoginMember loginMember,
+            @AuthenticationPrincipal(required = false) LoginMember loginMember,
             @RequestParam Long source, @RequestParam Long target) {
 
         return ResponseEntity
                 .ok()
-                .body(pathService.getShortestPathResponse(source, target, pathService.getLoginMemberAge(loginMember)));
+                .body(pathService.getShortestPathResponse(source, target, loginMember.getAge()));
     }
 }

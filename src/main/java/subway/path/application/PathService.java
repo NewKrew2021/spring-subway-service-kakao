@@ -13,6 +13,7 @@ import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,10 +55,6 @@ public class PathService {
         }
 
         return maxLineExtraFare;
-    }
-
-    public int getLoginMemberAge(LoginMember loginMember) {
-        return (loginMember != null) ? loginMember.getAge().intValue() : AGE_DEFAULT;
     }
 
 }
