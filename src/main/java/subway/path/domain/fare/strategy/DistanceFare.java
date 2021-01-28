@@ -17,7 +17,8 @@ public class DistanceFare implements FareStrategy {
         this.distance = distance;
     }
 
-    public int getDistanceFare() {
+    @Override
+    public int getExtraFare() {
         if (distance <= TEN_KM) {
             return DEFAULT_FARE;
         }
@@ -26,10 +27,5 @@ public class DistanceFare implements FareStrategy {
         }
         return DEFAULT_FARE + FARE_BY_EIGHT_KM * ((distance - FIFTY_KM + EIGHT_KM - 1) / EIGHT_KM)
                 + FIFTY_KM_DEDUCTION;
-    }
-
-    @Override
-    public int getExtraFare() {
-        return getDistanceFare();
     }
 }

@@ -29,7 +29,7 @@ public class PathService {
         Vertices vertices = Vertices.of(lines.getVertices(sourceId, targetId));
 
         int distance = lines.getDistance(sourceId, targetId);
-        FareParam fareParam = FareParam.of(vertices, distance);
+        FareParam fareParam = FareParam.of(vertices.getMaxLineExtraFare(), distance);
         Fare fare = Fare.of(loginMember, fareParam);
 
         return PathResponse.of(getStationResponses(vertices.getStationIds()), distance, fare.getFare());

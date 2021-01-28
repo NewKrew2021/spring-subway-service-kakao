@@ -1,22 +1,20 @@
 package subway.path.domain.fare;
 
-import subway.path.domain.Vertices;
-
 public class FareParam {
-    private final Vertices vertices;
+    private final int lineExtraFare;
     private final int distance;
 
-    public FareParam(Vertices vertices, int distance) {
-        this.vertices = vertices;
+    public FareParam(int lineExtraFare, int distance) {
+        this.lineExtraFare = lineExtraFare;
         this.distance = distance;
     }
 
-    public static FareParam of(Vertices vertices, int distance) {
-        return new FareParam(vertices, distance);
+    public static FareParam of(int lineExtraFare, int distance) {
+        return new FareParam(lineExtraFare, distance);
     }
 
-    public Vertices getVertices() {
-        return vertices;
+    public int getLineExtraFare() {
+        return lineExtraFare;
     }
 
     public int getDistance() {

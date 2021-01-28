@@ -8,7 +8,7 @@ import java.util.List;
 public class FareStrategyFactory {
     public static List<FareStrategy> createBy(FareParam fareParam) {
         List<FareStrategy> fareStrategies = Arrays.asList(
-                new LineFare(fareParam.getVertices()),
+                new LineFare(fareParam.getLineExtraFare()),
                 new DistanceFare(fareParam.getDistance())
         );
         return fareStrategies;

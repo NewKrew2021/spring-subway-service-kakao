@@ -1,16 +1,14 @@
 package subway.path.domain.fare.strategy;
 
-import subway.path.domain.Vertices;
-
 public class LineFare implements FareStrategy {
-    private final Vertices vertices;
+    private final int lineExtraFare;
 
-    public LineFare(Vertices vertices) {
-        this.vertices = vertices;
+    public LineFare(int lineExtraFare) {
+        this.lineExtraFare = lineExtraFare;
     }
 
     @Override
     public int getExtraFare() {
-        return vertices.getMaxLineExtraFare();
+        return lineExtraFare;
     }
 }
