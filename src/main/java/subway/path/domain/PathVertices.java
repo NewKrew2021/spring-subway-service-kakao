@@ -1,8 +1,6 @@
 package subway.path.domain;
 
 import subway.line.domain.Line;
-import subway.line.domain.Section;
-import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import java.util.*;
@@ -10,15 +8,16 @@ import java.util.*;
 public class PathVertices {
     private List<PathVertex> pathVertices;
 
-    public PathVertices(){
-
-    }
-
-    public PathVertices(List<PathVertex> pathVertexList){
+    private PathVertices(List<PathVertex> pathVertexList){
         this.pathVertices = pathVertexList;
     }
 
-    public void initAllVertex(List<Line> lines){
+    public static PathVertices of(List<PathVertex> pathVertexList){
+        return new PathVertices(pathVertexList);
+    }
+
+    public static PathVertices from(List<Line> lines){
+        List<PathVertex> pathVertices = new ArrayList<>();
         Map<Station, List<Long>> tmp = new HashMap<>();
         lines.forEach(line -> {
             List<Station> stations = line.getStations();
@@ -30,10 +29,11 @@ public class PathVertices {
                 tmp.put(station, new ArrayList<>(Arrays.asList(line.getId())));
             });
         });
-        this.pathVertices = new ArrayList<>();
         tmp.forEach((key, value) ->
-            this.pathVertices.add(new PathVertex(key, value))
+                pathVertices.add(new PathVertex(key, value))
         );
+
+        return new PathVertices(pathVertices);
     }
 
 
