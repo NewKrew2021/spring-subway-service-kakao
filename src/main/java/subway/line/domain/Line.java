@@ -34,7 +34,6 @@ public class Line {
         this(id, name, color, sections, 0);
     }
 
-    @JsonCreator
     public Line(Long id, String name, String color, Sections sections, int extraFare) {
         this.id = id;
         this.name = name;

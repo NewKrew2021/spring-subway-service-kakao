@@ -23,7 +23,7 @@ public class FavoriteRequest {
     }
 
     public void checkValidation() {
-        if(this.source == null || this.target == null) {
+        if (this.source == null || this.target == null) {
             throw new InvalidRequestException("FavoriteRequest는 출발지와 목적지를 모두 가지고 있어야 합니다.");
         }
     }

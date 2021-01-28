@@ -44,7 +44,7 @@ public class FavoriteService {
     }
 
     public void checkValidRequest(FavoriteRequest favoriteRequest) {
-        if(favoriteRequest == null){
+        if (favoriteRequest == null) {
             throw new InvalidRequestException("request body에 정보가 없습니다.");
         }
         favoriteRequest.checkValidation();
@@ -52,12 +52,12 @@ public class FavoriteService {
 
     public void checkValidUser(Long loginId, long favoriteId) {
         long memberId;
-        try{
+        try {
             memberId = favoriteDao.findById(favoriteId).getMemberId();
-        } catch(DataAccessException e){
+        } catch (DataAccessException e) {
             throw new InvalidRequestException("존재하지 않는 즐겨찾기 입니다.");
         }
-        if(memberId != loginId){
+        if (memberId != loginId) {
             throw new AuthorizationException("해당 즐겨찾기에 접근할 수 없는 사용자 입니다.");
         }
     }

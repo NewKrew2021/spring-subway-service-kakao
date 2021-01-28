@@ -18,7 +18,6 @@ public class Section {
         this(0L, lineId, upStation, downStation, distance);
     }
 
-    @JsonCreator
     public Section(Long id, Long lineId, Station upStation, Station downStation, int distance) {
         this.id = id;
         this.lineId = lineId;

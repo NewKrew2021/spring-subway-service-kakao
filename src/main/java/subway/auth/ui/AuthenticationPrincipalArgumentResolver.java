@@ -32,8 +32,8 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
         String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
 
-        if(token == null){
-            if(auth.isThrow()){
+        if (token == null) {
+            if (auth.isThrow()) {
                 throw new AuthorizationException("로그인이 필요한 기능입니다.");
             }
             return null;
