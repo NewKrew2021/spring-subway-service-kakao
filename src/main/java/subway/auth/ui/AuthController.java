@@ -23,7 +23,6 @@ public class AuthController {
     public ResponseEntity<TokenResponse> createAuth(@RequestBody TokenRequest tokenRequest){
         String email = tokenRequest.getEmail();
         String password = tokenRequest.getPassword();
-        TokenResponse tokenResponse = authService.createAuth(email, password);
-        return ResponseEntity.ok().body(tokenResponse);
+        return ResponseEntity.ok().body(new TokenResponse(authService.createAuth(email, password)));
     }
 }

@@ -19,12 +19,11 @@ public class AuthService {
         this.memberService = memberService;
     }
 
-    public TokenResponse createAuth(String email, String password) {
+    public String createAuth(String email, String password) {
         if(!memberService.findByEmail(email).getPassword().equals(password)){
             throw new InvalidMemberException();
         }
-        String token = jwtTokenProvider.createToken(email);
-        return new TokenResponse(token);
+        return jwtTokenProvider.createToken(email);
     }
 
     public Member getMemberByToken(String token) {
