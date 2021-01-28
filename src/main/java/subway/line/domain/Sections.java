@@ -148,10 +148,20 @@ public class Sections {
     }
 
     private List<Section> findSectionsUntil(Station station) {
-        int stationIndex = getStations().indexOf(station);
-        if (stationIndex == -1) {
-            throw new IllegalArgumentException("해당 역은 구간에 존재하지 않습니다");
+        checkStationExist(station);
+
+        List<Section> sections = new ArrayList<>();
+        Section nextSection = findUpEndSection();
+        while (nextSection != null && !nextSection.getUpStation().equals(station)) {
+            sections.add(nextSection);
+            nextSection = findSectionByNextUpStation(nextSection.getDownStation());
         }
-        return sections.subList(0, stationIndex);
+        return sections;
+    }
+
+    private void checkStationExist(Station station) {
+        if (!getStations().contains(station)) {
+            throw new IllegalStateException("해당 역은 구간에 존재하지 않습니다");
+        }
     }
 }

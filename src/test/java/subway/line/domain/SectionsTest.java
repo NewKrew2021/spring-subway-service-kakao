@@ -1,7 +1,6 @@
 package subway.line.domain;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,9 +19,9 @@ class SectionsTest {
     void getTotalDurationUntil(Station target, int expectedTime) {
         // given
         Sections sections = new Sections(Arrays.asList(
-                new Section(new Station(1L, "삼송역"), new Station(2L, "지축역"), 20),
                 new Section(new Station(2L, "지축역"), new Station(3L, "구파발역"), 5),
                 new Section(new Station(3L, "구파발역"), new Station(4L, "연신내역"), 10),
+                new Section(new Station(1L, "삼송역"), new Station(2L, "지축역"), 20),
                 new Section(new Station(4L, "연신내역"), new Station(5L, "불광역"), 5)
         ));
 
