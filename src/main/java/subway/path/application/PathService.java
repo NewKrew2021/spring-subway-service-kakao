@@ -7,14 +7,14 @@ import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
 import subway.member.dao.MemberDao;
-import subway.member.domain.AGE;
+import subway.path.domain.Fare;
 import subway.path.domain.Path;
 import subway.path.domain.PathVertices;
 import subway.path.dto.PathResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class PathService {
@@ -28,9 +28,7 @@ public class PathService {
         this.memberDao = memberDao;
     }
 
-    public PathResult findShortestPath(Long sourceId, Long targetId, int age) {
-
-        //Sections sections = sectionDao.findAll();
+    public PathResult calculatePathResult(Long sourceId, Long targetId, int age) {
         PathVertices pathVertices = new PathVertices();
         List<Line> lineList = lineDao.findAll();
         pathVertices.initAllVertex(lineList);
@@ -44,24 +42,13 @@ public class PathService {
 
         PathResult result = path.findShortestPath(sourceId, targetId);
 
-        int basicFare = path.getBasicFare(result.getDistance());
+        List<Integer> lineExtraFareList = path.findLineIdListInPath(result.getPathVertices())
+                .stream()
+                .map(lineId -> lineDao.findById(lineId).getExtraFare())
+                .collect(Collectors.toList());
 
-        List<Long> lineIdList = path.findLineIdListInPath(result.getPathVertices());
-        int extraFare = calculateExtraFare(lineIdList);
-
-        result.setFare(discount(age, basicFare + extraFare));
+        result.setFare(Fare.calculateFare(result.getDistance(), lineExtraFareList, age));
         return result;
-
     }
-
-    private int calculateExtraFare(List<Long> lineIdList){
-        return lineIdList.stream().map(lineId -> lineDao.findById(lineId).getExtraFare()).max(Integer::compare).orElse(0);
-    }
-
-    private int discount(int age, int fare){
-        AGE ageStatus = AGE.getAgeStatus(age);
-        return (int)((fare - ageStatus.getDeduction()) * ageStatus.getSaleRate()) + ageStatus.getDeduction();
-    }
-
 }
 

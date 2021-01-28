@@ -3,6 +3,7 @@ package subway.favorite.application;
 import org.springframework.stereotype.Service;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exception.InvalidTokenException;
+import subway.exception.RequestPermissionDeniedException;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteResponse;
@@ -41,7 +42,11 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteFavorites(Long favoriteId) {
+    public void deleteFavorites(Long favoriteId, Long expectedMemberId) {
+        Favorite favorite = favoriteDao.findById(favoriteId);
+        if(!favorite.getMemberId().equals(expectedMemberId)){
+            throw new RequestPermissionDeniedException();
+        }
         favoriteDao.deleteById(favoriteId);
     }
 }

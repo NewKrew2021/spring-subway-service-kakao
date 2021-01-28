@@ -51,6 +51,11 @@ public class FavoriteDao {
         return jdbcTemplate.query(sql, rowMapper, memberId);
     }
 
+    public Favorite findById(Long id){
+        String sql = FavoriteDaoQuery.FIND_BY_ID_QUERY;
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    }
+
     public void deleteById(Long favoriteId) {
         String sql = FavoriteDaoQuery.DELETE_BY_ID_QUERY;
         jdbcTemplate.update(sql, favoriteId);

@@ -31,4 +31,10 @@ public class ControllerExceptionHandler {
         logger.error("handleSQLException");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @ExceptionHandler(RequestPermissionDeniedException.class)
+    protected ResponseEntity<Void> handleRequestPermissionDeniedException(RequestPermissionDeniedException e){
+        logger.error("handleRequestPermissionDeniedException");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 }

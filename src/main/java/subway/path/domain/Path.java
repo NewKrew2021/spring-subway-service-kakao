@@ -13,12 +13,6 @@ public class Path {
     WeightedMultigraph<PathVertex, DefaultWeightedEdge> graph
             = new WeightedMultigraph(DefaultWeightedEdge.class);
 
-    private static final int BASIC_FARE = 1250;
-    private static final int EXTRA_FARE_DISTANCE_FIRST = 10;
-    private static final int EXTRA_FARE_DISTANCE_SECOND = 50;
-    private static final int EXTRA_FARE_DISTANCE_FIRST_UNIT = 5;
-    private static final int EXTRA_FARE_DISTANCE_SECOND_UNIT = 8;
-    private static final int EXTRA_FARE_UNIT = 100;
 
     private PathVertices pathVertices;
 
@@ -43,30 +37,17 @@ public class Path {
         int distance = (int) result.getWeight();
         return new PathResult(new PathVertices(vertexList), distance);
     }
-    public int getBasicFare(int distance) {
-        int result = BASIC_FARE;
-
-        if (distance > EXTRA_FARE_DISTANCE_FIRST && distance <= EXTRA_FARE_DISTANCE_SECOND) {
-            result += (int) Math.ceil((double)(distance - EXTRA_FARE_DISTANCE_FIRST) / EXTRA_FARE_DISTANCE_FIRST_UNIT) * EXTRA_FARE_UNIT;
-        }
-
-        if (distance > EXTRA_FARE_DISTANCE_SECOND) {
-            result += (int) Math.ceil((double)(distance - EXTRA_FARE_DISTANCE_SECOND) / EXTRA_FARE_DISTANCE_SECOND_UNIT) * EXTRA_FARE_UNIT
-                    + ((EXTRA_FARE_DISTANCE_SECOND - EXTRA_FARE_DISTANCE_FIRST) / EXTRA_FARE_DISTANCE_FIRST_UNIT) * EXTRA_FARE_UNIT;
-        }
-        return result;
-    }
 
     public List<Long> findLineIdListInPath(PathVertices pathVertices){
 
         Set<Long> lineIdSet = new HashSet<>();
         List<Long> previousLineIdList = new ArrayList<>();
         for (PathVertex pathVertex : pathVertices.getPathVertexList()) {
-            Optional<Long> duplicateLineId = getDuplicateLineId(pathVertex.getLineList(), previousLineIdList);
+            Optional<Long> duplicateLineId = getDuplicateLineId(pathVertex.getLineIdList(), previousLineIdList);
             if(duplicateLineId.isPresent()){
                 lineIdSet.add(duplicateLineId.get());
             }
-            previousLineIdList = pathVertex.getLineList();
+            previousLineIdList = pathVertex.getLineIdList();
         }
         return new ArrayList<>(lineIdSet);
     }

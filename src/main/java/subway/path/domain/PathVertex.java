@@ -6,18 +6,18 @@ import java.util.List;
 
 public class PathVertex {
     private Station station;
-    private List<Long> lineList;
+    private List<Long> lineIdList;
 
     public PathVertex(Station station, List<Long> lineList) {
         this.station = station;
-        this.lineList = lineList;
+        this.lineIdList = lineList;
     }
 
     public Station getStation() {
         return station;
     }
 
-    public List<Long> getLineList() {
-        return lineList;
+    public List<Long> getLineIdList() {
+        return lineIdList;
     }
 }

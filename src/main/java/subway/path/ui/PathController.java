@@ -34,7 +34,7 @@ public class PathController {
 
     @GetMapping(value = "/paths", params = {"source", "target"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PathResponse> getPaths(@AuthenticationPrincipal LoginMember loginMember, @RequestParam Long source, @RequestParam Long target){
-        PathResult result = pathService.findShortestPath(source, target, loginMember.getAge());
+        PathResult result = pathService.calculatePathResult(source, target, loginMember.getAge());
         PathResponse pathResponse = new PathResponse(result);
         return ResponseEntity.ok().body(pathResponse);
     }
