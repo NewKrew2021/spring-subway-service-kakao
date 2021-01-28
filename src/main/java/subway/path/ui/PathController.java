@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.dto.TokenRequest;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 import org.jgrapht.*;
@@ -32,12 +34,8 @@ public class PathController {
     }
 
     @GetMapping(value = "/paths", params = {"source", "target"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PathResponse> getPaths(HttpServletRequest request, @RequestParam Long source, @RequestParam Long target){
-        String token = AuthorizationExtractor.extract(request);
-        String email = null;
-        if(token != null && jwtTokenProvider.validateToken(token)){
-            email = jwtTokenProvider.getPayload(token);
-        }
+    public ResponseEntity<PathResponse> getPaths(@AuthenticationPrincipal LoginMember loginMember, @RequestParam Long source, @RequestParam Long target){
+        String email = (loginMember == null) ? null : loginMember.getEmail();
         PathResult result = pathService.findShortestPath(source, target, email);
         PathResponse pathResponse = new PathResponse(result);
         return ResponseEntity.ok().body(pathResponse);
