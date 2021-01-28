@@ -6,6 +6,7 @@ public class LoginMember {
     private Integer age;
 
     public LoginMember() {
+        this.age = Integer.MAX_VALUE;
     }
 
     public LoginMember(Long id, String email, Integer age) {
@@ -24,5 +25,14 @@ public class LoginMember {
 
     public Integer getAge() {
         return age;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginMember{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

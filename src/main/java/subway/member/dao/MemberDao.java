@@ -1,5 +1,6 @@
 package subway.member.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
+import java.lang.annotation.Native;
+import java.util.Optional;
 
 @Repository
 public class MemberDao {
@@ -38,22 +41,30 @@ public class MemberDao {
     }
 
     public void update(Member member) {
-        String sql = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
+        String sql = MemberDaoQuery.UPDATE_QUERY;
         jdbcTemplate.update(sql, new Object[]{member.getEmail(), member.getPassword(), member.getAge(), member.getId()});
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from MEMBER where id = ?";
+        String sql = MemberDaoQuery.DELETE_BY_ID_QUERY;
         jdbcTemplate.update(sql, id);
     }
 
     public Member findById(Long id) {
-        String sql = "select * from MEMBER where id = ?";
+        String sql = MemberDaoQuery.FIND_BY_ID_QUERY;
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
-    public Member findByEmail(String email) {
-        String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+    public Optional<Member> findByEmail(String email) {
+        String sql = MemberDaoQuery.FIND_BY_EMAIL_QUERY;
+        try{
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, email));
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+
     }
+
+
+
 }

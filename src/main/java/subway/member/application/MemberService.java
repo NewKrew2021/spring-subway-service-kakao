@@ -9,6 +9,8 @@ import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
 
+import java.util.Optional;
+
 @Service
 public class MemberService {
     private MemberDao memberDao;
