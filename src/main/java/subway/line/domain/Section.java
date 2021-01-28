@@ -2,7 +2,11 @@ package subway.line.domain;
 
 import subway.station.domain.Station;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Section {
+
     private Long id;
     private Station upStation;
     private Station downStation;
@@ -22,6 +26,10 @@ public class Section {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
+    }
+
+    public List<Station> getStations() {
+        return Arrays.asList(upStation, downStation);
     }
 
     public Long getId() {
