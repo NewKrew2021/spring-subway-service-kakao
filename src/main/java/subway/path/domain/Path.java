@@ -1,5 +1,6 @@
 package subway.path.domain;
 
+import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
 import subway.station.domain.Station;
 
@@ -10,7 +11,8 @@ public class Path {
     private int distance;
     private Fare fare;
 
-    public Path(ShortestGraph shortestGraph, LoginMember loginMember) {
+    public Path(List<Line> lines, Station sourceStation, Station targetStation, LoginMember loginMember) {
+        ShortestGraph shortestGraph = new ShortestGraph(lines, sourceStation, targetStation);
         this.stations = shortestGraph.getGraphPath().getVertexList();
         this.distance = (int) shortestGraph.getGraphPath().getWeight();
         this.fare = new Fare(shortestGraph, loginMember);

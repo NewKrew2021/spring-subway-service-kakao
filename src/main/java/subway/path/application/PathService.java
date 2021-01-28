@@ -28,8 +28,7 @@ public class PathService {
         List<Line> lines = lineService.findLines();
         Station sourceStation = stationService.findStationById(sourceId);
         Station targetStation = stationService.findStationById(targetId);
-
-        Path path = new Path(new ShortestGraph(lines,sourceStation,targetStation),loginMember);
+        Path path = new Path(lines,sourceStation,targetStation,loginMember);
         return PathResponse.make(path.getStations(), path.getDistance(), path.getFare());
     }
 
