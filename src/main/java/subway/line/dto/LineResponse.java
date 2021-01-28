@@ -1,5 +1,6 @@
 package subway.line.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import subway.line.domain.Line;
 import subway.station.dto.StationResponse;
 
@@ -7,12 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LineResponse {
-    private Long id;
-    private String name;
-    private String color;
-    private int extraFare;
-    private List<StationResponse> stations;
+    private final Long id;
+    private final String name;
+    private final String color;
+    private final List<StationResponse> stations;
 
+    @JsonCreator
     public LineResponse(Long id, String name, String color, List<StationResponse> stations) {
         this.id = id;
         this.name = name;
@@ -22,15 +23,9 @@ public class LineResponse {
 
     public static LineResponse of(Line line) {
         List<StationResponse> stations = line.getStations().stream()
-                .map(it -> StationResponse.of(it))
+                .map(StationResponse::of)
                 .collect(Collectors.toList());
         return new LineResponse(line.getId(), line.getName(), line.getColor(), stations);
-    }
-
-    public static List<LineResponse> listOf(List<Line> lines) {
-        return lines.stream()
-                .map(LineResponse::of)
-                .collect(Collectors.toList());
     }
 
     public Long getId() {

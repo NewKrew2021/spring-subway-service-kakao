@@ -1,5 +1,6 @@
 package subway.station.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
@@ -11,14 +12,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class StationService {
-    private StationDao stationDao;
+    private final StationDao stationDao;
 
+    @Autowired
     public StationService(StationDao stationDao) {
         this.stationDao = stationDao;
     }
 
     public StationResponse saveStation(StationRequest stationRequest) {
-        Station station = stationDao.insert(stationRequest.toStation());
+        Station station = stationDao.insert(stationRequest.getName());
         return StationResponse.of(station);
     }
 

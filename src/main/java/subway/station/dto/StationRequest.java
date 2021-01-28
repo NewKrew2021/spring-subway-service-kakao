@@ -1,22 +1,16 @@
 package subway.station.dto;
 
-import subway.station.domain.Station;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class StationRequest {
-    private String name;
+    private final String name;
 
-    public StationRequest() {
-    }
-
+    @JsonCreator
     public StationRequest(String name) {
         this.name = name;
     }
 
     public String getName() {
         return name;
-    }
-
-    public Station toStation() {
-        return new Station(name);
     }
 }

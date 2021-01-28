@@ -9,13 +9,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
-    private List<Section> sections = new ArrayList<>();
+    private final List<Section> sections;
 
     public List<Section> getSections() {
         return sections;
     }
 
     public Sections() {
+        sections = new ArrayList<>();
     }
 
     public Sections(List<Section> sections) {
@@ -40,7 +41,7 @@ public class Sections {
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException("At least one section should be already added");
         }
     }
 
@@ -48,7 +49,7 @@ public class Sections {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException("Section already exists");
         }
     }
 
@@ -68,7 +69,7 @@ public class Sections {
 
     private void replaceSectionWithUpStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException("New section cannot have distance larger than existing one");
         }
         this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
@@ -76,7 +77,7 @@ public class Sections {
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException("New section cannot have distance larger than existing one");
         }
         this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
@@ -102,7 +103,7 @@ public class Sections {
 
     private Section findUpEndSection() {
         List<Station> downStations = this.sections.stream()
-                .map(it -> it.getDownStation())
+                .map(Section::getDownStation)
                 .collect(Collectors.toList());
 
         return this.sections.stream()
@@ -120,7 +121,7 @@ public class Sections {
 
     public void removeStation(Station station) {
         if (sections.size() <= 1) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException("Cannot delete if there is only one section left");
         }
 
         Optional<Section> upSection = sections.stream()
@@ -137,7 +138,7 @@ public class Sections {
             sections.add(new Section(newUpStation, newDownStation, newDistance));
         }
 
-        upSection.ifPresent(it -> sections.remove(it));
-        downSection.ifPresent(it -> sections.remove(it));
+        upSection.ifPresent(sections::remove);
+        downSection.ifPresent(sections::remove);
     }
 }

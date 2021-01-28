@@ -1,15 +1,14 @@
 package subway.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import subway.member.domain.Member;
 
 public class MemberRequest {
-    private String email;
-    private String password;
-    private Integer age;
+    private final String email;
+    private final String password;
+    private final Integer age;
 
-    public MemberRequest() {
-    }
-
+    @JsonCreator
     public MemberRequest(String email, String password, Integer age) {
         this.email = email;
         this.password = password;

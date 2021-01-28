@@ -1,5 +1,6 @@
 package subway.member.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -12,24 +13,24 @@ import javax.sql.DataSource;
 
 @Repository
 public class MemberDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert simpleJdbcInsert;
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
 
-    private RowMapper<Member> rowMapper = (rs, rowNum) ->
-            new Member(
-                    rs.getLong("id"),
-                    rs.getString("email"),
-                    rs.getString("password"),
-                    rs.getInt("age")
-            );
-
-
+    @Autowired
     public MemberDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("member")
                 .usingGeneratedKeyColumns("id");
     }
+
+    private final RowMapper<Member> rowMapper = (rs, rowNum) ->
+            new Member(
+                    rs.getLong("id"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getInt("age")
+            );
 
     public Member insert(Member member) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
@@ -52,8 +53,8 @@ public class MemberDao {
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
-    public Member findByEmail(String email) {
-        String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+    public Member findByEmailAndPassword(String email, String password) {
+        String sql = "select * from MEMBER where email = ? and password = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper, email, password);
     }
 }

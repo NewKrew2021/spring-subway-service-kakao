@@ -1,12 +1,12 @@
 package subway.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class TokenRequest {
-    private String email;
-    private String password;
+    private final String email;
+    private final String password;
 
-    public TokenRequest() {
-    }
-
+    @JsonCreator
     public TokenRequest(String email, String password) {
         this.email = email;
         this.password = password;

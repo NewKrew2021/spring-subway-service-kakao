@@ -1,13 +1,13 @@
 package subway.line.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class SectionRequest {
-    private Long upStationId;
-    private Long downStationId;
-    private int distance;
+    private final Long upStationId;
+    private final Long downStationId;
+    private final int distance;
 
-    public SectionRequest() {
-    }
-
+    @JsonCreator
     public SectionRequest(Long upStationId, Long downStationId, int distance) {
         this.upStationId = upStationId;
         this.downStationId = downStationId;

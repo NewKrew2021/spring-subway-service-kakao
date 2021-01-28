@@ -1,18 +1,28 @@
 package subway.auth.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exceptions.UnauthenticatedException;
+import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private AuthService authService;
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationPrincipalArgumentResolver(AuthService authService) {
-        this.authService = authService;
+    @Autowired
+    public AuthenticationPrincipalArgumentResolver(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
+        this.memberService = memberService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -20,10 +30,21 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
-        return null;
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        String token = AuthorizationExtractor.extract(request);
+
+        if (jwtTokenProvider.validateToken(token)) {
+            Long memberId = Long.parseLong(jwtTokenProvider.getPayload(token));
+            return memberService.findLoginMember(memberId);
+        }
+
+        AuthenticationPrincipal auth = parameter.getParameterAnnotation(AuthenticationPrincipal.class);
+        if (auth.required()) {
+            throw new UnauthenticatedException("Must login before using this service: " + request.getContextPath());
+        }
+
+        return LoginMember.guestMember;
     }
 }

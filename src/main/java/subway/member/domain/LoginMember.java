@@ -1,12 +1,12 @@
 package subway.member.domain;
 
-public class LoginMember {
-    private Long id;
-    private String email;
-    private Integer age;
+import subway.path.domain.Person;
 
-    public LoginMember() {
-    }
+public class LoginMember {
+    public static final LoginMember guestMember = new LoginMember(0L, "guest", Person.ADULT.getMinAge());
+    private final Long id;
+    private final String email;
+    private final Integer age;
 
     public LoginMember(Long id, String email, Integer age) {
         this.id = id;

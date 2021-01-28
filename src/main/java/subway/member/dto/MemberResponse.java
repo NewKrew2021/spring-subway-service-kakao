@@ -1,15 +1,14 @@
 package subway.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import subway.member.domain.Member;
 
 public class MemberResponse {
-    private Long id;
-    private String email;
-    private Integer age;
+    private final Long id;
+    private final String email;
+    private final Integer age;
 
-    public MemberResponse() {
-    }
-
+    @JsonCreator
     public MemberResponse(Long id, String email, Integer age) {
         this.id = id;
         this.email = email;
