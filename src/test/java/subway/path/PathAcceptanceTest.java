@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
 import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
+import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
         PathResponse pathResponse = response.as(PathResponse.class);
 
         List<Long> stationIds = pathResponse.getStations().stream()
-                .map(StationResponse::getId)
+                .map(Station::getId)
                 .collect(Collectors.toList());
 
         List<Long> expectedPathIds = expectedPath.stream()

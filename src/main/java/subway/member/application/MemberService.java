@@ -24,7 +24,8 @@ public class MemberService {
     }
 
     public MemberResponse findMember(Long id) {
-        Member member = memberDao.findById(id);
+        Member member = memberDao.findOneById(id)
+                .orElseThrow(UnauthenticatedException::new);
         return MemberResponse.of(member);
     }
 
@@ -39,13 +40,13 @@ public class MemberService {
     }
 
     public Member findAuthenticatedMember(String email, String password) {
-        return memberDao.findByEmail(email)
+        return memberDao.findOneByEmail(email)
                 .filter(member -> member.hasSamePassword(password))
                 .orElseThrow(UnauthenticatedException::new);
     }
 
-    public LoginMember findLoginMember(String email) {
-        return memberDao.findByEmail(email)
+    public LoginMember findLoginMemberById(Long id) {
+        return memberDao.findOneById(id)
                 .map(LoginMember::new)
                 .orElseThrow(UnauthenticatedException::new);
     }
