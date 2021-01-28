@@ -11,7 +11,6 @@ import subway.line.domain.Section;
 import subway.line.domain.Sections;
 import subway.member.domain.LoginMember;
 import subway.path.domain.Path;
-import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -30,7 +29,7 @@ public class PathService {
         this.fareService = fareService;
     }
 
-    public PathResponse getPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
+    public Path getPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
 
         GraphPath graphPath =
                 DijkstraShortestPath.findPathBetween(makeGraph(),
@@ -41,7 +40,7 @@ public class PathService {
         List<Long> distinctLineIds = new Sections(graphPath.getEdgeList()).getDistinctLineIds();
         int fare = fareService.findFare(distinctLineIds, distance, loginMember);
 
-        return PathResponse.of(new Path(graphPath.getVertexList(), distance, fare));
+        return new Path(graphPath.getVertexList(), distance, fare);
     }
 
     private WeightedMultigraph<Station, Section> makeGraph() {

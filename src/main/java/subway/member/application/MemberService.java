@@ -1,11 +1,9 @@
 package subway.member.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import subway.auth.application.AuthorizationException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
-import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
 
 @Service
@@ -16,14 +14,12 @@ public class MemberService {
         this.memberDao = memberDao;
     }
 
-    public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
-        return MemberResponse.of(member);
+    public Member createMember(String email, String password, Integer age) {
+        return memberDao.insert(new Member(email, password, age));
     }
 
-    public MemberResponse findById(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+    public Member findById(Long id) {
+        return memberDao.findById(id);
     }
 
     public void validateMember(String email, String password) {
@@ -39,8 +35,8 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
-    public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+    public void updateMember(Long id, String email, String password, Integer age) {
+        memberDao.update(new Member(id, email, password, age));
     }
 
     public void deleteMember(Long id) {

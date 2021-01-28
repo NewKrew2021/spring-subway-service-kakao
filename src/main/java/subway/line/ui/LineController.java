@@ -3,6 +3,7 @@ package subway.line.ui;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.line.application.LineService;
+import subway.line.domain.Line;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
@@ -23,23 +24,29 @@ public class LineController {
 
     @PostMapping
     public ResponseEntity createLine(@RequestBody LineRequest lineRequest) {
-        LineResponse line = lineService.saveLine(lineRequest);
-        return ResponseEntity.created(URI.create("/lines/" + line.getId())).body(line);
+        Line line = lineService.saveLine(lineRequest);
+        return ResponseEntity
+                .created(URI.create("/lines/" + line.getId()))
+                .body(LineResponse.of(line));
     }
 
     @GetMapping
     public ResponseEntity<List<LineResponse>> findAllLines() {
-        return ResponseEntity.ok(lineService.findLineResponses());
+        return ResponseEntity.ok(LineResponse.listOf(lineService.findLines()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LineResponse> findLineById(@PathVariable Long id) {
-        return ResponseEntity.ok(lineService.findLineResponseById(id));
+        return ResponseEntity.ok(LineResponse.of(lineService.findLineById(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateLine(@PathVariable Long id, @RequestBody LineRequest lineUpdateRequest) {
-        lineService.updateLine(id, lineUpdateRequest);
+    public ResponseEntity updateLine(@PathVariable Long id,
+                                     @RequestBody LineRequest lineUpdateRequest) {
+        lineService.updateLine(id,
+                lineUpdateRequest.getName(),
+                lineUpdateRequest.getColor(),
+                lineUpdateRequest.getExtraFare());
         return ResponseEntity.ok().build();
     }
 
@@ -50,8 +57,12 @@ public class LineController {
     }
 
     @PostMapping("/{lineId}/sections")
-    public ResponseEntity addLineStation(@PathVariable Long lineId, @RequestBody SectionRequest sectionRequest) {
-        lineService.addLineStation(lineId, sectionRequest);
+    public ResponseEntity addLineStation(@PathVariable Long lineId,
+                                         @RequestBody SectionRequest sectionRequest) {
+        lineService.addLineStation(lineId,
+                sectionRequest.getUpStationId(),
+                sectionRequest.getDownStationId(),
+                sectionRequest.getDistance());
         return ResponseEntity.ok().build();
     }
 

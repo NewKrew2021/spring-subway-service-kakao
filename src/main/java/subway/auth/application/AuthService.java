@@ -1,8 +1,6 @@
 package subway.auth.application;
 
 import org.springframework.stereotype.Service;
-import subway.auth.dto.TokenRequest;
-import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.application.MemberService;
 import subway.member.dto.MemberResponse;
@@ -18,11 +16,9 @@ public class AuthService {
         this.memberService = memberService;
     }
 
-    public TokenResponse createToken(TokenRequest tokenRequest) {
-        validateLogin(tokenRequest.getEmail(), tokenRequest.getPassword());
-
-        String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
-        return new TokenResponse(accessToken);
+    public String createToken(String email, String password) {
+        validateLogin(email, password);
+        return jwtTokenProvider.createToken(email);
     }
 
     public MemberResponse findMember(String principal) {

@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.station.application.StationService;
+import subway.station.domain.Station;
 import subway.station.dto.StationRequest;
 import subway.station.dto.StationResponse;
 
@@ -22,13 +23,14 @@ public class StationController {
 
     @PostMapping("/stations")
     public ResponseEntity<StationResponse> createStation(@RequestBody StationRequest stationRequest) {
-        StationResponse station = stationService.saveStation(stationRequest);
-        return ResponseEntity.created(URI.create("/stations/" + station.getId())).body(station);
+        Station station = stationService.saveStation(stationRequest.toStation());
+        return ResponseEntity.created(URI.create("/stations/" + station.getId()))
+                .body(StationResponse.of(station));
     }
 
     @GetMapping(value = "/stations", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StationResponse>> showStations() {
-        return ResponseEntity.ok().body(stationService.findAllStationResponses());
+        return ResponseEntity.ok().body(StationResponse.listOf(stationService.findAll()));
     }
 
     @DeleteMapping("/stations/{id}")
