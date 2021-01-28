@@ -52,6 +52,8 @@ public class MemberController {
 
     @GetMapping("/members/me")
     public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        if(loginMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         MemberResponse member = memberService.findMember(loginMember.getId());
         return ResponseEntity.ok().body(member);
 
@@ -59,19 +61,18 @@ public class MemberController {
 
     @PutMapping("/members/me")
     public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
+        if(loginMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         memberService.updateMember(loginMember.getId(), param);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/me")
     public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        if(loginMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         memberService.deleteMember(loginMember.getId());
         return ResponseEntity.noContent().build();
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<Void> invalidToken(){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 }
