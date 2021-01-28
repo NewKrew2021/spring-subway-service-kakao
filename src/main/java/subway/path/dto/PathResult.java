@@ -31,10 +31,6 @@ public class PathResult {
         return distance;
     }
 
-    public void setFare(int fare){
-        this.fare = fare;
-    }
-
     public int getFare() {
         return fare;
     }
