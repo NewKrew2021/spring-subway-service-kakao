@@ -1,61 +1,70 @@
 package subway.member.ui;
 
-import subway.member.domain.LoginMember;
-import subway.member.application.MemberService;
-import subway.member.dto.MemberRequest;
-import subway.member.dto.MemberResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.auth.application.AuthService;
+import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.exception.InvalidTokenException;
+import subway.member.application.MemberService;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberRequest;
+import subway.member.dto.MemberResponse;
 
 import java.net.URI;
 
 @RestController
+@RequestMapping("/members")
 public class MemberController {
     private MemberService memberService;
+    private AuthService authService;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(AuthService authService, MemberService memberService) {
+        this.authService = authService;
         this.memberService = memberService;
     }
 
-    @PostMapping("/members")
+    @PostMapping
     public ResponseEntity createMember(@RequestBody MemberRequest request) {
-        MemberResponse member = memberService.createMember(request);
-        return ResponseEntity.created(URI.create("/members/" + member.getId())).build();
+        return ResponseEntity.created(URI.create("/members/" + memberService.createMember(request).getId())).build();
     }
 
-    @GetMapping("/members/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MemberResponse> findMember(@PathVariable Long id) {
-        MemberResponse member = memberService.findMember(id);
-        return ResponseEntity.ok().body(member);
+        return ResponseEntity.ok().body(memberService.findMember(id));
     }
 
-    @PutMapping("/members/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<MemberResponse> updateMember(@PathVariable Long id, @RequestBody MemberRequest param) {
         memberService.updateMember(id, param);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/members/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<MemberResponse> deleteMember(@PathVariable Long id) {
         memberService.deleteMember(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/members/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(LoginMember loginMember) {
-        MemberResponse member = memberService.findMember(loginMember.getId());
-        return ResponseEntity.ok().body(member);
+    @GetMapping("/me")
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        return ResponseEntity.ok().body(memberService.findMember(loginMember.getId()));
     }
 
-    @PutMapping("/members/me")
-    public ResponseEntity<MemberResponse> updateMemberOfMine(LoginMember loginMember, @RequestBody MemberRequest param) {
+    @PutMapping("/me")
+    public ResponseEntity<MemberResponse> updateMemberOfMine(@AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest param) {
         memberService.updateMember(loginMember.getId(), param);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/members/me")
-    public ResponseEntity<MemberResponse> deleteMemberOfMine(LoginMember loginMember) {
+    @DeleteMapping("/me")
+    public ResponseEntity<MemberResponse> deleteMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
         memberService.deleteMember(loginMember.getId());
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<Void> invalidToken() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

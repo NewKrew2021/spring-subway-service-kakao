@@ -1,11 +1,13 @@
 package subway.member.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.auth.exception.InvalidMemberException;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
@@ -16,7 +18,7 @@ public class MemberDao {
     private SimpleJdbcInsert simpleJdbcInsert;
 
     private RowMapper<Member> rowMapper = (rs, rowNum) ->
-            new Member(
+            Member.of(
                     rs.getLong("id"),
                     rs.getString("email"),
                     rs.getString("password"),
@@ -34,7 +36,7 @@ public class MemberDao {
     public Member insert(Member member) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
         Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-        return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
+        return Member.of(id, member.getEmail(), member.getPassword(), member.getAge());
     }
 
     public void update(Member member) {
@@ -54,6 +56,10 @@ public class MemberDao {
 
     public Member findByEmail(String email) {
         String sql = "select * from MEMBER where email = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        } catch (EmptyResultDataAccessException e) {
+            throw new InvalidMemberException("존재하지 않는 이메일입니다.");
+        }
     }
 }
