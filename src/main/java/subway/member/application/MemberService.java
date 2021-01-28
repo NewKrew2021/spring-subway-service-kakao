@@ -19,14 +19,12 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
-        return MemberResponse.of(member);
+    public Member createMember(MemberRequest request) {
+        return memberDao.insert(request.toMember());
     }
 
-    public MemberResponse findMember(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+    public Member findMember(Long id) {
+        return memberDao.findById(id);
     }
 
     public Member findByEmail(String email){

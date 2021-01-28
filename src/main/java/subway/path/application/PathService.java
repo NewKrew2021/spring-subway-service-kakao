@@ -23,13 +23,12 @@ public class PathService {
         this.stationService = stationService;
     }
 
-    public PathResponse getShortestPath(Long sourceId, Long targetId, LoginMember loginMember) {
+    public Path getShortestPath(Long sourceId, Long targetId, LoginMember loginMember) {
         List<Line> lines = lineService.findLines();
         Station sourceStation = stationService.findStationById(sourceId);
         Station targetStation = stationService.findStationById(targetId);
 
-        Path path = new Path(new ShortestGraph(lines,sourceStation,targetStation),loginMember);
-        return PathResponse.make(path.getStations(), path.getDistance(), path.getFare());
+        return new Path(new ShortestGraph(lines,sourceStation,targetStation),loginMember);
     }
 
 }

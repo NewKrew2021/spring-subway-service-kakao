@@ -26,10 +26,10 @@ public class LineService {
         this.stationService = stationService;
     }
 
-    public LineResponse saveLine(LineRequest request) {
+    public Line saveLine(LineRequest request) {
         Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor() , request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
-        return LineResponse.of(persistLine);
+        return persistLine;
     }
 
     private Section addInitSection(Line line, LineRequest request) {
@@ -42,20 +42,16 @@ public class LineService {
         return null;
     }
 
-    public List<LineResponse> findLineResponses() {
-        List<Line> persistLines = findLines();
-        return persistLines.stream()
-                .map(line -> LineResponse.of(line))
-                .collect(Collectors.toList());
+    public List<Line> findLineResponses() {
+        return findLines();
     }
 
     public List<Line> findLines() {
         return lineDao.findAll();
     }
 
-    public LineResponse findLineResponseById(Long id) {
-        Line persistLine = findLineById(id);
-        return LineResponse.of(persistLine);
+    public Line findLineResponseById(Long id) {
+        return findLineById(id);
     }
 
     public Line findLineById(Long id) {

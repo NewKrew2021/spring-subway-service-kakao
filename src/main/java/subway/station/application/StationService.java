@@ -18,9 +18,8 @@ public class StationService {
         this.stationDao = stationDao;
     }
 
-    public StationResponse saveStation(StationRequest stationRequest) {
-        Station station = stationDao.insert(stationRequest.toStation());
-        return StationResponse.of(station);
+    public Station saveStation(StationRequest stationRequest) {
+        return stationDao.insert(stationRequest.toStation());
     }
 
     public Station findStationById(Long id) {
@@ -29,12 +28,8 @@ public class StationService {
                 .orElseThrow(InvalidStationException::new);
     }
 
-    public List<StationResponse> findAllStationResponses() {
-        List<Station> stations = stationDao.findAll();
-
-        return stations.stream()
-                .map(StationResponse::of)
-                .collect(Collectors.toList());
+    public List<Station> findAllStationResponses() {
+        return stationDao.findAll();
     }
 
     public void deleteStationById(Long id) {

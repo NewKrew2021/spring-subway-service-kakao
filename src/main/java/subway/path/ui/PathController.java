@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
 import subway.path.application.PathService;
+import subway.path.domain.Path;
 import subway.path.dto.PathResponse;
 
 @RestController
@@ -23,7 +24,9 @@ public class PathController {
                                 @AuthenticationPrincipal(required = false) LoginMember loginMember,
                                 @RequestParam("source") Long sourceId,
                                 @RequestParam("target") Long targetId) {
-        PathResponse pathResponse = pathService.getShortestPath(sourceId, targetId, loginMember);
+        Path path = pathService.getShortestPath(sourceId, targetId, loginMember);
+        PathResponse pathResponse =  PathResponse.make(path.getStations(), path.getDistance(), path.getFare());
+
         return ResponseEntity.ok().body(pathResponse);
     }
 
