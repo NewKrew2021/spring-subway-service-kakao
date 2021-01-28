@@ -4,7 +4,6 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.fare.application.FareService;
 import subway.line.application.LineService;
@@ -25,7 +24,6 @@ public class PathService {
     private LineService lineService;
     private FareService fareService;
 
-    @Autowired
     public PathService(StationService stationService, LineService lineService, FareService fareService) {
         this.stationService = stationService;
         this.lineService = lineService;

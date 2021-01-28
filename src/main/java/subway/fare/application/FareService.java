@@ -1,6 +1,5 @@
 package subway.fare.application;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.fare.domain.AgeFarePolicy;
 import subway.fare.domain.DistanceFarePolicy;
@@ -18,7 +17,6 @@ public class FareService {
 
     private LineService lineService;
 
-    @Autowired
     public FareService(LineService lineService) {
         this.lineService = lineService;
     }

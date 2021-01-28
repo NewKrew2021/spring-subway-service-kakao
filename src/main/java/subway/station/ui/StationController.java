@@ -1,6 +1,5 @@
 package subway.station.ui;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ public class StationController {
 
     private StationService stationService;
 
-    @Autowired
     public StationController(StationService stationService) {
         this.stationService = stationService;
     }

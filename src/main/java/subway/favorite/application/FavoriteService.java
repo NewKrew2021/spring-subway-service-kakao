@@ -1,6 +1,5 @@
 package subway.favorite.application;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
@@ -17,7 +16,6 @@ public class FavoriteService {
     private FavoriteDao favoriteDao;
     private StationService stationService;
 
-    @Autowired
     public FavoriteService(FavoriteDao favoriteDao, StationService stationService) {
         this.favoriteDao = favoriteDao;
         this.stationService = stationService;
