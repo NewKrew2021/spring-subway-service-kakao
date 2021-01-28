@@ -24,7 +24,7 @@ public class PathController {
     }
 
     @GetMapping("/paths")
-    public ResponseEntity<PathResponse> getPath(@AuthenticationPrincipal Optional<LoginMember> optionalLoginMember,
+    public ResponseEntity<PathResponse> getPath(@AuthenticationPrincipal(required = false) Optional<LoginMember> optionalLoginMember,
                                                 @RequestParam String source, @RequestParam String target) {
         Station sourceStation = stationService.findStationById(Long.valueOf(source));
         Station targetStation = stationService.findStationById(Long.valueOf(target));
