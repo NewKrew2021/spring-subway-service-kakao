@@ -50,11 +50,6 @@ public class PathService {
         return lineIdList.stream().map(lineId -> lineDao.findById(lineId).getExtraFare()).max(Integer::compare).orElse(0);
     }
 
-//    - 청소년: 13세 이상~19세 미만
-//    - 어린이: 6세 이상~ 13세 미만
-//    청소년: 운임에서 350원을 공제한 금액의 20%할인
-//    어린이: 운임에서 350원을 공제한 금액의 50%할인
-//    6세 미만: 무임
     private int discount(int age, int fare){
         AGE ageStatus = AGE.getAgeStatus(age);
         return (int)((fare - ageStatus.getDeduction()) * ageStatus.getSaleRate()) + ageStatus.getDeduction();

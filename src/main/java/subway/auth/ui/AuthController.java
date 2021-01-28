@@ -25,12 +25,7 @@ public class AuthController {
 
     @PostMapping(value = "/login/token", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TokenResponse> tryLogin(@RequestBody TokenRequest tokenRequest){
-        try{
-            TokenResponse tokenResponse  = authService.createToken(tokenRequest);
-            return ResponseEntity.ok().body(tokenResponse);
-        }
-        catch (LoginFailException e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        TokenResponse tokenResponse  = authService.createToken(tokenRequest);
+        return ResponseEntity.ok().body(tokenResponse);
     }
 }
