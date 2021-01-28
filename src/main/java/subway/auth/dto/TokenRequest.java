@@ -19,4 +19,9 @@ public class TokenRequest {
     public String getPassword() {
         return password;
     }
+
+    public boolean isEmpty(){
+        return email.isEmpty() || password.isEmpty();
+    }
+
 }

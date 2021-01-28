@@ -2,6 +2,7 @@ package subway.auth.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
@@ -36,8 +37,8 @@ public class AuthService {
 
     public TokenResponse createToken(TokenRequest tokenRequest) {
         StringBuilder errorMessageBuilder = new StringBuilder();
-        if (!checkValidLogin(errorMessageBuilder,
-                tokenRequest.getEmail(), tokenRequest.getPassword())) {
+        if (tokenRequest.isEmpty()
+                || !checkValidLogin(errorMessageBuilder, tokenRequest.getEmail(), tokenRequest.getPassword())) {
             throw new InvalidLoginException(errorMessageBuilder.toString());
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
