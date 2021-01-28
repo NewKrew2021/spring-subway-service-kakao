@@ -6,9 +6,11 @@ import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Sections;
 import subway.member.dao.MemberDao;
+import subway.path.domain.Fare;
 import subway.path.domain.Path;
 import subway.path.domain.PathVertex;
 import subway.path.domain.PathVertices;
+import subway.path.dto.PathResponse;
 import subway.path.dto.PathResult;
 import subway.station.dao.StationDao;
 
@@ -29,25 +31,23 @@ public class PathService {
         this.stationDao = stationDao;
     }
 
-    public PathResult findShortestPath(Long sourceId, Long targetId, String email) {
+    public PathResponse findShortestPath(Long sourceId, Long targetId, String email) {
         Sections sections = sectionDao.findAll();
         PathVertices pathVertices = PathVertices.from(lineDao.findAll());
         Path path = new Path(pathVertices, sections);
 
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
-        List<PathVertex> vertexList = result.getVertexList();
-        int distance = (int) result.getWeight();
-        int fare = path.calculateFare(
-                distance,
-                path.findLineIdListInPath(PathVertices.of(vertexList))
+
+        Fare fare = new Fare(result.getDistance(),
+                path.findLineIdListInPath(result.getPathVertices())
                         .stream()
                         .map(lineId -> lineDao.findById(lineId).getExtraFare())
                         .collect(Collectors.toList()));
 
         if(email != null )
-            fare = path.discount(memberDao.findByEmail(email).getAge(), fare);
+            fare.discount(memberDao.findByEmail(email).getAge());
 
-        return new PathResult(PathVertices.of(vertexList), distance);
+        return new PathResponse(result, fare);
 
     }
 }

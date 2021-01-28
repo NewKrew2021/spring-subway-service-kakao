@@ -1,5 +1,6 @@
 package subway.path.dto;
 
+import subway.path.domain.Fare;
 import subway.path.domain.Path;
 import subway.station.dto.StationResponse;
 
@@ -20,13 +21,13 @@ public class PathResponse {
         this.fare = fare;
     }
 
-    public PathResponse(PathResult pathResult){
+    public PathResponse(PathResult pathResult, Fare fare){
         this.stations = pathResult.getPathVertices().getPathVertexList()
                 .stream()
                 .map(i -> new StationResponse(i.getStation().getId(), i.getStation().getName()))
                 .collect(Collectors.toList());
         this.distance = pathResult.getDistance();
-        this.fare = pathResult.getFare();
+        this.fare = fare.getFare();
     }
 
 

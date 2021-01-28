@@ -19,14 +19,6 @@ public class Path {
 
     private PathVertices pathVertices;
 
-    private final int BASIC_FARE = 1250;
-    private final int FREE_DISTANCE_BOUND = 10;
-    private final int FARE_DISCOUNT_DISTANCE_BOUND = 50;
-
-    private final int KID_LOWER_BOUND = 6;
-    private final int KID_UPPER_BOUND = 13;
-    private final int TEEN_UPPER_BOUND = 19;
-
     public Path(PathVertices pathVertices, Sections sections){
         this.pathVertices = pathVertices;
 
@@ -72,45 +64,5 @@ public class Path {
                 .map(id -> Optional.of(id))
                 .findFirst()
                 .orElse(Optional.empty());
-    }
-
-    public int calculateFare(int distance, List<Integer> extraFareList){
-        int basicFare = getFareByDistance(distance);
-        int extraFare = getExtraFareByLines(extraFareList);
-
-        return basicFare + extraFare;
-    }
-
-    private int getFareByDistance(int distance) {
-        int result = BASIC_FARE;
-
-        if (distance > FREE_DISTANCE_BOUND && distance <= FARE_DISCOUNT_DISTANCE_BOUND) {
-            result += (int) Math.ceil((double)(distance - 10) / 5) * 100;
-        }
-
-        if (distance > FARE_DISCOUNT_DISTANCE_BOUND) {
-            result += (int) Math.ceil((double)(distance - 50) / 8) * 100 + 800;
-        }
-        return result;
-    }
-
-    private int getExtraFareByLines(List<Integer> extraFareList){
-        return extraFareList.stream().max(Integer::compare).orElse(0);
-    }
-
-    public int discount(int age, int fare){
-        if(age < KID_LOWER_BOUND){
-            return 0;
-        }
-
-        if(age >=KID_LOWER_BOUND && age < KID_UPPER_BOUND){
-            return (int) ((fare - 350) * 0.5) + 350;
-        }
-
-        if(age >= KID_UPPER_BOUND && age < TEEN_UPPER_BOUND){
-            return (int) ((fare - 350) * 0.8) + 350;
-        }
-
-        return fare;
     }
 }
