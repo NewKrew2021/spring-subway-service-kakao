@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SubwayMap {
-    private final List<Line> lines;
+    private List<Line> lines;
 
     public SubwayMap(List<Line> lines) {
         this.lines = lines;
@@ -33,5 +33,9 @@ public class SubwayMap {
 
     public DirectedSections getShortestPath(Station source, Station destination) {
         return new DirectedSections(this, source, destination);
+    }
+
+    public void refresh(List<Line> lines) {
+        this.lines = lines;
     }
 }
