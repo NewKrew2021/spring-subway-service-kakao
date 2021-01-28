@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("지하철 경로 유닛 테스트")
 public class MetroMapTest {
-    KakaoMap kakaoMap;
+    MetroNavigator metroNavigator;
     Station station1;
     Station station2;
     Station station3;
@@ -41,17 +41,17 @@ public class MetroMapTest {
         Sections sections2 = new Sections(Arrays.asList(section4));
         line = new Line(1L, "red", "신분당선", sections1, 300);
         line2 = new Line(2L, "blue", "분당선", sections2, 400);
-        kakaoMap = new KakaoMap(Arrays.asList(line, line2), station1, station5);
+        metroNavigator = new MetroNavigator(Arrays.asList(line, line2), station1, station5);
     }
 
     @Test
     void 최단거리_리스트_테스트() {
-        assertThat(kakaoMap.getShortestPath()).isEqualTo(Arrays.asList(station1, station2, station3, station5));
+        assertThat(metroNavigator.getShortestPath()).isEqualTo(Arrays.asList(station1, station2, station3, station5));
     }
 
     @Test
     void 최단거리_구간_테스트() {
-        assertThat(kakaoMap.getShortestPathSections()).isEqualTo(Arrays.asList(section1, section2, section4));
+        assertThat(metroNavigator.getShortestPathSections()).isEqualTo(Arrays.asList(section1, section2, section4));
     }
 
 }

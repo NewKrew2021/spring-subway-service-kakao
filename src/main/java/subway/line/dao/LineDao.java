@@ -39,7 +39,7 @@ public class LineDao {
         try {
             Long lineId = insertAction.executeAndReturnKey(params).longValue();
             return new Line(lineId, line.getName(), line.getColor());
-        } catch (DuplicateKeyException e){
+        } catch (DuplicateKeyException e) {
             throw new AlreadyExistedDataException("이미 사용중인 노선 명 입니다.");
         }
     }

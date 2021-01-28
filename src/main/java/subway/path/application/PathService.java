@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
-import subway.path.domain.KakaoMap;
+import subway.path.domain.MetroNavigator;
 import subway.path.dto.PathResponse;
 import subway.path.domain.ComplimentaryAge;
 import subway.station.dao.StationDao;
@@ -32,10 +32,10 @@ public class PathService {
         if (loginMember != null) {
             complimentaryAge = ComplimentaryAge.getAgeGroup(loginMember.getAge());
         }
-        KakaoMap kakaoMap = new KakaoMap(lines, stationDao.findById(source), stationDao.findById(target), complimentaryAge);
-        return new PathResponse(kakaoMap.getShortestPath().stream()
+        MetroNavigator metroNavigator = new MetroNavigator(lines, stationDao.findById(source), stationDao.findById(target), complimentaryAge);
+        return new PathResponse(metroNavigator.getShortestPath().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList()),
-                kakaoMap.getTotalDistance(), kakaoMap.getTotalFare());
+                metroNavigator.getTotalDistance(), metroNavigator.getTotalFare());
     }
 }

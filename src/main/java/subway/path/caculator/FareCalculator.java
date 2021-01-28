@@ -11,8 +11,6 @@ public class FareCalculator {
     private static final int BASE_FARE = 1250;
     private static final int PERCENTAGE_VALUE = 100;
     private static final int DEDUCTION_FARE = 350;
-    private static final double TEENAGER_SALE_RATE = 0.2;
-    private static final double CHILD_SALE_RATE = 0.5;
     private static final int BASIC_FARE_DISTANCE = 10;
     private static final int FIFTY_KILOMETER = 50;
     private static final int OVER_FIFTY_KILOMETER_FARE = 800;

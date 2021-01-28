@@ -64,7 +64,7 @@ public class MemberDao {
         }
     }
 
-    public Member findByEmail(String email) throws IncorrectResultSizeDataAccessException{
+    public Member findByEmail(String email) throws IncorrectResultSizeDataAccessException {
         System.out.println(email);
         String sql = "select * from MEMBER where email = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, email);

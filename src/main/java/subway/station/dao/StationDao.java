@@ -39,7 +39,7 @@ public class StationDao {
         try {
             Long id = insertAction.executeAndReturnKey(params).longValue();
             return new Station(id, station.getName());
-        } catch (DuplicateKeyException e){
+        } catch (DuplicateKeyException e) {
             throw new AlreadyExistedDataException("이미 사용중인 역 명입니다.");
         }
     }
@@ -58,7 +58,7 @@ public class StationDao {
         String sql = "select * from STATION where id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, id);
-        } catch (IncorrectResultSizeDataAccessException e){
+        } catch (IncorrectResultSizeDataAccessException e) {
             throw new NotExistDataException("해당 역이 존재하지 않습니다.");
         }
     }

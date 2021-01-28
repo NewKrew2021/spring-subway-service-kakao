@@ -9,7 +9,7 @@ public class FavoriteResponse {
     private StationResponse source;
     private StationResponse target;
 
-    public FavoriteResponse(Long id, Station source, Station target){
+    public FavoriteResponse(Long id, Station source, Station target) {
         this.id = id;
         this.source = StationResponse.of(source);
         this.target = StationResponse.of(target);

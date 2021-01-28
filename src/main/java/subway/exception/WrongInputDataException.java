@@ -1,6 +1,6 @@
 package subway.exception;
 
-public class WrongInputDataException extends IllegalArgumentException{
+public class WrongInputDataException extends IllegalArgumentException {
     public WrongInputDataException() {
     }
 

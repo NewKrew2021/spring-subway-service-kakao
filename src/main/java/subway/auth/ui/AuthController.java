@@ -14,9 +14,10 @@ import subway.auth.dto.TokenResponse;
 public class AuthController {
     private AuthService authService;
 
-    public AuthController(AuthService authService){
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
+
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest request) {
         return ResponseEntity.ok(authService.login(request));

@@ -33,7 +33,7 @@ public class Line {
 
     public Line(String name, String color, int extraFare) {
         this(name, color);
-        if(extraFare < 0){
+        if (extraFare < 0) {
             throw new WrongInputDataException("추가요금이 잘못 입력되었습니다.");
         }
         this.extraFare = extraFare;
