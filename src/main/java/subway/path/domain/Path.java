@@ -34,16 +34,16 @@ public class Path {
         sections.getSections()
                 .forEach(section ->
                         graph.setEdgeWeight(graph.addEdge(
-                        pathVertices.getPathVertexByStationId(section.getUpStation().getId()),
-                        pathVertices.getPathVertexByStationId(section.getDownStation().getId())),
+                        pathVertices.getPathVertexByStation(section.getUpStation()),
+                        pathVertices.getPathVertexByStation(section.getDownStation())),
                                 section.getDistance()));
     }
 
-    public GraphPath findShortestPath(Long sourceStationId, Long targetStationId) {
+    public GraphPath findShortestPath(Station sourceStation, Station targetStation) {
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(this.graph);
         GraphPath result = dijkstraShortestPath.getPath(
-                this.pathVertices.getPathVertexByStationId(sourceStationId),
-                this.pathVertices.getPathVertexByStationId(targetStationId));
+                this.pathVertices.getPathVertexByStation(sourceStation),
+                this.pathVertices.getPathVertexByStation(targetStation));
         return result;
     }
 

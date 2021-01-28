@@ -41,9 +41,9 @@ public class PathVertices {
         return pathVertices;
     }
 
-    public PathVertex getPathVertexByStationId(Long stationId){
+    public PathVertex getPathVertexByStation(Station station){
         return pathVertices.stream()
-                .filter(vertex -> vertex.getStation().getId().equals(stationId))
+                .filter(vertex -> vertex.getStation().equals(station))
                 .findFirst()
                 .orElse(null);
     }

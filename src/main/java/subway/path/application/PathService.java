@@ -10,6 +10,8 @@ import subway.path.domain.Path;
 import subway.path.domain.PathVertex;
 import subway.path.domain.PathVertices;
 import subway.path.dto.PathResult;
+import subway.station.dao.StationDao;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,11 +20,13 @@ public class PathService {
     MemberDao memberDao;
     LineDao lineDao;
     SectionDao sectionDao;
+    StationDao stationDao;
 
-    public PathService(LineDao lineDao, SectionDao sectionDao, MemberDao memberDao){
+    public PathService(LineDao lineDao, SectionDao sectionDao, MemberDao memberDao, StationDao stationDao){
         this.lineDao = lineDao;
         this.sectionDao = sectionDao;
         this.memberDao = memberDao;
+        this.stationDao = stationDao;
     }
 
     public PathResult findShortestPath(Long sourceId, Long targetId, String email) {
@@ -30,7 +34,7 @@ public class PathService {
         PathVertices pathVertices = PathVertices.from(lineDao.findAll());
         Path path = new Path(pathVertices, sections);
 
-        GraphPath result = path.findShortestPath(sourceId, targetId);
+        GraphPath result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
         List<PathVertex> vertexList = result.getVertexList();
         int distance = (int) result.getWeight();
         int fare = path.calculateFare(
