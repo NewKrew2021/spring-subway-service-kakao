@@ -35,6 +35,24 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         회원_정보_조회됨(response, EMAIL, AGE);
     }
 
+    @DisplayName("Member password 불일치 로그인 실패")
+    @Test
+    void myInfoWithBadMemberPassword() {
+        회원_등록되어_있음(EMAIL, PASSWORD, AGE);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("email", EMAIL);
+        params.put("password", PASSWORD + "123");
+
+        RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(params)
+                .when().post("/login/token")
+                .then().log().all()
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
+
     @DisplayName("Bearer Auth 로그인 실패")
     @Test
     void myInfoWithBadBearerAuth() {
