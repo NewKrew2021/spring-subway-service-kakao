@@ -1,5 +1,7 @@
 package subway.line.domain;
 
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import subway.member.domain.LoginMember;
 import subway.member.domain.LoginMemberType;
 import subway.station.domain.Station;
@@ -15,10 +17,16 @@ public class DirectedSections extends Section {
     private static final int ADDITIONAL_PRICE = 100;
     private final List<DirectedSection> sections;
     private final ExtraFare maxExtraFare;
+    private final Station source;
+    private final Station destination;
+    private final DijkstraShortestPath<Station, DefaultWeightedEdge> graph;
 
-    public DirectedSections(List<DirectedSection> sections, ExtraFare maxExtraFare) {
+    public DirectedSections(List<DirectedSection> sections, Station source, Station destination,DijkstraShortestPath<Station, DefaultWeightedEdge> graph,ExtraFare maxExtraFare) {
         this.sections = sections;
+        this.source = source;
+        this.destination = destination;
         this.maxExtraFare = maxExtraFare;
+        this.graph = graph;
     }
 
     public int getMaxExtraFare() {
@@ -64,9 +72,7 @@ public class DirectedSections extends Section {
     }
 
     public int getDistance() {
-        return sections.stream()
-                .map(Section::getDistance)
-                .reduce(0, Integer::sum);
+        return (int) graph.getPathWeight(source,destination);
     }
 
     public List<Station> getStations() {

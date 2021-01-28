@@ -4,29 +4,29 @@ import subway.station.domain.Station;
 
 import java.util.Objects;
 
-public class DirectedSection extends Section{
+public class DirectedSection {
+    private final Station upStation;
+    private final Station downStation;
     private final boolean isUpward;
 
     public DirectedSection(Section section, Station sourceStation) {
-        super(section.getId(),
-                section.getUpStation(),
-                section.getDownStation(),
-                section.getDistance());
+        this.upStation = section.getUpStation();
+        this.downStation = section.getDownStation();
         this.isUpward = section.getDownStation().equals(sourceStation);
     }
 
     public Station getSourceStation() {
         if(isUpward) {
-            return getDownStation();
+            return downStation;
         }
-        return getUpStation();
+        return upStation;
     }
 
     public Station getTargetStation() {
         if(isUpward) {
-            return getUpStation();
+            return upStation;
         }
-        return getDownStation();
+        return downStation;
     }
 
     @Override
@@ -35,6 +35,14 @@ public class DirectedSection extends Section{
         if (o == null || getClass() != o.getClass()) return false;
         DirectedSection that = (DirectedSection) o;
         return isUpward == that.isUpward;
+    }
+
+    public Station getUpStation() {
+        return upStation;
+    }
+
+    public Station getDownStation() {
+        return downStation;
     }
 
     @Override
@@ -46,10 +54,8 @@ public class DirectedSection extends Section{
     public String toString() {
         return "DirectedSection{" +
                 "isUpward=" + isUpward +
-                ", id=" + id +
                 ", upStation=" + upStation +
                 ", downStation=" + downStation +
-                ", distance=" + distance +
                 '}';
     }
 }

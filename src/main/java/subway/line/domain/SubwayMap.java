@@ -37,7 +37,8 @@ public class SubwayMap {
 
     public DirectedSections getShortestPath(Station source, Station destination) {
         List<Section> sections = findAllSections();
-        List<Station> orderedStations = createGraph(sections).getPath(source, destination).getVertexList();
+        DijkstraShortestPath<Station, DefaultWeightedEdge> graph = createGraph(sections);
+        List<Station> orderedStations = graph.getPath(source, destination).getVertexList();
         List<DirectedSection> directedSections = new ArrayList<>();
 
         for (int i = 0; i < orderedStations.size() - 1; i++) {
@@ -47,6 +48,9 @@ public class SubwayMap {
             directedSections.add(directedSection);
         }
         return new DirectedSections(directedSections,
+                source,
+                destination,
+                graph,
                 ExtraFare.of(this, directedSections));
     }
 
