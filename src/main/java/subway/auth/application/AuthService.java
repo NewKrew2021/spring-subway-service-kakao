@@ -24,8 +24,11 @@ public class AuthService {
         return new TokenResponse(token);
     }
 
-    public LoginMember validateToken(String token) {
+    public LoginMember getLoginMemberInToken(String token) {
         if(token == null) {
+            throw new UnAuthorizedException();
+        }
+        if(!tokenProvider.validateToken(token)){
             throw new UnAuthorizedException();
         }
 

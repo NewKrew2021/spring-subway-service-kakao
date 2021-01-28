@@ -38,6 +38,6 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             return LoginMember.GUEST;
         }
 
-        return authService.validateToken(token);
+        return authService.getLoginMemberInToken(token);
     }
 }
