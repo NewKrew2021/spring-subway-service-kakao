@@ -28,7 +28,7 @@ class FareServiceTest {
     @DisplayName("거리에 따른 운임을 계산한다.")
     @ParameterizedTest
     @CsvSource({"10,1250", "11,1350", "15,1350", "50,2050", "51,2150", "58,2150"})
-    void getFareByDistance(int distance, int fare) {
+    void getDistanceFare(int distance, int fare) {
         assertThat(fareService.getDistanceFare(distance)).isEqualTo(fare);
     }
 
