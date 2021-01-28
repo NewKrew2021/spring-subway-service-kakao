@@ -12,6 +12,7 @@ import subway.path.dto.PathResponse;
 import subway.station.dao.StationDao;
 import subway.station.dto.StationResponse;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,10 @@ public class PathService {
 
     public PathResponse searchPathAndFare(LoginMember loginMember, Long source, Long target) {
         PathDto pathDto = searchShortestPath(source, target);
+        if (pathDto.getShortestPath().isEmpty()) {
+            return new PathResponse(Collections.emptyList(), 0, 0);
+        }
+
         int fare = fareService.getFare(pathDto, loginMember);
         return new PathResponse(getStationResponses(pathDto.getShortestPath()),
                 pathDto.getDistance(), fare);
@@ -40,11 +45,15 @@ public class PathService {
                 .collect(Collectors.toList()));
     }
 
-    private PathDto searchShortestPath(Long source, Long target) {
+    protected PathDto searchShortestPath(Long source, Long target) {
         DijkstraShortestPath<Long, Integer> dijkstraShortestPath = new DijkstraShortestPath(createGraph());
-        List<Long> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
-        int distance = (int) dijkstraShortestPath.getPathWeight(source, target);
-        return new PathDto(shortestPath, distance);
+        try {
+            List<Long> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
+            int distance = (int) dijkstraShortestPath.getPathWeight(source, target);
+            return new PathDto(shortestPath, distance);
+        } catch (NullPointerException e) {
+            return new PathDto(Collections.emptyList(), 0);
+        }
     }
 
     private WeightedMultigraph<Long, DefaultWeightedEdge> createGraph() {
