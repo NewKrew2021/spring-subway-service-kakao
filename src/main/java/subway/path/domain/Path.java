@@ -19,15 +19,18 @@ public class Path {
 
     private PathVertices pathVertices;
 
-    public Path(PathVertices pathVertices, Sections sections){
+    public Path(PathVertices pathVertices){
         this.pathVertices = pathVertices;
 
         pathVertices.getPathVertexList().forEach(vertex -> graph.addVertex(vertex));
+    }
+
+    public void addSections(Sections sections){
         sections.getSections()
                 .forEach(section ->
                         graph.setEdgeWeight(graph.addEdge(
-                        pathVertices.getPathVertexByStation(section.getUpStation()),
-                        pathVertices.getPathVertexByStation(section.getDownStation())),
+                                pathVertices.getPathVertexByStation(section.getUpStation()),
+                                pathVertices.getPathVertexByStation(section.getDownStation())),
                                 section.getDistance()));
     }
 

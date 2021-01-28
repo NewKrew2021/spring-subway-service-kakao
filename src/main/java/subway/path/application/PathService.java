@@ -4,6 +4,7 @@ import org.jgrapht.GraphPath;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
+import subway.line.domain.Line;
 import subway.line.domain.Sections;
 import subway.member.dao.MemberDao;
 import subway.path.domain.Fare;
@@ -21,23 +22,21 @@ import java.util.stream.Collectors;
 public class PathService {
     MemberDao memberDao;
     LineDao lineDao;
-    SectionDao sectionDao;
     StationDao stationDao;
 
-    public PathService(LineDao lineDao, SectionDao sectionDao, MemberDao memberDao, StationDao stationDao){
+    public PathService(LineDao lineDao, MemberDao memberDao, StationDao stationDao){
         this.lineDao = lineDao;
-        this.sectionDao = sectionDao;
         this.memberDao = memberDao;
         this.stationDao = stationDao;
     }
 
     public PathResponse findShortestPath(Long sourceId, Long targetId, String email) {
-        Sections sections = sectionDao.findAll();
-        PathVertices pathVertices = PathVertices.from(lineDao.findAll());
-        Path path = new Path(pathVertices, sections);
+        List<Line> lines = lineDao.findAll();
+        PathVertices pathVertices = PathVertices.from(lines);
+        Path path = new Path(pathVertices);
+        lines.forEach(line -> path.addSections(line.getSections()));
 
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
-
         Fare fare = new Fare(result.getDistance(),
                 path.findLineIdListInPath(result.getPathVertices())
                         .stream()
