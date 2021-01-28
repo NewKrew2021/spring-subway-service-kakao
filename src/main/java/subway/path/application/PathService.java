@@ -5,14 +5,15 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
 import subway.line.dao.SectionDao;
+import subway.line.domain.Section;
 import subway.member.domain.LoginMember;
 import subway.path.dto.PathDto;
 import subway.path.dto.PathResponse;
 import subway.station.dao.StationDao;
 import subway.station.dto.StationResponse;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +30,10 @@ public class PathService {
 
     public PathResponse searchPathAndFare(LoginMember loginMember, Long source, Long target) {
         PathDto pathDto = searchShortestPath(source, target);
+        if (pathDto.getShortestPath().isEmpty()) {
+            return new PathResponse(Collections.emptyList(), 0, 0);
+        }
+
         int fare = fareService.getFare(pathDto, loginMember);
         return new PathResponse(getStationResponses(pathDto.getShortestPath()),
                 pathDto.getDistance(), fare);
@@ -40,24 +45,28 @@ public class PathService {
                 .collect(Collectors.toList()));
     }
 
-    private PathDto searchShortestPath(Long source, Long target) {
+    protected PathDto searchShortestPath(Long source, Long target) {
         DijkstraShortestPath<Long, Integer> dijkstraShortestPath = new DijkstraShortestPath(createGraph());
-        List<Long> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
-        int distance = (int) dijkstraShortestPath.getPathWeight(source, target);
-        return new PathDto(shortestPath, distance);
+        try {
+            List<Long> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
+            int distance = (int) dijkstraShortestPath.getPathWeight(source, target);
+            return new PathDto(shortestPath, distance);
+        } catch (NullPointerException e) {
+            return new PathDto(Collections.emptyList(), 0);
+        }
     }
 
     private WeightedMultigraph<Long, DefaultWeightedEdge> createGraph() {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        List<Map<String, Object>> sections = sectionDao.findAllAsMap();
+        List<Section> sections = sectionDao.findAll();
 
-        for (Map<String, Object> section : sections) {
-            Long upStationId = (Long) section.get("up_station_id");
-            Long downStationId = (Long) section.get("down_station_id");
+        for (Section section : sections) {
+            Long upStationId = section.getUpStation().getId();
+            Long downStationId = section.getDownStation().getId();
 
             graph.addVertex(upStationId);
             graph.addVertex(downStationId);
-            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), (int) section.get("distance"));
+            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), section.getDistance());
         }
 
         return graph;

@@ -41,7 +41,7 @@ public class FavoriteService {
 
     public void deleteFavorite(Long memberId, Long id) {
         if (!memberHasFavorite(memberId, id)) {
-            throw new AuthorizationException("등록된 즐겨찾기가 존재하지 않습니다.");
+            throw new AuthorizationException("잘못된 접근입니다.");
         }
 
         favoriteDao.deleteById(id);

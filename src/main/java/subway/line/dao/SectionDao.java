@@ -1,10 +1,12 @@
 package subway.line.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -61,8 +63,16 @@ public class SectionDao {
         return jdbcTemplate.queryForObject(sql, Long.class, upStationId, downStationId, upStationId, downStationId);
     }
 
-    public List<Map<String, Object>> findAllAsMap() {
-        String sql = "select * from SECTION";
-        return jdbcTemplate.queryForList(sql);
+    public List<Section> findAll() {
+        String sql = "select id, line_id, up_station_id, down_station_id, distance " +
+                "from SECTION";
+        return jdbcTemplate.query(sql, rowMapper);
     }
+
+    private final RowMapper<Section> rowMapper = (resultSet, rowNum) -> new Section(
+            resultSet.getLong("id"),
+            new Station(resultSet.getLong("up_station_id")),
+            new Station(resultSet.getLong("down_station_id")),
+            resultSet.getInt("distance")
+    );
 }
