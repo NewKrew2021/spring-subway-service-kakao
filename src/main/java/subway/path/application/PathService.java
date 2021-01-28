@@ -5,6 +5,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.stereotype.Service;
 import subway.line.dao.SectionDao;
+import subway.line.domain.Section;
 import subway.member.domain.LoginMember;
 import subway.path.dto.PathDto;
 import subway.path.dto.PathResponse;
@@ -12,7 +13,6 @@ import subway.station.dao.StationDao;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,15 +49,15 @@ public class PathService {
 
     private WeightedMultigraph<Long, DefaultWeightedEdge> createGraph() {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        List<Map<String, Object>> sections = sectionDao.findAllAsMap();
+        List<Section> sections = sectionDao.findAll();
 
-        for (Map<String, Object> section : sections) {
-            Long upStationId = (Long) section.get("up_station_id");
-            Long downStationId = (Long) section.get("down_station_id");
+        for (Section section : sections) {
+            Long upStationId = section.getUpStation().getId();
+            Long downStationId = section.getDownStation().getId();
 
             graph.addVertex(upStationId);
             graph.addVertex(downStationId);
-            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), (int) section.get("distance"));
+            graph.setEdgeWeight(graph.addEdge(upStationId, downStationId), section.getDistance());
         }
 
         return graph;
