@@ -34,7 +34,7 @@ public class DirectedSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DirectedSection that = (DirectedSection) o;
-        return isUpward == that.isUpward;
+        return isUpward == that.isUpward && Objects.equals(upStation, that.upStation) && Objects.equals(downStation, that.downStation);
     }
 
     public Station getUpStation() {

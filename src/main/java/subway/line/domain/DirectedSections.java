@@ -11,11 +11,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DirectedSections extends Section {
+public class DirectedSections {
     private static final int MIN_DISTANCE = 10;
     private static final int MAX_DISTANCE = 50;
     private static final int DEFAULT_PRICE = 1250;
     private static final int ADDITIONAL_PRICE = 100;
+    private static final int PER_NEAR_DISTANCE = 5;
+    private static final int PER_FAR_DISTANCE = 8;
+    private static final int FARE_FREE_PRICE = 350;
+    private static final int RATE_HALF = 2;
+    private static final int RATE_FIFTH = 5;
     private final List<DirectedSection> sections;
     private final ExtraFare maxExtraFare;
     private final Station source;
@@ -58,7 +63,7 @@ public class DirectedSections extends Section {
                 .orElseThrow(IllegalStateException::new);
     }
 
-    public int getPrice() {
+    private int getPrice() {
         int distance = getDistance();
         if (distance <= MIN_DISTANCE) {
             return DEFAULT_PRICE + maxExtraFare.getValue();
@@ -69,17 +74,19 @@ public class DirectedSections extends Section {
                     maxExtraFare.getValue();
         }
         return DEFAULT_PRICE +
-                (MAX_DISTANCE - MIN_DISTANCE) / 5 * ADDITIONAL_PRICE +
+                (MAX_DISTANCE - MIN_DISTANCE) / PER_NEAR_DISTANCE * ADDITIONAL_PRICE +
                 over50Bonus(distance) * ADDITIONAL_PRICE +
                 maxExtraFare.getValue();
     }
 
-    public int under50Bonus(int distance) {
-        return (distance - MIN_DISTANCE) / 5 + ((distance - MIN_DISTANCE) % 5 == 0 ? 0 : 1);
+    private int under50Bonus(int distance) {
+        return (distance - MIN_DISTANCE) / PER_NEAR_DISTANCE +
+                ((distance - MIN_DISTANCE) % PER_NEAR_DISTANCE == 0 ? 0 : 1);
     }
 
-    public int over50Bonus(int distance) {
-        return (distance - MAX_DISTANCE) / 8 + ((distance - MIN_DISTANCE) % 8 == 0 ? 0 : 1);
+    private int over50Bonus(int distance) {
+        return (distance - MAX_DISTANCE) / PER_FAR_DISTANCE +
+                ((distance - MIN_DISTANCE) % PER_FAR_DISTANCE == 0 ? 0 : 1);
     }
 
     public int getResultPrice(LoginMember loginMember) {
@@ -88,10 +95,10 @@ public class DirectedSections extends Section {
             return 0;
         }
         if (loginMember.getType() == LoginMemberType.CHILD) {
-            return defaultPrice - (defaultPrice - 350) / 2;
+            return defaultPrice - (defaultPrice - FARE_FREE_PRICE) / RATE_HALF;
         }
         if (loginMember.getType() == LoginMemberType.ADOLESCENT) {
-            return defaultPrice - (defaultPrice - 350) / 5;
+            return defaultPrice - (defaultPrice - FARE_FREE_PRICE) / RATE_FIFTH;
         }
         return defaultPrice;
     }
