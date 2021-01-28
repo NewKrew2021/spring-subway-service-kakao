@@ -39,12 +39,12 @@ public class Path {
                                 section.getDistance()));
     }
 
-    public GraphPath findShortestPath(Station sourceStation, Station targetStation) {
+    public PathResult findShortestPath(Station sourceStation, Station targetStation) {
         DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(this.graph);
         GraphPath result = dijkstraShortestPath.getPath(
                 this.pathVertices.getPathVertexByStation(sourceStation),
                 this.pathVertices.getPathVertexByStation(targetStation));
-        return result;
+        return new PathResult(PathVertices.of(result.getVertexList()), (int)result.getWeight());
     }
 
     public List<Long> findLineIdListInPath(PathVertices pathVertices){

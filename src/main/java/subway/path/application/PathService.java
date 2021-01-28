@@ -34,7 +34,7 @@ public class PathService {
         PathVertices pathVertices = PathVertices.from(lineDao.findAll());
         Path path = new Path(pathVertices, sections);
 
-        GraphPath result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
+        PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
         List<PathVertex> vertexList = result.getVertexList();
         int distance = (int) result.getWeight();
         int fare = path.calculateFare(
@@ -47,7 +47,7 @@ public class PathService {
         if(email != null )
             fare = path.discount(memberDao.findByEmail(email).getAge(), fare);
 
-        return new PathResult(PathVertices.of(vertexList), distance, fare);
+        return new PathResult(PathVertices.of(vertexList), distance);
 
     }
 }
