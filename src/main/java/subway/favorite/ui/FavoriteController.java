@@ -4,12 +4,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.exception.InvalidTokenException;
 import subway.favorite.application.FavoriteService;
 import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
+import subway.member.domain.LoginMember;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -25,26 +28,22 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    // TODO: 즐겨찾기 기능 구현하기
     @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createFavorites(HttpServletRequest request, @RequestBody FavoriteRequest favoriteRequest){
-        String token = AuthorizationExtractor.extract(request);
-        Favorite favorite = favoriteService.save(token, favoriteRequest.getSource(), favoriteRequest.getTarget());
+    public ResponseEntity<Void> createFavorites(@AuthenticationPrincipal LoginMember loginMember, @RequestBody FavoriteRequest favoriteRequest){
+        Favorite favorite = favoriteService.save(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget());
         return ResponseEntity.created(URI.create("/favorites/" + favorite.getId())).build();
     }
 
     @GetMapping(value = "/favorites", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FavoriteResponse>> getFavorites(HttpServletRequest request){
-        String token = AuthorizationExtractor.extract(request);
-        List<Favorite> favorites = favoriteService.getFavorites(token);
+    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember){
+        List<Favorite> favorites = favoriteService.getFavorites(loginMember.getId());
         List<FavoriteResponse> favoriteResponses = favoriteService.convertFavoriteResponse(favorites);
         return ResponseEntity.ok().body(favoriteResponses);
     }
 
     @DeleteMapping(value = "/favorites/{favoriteId}")
-    public ResponseEntity<Void> deleteFavorites(HttpServletRequest request, @PathVariable("favoriteId") Long favoriteId){
-        String token = AuthorizationExtractor.extract(request);
-        favoriteService.deleteFavorites(token, favoriteId);
+    public ResponseEntity<Void> deleteFavorites(@AuthenticationPrincipal LoginMember loginMember, @PathVariable("favoriteId") Long favoriteId){
+        favoriteService.deleteFavorites(favoriteId);
         return ResponseEntity.noContent().build();
     }
 }

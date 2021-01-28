@@ -28,14 +28,12 @@ public class FavoriteService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public Favorite save(String token, Long source, Long target) {
-        Member member = memberDao.findByEmail(jwtTokenProvider.getPayload(token));
-        return favoriteDao.save(new Favorite(member.getId(), source, target));
+    public Favorite save(Long memberId, Long source, Long target) {
+        return favoriteDao.save(new Favorite(memberId, source, target));
     }
 
-    public List<Favorite> getFavorites(String token) {
-        Member member = memberDao.findByEmail(jwtTokenProvider.getPayload(token));
-        return favoriteDao.findAll(member.getId());
+    public List<Favorite> getFavorites(Long memberId) {
+        return favoriteDao.findAll(memberId);
     }
 
     public List<FavoriteResponse> convertFavoriteResponse(List<Favorite> favorites) {
@@ -47,12 +45,7 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteFavorites(String token, Long favoriteId) {
-        if(!jwtTokenProvider.getPayload(token)
-                .equals(memberDao.findById(favoriteDao.findById(favoriteId).getMemberId()).getEmail())){
-            throw new InvalidTokenException();
-        }
-
+    public void deleteFavorites(Long favoriteId) {
         favoriteDao.deleteById(favoriteId);
     }
 }

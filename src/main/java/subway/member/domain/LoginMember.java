@@ -6,6 +6,7 @@ public class LoginMember {
     private Integer age;
 
     public LoginMember() {
+        this.age = Integer.MAX_VALUE;
     }
 
     public LoginMember(Long id, String email, Integer age) {

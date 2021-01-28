@@ -23,7 +23,7 @@ public class PathService {
         this.memberDao = memberDao;
     }
 
-    public PathResult findShortestPath(Long sourceId, Long targetId, String email) {
+    public PathResult findShortestPath(Long sourceId, Long targetId, int age) {
 
         Sections sections = sectionDao.findAll();
         PathVertices pathVertices = new PathVertices();
@@ -37,11 +37,7 @@ public class PathService {
         List<Long> lineIdList = path.findLineIdListInPath(result.getPathVertices());
         int extraFare = calculateExtraFare(lineIdList);
 
-        if(email == null){
-            result.setFare(basicFare + extraFare);
-            return result;
-        }
-        result.setFare(discount(memberDao.findByEmail(email).getAge(), basicFare + extraFare));
+        result.setFare(discount(age, basicFare + extraFare));
         return result;
 
     }
