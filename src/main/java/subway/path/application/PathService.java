@@ -3,13 +3,18 @@ package subway.path.application;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
+import subway.line.domain.Line;
+import subway.line.domain.Section;
 import subway.line.domain.Sections;
 import subway.member.dao.MemberDao;
 import subway.member.domain.AGE;
 import subway.path.domain.Path;
 import subway.path.domain.PathVertices;
 import subway.path.dto.PathResult;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 
 @Service
 public class PathService {
@@ -25,10 +30,17 @@ public class PathService {
 
     public PathResult findShortestPath(Long sourceId, Long targetId, int age) {
 
-        Sections sections = sectionDao.findAll();
+        //Sections sections = sectionDao.findAll();
         PathVertices pathVertices = new PathVertices();
-        pathVertices.initAllVertex(lineDao.findAll());
-        Path path = new Path(pathVertices, sections);
+        List<Line> lineList = lineDao.findAll();
+        pathVertices.initAllVertex(lineList);
+
+        List<Section> sectionList = new ArrayList<>();
+        lineList.stream()
+                .map(line -> line.getSections().getSections())
+                .forEach(sectionList::addAll);
+
+        Path path = new Path(pathVertices, new Sections(sectionList));
 
         PathResult result = path.findShortestPath(sourceId, targetId);
 

@@ -27,10 +27,9 @@ public class PathController {
     // TODO: 경로조회 기능 구현하기
 
     PathService pathService;
-    JwtTokenProvider jwtTokenProvider;
-    public PathController(PathService pathService, JwtTokenProvider jwtTokenProvider){
+
+    public PathController(PathService pathService){
         this.pathService = pathService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @GetMapping(value = "/paths", params = {"source", "target"}, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -47,4 +47,5 @@ public class PathVertices {
                 .findFirst()
                 .orElse(null);
     }
+
 }

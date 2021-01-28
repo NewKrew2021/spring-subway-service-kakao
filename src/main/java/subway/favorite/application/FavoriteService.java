@@ -17,15 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class FavoriteService {
     private final FavoriteDao favoriteDao;
-    private final MemberDao memberDao;
     private final StationDao stationDao;
-    private final JwtTokenProvider jwtTokenProvider;
 
-    public FavoriteService(FavoriteDao favoriteDao, MemberDao memberDao, StationDao stationDao, JwtTokenProvider jwtTokenProvider) {
+    public FavoriteService(FavoriteDao favoriteDao, StationDao stationDao) {
         this.favoriteDao = favoriteDao;
-        this.memberDao = memberDao;
         this.stationDao = stationDao;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     public Favorite save(Long memberId, Long source, Long target) {

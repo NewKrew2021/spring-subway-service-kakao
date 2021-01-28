@@ -31,16 +31,13 @@ public class AuthService {
     }
 
     private boolean checkEmailValidation(String email, String password) {
-        Member member = memberDao.findByEmail(email);
-        return member != null && member.getPassword().equals(password);
-    }
-    public String getPayLoad(String token){
-        return jwtTokenProvider.getPayload(token);
+        Optional<Member> member = memberDao.findByEmail(email);
+        return member.map(value -> value.getPassword().equals(password)).orElse(false);
     }
 
     public Member getMemberByToken(String token){
-        if (jwtTokenProvider.validateToken(token)){
-            return memberDao.findByEmail(jwtTokenProvider.getPayload(token));
+        if (jwtTokenProvider.validateToken(token)) {
+            return memberDao.findByEmail(jwtTokenProvider.getPayload(token)).orElseThrow(InvalidTokenException::new);
         }
         throw new InvalidTokenException();
     }
