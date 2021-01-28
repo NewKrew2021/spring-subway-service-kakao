@@ -11,9 +11,9 @@ public enum AgeGrade {
 
     private static final int DEDUCTION = 350;
 
-    public int age;
-    public double discountRate;
-    public int deduction;
+    private final int age;
+    private final double discountRate;
+    private final int deduction;
 
     AgeGrade(int age, double discountRate, int deduction) {
         this.age = age;
@@ -26,5 +26,9 @@ public enum AgeGrade {
                 .filter(grade -> age <= grade.age)
                 .findFirst()
                 .orElse(ADULT);
+    }
+
+    public int getDiscountedFare(int fare) {
+        return (int) ((fare - deduction) * discountRate);
     }
 }
