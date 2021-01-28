@@ -63,12 +63,14 @@ public class FavoriteDao {
                 favorite.getSourceStationId(), favorite.getTargetStationId()) != 0;
     }
 
-    public void deleteById(long favoriteId) {
-        String sql = "delete from FAVORITE where id = ?";
-        int affectedRows = jdbcTemplate.update(sql, favoriteId);
+    public void deleteById(long memberId, long favoriteId) {
+        String sql = "delete from FAVORITE where member_id = ? and id = ?";
+        int affectedRows = jdbcTemplate.update(sql, memberId, favoriteId);
 
         if (affectedRows != 1) {
-            throw new NoSuchElementException("Could not find favorite with id: %d" + favoriteId);
+            throw new NoSuchElementException(
+                    String.format("Could not find favorite of member with id: %d and favorite id: %d",
+                            memberId, favoriteId));
         }
     }
 }

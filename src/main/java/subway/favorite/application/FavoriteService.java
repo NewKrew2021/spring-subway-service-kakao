@@ -63,7 +63,7 @@ public class FavoriteService {
                 .collect(Collectors.toList());
     }
 
-    public void delete(long favoriteId) {
-        favoriteDao.deleteById(favoriteId);
+    public void delete(long memberId, long favoriteId) {
+        favoriteDao.deleteById(memberId, favoriteId);
     }
 }
