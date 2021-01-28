@@ -24,8 +24,10 @@ public class AuthService {
     public TokenResponse createToken(TokenRequest tokenRequest) {
         try {
             memberService.findMemberByEmail(tokenRequest.getEmail());
-        } catch (DataAccessException | NullPointerException e) {
+        } catch (DataAccessException e) {
             throw new AuthenticationException("멤버 정보가 존재하지 않습니다.");
+        } catch (NullPointerException e) {
+            throw new AuthenticationException("유효하지 않은 토큰입니다.");
         }
         return new TokenResponse(jwtTokenProvider.createToken(tokenRequest.getEmail()));
     }

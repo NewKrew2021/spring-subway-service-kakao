@@ -65,7 +65,7 @@ public class FavoriteDao {
                 new Station((Long) result.get("target_station_id"), (String) result.get("target_station_name")));
     }
 
-    public void deleteById(Long id) {
-        jdbcTemplate.update("delete from FAVORITE where id = ?", id);
+    public void deleteById(Long memberId, Long id) {
+        jdbcTemplate.update("delete from FAVORITE where id = ? and member_id = ?", id, memberId);
     }
 }
