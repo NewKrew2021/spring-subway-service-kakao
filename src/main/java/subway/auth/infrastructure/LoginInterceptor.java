@@ -3,7 +3,7 @@ package subway.auth.infrastructure;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import subway.auth.application.AuthService;
-import subway.auth.exception.InvalidLoginException;
+import subway.auth.exception.InvalidTokenException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String accessToken = AuthorizationExtractor.extract(request);
         if (accessToken == null || !authService.validateToken(accessToken)) {
-            throw new InvalidLoginException();
+            throw new InvalidTokenException(InvalidTokenException.INVALID_TOKEN);
         }
         return true;
     }

@@ -19,19 +19,26 @@ public class AuthService {
         this.memberDao = memberDao;
     }
 
-    private boolean checkValidLogin(String email, String password) {
+    private boolean checkValidLogin(StringBuilder errorMessageBuilder, String email, String password) {
         try {
-            return memberDao.findByEmail(email)
+            if(!memberDao.findByEmail(email)
                     .getPassword()
-                    .equals(password);
+                    .equals(password)){
+                errorMessageBuilder.append(InvalidLoginException.EMAIL_PASSWORD_MISMATCH);
+                return false;
+            }
         } catch (EmptyResultDataAccessException erdae) {
+            errorMessageBuilder.append(InvalidLoginException.EMAIL_NOT_EXIST);
             return false;
         }
+        return true;
     }
 
     public TokenResponse createToken(TokenRequest tokenRequest) {
-        if (!checkValidLogin(tokenRequest.getEmail(), tokenRequest.getPassword())) {
-            throw new InvalidLoginException();
+        StringBuilder errorMessageBuilder = new StringBuilder();
+        if (!checkValidLogin(errorMessageBuilder,
+                tokenRequest.getEmail(), tokenRequest.getPassword())) {
+            throw new InvalidLoginException(errorMessageBuilder.toString());
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return TokenResponse.of(accessToken);
