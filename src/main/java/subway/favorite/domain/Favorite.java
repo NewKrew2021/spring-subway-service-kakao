@@ -6,14 +6,14 @@ import subway.station.domain.Station;
 public class Favorite {
     private Long id;
     private Member memberId;
-    private Station sourceStationId;
-    private Station targetStationId;
+    private Station sourceStation;
+    private Station targetStation;
 
-    public Favorite(Long id, Member memberId, Station sourceStationId, Station targetStationId){
+    public Favorite(Long id, Member memberId, Station sourceStation, Station targetStation){
         this.id = id;
         this.memberId = memberId;
-        this.sourceStationId = sourceStationId;
-        this.targetStationId = targetStationId;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
     }
 
     public Long getId(){
@@ -24,11 +24,11 @@ public class Favorite {
         return memberId;
     }
 
-    public Station getSourceStationId(){
-        return sourceStationId;
+    public Station getSourceStation(){
+        return sourceStation;
     }
 
-    public Station getTargetStationId(){
-        return targetStationId;
+    public Station getTargetStation(){
+        return targetStation;
     }
 }

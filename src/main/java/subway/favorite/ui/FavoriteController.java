@@ -10,6 +10,7 @@ import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.favorite.service.FavoriteService;
 import subway.member.domain.LoginMember;
+import subway.station.dto.StationResponse;
 
 import java.net.URI;
 import java.util.List;
@@ -28,9 +29,12 @@ public class FavoriteController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FavoriteResponse> createFavorite(@AuthenticationPrincipal LoginMember loginMember,
                                          @RequestBody FavoriteRequest favoriteRequest) {
-        FavoriteResponse favoriteResponse = favoriteService.createFavorite(loginMember.getId(),
+        Favorite favorite = favoriteService.createFavorite(loginMember.getId(),
                 favoriteRequest.getSource(),
                 favoriteRequest.getTarget());
+        FavoriteResponse favoriteResponse = new FavoriteResponse(favorite.getId(),
+                StationResponse.of(favorite.getSourceStation()),
+                StationResponse.of(favorite.getTargetStation()));
 
         return ResponseEntity.created(URI.create("/favorites/" + favoriteResponse.getId())).body(favoriteResponse);
     }
@@ -39,8 +43,8 @@ public class FavoriteController {
     public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember){
         List<FavoriteResponse> favoriteResponses = favoriteService.getFavorite(loginMember.getId()).stream()
                 .map(favorite -> FavoriteResponse.of(favorite.getId(),
-                        favorite.getSourceStationId(),
-                        favorite.getTargetStationId()))
+                        favorite.getSourceStation(),
+                        favorite.getTargetStation()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(favoriteResponses);
     }

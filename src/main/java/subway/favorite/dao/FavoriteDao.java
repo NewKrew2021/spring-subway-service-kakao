@@ -48,13 +48,13 @@ public class FavoriteDao {
         return favorite;
     };
 
-    public void insert(Long memberId, Long sourceId, Long targetId){
+    public Long insert(Long memberId, Long sourceId, Long targetId){
         Map<String, Object> params = new HashMap<>();
         params.put("member_id", memberId);
         params.put("source_station_id", sourceId);
         params.put("target_station_id", targetId);
 
-        insertAction.execute(params);
+        return insertAction.executeAndReturnKey(params).longValue();
     }
 
     public List<Favorite> findByUser(Long memberId){
