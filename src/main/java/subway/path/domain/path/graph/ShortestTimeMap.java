@@ -11,10 +11,10 @@ import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-
-import static java.util.function.BinaryOperator.minBy;
+import java.util.Map;
+import java.util.Optional;
 
 public class ShortestTimeMap implements SubwayMap {
 
@@ -35,49 +35,70 @@ public class ShortestTimeMap implements SubwayMap {
 
     @Override
     public SubwayPath getPath(Station source, Station target, LocalDateTime departureTime) {
-        GraphPath<Station, SubwayEdge> shortestPath =
-                getShortestArrivalTimePath(new KShortestPaths<>(graph, ALL_PATH_COUNT).getPaths(source, target), departureTime);
-        return SubwayPath.of(shortestPath, getArrivalTime(shortestPath, departureTime));
+        return getShortestPath(getAllPathsWithArrival(source, target, departureTime));
     }
 
-    private GraphPath<Station, SubwayEdge> getShortestArrivalTimePath(List<GraphPath<Station, SubwayEdge>> graphPaths, LocalDateTime departureTime) {
-        return graphPaths.stream()
-                .reduce(minBy(arrivalTimeComparator(departureTime)))
-                .orElseThrow(() -> new IllegalArgumentException("하나 이상의 경로는 반드시 존재해야 합니다"));
+    private SubwayPath getShortestPath(Map<GraphPath<Station, SubwayEdge>, LocalDateTime> pathWithArrivalTime) {
+        return pathWithArrivalTime.entrySet()
+                .stream()
+                .min(Map.Entry.comparingByValue())
+                .map(entry -> SubwayPath.of(entry.getKey(), entry.getValue()))
+                .orElseThrow(() -> new IllegalArgumentException("당일 도착하는 경로가 존재하지 않습니다"));
     }
 
-    private Comparator<GraphPath<Station, SubwayEdge>> arrivalTimeComparator(LocalDateTime departureTime) {
-        return Comparator.comparing(path -> getArrivalTime(path, departureTime));
+    private Map<GraphPath<Station, SubwayEdge>, LocalDateTime> getAllPathsWithArrival(Station source, Station target, LocalDateTime departureTime) {
+        Map<GraphPath<Station, SubwayEdge>, LocalDateTime> pathsWithArrival = new HashMap<>();
+
+        for (GraphPath<Station, SubwayEdge> path : getAllPaths(source, target)) {
+            findArrivalTime(path, departureTime)
+                    .ifPresent(arrivalTime -> pathsWithArrival.put(path, arrivalTime));
+        }
+        return pathsWithArrival;
     }
 
-    private LocalDateTime getArrivalTime(GraphPath<Station, SubwayEdge> path, LocalDateTime departureTime) {
+    private List<GraphPath<Station, SubwayEdge>> getAllPaths(Station source, Station target) {
+        try {
+            return new KShortestPaths<>(graph, ALL_PATH_COUNT).getPaths(source, target);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("시작역 또는 종착역이 그래프에 존재하지 않습니다");
+        }
+    }
+
+    private Optional<LocalDateTime> findArrivalTime(GraphPath<Station, SubwayEdge> path, LocalDateTime departureTime) {
         List<SubwayEdge> sections = path.getEdgeList();
         List<Station> stations = path.getVertexList();
 
-        LocalDateTime arrivalTime = getBoardingTime(departureTime, sections, stations);
+        Optional<LocalDateTime> arrivalTime = findBoardingTime(departureTime, sections, stations);
         for (int i = 0; i < sections.size(); i++) {
             SubwayEdge section = sections.get(i);
-            LocalDateTime nextArrivalTime = arrivalTime.plus(section.getDuration(), ChronoUnit.MINUTES);
-            arrivalTime = getNextDepartureTime(stations.get(i + NEXT), nextArrivalTime, section.getLine());
+            Station nextStation = stations.get(i + NEXT);
+            arrivalTime = arrivalTime.flatMap(time -> getNextDepartureTime(time, section, nextStation));
         }
         return arrivalTime;
     }
 
-    private LocalDateTime getBoardingTime(LocalDateTime departureTime, List<SubwayEdge> edges, List<Station> stations) {
-        return getNextDepartureTime(
+    private Optional<LocalDateTime> findBoardingTime(LocalDateTime departureTime, List<SubwayEdge> edges, List<Station> stations) {
+        return findNextDepartureTime(
                 stations.get(FIRST_STATION_INDEX),
                 departureTime,
                 edges.get(FIRST_LINE_INDEX).getLine()
         );
     }
 
-    private LocalDateTime getNextDepartureTime(Station station, LocalDateTime baseDateTime, Line line) {
+    private Optional<LocalDateTime> getNextDepartureTime(LocalDateTime time, SubwayEdge section, Station nextStation) {
+        return findNextDepartureTime(
+                nextStation,
+                time.plus(section.getDuration(), ChronoUnit.MINUTES),
+                section.getLine()
+        );
+    }
+
+    private Optional<LocalDateTime> findNextDepartureTime(Station station, LocalDateTime baseDateTime, Line line) {
         return line.getDepartureTimesOf(station)
                 .stream()
                 .map(time -> LocalDateTime.of(baseDateTime.toLocalDate(), time))
                 .filter(departureTime -> departureTime.isAfter(baseDateTime) || departureTime.isEqual(baseDateTime))
                 .sorted()
-                .findFirst()
-                .orElse(LocalDateTime.MAX);
+                .findFirst();
     }
 }

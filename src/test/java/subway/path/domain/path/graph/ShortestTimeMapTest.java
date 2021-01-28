@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ShortestTimeMapTest {
@@ -103,5 +104,31 @@ class ShortestTimeMapTest {
                 () -> assertThat(result.getStations())
                         .isEqualTo(Arrays.asList(삼송역, 의정부역))
         );
+    }
+
+    @DisplayName("여러 경로 중 하나라도 당일 도착 가능한 경로가 있다면 구한다")
+    @Test
+    void testPath3() {
+        // when
+        SubwayPath result = map.getPath(
+                삼송역,
+                서현역,
+                LocalDateTime.of(2021, 1, 26, 22, 0)
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(result.getArrivalTime()).isEqualTo(LocalDateTime.of(2021, 1, 26, 22, 25)),
+                () -> assertThat(result.getStations())
+                        .isEqualTo(Arrays.asList(삼송역, 지축역, 서현역))
+        );
+    }
+
+    @DisplayName("당일 도착하는 경로가 없는 경우 예외가 발생한다")
+    @Test
+    void fail() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> map.getPath(삼송역, 잠실역, LocalDateTime.of(2021, 1, 26, 22, 0)))
+                .withMessage("당일 도착하는 경로가 존재하지 않습니다");
     }
 }
