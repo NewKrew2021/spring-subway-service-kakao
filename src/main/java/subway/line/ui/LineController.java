@@ -8,7 +8,6 @@ import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
 
 import java.net.URI;
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -61,8 +60,4 @@ public class LineController {
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity handleSQLException() {
-        return ResponseEntity.badRequest().build();
-    }
 }
