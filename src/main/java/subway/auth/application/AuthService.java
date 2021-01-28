@@ -19,7 +19,7 @@ public class AuthService {
     }
 
     public TokenResponse createAuth(String email, String password) {
-        if(!memberDao.findByEmail(email).getPassword().equals(password)){
+        if (!validFindByEmail(email) || !memberDao.findByEmail(email).get().getPassword().equals(password)) {
             throw new InvalidMemberException();
         }
         String token = jwtTokenProvider.createToken(email);
@@ -27,12 +27,19 @@ public class AuthService {
     }
 
     public Member getMemberByToken(String token) {
-        if(jwtTokenProvider.validateToken(token)) {
+        if (jwtTokenProvider.validateToken(token)) {
             String payLoad = jwtTokenProvider.getPayload(token);
-            Member member = memberDao.findByEmail(payLoad);
-            return member;
+            validFindByEmail(payLoad);
+            return memberDao.findByEmail(payLoad).get();
         }
         throw new InvalidTokenException();
+    }
+
+    private boolean validFindByEmail(String email) {
+        if (!memberDao.findByEmail(email).isPresent()) {
+            throw new InvalidMemberException();
+        }
+        return true;
     }
 
 }

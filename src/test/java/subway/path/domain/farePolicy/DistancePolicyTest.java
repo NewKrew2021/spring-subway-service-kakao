@@ -1,4 +1,4 @@
-package subway.path.farePolicy;
+package subway.path.domain.farePolicy;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,9 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import subway.path.domain.farePolicy.BasicFare;
-import subway.path.domain.farePolicy.DistancePolicy;
-import subway.path.domain.farePolicy.SubwayFare;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

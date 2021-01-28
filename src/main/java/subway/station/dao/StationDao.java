@@ -7,12 +7,11 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import subway.exception.InvalidMemberException;
-import subway.exception.StationNotFoundException;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class StationDao {
@@ -51,11 +50,11 @@ public class StationDao {
         jdbcTemplate.update(DELETE_FROM_STATION_WHERE_ID, id);
     }
 
-    public Station findById(Long id) {
+    public Optional<Station> findById(Long id) {
         try {
-            return jdbcTemplate.queryForObject(SELECT_FROM_STATION_WHERE_ID, rowMapper, id);
-        } catch (EmptyResultDataAccessException e){
-            throw new StationNotFoundException();
+            return Optional.of(jdbcTemplate.queryForObject(SELECT_FROM_STATION_WHERE_ID, rowMapper, id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
     }
 }

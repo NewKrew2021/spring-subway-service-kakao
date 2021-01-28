@@ -1,6 +1,7 @@
 package subway.station.application;
 
 import org.springframework.stereotype.Service;
+import subway.exception.StationNotFoundException;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationRequest;
@@ -23,7 +24,10 @@ public class StationService {
     }
 
     public Station findStationById(Long id) {
-        return stationDao.findById(id);
+        if (!stationDao.findById(id).isPresent()) {
+            throw new StationNotFoundException();
+        }
+        return stationDao.findById(id).get();
     }
 
     public List<StationResponse> findAllStationResponses() {

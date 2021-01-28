@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import subway.exception.InvalidMemberException;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
 @Repository
 public class MemberDao {
@@ -52,15 +52,19 @@ public class MemberDao {
         jdbcTemplate.update(DELETE_FROM_MEMBER_WHERE_ID, id);
     }
 
-    public Member findById(Long id) {
-        return jdbcTemplate.queryForObject(SELECT_FROM_MEMBER_WHERE_ID, rowMapper, id);
+    public Optional<Member> findById(Long id) {
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(SELECT_FROM_MEMBER_WHERE_ID, rowMapper, id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
-    public Member findByEmail(String email) {
+    public Optional<Member> findByEmail(String email) {
         try {
-            return jdbcTemplate.queryForObject(SELECT_FROM_MEMBER_WHERE_EMAIL, rowMapper, email);
-        } catch (EmptyResultDataAccessException e){
-            throw new InvalidMemberException();
+            return Optional.of(jdbcTemplate.queryForObject(SELECT_FROM_MEMBER_WHERE_EMAIL, rowMapper, email));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
     }
 

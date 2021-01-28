@@ -2,12 +2,12 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
+import subway.exception.InvalidMemberException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
-import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
+
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -19,13 +19,16 @@ public class MemberService {
 
     @Transactional
     public MemberResponse createMember(String email, String password, int age) {
-        Member member = memberDao.insert(new Member(email,password,age));
+        Member member = memberDao.insert(new Member(email, password, age));
         return MemberResponse.of(member);
     }
 
     public MemberResponse findMember(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+        Optional<Member> member = memberDao.findById(id);
+        if (!member.isPresent()) {
+            throw new InvalidMemberException();
+        }
+        return MemberResponse.of(member.get());
     }
 
     @Transactional

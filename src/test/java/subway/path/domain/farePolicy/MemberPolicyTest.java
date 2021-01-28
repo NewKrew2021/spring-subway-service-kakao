@@ -1,13 +1,10 @@
-package subway.path.farePolicy;
+package subway.path.domain.farePolicy;
 
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.member.domain.LoginMember;
-import subway.path.domain.farePolicy.BasicFare;
-import subway.path.domain.farePolicy.MemberPolicy;
-import subway.path.domain.farePolicy.SubwayFare;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

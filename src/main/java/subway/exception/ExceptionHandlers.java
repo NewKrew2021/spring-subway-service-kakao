@@ -14,12 +14,17 @@ public class ExceptionHandlers {
     }
 
     @ExceptionHandler(InvalidMemberException.class)
-    public ResponseEntity<String> invalidMemberHandle(){
+    public ResponseEntity<String> invalidMemberHandle() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @ExceptionHandler(StationNotFoundException.class)
-    public ResponseEntity<String> StationNotFoundHandle(){
+    public ResponseEntity<String> StationNotFoundHandle() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<String> InvalidInputHandle() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

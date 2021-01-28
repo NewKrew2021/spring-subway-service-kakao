@@ -1,4 +1,4 @@
-package subway.path.farePolicy;
+package subway.path.domain.farePolicy;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,10 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Sections;
-import subway.path.domain.WeightWithLine;
-import subway.path.domain.farePolicy.BasicFare;
-import subway.path.domain.farePolicy.LinePolicy;
-import subway.path.domain.farePolicy.SubwayFare;
 
 import java.util.ArrayList;
 import java.util.Arrays;
