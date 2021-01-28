@@ -3,7 +3,7 @@ package subway.path.application;
 import org.springframework.stereotype.Service;
 import subway.line.application.LineService;
 import subway.line.domain.Lines;
-import subway.member.domain.AGE;
+import subway.member.domain.Age;
 import subway.path.domain.Vertex;
 import subway.path.domain.strategy.AgeFare;
 import subway.path.domain.strategy.DistanceFare;
@@ -27,7 +27,7 @@ public class PathService {
         this.lineService = lineService;
     }
 
-    public PathResponse getShortPath(Long sourceId, Long targetId, AGE age) {
+    public PathResponse getShortPath(Long sourceId, Long targetId, Age age) {
         Lines lines = Lines.of(lineService.findLines());
         List<Vertex> vertexs = lines.getVertexs(sourceId, targetId);
 

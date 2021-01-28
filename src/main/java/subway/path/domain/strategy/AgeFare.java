@@ -1,10 +1,10 @@
 package subway.path.domain.strategy;
 
-import subway.member.domain.AGE;
+import subway.member.domain.Age;
 
 public class AgeFare implements FareStrategy {
-    private final AGE age;
-    public AgeFare(AGE age) {
+    private final Age age;
+    public AgeFare(Age age) {
         this.age = age;
     }
 
