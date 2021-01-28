@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import subway.auth.exception.InvalidLoginException;
+import subway.common.exception.InvalidLoginException;
 
 @ControllerAdvice
 public class ExceptionAdvice {

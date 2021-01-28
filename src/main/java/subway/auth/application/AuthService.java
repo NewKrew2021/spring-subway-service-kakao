@@ -4,7 +4,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
-import subway.auth.exception.InvalidLoginException;
+import subway.common.exception.InvalidLoginException;
 import subway.auth.infrastructure.JwtTokenProvider;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;

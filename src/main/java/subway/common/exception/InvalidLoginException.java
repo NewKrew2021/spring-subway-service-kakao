@@ -1,4 +1,4 @@
-package subway.auth.exception;
+package subway.common.exception;
 
 public class InvalidLoginException extends RuntimeException{
 
