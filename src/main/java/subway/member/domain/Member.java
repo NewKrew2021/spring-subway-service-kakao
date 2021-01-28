@@ -50,10 +50,8 @@ public class Member {
         return age;
     }
 
-    public void checkValidPassword(String password) {
-        if (!this.password.equals(password)) {
-            throw new LoginFailException();
-        }
+    public boolean equalPassword(String password) {
+        return this.password.equals(password);
     }
 
     @Override

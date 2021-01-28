@@ -30,10 +30,13 @@ public class AuthService {
     }
 
     private void authenticate(TokenRequest tokenRequest) {
+        Member member;
         try {
-            Member member = memberDao.findByEmail(tokenRequest.getEmail());
-            member.checkValidPassword(tokenRequest.getPassword());
+            member = memberDao.findByEmail(tokenRequest.getEmail());
         } catch (IncorrectResultSizeDataAccessException e) {
+            throw new LoginFailException();
+        }
+        if (member.equalPassword(tokenRequest.getPassword())) {
             throw new LoginFailException();
         }
     }
