@@ -5,6 +5,7 @@ import subway.station.domain.Station;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +29,7 @@ public class SubwayGraphTest {
          *         v2 - v3
          */
 
-        List<SectionEdge> sectionEdges = Arrays.asList(
+        Supplier<List<SectionEdge>> sectionEdges = () -> Arrays.asList(
                 new SectionEdge(start, v1, 1, 0),
                 new SectionEdge(start, v2, 4, 0),
                 new SectionEdge(v1, v2, 3, 0),
@@ -53,7 +54,7 @@ public class SubwayGraphTest {
         Station start = new Station(1L, "start");
         Station middle = new Station(2L, "middle");
         Station end = new Station(3L, "end");
-        List<SectionEdge> sectionEdges = Arrays.asList(
+        Supplier<List<SectionEdge>> sectionEdges = () -> Arrays.asList(
                 new SectionEdge(start, middle, 2, 5),
                 new SectionEdge(start, middle, 2, 3),
                 new SectionEdge(middle, end, 2, 3),

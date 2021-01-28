@@ -11,31 +11,19 @@ import subway.station.domain.Station;
 
 @Service
 public class PathService {
+    public static SubwayGraph subwayGraph;
     private final SectionDao sectionDao;
     private final StationDao stationDao;
-    private static SubwayGraph subwayGraph;
-    public static boolean isUpdated = false;
 
     @Autowired
     public PathService(SectionDao sectionDao, StationDao stationDao) {
         this.sectionDao = sectionDao;
         this.stationDao = stationDao;
-    }
 
-    public static void newlyUpdated() {
-        synchronized (PathService.class) {
-            isUpdated = false;
-        }
+        subwayGraph = new SubwayGraph(this.sectionDao::getSectionEdges);
     }
 
     public Path find(long sourceId, long targetId) {
-        synchronized (PathService.class) {
-            if (!isUpdated) {
-                subwayGraph = new SubwayGraph(sectionDao.getSectionEdges());
-                isUpdated = true;
-            }
-        }
-
         Station sourceStation = stationDao.findById(sourceId);
         Station targetStation = stationDao.findById(targetId);
 

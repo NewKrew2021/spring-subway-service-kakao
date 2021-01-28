@@ -11,6 +11,7 @@ import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
 import subway.line.vo.LineAttributes;
 import subway.path.application.PathService;
+import subway.path.states.OutOfDate;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -97,28 +98,28 @@ public class LineService {
 
     private void deleteLineAndSet(Long id) {
         lineDao.deleteById(id);
-        PathService.newlyUpdated();
+
     }
 
     private Line insertAndSet(LineRequest lineRequest) {
         Line newLine = lineDao.insert(lineRequest);
-        PathService.newlyUpdated();
+        PathService.subwayGraph.setState(OutOfDate.getInstance());
         return newLine;
     }
 
     private Section insertSectionAndSet(Line line, Section section) {
         Section newSection = sectionDao.insert(line, section);
-        PathService.newlyUpdated();
+        PathService.subwayGraph.setState(OutOfDate.getInstance());
         return newSection;
     }
 
     private void deleteSectionsAndSet(Long lineId) {
         sectionDao.deleteByLineId(lineId);
-        PathService.newlyUpdated();
+        PathService.subwayGraph.setState(OutOfDate.getInstance());
     }
 
     private void insertSectionsAndSet(Line line) {
         sectionDao.insertSections(line);
-        PathService.newlyUpdated();
+        PathService.subwayGraph.setState(OutOfDate.getInstance());
     }
 }
