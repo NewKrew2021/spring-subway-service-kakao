@@ -9,6 +9,8 @@ public enum AgeFare {
     TEEN(19, 0.2, 350),
     ADULT(10000, 0, 0);
 
+    public static final int DEFAULT_AGE = 20;
+
     private final int upperAgeRange;
     private final double discountRate;
     private final int deduction;

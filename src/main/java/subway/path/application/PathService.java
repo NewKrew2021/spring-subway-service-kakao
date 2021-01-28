@@ -3,7 +3,6 @@ package subway.path.application;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Line;
-import subway.member.domain.LoginMember;
 import subway.path.domain.Fare;
 import subway.path.domain.Path;
 import subway.path.domain.ShortestPathExplorer;
@@ -24,7 +23,7 @@ public class PathService {
         this.stationDao = stationDao;
     }
 
-    public PathResponse findShortestPathResponse(LoginMember loginMember, Long sourceId, Long targetId) {
+    public PathResponse findShortestPathResponse(Long sourceId, Long targetId, int age) {
         List<Line> lines = lineDao.findAll();
         SubwayGraph subwayGraph = new SubwayGraph(lines);
         ShortestPathExplorer shortestPathExplorer = new ShortestPathExplorer(subwayGraph);
@@ -36,9 +35,7 @@ public class PathService {
         Fare fare = new Fare();
         fare.applyDistanceFarePolicy(path.getDistance());
         fare.applyExtraFareOfLine(path.getStations(), lines);
-        if (loginMember != null) {
-            fare.applyAgeFarePolicy(loginMember.getAge());
-        }
+        fare.applyAgeFarePolicy(age);
 
         return PathResponse.of(path, fare);
     }

@@ -15,7 +15,6 @@ import subway.member.domain.Member;
 public class AuthService {
 
     private static final String INVALID_LOGIN_MESSAGE = "유효하지 않은 로그인 정보입니다.";
-    private static final String EXPIRED_TOKEN_MESSAGE = "만료된 토큰입니다.";
     private static final String INVALID_TOKEN_MESSAGE = "유효하지 않은 토큰입니다.";
     private static final String NO_EXIST_EMAIL_MESSAGE = "존재하지 않는 이메일입니다.";
 
@@ -41,9 +40,9 @@ public class AuthService {
                 && member.getPassword().equals(tokenRequest.getPassword());
     }
 
-    public LoginMember findMemberByToken(String token) {
+    public LoginMember findMemberByToken(String token) throws AuthorizationException {
         if (!jwtTokenProvider.validateToken(token)) {
-            throw new AuthorizationException(EXPIRED_TOKEN_MESSAGE);
+            throw new AuthorizationException(INVALID_TOKEN_MESSAGE);
         }
         try {
             String payload = jwtTokenProvider.getPayload(token);

@@ -8,7 +8,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.exception.AuthorizationException;
 import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,9 +31,11 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         String token = AuthorizationExtractor.extract(request);
-        if (token == null || token.isEmpty()) {
-            return null;
+        try {
+            return authService.findMemberByToken(token);
         }
-        return authService.findMemberByToken(token);
+        catch (AuthorizationException e) {
+            return LoginMember.notLogin();
+        }
     }
 }
