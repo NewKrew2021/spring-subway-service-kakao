@@ -3,6 +3,7 @@ package subway.favorite.application;
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
+import subway.member.domain.LoginMember;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -20,11 +21,11 @@ public class FavoriteService {
 
     }
 
-    public Favorite createFavorite(Long memberId, Long sourceId, Long targetId) {
+    public Favorite createFavorite(LoginMember loginMember, Long sourceId, Long targetId) {
         Station sourceStation = stationService.findStationById(sourceId);
         Station targetStation = stationService.findStationById(targetId);
 
-        return favoriteDao.insert(new Favorite(memberId, sourceStation, targetStation));
+        return favoriteDao.insert(new Favorite(loginMember, sourceStation, targetStation));
     }
 
     public List<Favorite> findByMemberId(Long memberId) {
