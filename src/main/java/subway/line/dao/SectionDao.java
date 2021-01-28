@@ -17,6 +17,14 @@ import java.util.stream.Collectors;
 @Repository
 public class SectionDao {
 
+    private static final String DELETE_BY_LINE_ID_SQL = "delete from SECTION where line_id = ?";
+    private static final String FIND_ALL_SQL = "select S.id as section_id, S.line_id as line_id, S.distance as section_distance," +
+            "UST.id as up_station_id, UST.name as up_station_name, " +
+            "DST.id as down_station_id, DST.name as down_station_name " +
+            "from SECTION S \n" +
+            "left outer join STATION UST on S.up_station_id = UST.id " +
+            "left outer join STATION DST on S.down_station_id = DST.id ";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 
@@ -58,7 +66,7 @@ public class SectionDao {
     }
 
     public void deleteByLineId(Long lineId) {
-        jdbcTemplate.update("delete from SECTION where line_id = ?", lineId);
+        jdbcTemplate.update(DELETE_BY_LINE_ID_SQL, lineId);
     }
 
     public void insertSections(Line line) {
@@ -78,13 +86,6 @@ public class SectionDao {
     }
 
     public List<Section> findAll() {
-        String sql = "select S.id as section_id, S.line_id as line_id, S.distance as section_distance," +
-                "UST.id as up_station_id, UST.name as up_station_name, " +
-                "DST.id as down_station_id, DST.name as down_station_name " +
-                "from SECTION S \n" +
-                "left outer join STATION UST on S.up_station_id = UST.id " +
-                "left outer join STATION DST on S.down_station_id = DST.id ";
-
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(FIND_ALL_SQL, rowMapper);
     }
 }

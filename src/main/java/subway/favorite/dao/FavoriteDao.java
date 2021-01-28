@@ -16,6 +16,19 @@ import java.util.Map;
 @Repository
 public class FavoriteDao {
 
+    private static final String FIND_BY_MEMBER_ID_SQL = "select F.id as favorite_id," +
+            "SST.id as source_station_id, SST.name as source_station_name, " +
+            "TST.id as target_station_id, TST.name as target_station_name," +
+            "M.id as member_id, M.email as member_email, M.age as member_age " +
+            "from FAVORITE F \n" +
+            "left outer join STATION SST on F.source_station_id = SST.id " +
+            "left outer join STATION TST on F.target_station_id = TST.id " +
+            "left outer join MEMBER M on F.member_id = M.id " +
+            "WHERE F.member_id = ?";
+
+    private static final String DELETE_BY_ID_AND_MEMBER_ID_SQL =
+            "delete from FAVORITE where id = ? and member_id = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertAction;
 
@@ -68,22 +81,11 @@ public class FavoriteDao {
     }
 
     public List<Favorite> findByMemberId(Long memberId) {
-        String sql = "select F.id as favorite_id," +
-                "SST.id as source_station_id, SST.name as source_station_name, " +
-                "TST.id as target_station_id, TST.name as target_station_name," +
-                "M.id as member_id, M.email as member_email, M.age as member_age " +
-                "from FAVORITE F \n" +
-                "left outer join STATION SST on F.source_station_id = SST.id " +
-                "left outer join STATION TST on F.target_station_id = TST.id " +
-                "left outer join MEMBER M on F.member_id = M.id " +
-                "WHERE F.member_id = ?";
-
-        return jdbcTemplate.query(sql, favoriteRowMapper, memberId);
+        return jdbcTemplate.query(FIND_BY_MEMBER_ID_SQL, favoriteRowMapper, memberId);
     }
 
 
-    public void deleteByIdMemberAndId(Long id, Long memberId) {
-        String sql = "delete from FAVORITE where id = ? and member_id = ?";
-        jdbcTemplate.update(sql, id, memberId);
+    public void deleteByIdAndMemberId(Long id, Long memberId) {
+        jdbcTemplate.update(DELETE_BY_ID_AND_MEMBER_ID_SQL, id, memberId);
     }
 }

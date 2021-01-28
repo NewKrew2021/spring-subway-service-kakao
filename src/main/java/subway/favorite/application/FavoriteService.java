@@ -32,7 +32,7 @@ public class FavoriteService {
         return favoriteDao.findByMemberId(memberId);
     }
 
-    public void deleteByIdMemberAndId(Long id, Long memberId) {
-        favoriteDao.deleteByIdMemberAndId(id, memberId);
+    public void deleteByIdAndMemberId(Long id, Long memberId) {
+        favoriteDao.deleteByIdAndMemberId(id, memberId);
     }
 }
