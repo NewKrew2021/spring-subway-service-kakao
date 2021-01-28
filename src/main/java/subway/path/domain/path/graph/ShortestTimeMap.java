@@ -1,9 +1,12 @@
-package subway.path.domain.path.time;
+package subway.path.domain.path.graph;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.KShortestPaths;
+import org.jgrapht.graph.Multigraph;
 import subway.line.domain.Line;
 import subway.path.domain.path.SubwayEdge;
-import subway.path.domain.path.graph.PathAndArrival;
+import subway.path.domain.path.SubwayPath;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
@@ -13,42 +16,39 @@ import java.util.List;
 
 import static java.util.function.BinaryOperator.minBy;
 
-public class ShortestTimePathFinder {
+public class ShortestTimeMap implements SubwayMap {
 
     private static final int FIRST_LINE_INDEX = 0;
     private static final int FIRST_STATION_INDEX = 0;
     private static final int NEXT = 1;
+    private static final int ALL_PATH_COUNT = 1000;
 
-    private final List<GraphPath<Station, SubwayEdge>> graphPaths;
+    private final Graph<Station, SubwayEdge> graph;
 
-    ShortestTimePathFinder(List<GraphPath<Station, SubwayEdge>> graphPaths) {
-        requireNotEmpty(graphPaths);
-
-        this.graphPaths = graphPaths;
+    private ShortestTimeMap(Graph<Station, SubwayEdge> graph) {
+        this.graph = graph;
     }
 
-    private void requireNotEmpty(List<GraphPath<Station, SubwayEdge>> graphPaths) {
-        if (graphPaths == null || graphPaths.isEmpty()) {
-            throw new IllegalArgumentException("하나 이상의 경로가 존재해야합니다");
-        }
+    public static ShortestTimeMap initialize(List<Line> lines) {
+        return new ShortestTimeMap(GraphUtil.initializeGraph(new Multigraph<>(SubwayEdge.class), lines));
     }
 
-    public PathAndArrival getPath(LocalDateTime departureTime) {
-        GraphPath<Station, SubwayEdge> shortestPath = getShortestArrivalTimePath(departureTime);
-
-        return new PathAndArrival(shortestPath, getArrivalTime(shortestPath, departureTime));
+    @Override
+    public SubwayPath getPath(Station source, Station target, LocalDateTime departureTime) {
+        GraphPath<Station, SubwayEdge> shortestPath =
+                getShortestArrivalTimePath(new KShortestPaths<>(graph, ALL_PATH_COUNT).getPaths(source, target), departureTime);
+        return SubwayPath.of(shortestPath, getArrivalTime(shortestPath, departureTime));
     }
 
-    private GraphPath<Station, SubwayEdge> getShortestArrivalTimePath(LocalDateTime departureTime) {
+    private GraphPath<Station, SubwayEdge> getShortestArrivalTimePath(List<GraphPath<Station, SubwayEdge>> graphPaths, LocalDateTime departureTime) {
         return graphPaths.stream()
                 .reduce(minBy(arrivalTimeComparator(departureTime)))
-                .orElseThrow(() -> new AssertionError("하나 이상의 경로는 반드시 존재합니다"));
+                .orElseThrow(() -> new IllegalArgumentException("하나 이상의 경로는 반드시 존재해야 합니다"));
     }
 
     private Comparator<GraphPath<Station, SubwayEdge>> arrivalTimeComparator(LocalDateTime departureTime) {
         return Comparator.comparing(path -> getArrivalTime(path, departureTime));
     }
-
 
     private LocalDateTime getArrivalTime(GraphPath<Station, SubwayEdge> path, LocalDateTime departureTime) {
         List<SubwayEdge> sections = path.getEdgeList();

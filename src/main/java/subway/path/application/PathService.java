@@ -6,8 +6,8 @@ import subway.member.domain.LoginMember;
 import subway.path.domain.fare.FareCalculator;
 import subway.path.domain.path.PathType;
 import subway.path.domain.path.PathValue;
-import subway.path.domain.path.SubwayMap;
 import subway.path.domain.path.SubwayPath;
+import subway.path.domain.path.graph.SubwayMap;
 import subway.station.application.StationService;
 
 import java.time.LocalDateTime;
@@ -25,9 +25,9 @@ public class PathService {
         this.fareCalculator = fareCalculator;
     }
 
-    public PathValue findPath(long source, long target, LoginMember loginMember, LocalDateTime departureTime, PathType type) {
-        SubwayMap graph = SubwayMap.from(lineService.findLines(), type);
-        SubwayPath path = graph.getPath(
+    public PathValue findPath(long source, long target, LoginMember loginMember, LocalDateTime departureTime, PathType pathType) {
+        SubwayMap map = pathType.generateMapBy(lineService.findLines());
+        SubwayPath path = map.getPath(
                 stationService.findStationById(source),
                 stationService.findStationById(target),
                 departureTime

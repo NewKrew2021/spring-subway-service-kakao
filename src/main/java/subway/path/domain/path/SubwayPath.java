@@ -2,7 +2,6 @@ package subway.path.domain.path;
 
 import org.jgrapht.GraphPath;
 import subway.line.domain.Line;
-import subway.path.domain.path.graph.PathAndArrival;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
@@ -23,13 +22,12 @@ public class SubwayPath {
         this.arrivalTime = arrivalTime;
     }
 
-    public static SubwayPath from(PathAndArrival subwayPath) {
-        GraphPath<Station, SubwayEdge> path = subwayPath.getPath();
+    public static SubwayPath of(GraphPath<Station, SubwayEdge> path, LocalDateTime arrivalTime) {
         return new SubwayPath(
                 path.getVertexList(),
                 (int) path.getWeight(),
                 getLines(path.getEdgeList()),
-                subwayPath.getArrivalTime()
+                arrivalTime
         );
     }
 

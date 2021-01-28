@@ -1,21 +1,19 @@
-package subway.path.domain.path.time;
+package subway.path.domain.path.graph;
 
-import org.jgrapht.GraphPath;
-import org.jgrapht.graph.GraphWalk;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
-import subway.path.domain.path.SubwayEdge;
-import subway.path.domain.path.graph.PathAndArrival;
+import subway.path.domain.path.SubwayPath;
 import subway.station.domain.Station;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ShortestTimePathFinderTest {
+class ShortestTimeGraphTest {
 
     /**
      *
@@ -54,35 +52,20 @@ class ShortestTimePathFinderTest {
         이호선.addSection(의정부역, 잠실역, 6);
         칠호선.addSection(잠실역, 서현역, 5);
 
-        GraphPath<Station, SubwayEdge> shortestTimePath = new GraphWalk<>(
-                null,
-                삼송역,
-                서현역,
-                Arrays.asList(삼송역, 지축역, 서현역),
-                Arrays.asList(new SubwayEdge(5, 5, 삼호선), new SubwayEdge(20, 20, 삼호선)),
-                25
-        );
-        GraphPath<Station, SubwayEdge> shortestDistancePath = new GraphWalk<>(
-                null,
-                삼송역,
-                서현역,
-                Arrays.asList(삼송역, 의정부역, 잠실역, 서현역),
-                Arrays.asList(
-                        new SubwayEdge(3, 3, 일호선),
-                        new SubwayEdge(5, 5, 이호선),
-                        new SubwayEdge(5, 5, 칠호선)
-                ),
-                13
-        );
-        ShortestTimePathFinder shortestTimePathFinder = new ShortestTimePathFinder(Arrays.asList(shortestDistancePath, shortestTimePath));
+        List<Line> lines = Arrays.asList(삼호선, 일호선, 이호선, 칠호선);
+        ShortestTimeMap shortestTimePathFinder = ShortestTimeMap.initialize(lines);
 
         // when
-        PathAndArrival result = shortestTimePathFinder.getPath(LocalDateTime.of(2021, 1, 26, 6, 3));
+        SubwayPath result = shortestTimePathFinder.getPath(
+                삼송역,
+                서현역,
+                LocalDateTime.of(2021, 1, 26, 6, 3)
+        );
 
         // then
         assertAll(
                 () -> assertThat(result.getArrivalTime()).isEqualTo(LocalDateTime.of(2021, 1, 26, 6, 30)),
-                () -> assertThat(result.getPath().getVertexList())
+                () -> assertThat(result.getStations())
                         .isEqualTo(Arrays.asList(삼송역, 지축역, 서현역))
         );
     }
