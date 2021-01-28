@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.domain.*;
+import subway.station.dto.StationResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ public class SubwayPathGraph {
     private Long target;
     private DijkstraShortestPath dijkstraShortestPath;
     private GraphPath<String, PathEdge> graphPath;
-
 
     public SubwayPathGraph(Lines lines, Long source, Long target) {
         this.graph = new WeightedMultigraph(PathEdge.class);
@@ -47,8 +47,10 @@ public class SubwayPathGraph {
                 .getPath(source.toString(), target.toString());
     }
 
-    public List<String> getVertexList() {
-        return graphPath.getVertexList();
+    public List<Long> getShortestPathStationIds() {
+        return graphPath.getVertexList().stream()
+                .map((stationId -> Long.parseLong(stationId)))
+                .collect(Collectors.toList());
     }
 
     public int getTotalDistance() {

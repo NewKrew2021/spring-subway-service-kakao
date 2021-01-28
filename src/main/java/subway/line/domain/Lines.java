@@ -15,16 +15,16 @@ public class Lines {
         return lines;
     }
 
-    public Sections addAllSections(){
+    public Sections addAllSections() {
         Sections sections = new Sections();
-        for(Line line : lines){
-            addSections(line,sections);
+        for (Line line : lines) {
+            addSections(line, sections);
         }
         return sections;
     }
 
     private void addSections(Line line, Sections sections) {
-        for(Section section : line.getSections().getSections()){
+        for (Section section : line.getSections().getSections()) {
             sections.getSections().add(section);
         }
     }

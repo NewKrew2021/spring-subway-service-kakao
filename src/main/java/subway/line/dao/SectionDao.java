@@ -65,7 +65,7 @@ public class SectionDao {
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
     }
 
-    public List<Section> findAll(){
+    public List<Section> findAll() {
         String sql = "select S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -76,7 +76,7 @@ public class SectionDao {
         return mapSections(jdbcTemplate.queryForList(sql));
     }
 
-    public List<Section> mapSections(List<Map<String, Object>> result){
+    public List<Section> mapSections(List<Map<String, Object>> result) {
         return result
                 .stream()
                 .map(it ->

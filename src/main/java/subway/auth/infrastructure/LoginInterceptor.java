@@ -1,4 +1,4 @@
-package subway.path.ui;
+package subway.auth.infrastructure;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

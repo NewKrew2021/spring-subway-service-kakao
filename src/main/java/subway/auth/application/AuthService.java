@@ -19,29 +19,29 @@ public class AuthService {
         this.memberDao = memberDao;
     }
 
-    private boolean checkValidLogin(String email, String password){
-        try{
+    private boolean checkValidLogin(String email, String password) {
+        try {
             return memberDao.findByEmail(email)
                     .getPassword()
                     .equals(password);
-        } catch(EmptyResultDataAccessException erdae){
+        } catch (EmptyResultDataAccessException erdae) {
             return false;
         }
     }
 
-    public TokenResponse createToken(TokenRequest tokenRequest){
-        if(!checkValidLogin(tokenRequest.getEmail(), tokenRequest.getPassword())){
+    public TokenResponse createToken(TokenRequest tokenRequest) {
+        if (!checkValidLogin(tokenRequest.getEmail(), tokenRequest.getPassword())) {
             throw new InvalidLoginException();
         }
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         return jwtTokenProvider.validateToken(token);
     }
 
-    public Member findMemberByToken(String token){
+    public Member findMemberByToken(String token) {
         String email = jwtTokenProvider.getPayload(token);
         return memberDao.findByEmail(email);
     }

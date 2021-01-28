@@ -32,40 +32,47 @@ public class PathService {
     }
 
     public PathResponse getShortestpathResponse(Long source, Long target, int age) {
-        SubwayPathGraph subwayPathGraph = new SubwayPathGraph(
-                new Lines(lineDao.findAll()), source, target);
+        SubwayPathGraph subwayPathGraph = new SubwayPathGraph(new Lines(lineDao.findAll()), source, target);
+        List<Long> shortestPathStations = subwayPathGraph.getShortestPathStationIds();
+        int totalDistance = subwayPathGraph.getTotalDistance();
+        int totalFare = getPathTotalFare();
+        return new PathResponse(shortestPathStations, totalDistance, totalFare);
+    }
 
-        List<StationResponse> shortestStations = subwayPathGraph.getVertexList()
-                .stream()
+    private List<StationResponse> getShortestPathStations(){
+        List<StationResponse> shortestStations = subwayPathGraph.getVertexList().stream()
                 .map((String stationId) -> stationDao.findById(Long.parseLong(stationId)))
                 .map((Station station) -> new StationResponse(station.getId(), station.getName()))
                 .collect(Collectors.toList());
+    }
 
+    private int getPathTotalDistance(){
+        return subwayPathGraph.getTotalDistance();
+    }
+
+    private int getPathTotalFare(){
         int totalFare = DistanceExtraFare.getTotalFare(subwayPathGraph.getTotalDistance())
                 + getExtraFareByLines(subwayPathGraph.getLineIdsInShortestPath());
         totalFare = getAgeDiscountTotalFare(totalFare, age);
-
-        return new PathResponse(shortestStations,
-                subwayPathGraph.getTotalDistance(), totalFare);
     }
 
 
-    private int getExtraFareByLines(List<Long> lineIds){
+    private int getExtraFareByLines(List<Long> lineIds) {
         int maxExtratotalExtra = 0;
 
-        for(Long lineId : lineIds){
+        for (Long lineId : lineIds) {
             maxExtratotalExtra = Math.max(lineDao.findById(lineId).getExtraFare(), maxExtratotalExtra);
         }
 
         return maxExtratotalExtra;
     }
 
-    private int getAgeDiscountTotalFare(int totalFare, int age){
-        if(13 <= age && age <= 18){
+    private int getAgeDiscountTotalFare(int totalFare, int age) {
+        if (13 <= age && age <= 18) {
             int discountAmount = (totalFare - 350) / 100 * 20;
             totalFare -= discountAmount;
         }
-        if(6 <= age && age <= 12){
+        if (6 <= age && age <= 12) {
             int discountAmount = (totalFare - 350) / 100 * 50;
             totalFare -= discountAmount;
         }

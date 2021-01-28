@@ -18,7 +18,7 @@ public class PathController {
     private final PathService pathService;
 
     @Autowired
-    public PathController(PathService pathService){
+    public PathController(PathService pathService) {
         this.pathService = pathService;
     }
 
@@ -27,9 +27,9 @@ public class PathController {
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam Long source, @RequestParam Long target
 
-    ){
+    ) {
         return ResponseEntity
                 .ok()
-                .body(pathService.getShortestpathResponse(source,target, (loginMember != null) ? loginMember.getAge().intValue() : 0));
+                .body(pathService.getShortestpathResponse(source, target, (loginMember != null) ? loginMember.getAge().intValue() : 0));
     }
 }
