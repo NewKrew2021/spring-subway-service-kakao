@@ -2,7 +2,7 @@ package subway.auth.infrastructure;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import subway.auth.application.AuthService;
+import subway.auth.service.AuthService;
 import subway.common.exception.InvalidTokenException;
 
 import javax.servlet.http.HttpServletRequest;

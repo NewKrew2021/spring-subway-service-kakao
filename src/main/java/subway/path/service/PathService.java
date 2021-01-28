@@ -1,9 +1,8 @@
-package subway.path.application;
+package subway.path.service;
 
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Lines;
-import subway.member.domain.LoginMember;
 import subway.path.domain.DiscountAge;
 import subway.path.domain.DistanceExtraFare;
 import subway.path.domain.SubwayPathGraph;
@@ -13,7 +12,6 @@ import subway.station.domain.Station;
 import subway.station.dto.StationResponse;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

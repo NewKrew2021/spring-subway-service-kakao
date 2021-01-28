@@ -36,7 +36,7 @@ public class LoginMember {
                 .map(LoginMember::new)
                 .orElse(defaultLoginMember);
     }
-    
+
     public Long getId() {
         return id;
     }

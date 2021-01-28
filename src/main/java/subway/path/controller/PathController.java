@@ -1,4 +1,4 @@
-package subway.path.ui;
+package subway.path.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
-import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
+import subway.path.service.PathService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 

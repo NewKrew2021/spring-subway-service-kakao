@@ -1,13 +1,13 @@
-package subway.auth.ui;
+package subway.auth.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import subway.auth.application.AuthService;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
+import subway.auth.service.AuthService;
 
 @Controller
 public class AuthController {

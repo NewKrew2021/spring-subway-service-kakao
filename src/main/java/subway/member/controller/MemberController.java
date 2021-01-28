@@ -1,12 +1,12 @@
-package subway.member.ui;
+package subway.member.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
-import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
+import subway.member.service.MemberService;
 
 import java.net.URI;
 

@@ -1,4 +1,4 @@
-package subway;
+package subway.common.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

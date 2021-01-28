@@ -1,4 +1,4 @@
-package subway.favorite.application;
+package subway.favorite.service;
 
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;

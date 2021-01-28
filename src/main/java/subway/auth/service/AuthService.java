@@ -1,11 +1,11 @@
-package subway.auth.application;
+package subway.auth.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
-import subway.common.exception.InvalidLoginException;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.common.exception.InvalidLoginException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 
@@ -21,9 +21,9 @@ public class AuthService {
 
     private boolean checkValidLogin(StringBuilder errorMessageBuilder, String email, String password) {
         try {
-            if(!memberDao.findByEmail(email)
+            if (!memberDao.findByEmail(email)
                     .getPassword()
-                    .equals(password)){
+                    .equals(password)) {
                 errorMessageBuilder.append(InvalidLoginException.EMAIL_PASSWORD_MISMATCH);
                 return false;
             }
