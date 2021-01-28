@@ -26,13 +26,13 @@ public class PathService {
         this.lineDao = lineDao;
     }
 
-    public PathResponse getPathAndFare(LoginMember loginMember, Long source, Long target) {
+    public PathResponse getPathAndFare(LoginMember loginMember, Long startStationId, Long destStationId) {
         List<Line> lines = lineDao.findAll();
         ComplimentaryAge complimentaryAge = ComplimentaryAge.ADULT;
         if (loginMember != null) {
             complimentaryAge = ComplimentaryAge.getAgeGroup(loginMember.getAge());
         }
-        MetroNavigator metroNavigator = new MetroNavigator(lines, stationDao.findById(source), stationDao.findById(target), complimentaryAge);
+        MetroNavigator metroNavigator = new MetroNavigator(lines, stationDao.findById(startStationId), stationDao.findById(destStationId), complimentaryAge);
         return new PathResponse(metroNavigator.getShortestPath().stream()
                 .map(StationResponse::of)
                 .collect(Collectors.toList()),

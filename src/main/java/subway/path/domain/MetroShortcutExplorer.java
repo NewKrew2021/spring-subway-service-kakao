@@ -33,12 +33,12 @@ public class MetroShortcutExplorer {
         return new DijkstraShortestPath<>(graph);
     }
 
-    public List<Station> getShortestPath(Station source, Station target) {
-        return this.dijkstraShortestPath.getPath(source, target).getVertexList();
+    public List<Station> getShortestPath(Station stationStation, Station destStation) {
+        return this.dijkstraShortestPath.getPath(stationStation, destStation).getVertexList();
     }
 
-    public List<Section> getShortestPathSections(Station source, Station target) {
-        List<Station> shortestPathStations = getShortestPath(source, target);
+    public List<Section> getShortestPathSections(Station startStation, Station destStation) {
+        List<Station> shortestPathStations = getShortestPath(startStation, destStation);
         return IntStream.range(0, shortestPathStations.size() - 1)
                 .mapToObj(it -> new Section(shortestPathStations.get(it), shortestPathStations.get(it + 1)))
                 .collect(Collectors.toList());

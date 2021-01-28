@@ -11,23 +11,23 @@ public class MetroNavigator {
     private List<Line> lines;
     private ComplimentaryAge complimentaryAge;
     private MetroShortcutExplorer metroShortcutExplorer;
-    private Station source;
-    private Station target;
+    private Station startStation;
+    private Station destStation;
 
-    public MetroNavigator(List<Line> lines, Station source, Station target) {
-        this(lines, source, target, ComplimentaryAge.ADULT);
+    public MetroNavigator(List<Line> lines, Station startStation, Station destStation) {
+        this(lines, startStation, destStation, ComplimentaryAge.ADULT);
     }
 
-    public MetroNavigator(List<Line> lines, Station source, Station target, ComplimentaryAge complimentaryAge) {
+    public MetroNavigator(List<Line> lines, Station startStation, Station destStation, ComplimentaryAge complimentaryAge) {
         this.lines = lines;
-        this.source = source;
-        this.target = target;
+        this.startStation = startStation;
+        this.destStation = destStation;
         this.complimentaryAge = complimentaryAge;
         this.metroShortcutExplorer = new MetroShortcutExplorer(lines);
     }
 
     public List<Station> getShortestPath() {
-        return metroShortcutExplorer.getShortestPath(source, target);
+        return metroShortcutExplorer.getShortestPath(startStation, destStation);
     }
 
     public int getTotalFare() {
@@ -37,10 +37,10 @@ public class MetroNavigator {
     }
 
     public List<Section> getShortestPathSections() {
-        return metroShortcutExplorer.getShortestPathSections(source, target);
+        return metroShortcutExplorer.getShortestPathSections(startStation, destStation);
     }
 
     public int getTotalDistance() {
-        return metroShortcutExplorer.getTotalDistance(source, target);
+        return metroShortcutExplorer.getTotalDistance(startStation, destStation);
     }
 }
