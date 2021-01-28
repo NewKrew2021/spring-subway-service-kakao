@@ -5,10 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import subway.common.exception.InvalidLoginException;
+import subway.common.exception.InvalidTokenException;
 
 @ControllerAdvice
 public class ExceptionAdvice {
-    @ExceptionHandler(InvalidLoginException.class)
+    @ExceptionHandler({InvalidLoginException.class, InvalidTokenException.class})
     public ResponseEntity<String> catchInvalidLoginException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
