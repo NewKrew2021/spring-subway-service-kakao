@@ -5,6 +5,7 @@ import subway.fare.domain.AgeFarePolicy;
 import subway.fare.domain.DistanceFarePolicy;
 import subway.fare.domain.LineFarePolicy;
 import subway.line.application.LineService;
+import subway.member.domain.AnonymousMember;
 import subway.member.domain.LoginMember;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class FareService {
 
         fare += DistanceFarePolicy.findDistanceFare(distance);
 
-        if (!Objects.isNull(loginMember)) {
+        if (!(loginMember instanceof AnonymousMember)) {
             fare = AgeFarePolicy.applyAgeDiscount(fare, loginMember.getAge());
         }
 

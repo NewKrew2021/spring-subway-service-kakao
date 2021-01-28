@@ -8,6 +8,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.AnonymousMember;
 import subway.member.domain.LoginMember;
 import subway.member.dto.MemberResponse;
 
@@ -31,11 +32,12 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 
         String token = AuthorizationExtractor.extract(request);
-        if (token == null || token.isEmpty()) {
-            return null;
-        }
-        MemberResponse member = authService.findMemberByToken(token);
 
+        if (token.isEmpty()) {
+            return new AnonymousMember();
+        }
+
+        MemberResponse member = authService.findMemberByToken(token);
         return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 }
