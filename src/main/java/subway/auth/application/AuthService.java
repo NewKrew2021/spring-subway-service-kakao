@@ -8,7 +8,7 @@ import subway.auth.infrastructure.JwtTokenProvider;
 import subway.exception.AuthenticationException;
 import subway.member.application.MemberService;
 import subway.member.domain.LoginMember;
-import subway.member.dto.MemberResponse;
+import subway.member.domain.Member;
 
 @Service
 public class AuthService {
@@ -34,7 +34,7 @@ public class AuthService {
         if (!jwtTokenProvider.validateToken(token)) {
             throw new AuthenticationException("유효하지 않은 토큰입니다.");
         }
-        MemberResponse memberResponse = memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));
-        return new LoginMember(memberResponse.getId(), memberResponse.getEmail(), memberResponse.getAge());
+        Member member = memberService.findMemberByEmail(jwtTokenProvider.getPayload(token));
+        return LoginMember.of(member);
     }
 }

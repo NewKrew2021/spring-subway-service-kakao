@@ -27,9 +27,8 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
-    public MemberResponse findMemberByEmail(String email) {
-        Member member = memberDao.findByEmail(email);
-        return MemberResponse.of(member);
+    public Member findMemberByEmail(String email) {
+        return memberDao.findByEmail(email);
     }
 
     @Transactional
