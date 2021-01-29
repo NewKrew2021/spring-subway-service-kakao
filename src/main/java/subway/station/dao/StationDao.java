@@ -1,11 +1,15 @@
 package subway.station.dao;
 
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.exception.AlreadyExistedDataException;
+import subway.exception.NotExistDataException;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
@@ -32,8 +36,12 @@ public class StationDao {
 
     public Station insert(Station station) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(station);
-        Long id = insertAction.executeAndReturnKey(params).longValue();
-        return new Station(id, station.getName());
+        try {
+            Long id = insertAction.executeAndReturnKey(params).longValue();
+            return new Station(id, station.getName());
+        } catch (DuplicateKeyException e) {
+            throw new AlreadyExistedDataException("이미 사용중인 역 명입니다.");
+        }
     }
 
     public List<Station> findAll() {
@@ -48,6 +56,10 @@ public class StationDao {
 
     public Station findById(Long id) {
         String sql = "select * from STATION where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new NotExistDataException("해당 역이 존재하지 않습니다.");
+        }
     }
 }

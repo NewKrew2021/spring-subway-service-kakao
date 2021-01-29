@@ -1,18 +1,19 @@
 package subway.line.domain;
 
+import subway.exception.AlreadyExistedDataException;
+import subway.exception.NoMoreSectionToDeleteException;
+import subway.exception.WrongInputDataException;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
+    private static final int MIN_SIZE = 1;
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
-        return sections;
+        return Collections.unmodifiableList(sections);
     }
 
     public Sections() {
@@ -40,15 +41,25 @@ public class Sections {
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new RuntimeException();
+            throw new AlreadyExistedDataException("동일한 구간이 존재합니다.");
         }
+    }
+
+    public boolean isExist(Section section) {
+        for (Section section1 : sections) {
+            if (section1.getUpStation().equals(section.getUpStation()) && section1.getDownStation().equals(section.getDownStation())
+                    || section1.getUpStation().equals(section.getDownStation()) && section1.getDownStation().equals(section.getUpStation())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void checkExistedAny(Section section) {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new RuntimeException();
+            throw new AlreadyExistedDataException("동일한 구간이 존재합니다.");
         }
     }
 
@@ -76,7 +87,7 @@ public class Sections {
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+            throw new WrongInputDataException("거리가 잘못 입력되었습니다.");
         }
         this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
@@ -97,7 +108,7 @@ public class Sections {
             nextSection = findSectionByNextUpStation(nextSection.getDownStation());
         }
 
-        return stations;
+        return Collections.unmodifiableList(stations);
     }
 
     private Section findUpEndSection() {
@@ -119,8 +130,8 @@ public class Sections {
     }
 
     public void removeStation(Station station) {
-        if (sections.size() <= 1) {
-            throw new RuntimeException();
+        if (sections.size() <= MIN_SIZE) {
+            throw new NoMoreSectionToDeleteException();
         }
 
         Optional<Section> upSection = sections.stream()

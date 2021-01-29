@@ -1,11 +1,15 @@
 package subway.member.dao;
 
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.exception.AlreadyExistedDataException;
+import subway.exception.NotExistDataException;
 import subway.member.domain.Member;
 
 import javax.sql.DataSource;
@@ -33,8 +37,12 @@ public class MemberDao {
 
     public Member insert(Member member) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
-        Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-        return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
+        try {
+            Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
+            return new Member(id, member.getEmail(), member.getPassword(), member.getAge());
+        } catch (DuplicateKeyException e) {
+            throw new AlreadyExistedDataException("이미 사용중인 이메일 입니다.");
+        }
     }
 
     public void update(Member member) {
@@ -49,10 +57,15 @@ public class MemberDao {
 
     public Member findById(Long id) {
         String sql = "select * from MEMBER where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            throw new NotExistDataException("사용자가 존재하지 않습니다.");
+        }
     }
 
-    public Member findByEmail(String email) {
+    public Member findByEmail(String email) throws IncorrectResultSizeDataAccessException {
+        System.out.println(email);
         String sql = "select * from MEMBER where email = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, email);
     }
