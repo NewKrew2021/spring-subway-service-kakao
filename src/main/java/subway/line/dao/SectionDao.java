@@ -26,14 +26,6 @@ public class SectionDao {
                 .withTableName("SECTION")
                 .usingGeneratedKeyColumns("id");
     }
-//
-//    private RowMapper<Section> rowMapper = (rs, rowNum) ->
-//            new Section(
-//                    rs.getLong("id"),
-//                    rs.getString("upS"),
-//                    rs.getString("password"),
-//                    rs.getInt("age")
-//            );
 
     public Section insert(Line line, Section section) {
         Map<String, Object> params = new HashMap();
