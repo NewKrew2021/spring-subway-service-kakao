@@ -9,6 +9,7 @@ import subway.line.domain.Sections;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
+import java.sql.Time;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,9 @@ public class LineDao {
         params.put("name", line.getName());
         params.put("color", line.getColor());
         params.put("extra_fare", line.getExtraFare());
+        params.put("start_time", line.getStartTime());
+        params.put("end_time", line.getEndTime());
+        params.put("time_interval", line.getTimeInterval());
 
         Long lineId = insertAction.executeAndReturnKey(params).longValue();
         return new Line(lineId, line.getName(), line.getColor());
@@ -40,6 +44,7 @@ public class LineDao {
 
     public Line findById(Long id) {
         String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as line_extra_fare, " +
+                "L.start_time as line_start_time, L.end_time as line_end_time, L.time_interval as line_time_interval, " +
                 "S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -60,6 +65,7 @@ public class LineDao {
 
     public List<Line> findAll() {
         String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as line_extra_fare, " +
+                "L.start_time as line_start_time, L.end_time as line_end_time, L.time_interval as line_time_interval, " +
                 "S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -87,7 +93,11 @@ public class LineDao {
                 (String) result.get(0).get("LINE_NAME"),
                 (String) result.get(0).get("LINE_COLOR"),
                 (int) result.get(0).get("LINE_EXTRA_FARE"),
-                new Sections(sections));
+                ((Time) result.get(0).get("LINE_START_TIME")).toLocalTime(),
+                ((Time) result.get(0).get("LINE_END_TIME")).toLocalTime(),
+                (int) result.get(0).get("LINE_TIME_INTERVAL"),
+                new Sections(sections)
+        );
     }
 
     private List<Section> extractSections(List<Map<String, Object>> result) {

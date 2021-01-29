@@ -10,15 +10,14 @@ import java.util.List;
 public class FarePolicyFactory {
 
     public FarePolicy createBy(int distance, List<Line> lines, LoginMember loginMember) {
-        FarePolicy defaultPolicy = getDistanceAndLinePolicy(distance, lines);
-
         if (loginMember.isNotLogined()) {
-            return defaultPolicy;
+            return getDefaultPolicy(distance, lines);
         }
-        return defaultPolicy.andThen(new AgePolicy(loginMember.getAge()));
+        return getDefaultPolicy(distance, lines)
+                .andThen(new AgePolicy(loginMember.getAge()));
     }
 
-    private FarePolicy getDistanceAndLinePolicy(int distance, List<Line> lines) {
+    private FarePolicy getDefaultPolicy(int distance, List<Line> lines) {
         return new DistancePolicy(distance)
                 .andThen(new LinePolicy(lines));
     }

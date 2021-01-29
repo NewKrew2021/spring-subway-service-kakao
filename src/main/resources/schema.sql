@@ -11,6 +11,9 @@ create table if not exists LINE
     name varchar(255) not null unique,
     color varchar(20) not null,
     extra_fare int,
+    start_time time,
+    end_time time,
+    time_interval int,
     primary key(id)
     );
 

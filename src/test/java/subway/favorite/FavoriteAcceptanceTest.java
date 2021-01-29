@@ -16,6 +16,7 @@ import subway.favorite.dto.FavoriteResponse;
 import subway.line.dto.LineResponse;
 import subway.station.dto.StationResponse;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class FavoriteAcceptanceTest extends AcceptanceTest {
         정자역 = 지하철역_등록되어_있음("정자역");
         광교역 = 지하철역_등록되어_있음("광교역");
 
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 광교역, 10, 900);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 광교역, 10, 900, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
 
         지하철_구간_등록되어_있음(신분당선, 강남역, 양재역, 3);
         지하철_구간_등록되어_있음(신분당선, 양재역, 정자역, 3);

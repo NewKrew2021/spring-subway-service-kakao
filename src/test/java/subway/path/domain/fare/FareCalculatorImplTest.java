@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
 
+import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,9 +30,9 @@ class FareCalculatorImplTest {
     void setUp() {
         fareCalculator = new FareCalculatorImpl(new FarePolicyFactory());
 
-        추가요금_900 = new Line("신분당선", "bg-red-600", 900);
-        추가요금_500 = new Line("이호선", "bg-red-600", 500);
-        추가요금_없음 = new Line("삼호선", "bg-red-600", 0);
+        추가요금_900 = createLineWithFare(900);
+        추가요금_500 = createLineWithFare(500);
+        추가요금_없음 = createLineWithFare(0);
 
         어른 = new LoginMember(1L, "test1@test.com", 30);
         청소년 = new LoginMember(2L, "test2@test.com", 18);
@@ -79,5 +81,9 @@ class FareCalculatorImplTest {
 
         // then
         assertThat(result).isEqualTo(3050);
+    }
+
+    private static Line createLineWithFare(int fare) {
+        return new Line(UUID.randomUUID().toString(), "blue", fare, LocalTime.now(), LocalTime.now(), 10);
     }
 }

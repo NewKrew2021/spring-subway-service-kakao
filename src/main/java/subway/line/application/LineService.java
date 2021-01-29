@@ -27,7 +27,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(), request.getExtraFare()));
+        Line persistLine = lineDao.insert(request.toEntity());
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }

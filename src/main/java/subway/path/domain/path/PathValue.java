@@ -2,17 +2,20 @@ package subway.path.domain.path;
 
 import subway.station.domain.Station;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PathValue {
-    private List<Station> stations;
-    private int distance;
-    private int fare;
+    private final List<Station> stations;
+    private final int distance;
+    private final int fare;
+    private final LocalDateTime arrivalAt;
 
-    public PathValue(List<Station> stations, int distance, int fare) {
+    public PathValue(List<Station> stations, int distance, int fare, LocalDateTime arrivalAt) {
         this.stations = stations;
         this.distance = distance;
         this.fare = fare;
+        this.arrivalAt = arrivalAt;
     }
 
     public List<Station> getStations() {
@@ -25,5 +28,9 @@ public class PathValue {
 
     public int getFare() {
         return fare;
+    }
+
+    public LocalDateTime getArrivalAt() {
+        return arrivalAt;
     }
 }

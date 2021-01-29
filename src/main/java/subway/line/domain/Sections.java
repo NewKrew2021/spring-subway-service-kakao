@@ -140,4 +140,28 @@ public class Sections {
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
     }
+
+    public int getTotalDurationUntil(Station station) {
+        return findSectionsUntil(station).stream()
+                .mapToInt(Section::getDuration)
+                .sum();
+    }
+
+    private List<Section> findSectionsUntil(Station station) {
+        checkStationExist(station);
+
+        List<Section> sections = new ArrayList<>();
+        Section nextSection = findUpEndSection();
+        while (nextSection != null && !nextSection.getUpStation().equals(station)) {
+            sections.add(nextSection);
+            nextSection = findSectionByNextUpStation(nextSection.getDownStation());
+        }
+        return sections;
+    }
+
+    private void checkStationExist(Station station) {
+        if (!getStations().contains(station)) {
+            throw new IllegalStateException("해당 역은 구간에 존재하지 않습니다");
+        }
+    }
 }

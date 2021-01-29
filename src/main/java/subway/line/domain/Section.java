@@ -24,6 +24,11 @@ public class Section {
         this.distance = distance;
     }
 
+    // 편의상 1분에 1 distance만큼 간다고 가정
+    public int getDuration() {
+        return distance;
+    }
+
     public Long getId() {
         return id;
     }

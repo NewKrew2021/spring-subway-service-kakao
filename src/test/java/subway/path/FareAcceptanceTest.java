@@ -13,6 +13,10 @@ import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
 import subway.station.dto.StationResponse;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.auth.AuthAcceptanceTest.로그인되어_있음;
 import static subway.line.LineAcceptanceTest.지하철_노선_등록되어_있음;
@@ -58,9 +62,9 @@ public class FareAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
         고속버스터미널역 = 지하철역_등록되어_있음("고속버스터미널역");
 
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 80, 900);
-        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 28, 500);
-        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 남부터미널역, 5, 0);
+        신분당선 = 지하철_노선_등록되어_있음("신분당선", "bg-red-600", 강남역, 양재역, 80, 900, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        이호선 = 지하철_노선_등록되어_있음("이호선", "bg-red-600", 교대역, 강남역, 28, 500, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
+        삼호선 = 지하철_노선_등록되어_있음("삼호선", "bg-red-600", 교대역, 남부터미널역, 5, 0, LocalTime.of(6, 0), LocalTime.of(22, 0), 10);
 
         지하철_구간_등록되어_있음(삼호선, 남부터미널역, 양재역, 3);
         지하철_구간_등록되어_있음(이호선, 강남역, 잠실역, 38);
@@ -148,7 +152,8 @@ public class FareAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(String.format("/paths?source=%d&target=%d", sourceStation.getId(), targetStation.getId()))
+                .when().get(String.format("/paths?source=%d&target=%d&time=%s",
+                        sourceStation.getId(), targetStation.getId(), LocalDateTime.of(2021, 1, 26, 6, 30).format(DateTimeFormatter.ofPattern("uuuuMMddHHmm"))))
                 .then().log().all()
                 .extract();
     }
@@ -157,7 +162,8 @@ public class FareAcceptanceTest extends AcceptanceTest {
         return RestAssured
                 .given().log().all().auth().oauth2(tokenResponse.getAccessToken())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(String.format("/paths?source=%d&target=%d", sourceStation.getId(), targetStation.getId()))
+                .when().get(String.format("/paths?source=%d&target=%d&time=%s",
+                        sourceStation.getId(), targetStation.getId(), LocalDateTime.of(2021, 1, 26, 6, 30).format(DateTimeFormatter.ofPattern("uuuuMMddHHmm"))))
                 .then().log().all()
                 .extract();
     }
