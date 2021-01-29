@@ -45,15 +45,14 @@ public class FavoriteDao {
                 .collect(Collectors.groupingBy(it -> it.get("favorite_id")))
                 .entrySet()
                 .stream()
-                .map(it -> {
-                    Favorite favorite = new Favorite(
-                            (Long) it.getValue().get(0).get("favorite_id"),
-                            new Station((Long) it.getValue().get(0).get("source_id"), (String) it.getValue().get(0).get("source_name")),
-                            new Station((Long) it.getValue().get(0).get("target_id"), (String) it.getValue().get(0).get("target_name")),
-                            (Long) it.getValue().get(0).get("user_id")
-                    );
-                    return favorite;
-                })
+                .map(it ->
+                        new Favorite(
+                                (Long) it.getValue().get(0).get("favorite_id"),
+                                new Station((Long) it.getValue().get(0).get("source_id"), (String) it.getValue().get(0).get("source_name")),
+                                new Station((Long) it.getValue().get(0).get("target_id"), (String) it.getValue().get(0).get("target_name")),
+                                (Long) it.getValue().get(0).get("user_id")
+                        )
+                )
                 .collect(Collectors.toList());
     }
 }
