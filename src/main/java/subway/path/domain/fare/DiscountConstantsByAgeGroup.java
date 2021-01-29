@@ -14,13 +14,13 @@ public enum DiscountConstantsByAgeGroup {
     ADULT_DISCOUNT_CONSTANTS(ADULT, Fare.from(0), 0.0);
 
     AgeGroup ageGroup;
-    Fare DEDUCTION_AMOUNT;
-    double DISCOUNT_RATE;
+    Fare deductionAmount;
+    double discountRate;
 
     DiscountConstantsByAgeGroup(AgeGroup ageGroup, Fare deductionAmount, double discountRate) {
         this.ageGroup = ageGroup;
-        this.DEDUCTION_AMOUNT = deductionAmount;
-        this.DISCOUNT_RATE = discountRate;
+        this.deductionAmount = deductionAmount;
+        this.discountRate = discountRate;
     }
 
     public static DiscountConstantsByAgeGroup from(AgeGroup ageGroup) {

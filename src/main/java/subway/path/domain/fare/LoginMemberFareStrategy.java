@@ -21,7 +21,7 @@ public class LoginMemberFareStrategy extends DefaultFareStrategy {
     private Fare getDiscountedFareByAge(Fare fare, Age age) {
         AgeGroup ageGroup = AgeGroup.from(age);
         DiscountConstantsByAgeGroup discountConstants = DiscountConstantsByAgeGroup.from(ageGroup);
-        return fare.sub(fare.sub(discountConstants.DEDUCTION_AMOUNT).multiply(discountConstants.DISCOUNT_RATE));
+        return fare.sub(fare.sub(discountConstants.deductionAmount).multiply(discountConstants.discountRate));
     }
 
     @Override

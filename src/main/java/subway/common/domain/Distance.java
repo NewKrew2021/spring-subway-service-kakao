@@ -41,19 +41,19 @@ public class Distance {
         return distance < o.distance;
     }
 
-    public Distance getDifference(Distance o) {
-        if (o == null) {
+    public Distance getDifference(Distance subtrahend) {
+        if (subtrahend == null) {
             throw new NotExistException("존재하지 않는 거리는 연산할 수 없습니다.");
         }
-        int difference = distance > o.distance ? distance - o.distance : o.distance - distance;
+        int difference = distance > subtrahend.distance ? distance - subtrahend.distance : subtrahend.distance - distance;
         return Distance.from(difference);
     }
 
-    public Distance getSum(Distance o) {
-        if (o == null) {
+    public Distance getSum(Distance addend) {
+        if (addend == null) {
             throw new NotExistException("존재하지 않는 거리는 연산할 수 없습니다.");
         }
-        return Distance.from(distance + o.distance);
+        return Distance.from(distance + addend.distance);
     }
 
     @Override

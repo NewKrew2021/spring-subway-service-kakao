@@ -34,22 +34,22 @@ public class Fare {
         return fare;
     }
 
-    public static Fare add(Fare f1, Fare f2) {
-        if (f1 == null || f2 == null) {
+    public static Fare add(Fare addend1, Fare addend2) {
+        if (addend1 == null || addend2 == null) {
             throw new NotExistException("존재하지 않는 요금은 연산할 수 없습니다.");
         }
-        return new Fare(f1.fare + f2.fare);
+        return new Fare(addend1.fare + addend2.fare);
     }
 
-    public Fare sub(Fare f) {
-        if (f == null) {
+    public Fare sub(Fare subtrahend) {
+        if (subtrahend == null) {
             throw new NotExistException("존재하지 않는 요금은 연산할 수 없습니다.");
         }
-        return new Fare(fare - f.fare);
+        return new Fare(fare - subtrahend.fare);
     }
 
-    public Fare multiply(int number) {
-        return new Fare(fare * number);
+    public Fare multiply(int factor) {
+        return new Fare(fare * factor);
     }
 
     public Fare multiply(double number) {
