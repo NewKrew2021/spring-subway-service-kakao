@@ -1,8 +1,8 @@
 package subway.path.application;
 
 import org.springframework.stereotype.Service;
-import subway.line.domain.PriceCalculator;
-import subway.line.domain.ResultPath;
+import subway.path.domain.PriceCalculator;
+import subway.path.domain.ResultPath;
 import subway.line.domain.SubwayMap;
 import subway.member.domain.LoginMember;
 import subway.path.dto.PathResponse;

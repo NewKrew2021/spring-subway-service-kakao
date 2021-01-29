@@ -1,5 +1,6 @@
-package subway.line.domain;
+package subway.path.domain;
 
+import subway.line.domain.DistancePolicy;
 import subway.member.domain.LoginMember;
 import subway.member.domain.LoginMemberType;
 

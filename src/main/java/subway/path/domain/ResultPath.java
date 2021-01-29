@@ -1,5 +1,6 @@
-package subway.line.domain;
+package subway.path.domain;
 
+import subway.line.domain.ExtraFare;
 import subway.station.domain.Station;
 
 import java.util.List;
@@ -26,5 +27,14 @@ public class ResultPath {
 
     public List<Station> getStations(){
         return stations;
+    }
+
+    @Override
+    public String toString() {
+        return "ResultPath{" +
+                "maxExtraFare=" + maxExtraFare +
+                ", distance=" + distance +
+                ", stations=" + stations +
+                '}';
     }
 }

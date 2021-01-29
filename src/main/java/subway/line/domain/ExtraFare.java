@@ -15,4 +15,11 @@ public class ExtraFare {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "ExtraFare{" +
+                "value=" + value +
+                '}';
+    }
 }

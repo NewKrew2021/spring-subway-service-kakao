@@ -4,6 +4,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.WeightedMultigraph;
 import subway.line.exception.LineNotFoundException;
+import subway.path.domain.ResultPath;
 import subway.station.domain.Station;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package subway.line.domain;
+package subway.path.domain;
 
 public enum Price {
     DEFAULT_PRICE(1250),
