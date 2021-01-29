@@ -21,7 +21,7 @@ public class FavoriteService {
         this.stationService = stationService;
     }
 
-    public Favorite saveFavorite(LoginMember loginMember, FavoriteRequest favoriteRequest){
+    public Favorite saveFavorite(LoginMember loginMember, FavoriteRequest favoriteRequest) {
         Favorite favorite = new Favorite(
                 loginMember.getId(),
                 stationService.findStationById(favoriteRequest.getSource()),
@@ -30,13 +30,13 @@ public class FavoriteService {
         return favoriteDao.saveFavorite(favorite);
     }
 
-    public List<FavoriteResponse> findAllFavorites(LoginMember loginMember){
+    public List<FavoriteResponse> findAllFavorites(LoginMember loginMember) {
        return favoriteDao.findAllByMemberId(loginMember.getId()).stream()
                .map(FavoriteResponse::of)
                .collect(Collectors.toList());
     }
 
-    public void deleteFavorite(LoginMember loginMember, Long favoriteId){
+    public void deleteFavorite(LoginMember loginMember, Long favoriteId) {
         favoriteDao.deleteFavoriteById(loginMember.getId(), favoriteId);
     }
 }
