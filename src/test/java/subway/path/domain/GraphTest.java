@@ -64,7 +64,7 @@ public class GraphTest {
 
         //when, then
         assertThatThrownBy(() ->
-                graph.getPath(죽전역, 강남역, Optional.of(new LoginMember(1L, "blha", 10)))
+                graph.getPath(죽전역, 강남역)
         ).isInstanceOf(RuntimeException.class);
     }
 
@@ -76,7 +76,7 @@ public class GraphTest {
         Graph graph = new Graph(lines);
 
         //when
-        Path path = graph.getPath(강남역, 미금역, Optional.of(new LoginMember(1L, "15bass@naver.com", 7)));
+        Path path = graph.getPath(강남역, 미금역);
 
         //then
         assertThat(path.getDistance()).isEqualTo(9);
@@ -91,7 +91,7 @@ public class GraphTest {
         Graph graph = new Graph(lines);
 
         //when
-        Path path = graph.getPath(서울숲역, 회기역, Optional.of(new LoginMember(1L, "15bass@naver.com", 7)));
+        Path path = graph.getPath(서울숲역, 회기역);
 
         //then
         assertThat(path.getDistance()).isEqualTo(23);

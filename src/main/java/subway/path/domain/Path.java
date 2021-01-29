@@ -1,29 +1,30 @@
 package subway.path.domain;
 
+import org.jgrapht.GraphPath;
 import subway.station.domain.Station;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Path {
-    private final List<Station> stations;
-    private final int distance;
-    private final int fare;
+    private final GraphPath<Station, Edge> path;
 
-    public Path(List<Station> stations, int distance, int fare) {
-        this.stations = stations;
-        this.distance = distance;
-        this.fare = fare;
+    public Path(GraphPath<Station, Edge> shortestPath) {
+        this.path = shortestPath;
     }
 
     public List<Station> getStations() {
-        return stations;
+        return path.getVertexList();
     }
 
     public int getDistance() {
-        return distance;
+        return (int)path.getWeight();
     }
 
-    public int getFare() {
-        return fare;
+    public List<Integer> getExtraFaresInEdges() {
+        return path.getEdgeList()
+                .stream()
+                .map(Edge::getExtraFare)
+                .collect(Collectors.toList());
     }
 }
