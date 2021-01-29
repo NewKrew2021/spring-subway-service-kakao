@@ -13,12 +13,12 @@ import java.util.Map;
 
 @Repository
 public class MemberDao {
-    private final static String SELECT_BY_ID_QUERY = "select * from MEMBER where id = ?";
-    private final static String SELECT_BY_EMAIL_QUERY = "select * from MEMBER where email = ?";
-    private final static String SELECT_BY_EMAIL_AND_PASSWORD_QUERY = "select count(*) from MEMBER where email = ? and password = ?";
-    private final static String UPDATE_QUERY = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
-    private final static String DELETE_QUERY = "delete from MEMBER where id = ?";
-    private final static RowMapper<Member> rowMapper = (rs, rowNum) ->
+    private static final String SELECT_BY_ID_QUERY = "select * from MEMBER where id = ?";
+    private static final String SELECT_BY_EMAIL_QUERY = "select * from MEMBER where email = ?";
+    private static final String SELECT_BY_EMAIL_AND_PASSWORD_QUERY = "select count(*) from MEMBER where email = ? and password = ?";
+    private static final String UPDATE_QUERY = "update MEMBER set email = ?, password = ?, age = ? where id = ?";
+    private static final String DELETE_QUERY = "delete from MEMBER where id = ?";
+    private static final RowMapper<Member> rowMapper = (rs, rowNum) ->
             Member.of(
                     rs.getLong("id"),
                     rs.getString("email"),
