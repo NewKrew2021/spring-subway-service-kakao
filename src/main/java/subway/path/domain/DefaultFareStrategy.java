@@ -1,11 +1,10 @@
-package subway.util;
+package subway.path.domain;
 
 import subway.member.domain.LoginMember;
 
-public class ChildFareStrategy implements FareStrategy{
+public class DefaultFareStrategy implements FareStrategy{
     @Override
     public int getTotalFare(LoginMember loginMember, int totalFare) {
-        totalFare -= (totalFare - DEDUCTION_FARE) * CHILD_SALE_RATE;
         return totalFare;
     }
 }
