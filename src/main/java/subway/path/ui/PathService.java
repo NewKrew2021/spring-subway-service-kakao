@@ -32,28 +32,26 @@ public class PathService {
     }
 
     public PathResponse getShortestpathResponse(Long source, Long target, int age) {
-        SubwayPathGraph subwayPathGraph = new SubwayPathGraph(new Lines(lineDao.findAll()), source, target);
-        List<Long> shortestPathStations = subwayPathGraph.getShortestPathStationIds();
-        int totalDistance = subwayPathGraph.getTotalDistance();
-        int totalFare = getPathTotalFare();
+        SubwayPathGraph subwayShortestPathGraph = new SubwayPathGraph(new Lines(lineDao.findAll()), source, target);
+        List<StationResponse> shortestPathStations = getShortestPathStationResponses(subwayShortestPathGraph);
+        int totalDistance = subwayShortestPathGraph.getTotalDistance();
+        int totalFare = getPathTotalFare(subwayShortestPathGraph, age);
+
         return new PathResponse(shortestPathStations, totalDistance, totalFare);
     }
 
-    private List<StationResponse> getShortestPathStations(){
-        List<StationResponse> shortestStations = subwayPathGraph.getVertexList().stream()
-                .map((String stationId) -> stationDao.findById(Long.parseLong(stationId)))
-                .map((Station station) -> new StationResponse(station.getId(), station.getName()))
+    private List<StationResponse> getShortestPathStationResponses(SubwayPathGraph subwayPathGraph){
+        return subwayPathGraph.getShortestPathStationIds().stream()
+                .map(stationDao::findById)
+                .map(station -> StationResponse.of(station))
                 .collect(Collectors.toList());
     }
 
-    private int getPathTotalDistance(){
-        return subwayPathGraph.getTotalDistance();
-    }
-
-    private int getPathTotalFare(){
+    private int getPathTotalFare(SubwayPathGraph subwayPathGraph, int age){
         int totalFare = DistanceExtraFare.getTotalFare(subwayPathGraph.getTotalDistance())
                 + getExtraFareByLines(subwayPathGraph.getLineIdsInShortestPath());
         totalFare = getAgeDiscountTotalFare(totalFare, age);
+        return totalFare;
     }
 
 

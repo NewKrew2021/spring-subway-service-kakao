@@ -13,22 +13,18 @@ import java.util.stream.Collectors;
 
 public class SubwayPathGraph {
 
-    private final WeightedMultigraph<String, PathEdge> graph;
-
     private Long source;
     private Long target;
-    private DijkstraShortestPath dijkstraShortestPath;
     private GraphPath<String, PathEdge> graphPath;
 
     public SubwayPathGraph(Lines lines, Long source, Long target) {
-        this.graph = new WeightedMultigraph(PathEdge.class);
-        this.dijkstraShortestPath = new DijkstraShortestPath(graph);
         this.source = source;
         this.target = target;
         init(lines);
     }
 
-    public void init(Lines lines) {
+    private void init(Lines lines) {
+        WeightedMultigraph<String, PathEdge> graph = new WeightedMultigraph(PathEdge.class);
         List<Long> stationIds = new ArrayList<>(lines.getAllSections().getStationIdsSet());
 
         for (Long stationId : stationIds) {
@@ -43,7 +39,7 @@ public class SubwayPathGraph {
             }
         }
 
-        this.graphPath = dijkstraShortestPath
+        this.graphPath = new DijkstraShortestPath(graph)
                 .getPath(source.toString(), target.toString());
     }
 
