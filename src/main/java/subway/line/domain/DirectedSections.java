@@ -1,32 +1,24 @@
 package subway.line.domain;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import subway.member.domain.LoginMember;
 import subway.member.domain.LoginMemberType;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class DirectedSections extends Section {
+public class DirectedSections {
     private static final int MIN_DISTANCE = 10;
     private static final int MAX_DISTANCE = 50;
     private static final int DEFAULT_PRICE = 1250;
     private static final int ADDITIONAL_PRICE = 100;
-    private final List<DirectedSection> sections;
     private final ExtraFare maxExtraFare;
-    private final Station source;
-    private final Station destination;
-    private final DijkstraShortestPath<Station, DefaultWeightedEdge> graph;
+    private final int distance;
+    private final List<Station> stations;
 
-    public DirectedSections(List<DirectedSection> sections, Station source, Station destination,DijkstraShortestPath<Station, DefaultWeightedEdge> graph,ExtraFare maxExtraFare) {
-        this.sections = sections;
-        this.source = source;
-        this.destination = destination;
+    public DirectedSections(List<Station> stations, int distance, ExtraFare maxExtraFare) {
+        this.stations = stations;
         this.maxExtraFare = maxExtraFare;
-        this.graph = graph;
+        this.distance = distance;
     }
 
     public int getMaxExtraFare() {
@@ -72,22 +64,10 @@ public class DirectedSections extends Section {
     }
 
     public int getDistance() {
-        return (int) graph.getPathWeight(source,destination);
+        return distance;
     }
 
-    public List<Station> getStations() {
-        if (sections.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        List<Station> stations = new ArrayList<>();
-        stations.add(sections.get(0).getSourceStation());
-
-        for (DirectedSection section : sections) {
-            stations.add(section.getTargetStation());
-        }
-
+    public List<Station> getStations(){
         return stations;
     }
-
 }
