@@ -50,8 +50,8 @@ public class FavoriteDao {
         return jdbcTemplate.query(sql, favoriteRowMapper, memberId);
     }
 
-    public boolean deleteFavoriteById(Long memberId, Long favoriteId) {
+    public void deleteFavoriteById(Long memberId, Long favoriteId) {
         String deleteSqlById = "delete from FAVORITE where id = ? and member_id = ?";
-        return jdbcTemplate.update(deleteSqlById, favoriteId, memberId) > 0;
+        jdbcTemplate.update(deleteSqlById, favoriteId, memberId);
     }
 }

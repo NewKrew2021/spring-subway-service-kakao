@@ -3,7 +3,6 @@ package subway.auth.ui;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
@@ -13,7 +12,6 @@ import subway.exception.AuthorizationException;
 import subway.member.domain.LoginMember;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {

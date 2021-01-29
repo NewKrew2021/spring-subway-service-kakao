@@ -37,8 +37,6 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(LoginMember loginMember, Long favoriteId){
-        if(!favoriteDao.deleteFavoriteById(loginMember.getId(), favoriteId)){
-            throw new RuntimeException("삭제에 실패하였습니다.");
-        }
+        favoriteDao.deleteFavoriteById(loginMember.getId(), favoriteId);
     }
 }
