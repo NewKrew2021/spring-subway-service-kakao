@@ -5,8 +5,7 @@ import subway.common.domain.Distance;
 import subway.common.domain.Fare;
 import subway.line.application.LineService;
 import subway.member.domain.LoginMember;
-import subway.path.domain.fare.FareCalculator;
-import subway.path.domain.fare.FareStrategyFactory;
+import subway.path.domain.fare.*;
 import subway.path.domain.path.Path;
 import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
@@ -28,13 +27,17 @@ public class PathService {
                 lineService.findLines());
         Distance distance = path.getDistance();
         Fare extraFare = path.getExtraFare();
-        FareCalculator fareCalculator = new FareCalculator(
-                FareStrategyFactory.create(distance, extraFare, loginMember)
-        );
+
+        FarePolicy farePolicy = new FarePolicy();
+        farePolicy = new ExtraFarePolicyByDistance(farePolicy, distance);
+        farePolicy = new ExtraFarePolicyByExtraFare(farePolicy, extraFare);
+        if (loginMember != null) {
+            farePolicy = new DiscountFarePolicyByAge(farePolicy, loginMember.getAge());
+        }
 
         return PathResponse.of(
                 StationResponse.listOf(path.getStations()),
                 distance,
-                fareCalculator.getFare());
+                farePolicy.getFare());
     }
 }

@@ -3,32 +3,29 @@ package subway.path.domain.fare;
 import subway.common.domain.Distance;
 import subway.common.domain.Fare;
 
-public class DefaultFareStrategy implements FareStrategy {
-    private static final Fare BASIC_FARE = Fare.from(1250);
-    private static final Fare ADDITIONAL_FARE_PER_DISTANCE = Fare.from(100);
+public class ExtraFarePolicyByDistance extends ExtraFarePolicy {
+    private static final Fare FARE_PER_DISTANCE = Fare.from(100);
     private static final Distance FIVE_KM = Distance.from(5);
     private static final Distance EIGHT_KM = Distance.from(8);
     private static final Distance TEN_KM = Distance.from(10);
     private static final Distance FIFTY_KM = Distance.from(50);
     private static final Distance FORTY_KM = Distance.from(40);
 
-    private final Fare fare;
+    private final FarePolicy farePolicy;
+    private final Fare addend;
 
-    public DefaultFareStrategy(Distance distance, Fare extraFare) {
-        this.fare = calculateFare(distance, extraFare);
+    public ExtraFarePolicyByDistance(FarePolicy farePolicy, Distance distance) {
+        this.farePolicy = farePolicy;
+        addend = calculate(distance);
     }
 
-    private Fare calculateFare(Distance distance, Fare extraFare) {
-        return Fare.add(getFareByDistance(distance), extraFare);
-    }
-
-    private Fare getFareByDistance(Distance distance) {
-        return Fare.add(BASIC_FARE, getFareOver10(distance));
+    private Fare calculate(Distance distance) {
+        return getFareOver10(distance);
     }
 
     private Fare getFareOver10(Distance distance) {
         int count = getCountOver10Under50(distance) + getCountOver50(distance);
-        return ADDITIONAL_FARE_PER_DISTANCE.multiply(count);
+        return FARE_PER_DISTANCE.multiply(count);
     }
 
     private int getCountOver10Under50(Distance distance) {
@@ -47,6 +44,6 @@ public class DefaultFareStrategy implements FareStrategy {
 
     @Override
     public Fare getFare() {
-        return fare;
+        return Fare.add(farePolicy.getFare(), addend);
     }
 }
