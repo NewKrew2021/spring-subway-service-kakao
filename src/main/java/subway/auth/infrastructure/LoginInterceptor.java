@@ -23,7 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String accessToken = AuthorizationExtractor.extract(request);
         if (accessToken == null || !authService.validateToken(accessToken)) {
-            throw new InvalidLoginException();
+            throw new InvalidLoginException("잘못된 토큰 입니다.");
         }
         return true;
     }
