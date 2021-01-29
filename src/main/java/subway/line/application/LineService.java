@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
-import subway.line.domain.DirectedSections;
-import subway.line.domain.Line;
-import subway.line.domain.Section;
-import subway.line.domain.SubwayMap;
+import subway.line.domain.*;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
@@ -105,11 +102,11 @@ public class LineService {
     public PathResponse getShortestPathWithFare(LoginMember loginMember,
                                                 Station sourceStation,
                                                 Station targetStation) {
-        DirectedSections directedSections = map.getShortestPath(sourceStation, targetStation);
+        ResultPath directedSections = map.calculateShortestPath(sourceStation, targetStation);
         return new PathResponse(
                 StationResponse.listOf(directedSections.getStations()),
                 directedSections.getDistance(),
-                directedSections.getResultPrice(loginMember)
+                PriceCalculator.calculateResult(loginMember, directedSections)
         );
     }
 }

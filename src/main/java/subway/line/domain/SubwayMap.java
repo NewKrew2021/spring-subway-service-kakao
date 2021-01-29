@@ -17,14 +17,14 @@ public class SubwayMap {
         this.lines = lines;
     }
 
-    public DirectedSections getShortestPath(Station source, Station destination) {
+    public ResultPath calculateShortestPath(Station source, Station destination) {
         GraphPath<Station, Section> path = createGraph(flatLineToSections()).getPath(source, destination);
         int extraFare =  path.getEdgeList().stream()
                 .mapToInt(section -> getExtraFare(
                         section.getUpStation(),
                         section.getDownStation()
                 )).max().orElseThrow(LineNotFoundException::new);
-        return new DirectedSections(
+        return new ResultPath(
                 path.getVertexList(),
                 (int) path.getWeight(),
                 ExtraFare.of(extraFare));
