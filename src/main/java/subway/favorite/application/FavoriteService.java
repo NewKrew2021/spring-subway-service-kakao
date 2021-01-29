@@ -22,9 +22,9 @@ public class FavoriteService {
         this.stationDao = stationDao;
     }
 
-    public FavoriteResponse createFavorite(FavoriteRequest favoriteRequest, Long memberId) {
-        Station sourceStation = stationDao.findById(favoriteRequest.getSource());
-        Station targetStation = stationDao.findById(favoriteRequest.getTarget());
+    public FavoriteResponse createFavorite(Long sourceId, Long targetId, Long memberId) {
+        Station sourceStation = stationDao.findById(sourceId);
+        Station targetStation = stationDao.findById(targetId);
 
         Favorite insertFavorite = favoriteDao.insert(new Favorite(sourceStation, targetStation, memberId));
 
