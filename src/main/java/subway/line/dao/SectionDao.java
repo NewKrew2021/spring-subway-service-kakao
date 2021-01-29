@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -52,5 +53,28 @@ public class SectionDao {
                 .collect(Collectors.toList());
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
+    }
+
+    public List<Section> findAll() {
+        String sql = "select S.id as section_id, S.distance as section_distance, " +
+                "UST.id as up_station_id, UST.name as up_station_name, " +
+                "DST.id as down_station_id, DST.name as down_station_name " +
+                "from SECTION S \n" +
+                "left outer join STATION UST on S.up_station_id = UST.id " +
+                "left outer join STATION DST on S.down_station_id = DST.id ";
+
+        return mapSections(jdbcTemplate.queryForList(sql));
+    }
+
+    public List<Section> mapSections(List<Map<String, Object>> result) {
+        return result
+                .stream()
+                .map(it ->
+                        new Section(
+                                (Long) it.get("SECTION_ID"),
+                                new Station((Long) it.get("UP_STATION_ID"), (String) it.get("UP_STATION_NAME")),
+                                new Station((Long) it.get("DOWN_STATION_ID"), (String) it.get("DOWN_STATION_NAME")),
+                                (int) it.get("SECTION_DISTANCE")))
+                .collect(Collectors.toList());
     }
 }
