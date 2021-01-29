@@ -3,7 +3,6 @@ package subway.favorite.application;
 import org.springframework.stereotype.Service;
 import subway.favorite.dao.FavoriteDao;
 import subway.favorite.domain.Favorite;
-import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;

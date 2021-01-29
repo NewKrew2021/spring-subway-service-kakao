@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import subway.auth.domain.AuthenticationPrincipal;
 import subway.member.domain.LoginMember;
+import subway.path.application.PathService;
 import subway.path.dto.PathResponse;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
