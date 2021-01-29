@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
+
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
@@ -134,10 +135,17 @@ public class Sections {
             Station newUpStation = downSection.get().getUpStation();
             Station newDownStation = upSection.get().getDownStation();
             int newDistance = upSection.get().getDistance() + downSection.get().getDistance();
-            sections.add(new Section(newUpStation, newDownStation, newDistance));
+            sections.add(new Section(upSection.get().getLindId(), newUpStation, newDownStation, newDistance));
         }
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
+    }
+
+    public List<Long> getDistinctLineIds() {
+        return getSections().stream()
+                .map(Section::getLindId)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

@@ -7,8 +7,15 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.member.domain.AnonymousMember;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberResponse;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
     private AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
@@ -20,10 +27,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
-        return null;
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+
+        String token = AuthorizationExtractor.extract(request);
+
+        if (token.isEmpty()) {
+            return new AnonymousMember();
+        }
+
+        MemberResponse member = authService.findMemberByToken(token);
+        return new LoginMember(member.getId(), member.getEmail(), member.getAge());
     }
 }

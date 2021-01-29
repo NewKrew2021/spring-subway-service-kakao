@@ -1,12 +1,9 @@
 package subway.member.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
+import subway.auth.application.AuthorizationException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
-import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
 
 @Service
@@ -17,23 +14,31 @@ public class MemberService {
         this.memberDao = memberDao;
     }
 
-    @Transactional
-    public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
+    public Member createMember(String email, String password, Integer age) {
+        return memberDao.insert(new Member(email, password, age));
+    }
+
+    public Member findById(Long id) {
+        return memberDao.findById(id);
+    }
+
+    public void validateMember(String email, String password) {
+        Member member = memberDao.findByEmail(email);
+
+        if (!password.equals(member.getPassword())) {
+            throw new AuthorizationException();
+        }
+    }
+
+    public MemberResponse findByEmail(String email) {
+        Member member = memberDao.findByEmail(email);
         return MemberResponse.of(member);
     }
 
-    public MemberResponse findMember(Long id) {
-        Member member = memberDao.findById(id);
-        return MemberResponse.of(member);
+    public void updateMember(Long id, String email, String password, Integer age) {
+        memberDao.update(new Member(id, email, password, age));
     }
 
-    @Transactional
-    public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
-    }
-
-    @Transactional
     public void deleteMember(Long id) {
         memberDao.deleteById(id);
     }

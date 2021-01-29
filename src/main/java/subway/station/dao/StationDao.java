@@ -13,6 +13,11 @@ import java.util.List;
 
 @Repository
 public class StationDao {
+
+    private static final String FIND_ALL_SQL = "select * from STATION";
+    private static final String DELETE_BY_ID_SQL = "delete from STATION where id = ?";
+    private static final String FIND_BY_ID_SQL = "select * from STATION where id = ?";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertAction;
 
@@ -37,17 +42,14 @@ public class StationDao {
     }
 
     public List<Station> findAll() {
-        String sql = "select * from STATION";
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(FIND_ALL_SQL, rowMapper);
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from STATION where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_BY_ID_SQL, id);
     }
 
     public Station findById(Long id) {
-        String sql = "select * from STATION where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(FIND_BY_ID_SQL, rowMapper, id);
     }
 }

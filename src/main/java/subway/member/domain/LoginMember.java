@@ -5,13 +5,13 @@ public class LoginMember {
     private String email;
     private Integer age;
 
-    public LoginMember() {
-    }
-
     public LoginMember(Long id, String email, Integer age) {
         this.id = id;
         this.email = email;
         this.age = age;
+    }
+
+    public LoginMember() {
     }
 
     public Long getId() {
