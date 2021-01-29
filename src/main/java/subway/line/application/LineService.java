@@ -8,11 +8,8 @@ import subway.line.domain.*;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
-import subway.member.domain.LoginMember;
-import subway.path.dto.PathResponse;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
-import subway.station.dto.StationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,16 +94,5 @@ public class LineService {
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
         map.refresh(findLines());
-    }
-
-    public PathResponse getShortestPathWithFare(LoginMember loginMember,
-                                                Station sourceStation,
-                                                Station targetStation) {
-        ResultPath directedSections = map.calculateShortestPath(sourceStation, targetStation);
-        return new PathResponse(
-                StationResponse.listOf(directedSections.getStations()),
-                directedSections.getDistance(),
-                PriceCalculator.calculateResult(loginMember, directedSections)
-        );
     }
 }
