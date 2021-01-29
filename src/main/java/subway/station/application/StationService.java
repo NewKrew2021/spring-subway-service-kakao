@@ -1,6 +1,7 @@
 package subway.station.application;
 
 import org.springframework.stereotype.Service;
+import subway.exception.InvalidStationException;
 import subway.station.dao.StationDao;
 import subway.station.domain.Station;
 import subway.station.dto.StationRequest;
@@ -17,24 +18,25 @@ public class StationService {
         this.stationDao = stationDao;
     }
 
-    public StationResponse saveStation(StationRequest stationRequest) {
-        Station station = stationDao.insert(stationRequest.toStation());
-        return StationResponse.of(station);
+    public Station saveStation(StationRequest stationRequest) {
+        return stationDao.insert(stationRequest.toStation());
     }
 
     public Station findStationById(Long id) {
-        return stationDao.findById(id);
+        return stationDao.findById(id)
+                .filter(station -> station.hasSameId(id))
+                .orElseThrow(InvalidStationException::new);
     }
 
-    public List<StationResponse> findAllStationResponses() {
-        List<Station> stations = stationDao.findAll();
-
-        return stations.stream()
-                .map(StationResponse::of)
-                .collect(Collectors.toList());
+    public List<Station> findAllStationResponses() {
+        return stationDao.findAll();
     }
 
     public void deleteStationById(Long id) {
         stationDao.deleteById(id);
+    }
+
+    public List<Station> findStations() {
+        return stationDao.findAll();
     }
 }
