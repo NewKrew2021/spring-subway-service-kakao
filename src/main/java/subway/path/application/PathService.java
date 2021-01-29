@@ -30,7 +30,7 @@ public class PathService {
         this.stationDao = stationDao;
     }
 
-    public PathResponse findShortestPath(Long sourceId, Long targetId, String email) {
+    public PathResponse findShortestPath(Long sourceId, Long targetId, Integer age) {
         List<Line> lines = lineDao.findAll();
         PathVertices pathVertices = PathVertices.from(lines);
         Path path = new Path(pathVertices);
@@ -43,8 +43,8 @@ public class PathService {
                         .map(lineId -> lineDao.findById(lineId).getExtraFare())
                         .collect(Collectors.toList()));
 
-        if(email != null )
-            fare.discount(memberDao.findByEmail(email).getAge());
+        if(age != null )
+            fare.discount(age);
 
         return new PathResponse(result, fare);
 
