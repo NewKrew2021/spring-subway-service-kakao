@@ -9,7 +9,7 @@ public class PriceCalculator {
         return getResultPrice(loginMember, resultPath);
     }
 
-    public static int getResultPrice(LoginMember loginMember, ResultPath resultPath) {
+    private static int getResultPrice(LoginMember loginMember, ResultPath resultPath) {
         int defaultPrice = getPrice(resultPath);
         if (loginMember.getType() == LoginMemberType.KID) {
             return 0;
@@ -23,7 +23,7 @@ public class PriceCalculator {
         return defaultPrice;
     }
 
-    public static int getPrice(ResultPath resultPath) {
+    private static int getPrice(ResultPath resultPath) {
         int distance = resultPath.getDistance();
         if (distance <= DistancePolicy.MIN_DISTANCE.getValue()) {
             return Price.DEFAULT_PRICE.getValue() + resultPath.getMaxExtraFare().getValue();
@@ -40,14 +40,14 @@ public class PriceCalculator {
                 resultPath.getMaxExtraFare().getValue();
     }
 
-    public static int under50Bonus(int distance) {
+    private static int under50Bonus(int distance) {
         return (distance - DistancePolicy.MIN_DISTANCE.getValue())
                 / DistancePolicy.PER_NEAR_DISTANCE.getValue()
                 + ((distance - DistancePolicy.MIN_DISTANCE.getValue())
                 % DistancePolicy.PER_NEAR_DISTANCE.getValue() == 0 ? 0 : 1);
     }
 
-    public static int over50Bonus(int distance) {
+    private static int over50Bonus(int distance) {
         return (distance - DistancePolicy.MAX_DISTANCE.getValue())
                 / DistancePolicy.PER_FAR_DISTANCE.getValue()
                 + ((distance - DistancePolicy.MIN_DISTANCE.getValue())

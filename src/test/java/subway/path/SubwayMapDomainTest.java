@@ -1,4 +1,4 @@
-package subway.line;
+package subway.path;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -95,6 +95,7 @@ public class SubwayMapDomainTest extends AcceptanceTest {
     @Test
     void calculateShortestPath_잠실_남부터미널_Test() {
         ResultPath path = map.calculateShortestPath(잠실역, 남부터미널역);
+        System.out.println(path);
         assertThat(path.toString())
                 .contains("ExtraFare{value=900}")
                 .contains("distance=61")
