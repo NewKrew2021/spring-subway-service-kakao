@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/favorites")
 public class FavoriteController {
-    // TODO: 즐겨찾기 기능 구현하기
 
     private FavoriteService favoriteService;
 
@@ -26,7 +25,7 @@ public class FavoriteController {
 
     @PostMapping
     public ResponseEntity<FavoriteResponse> createFavorite(@AuthenticationPrincipal LoginMember loginMember,
-                                                           @RequestBody FavoriteRequest favoriteRequest){
+                                                           @RequestBody FavoriteRequest favoriteRequest) {
         FavoriteResponse favoriteResponse = favoriteService.createFavorite(
                 favoriteRequest.getSource(),
                 favoriteRequest.getTarget(),
@@ -37,7 +36,7 @@ public class FavoriteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember){
+    public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember) {
         List<FavoriteResponse> favorites = favoriteService.findAllByUserId(loginMember.getId()).stream()
                 .map((Favorite favorite) -> new FavoriteResponse(favorite))
                 .collect(Collectors.toList());
@@ -47,7 +46,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFavorite(@PathVariable Long id){
+    public ResponseEntity deleteFavorite(@PathVariable Long id) {
         favoriteService.deleteFavorite(id);
         return ResponseEntity
                 .noContent().build();
