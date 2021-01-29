@@ -60,11 +60,6 @@ public class Line {
         return extraFare.getValue();
     }
 
-    public void update(Line line) {
-        this.name = line.getName();
-        this.color = line.getColor();
-    }
-
     public void addSection(Station upStation, Station downStation, int distance) {
         Section section = new Section(upStation, downStation, distance);
         sections.addSection(section);
