@@ -28,9 +28,8 @@ public class FavoriteService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public Favorite save(String email, Long source, Long target) {
-        Member member = memberDao.findByEmail(email);
-        return favoriteDao.save(new Favorite(member.getId(), source, target));
+    public Favorite save(Long member_id, Long source, Long target) {
+        return favoriteDao.save(new Favorite(member_id, source, target));
     }
 
     public List<Favorite> getFavorites(String email) {
