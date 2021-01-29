@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.common.domain.Distance;
 import subway.common.domain.Fare;
+import subway.common.exception.NotExistException;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
 import subway.line.domain.Sections;
@@ -87,7 +88,7 @@ public class LineDao {
 
     private Line mapLine(List<Map<String, Object>> result) {
         if (result.size() == 0) {
-            throw new RuntimeException();
+            throw new NotExistException("노선 정보가 존재하지 않습니다.");
         }
 
         List<Section> sections = extractSections(result);

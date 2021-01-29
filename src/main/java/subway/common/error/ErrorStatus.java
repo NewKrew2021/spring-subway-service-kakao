@@ -2,6 +2,7 @@ package subway.common.error;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import subway.common.exception.AlreadyExistException;
 import subway.common.exception.AuthorizationException;
 import subway.common.exception.NegativeNumberException;
 import subway.common.exception.NotExistException;
@@ -13,9 +14,11 @@ public enum ErrorStatus {
     AUTHORIZATION(HttpStatus.UNAUTHORIZED, AuthorizationException.class),
     NEGATIVE_NUMBER(HttpStatus.BAD_REQUEST, NegativeNumberException.class),
     NOT_EXIST(HttpStatus.BAD_REQUEST, NotExistException.class),
+    ALREADY_EXIST(HttpStatus.BAD_REQUEST, AlreadyExistException.class),
     DATA_ACCESS(HttpStatus.BAD_REQUEST, DataAccessException.class),
     SQL(HttpStatus.BAD_REQUEST, SQLException.class),
     ILLEGAL_ARGUMENT(HttpStatus.BAD_REQUEST, IllegalArgumentException.class),
+    ILLEGAL_STATE(HttpStatus.INTERNAL_SERVER_ERROR, IllegalStateException.class),
     DEFAULT(HttpStatus.INTERNAL_SERVER_ERROR, Exception.class)
     ;
 
