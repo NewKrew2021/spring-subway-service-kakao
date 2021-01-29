@@ -1,5 +1,6 @@
 package subway.line.domain;
 
+import subway.line.exception.SectionException;
 import subway.station.domain.Station;
 
 import java.util.ArrayList;
@@ -9,6 +10,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Sections {
+
+    private static final String NOTHING_EXIST_MESSAGE = "두 역 모두 노선에 존재하지 않습니다.";
+    private static final String ALREADY_EXIST_MESSAGE = "두 역 모두 이미 노선에 존재합니다.";
+    private static final String INVALID_DISTANCE_MESSAGE = "새 노선의 거리값이 유효하지 않습니다.";
+    private static final String LONE_SECTION_MESSAGE = "한 개 남은 구간은 제거할 수 없습니다.";
+
     private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
@@ -40,7 +47,7 @@ public class Sections {
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new RuntimeException();
+            throw new SectionException(NOTHING_EXIST_MESSAGE);
         }
     }
 
@@ -48,7 +55,7 @@ public class Sections {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new RuntimeException();
+            throw new SectionException(ALREADY_EXIST_MESSAGE);
         }
     }
 
@@ -68,7 +75,7 @@ public class Sections {
 
     private void replaceSectionWithUpStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+            throw new SectionException(INVALID_DISTANCE_MESSAGE);
         }
         this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
@@ -76,7 +83,7 @@ public class Sections {
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
         if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+            throw new SectionException(INVALID_DISTANCE_MESSAGE);
         }
         this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
         this.sections.remove(existSection);
@@ -102,7 +109,7 @@ public class Sections {
 
     private Section findUpEndSection() {
         List<Station> downStations = this.sections.stream()
-                .map(it -> it.getDownStation())
+                .map(Section::getDownStation)
                 .collect(Collectors.toList());
 
         return this.sections.stream()
@@ -120,7 +127,7 @@ public class Sections {
 
     public void removeStation(Station station) {
         if (sections.size() <= 1) {
-            throw new RuntimeException();
+            throw new SectionException(LONE_SECTION_MESSAGE);
         }
 
         Optional<Section> upSection = sections.stream()
@@ -139,5 +146,19 @@ public class Sections {
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
+    }
+
+    public void addSections(Sections sections) {
+        this.sections.addAll(sections.sections);
+    }
+
+    public Section findSectionContainStations(Station upStation, Station downStation) {
+        return sections.stream()
+                .filter(section -> section.isExactlyContainStations(upStation, downStation))
+                .findFirst().get();
+    }
+
+    public boolean hasSection(Section section) {
+        return sections.contains(section);
     }
 }
