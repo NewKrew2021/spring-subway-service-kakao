@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class SectionDao {
     }
 
     public void deleteByLineId(Long lineId) {
-        jdbcTemplate.update("delete from SECTION where line_id = ?", lineId);
+        jdbcTemplate.update(SectionQuery.DELETE_BY_LINE_ID.getQuery(), lineId);
     }
 
     public void insertSections(Line line) {
@@ -52,5 +53,21 @@ public class SectionDao {
                 .collect(Collectors.toList());
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
+    }
+
+    public List<Section> findAll() {
+        return mapSections(jdbcTemplate.queryForList(SectionQuery.FIND_ALL.getQuery()));
+    }
+
+    public List<Section> mapSections(List<Map<String, Object>> result) {
+        return result
+                .stream()
+                .map(it ->
+                        new Section(
+                                (Long) it.get("SECTION_ID"),
+                                new Station((Long) it.get("UP_STATION_ID"), (String) it.get("UP_STATION_NAME")),
+                                new Station((Long) it.get("DOWN_STATION_ID"), (String) it.get("DOWN_STATION_NAME")),
+                                (int) it.get("SECTION_DISTANCE")))
+                .collect(Collectors.toList());
     }
 }

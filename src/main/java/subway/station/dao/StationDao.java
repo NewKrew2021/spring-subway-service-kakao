@@ -37,17 +37,14 @@ public class StationDao {
     }
 
     public List<Station> findAll() {
-        String sql = "select * from STATION";
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(StationQuery.FIND_ALL.getQuery(), rowMapper);
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from STATION where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(StationQuery.DELETE.getQuery(), id);
     }
 
     public Station findById(Long id) {
-        String sql = "select * from STATION where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(StationQuery.FIND_BY_ID.getQuery(), rowMapper, id);
     }
 }
