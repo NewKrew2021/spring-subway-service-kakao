@@ -40,12 +40,16 @@ public class PriceCalculator {
     }
 
     public static int under50Bonus(int distance) {
-        return (distance - DistancePolicy.MIN_DISTANCE.getValue()) / 5
-                + ((distance - DistancePolicy.MIN_DISTANCE.getValue()) % 5 == 0 ? 0 : 1);
+        return (distance - DistancePolicy.MIN_DISTANCE.getValue())
+                / DistancePolicy.PER_NEAR_DISTANCE.getValue()
+                + ((distance - DistancePolicy.MIN_DISTANCE.getValue())
+                % DistancePolicy.PER_NEAR_DISTANCE.getValue() == 0 ? 0 : 1);
     }
 
     public static int over50Bonus(int distance) {
-        return (distance - DistancePolicy.MAX_DISTANCE.getValue()) / 8
-                + ((distance - DistancePolicy.MIN_DISTANCE.getValue()) % 8 == 0 ? 0 : 1);
+        return (distance - DistancePolicy.MAX_DISTANCE.getValue())
+                / DistancePolicy.PER_FAR_DISTANCE.getValue()
+                + ((distance - DistancePolicy.MIN_DISTANCE.getValue())
+                % DistancePolicy.PER_FAR_DISTANCE.getValue() == 0 ? 0 : 1);
     }
 }
