@@ -47,30 +47,4 @@ public class Path {
                 this.pathVertices.getPathVertexByStation(targetStation));
         return new PathResult(PathVertices.of(result.getVertexList()), (int)result.getWeight());
     }
-
-    public List<Line> findLineListInPath(PathVertices pathVertices){
-
-        Set<Line> lineSet = new HashSet<>();
-        List<Line> previousLineList = new ArrayList<>();
-        for (PathVertex pathVertex : pathVertices.getPathVertexList()) {
-            Line duplicateLine = getDuplicateLineId(pathVertex.getLineList(), previousLineList);
-            addLineIdIfExist(duplicateLine, lineSet);
-            previousLineList = pathVertex.getLineList();
-        }
-        return new ArrayList<>(lineSet);
-    }
-
-    private void addLineIdIfExist(Line dup, Set<Line> lineSet){
-        if(dup != null)
-            lineSet.add(dup);
-    }
-
-    private Line getDuplicateLineId(List<Line> newLineList, List<Line> previousLineList){
-
-        return newLineList
-                .stream()
-                .filter(newLine -> previousLineList.contains(newLine))
-                .findFirst()
-                .orElse(null);
-    }
 }

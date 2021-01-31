@@ -1,7 +1,7 @@
 package subway.path.domain;
 
 public class Fare {
-    private int fare;
+    protected int fare;
 
     public Fare(int fare){
         this.fare = fare;

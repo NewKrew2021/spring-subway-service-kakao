@@ -4,65 +4,44 @@ import subway.line.domain.Line;
 import subway.path.dto.PathResult;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class FareCalculator {
-
-    private static final int BASIC_FARE = 1250;
-    private static final int FREE_DISTANCE_BOUND = 10;
-    private static final int FARE_DISCOUNT_DISTANCE_BOUND = 50;
-
-    private static final int KID_LOWER_BOUND = 6;
-    private static final int KID_UPPER_BOUND = 13;
-    private static final int TEEN_UPPER_BOUND = 19;
-
     public static Fare calculate(PathResult result, Integer age){
-        int basicFare = getFareByDistance(result.getDistance());
+        FareByDistance basicFare = new FareByDistance(result.getDistance());
 
-        List<Line> lines = new ArrayList<>();
-        result.getPathVertices().getPathVertexList()
-                .forEach(pathVertex -> lines.addAll(pathVertex.getLineList()));
+        FareByLine extraFare = new FareByLine(findLineListInPath(result.getPathVertices()));
 
-        int extraFare = getExtraFareByLines(lines.stream()
-                .map(Line::getExtraFare)
-                .collect(Collectors.toList()));
+        FareByAge fareDiscount = new FareByAge(basicFare.getFare() + extraFare.getFare(), age);
 
-        int fare = (age == null) ? basicFare + extraFare : discount(basicFare + extraFare, age);
-
-        return new Fare(fare);
+        return fareDiscount;
     }
 
-    private static int getFareByDistance(int distance) {
-        int result = BASIC_FARE;
+    private static List<Line> findLineListInPath(PathVertices pathVertices){
 
-        if (distance > FREE_DISTANCE_BOUND && distance <= FARE_DISCOUNT_DISTANCE_BOUND) {
-            result += (int) Math.ceil((double)(distance - 10) / 5) * 100;
+        Set<Line> lineSet = new HashSet<>();
+        List<Line> previousLineList = new ArrayList<>();
+        for (PathVertex pathVertex : pathVertices.getPathVertexList()) {
+            Line duplicateLine = getDuplicateLineId(pathVertex.getLineList(), previousLineList);
+            addLineIdIfExist(duplicateLine, lineSet);
+            previousLineList = pathVertex.getLineList();
         }
-
-        if (distance > FARE_DISCOUNT_DISTANCE_BOUND) {
-            result += (int) Math.ceil((double)(distance - 50) / 8) * 100 + 800;
-        }
-        return result;
+        return new ArrayList<>(lineSet);
     }
 
-    private static int getExtraFareByLines(List<Integer> extraFareList){
-        return extraFareList.stream().max(Integer::compare).orElse(0);
+    private static void addLineIdIfExist(Line dup, Set<Line> lineSet){
+        if(dup != null)
+            lineSet.add(dup);
     }
 
-    private static int discount(int fare, Integer age){
-        if(age < KID_LOWER_BOUND){
-            fare = 0;
-        }
+    private static Line getDuplicateLineId(List<Line> newLineList, List<Line> previousLineList){
 
-        if(age >=KID_LOWER_BOUND && age < KID_UPPER_BOUND){
-            fare = (int) ((fare - 350) * 0.5) + 350;
-        }
-
-        if(age >= KID_UPPER_BOUND && age < TEEN_UPPER_BOUND){
-            fare = (int) ((fare - 350) * 0.8) + 350;
-        }
-
-        return fare;
+        return newLineList
+                .stream()
+                .filter(newLine -> previousLineList.contains(newLine))
+                .findFirst()
+                .orElse(null);
     }
 }
