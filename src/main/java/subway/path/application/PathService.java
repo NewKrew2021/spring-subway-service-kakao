@@ -41,10 +41,8 @@ public class PathService {
                 path.findLineIdListInPath(result.getPathVertices())
                         .stream()
                         .map(lineId -> lineDao.findById(lineId).getExtraFare())
-                        .collect(Collectors.toList()));
-
-        if(age != null )
-            fare.discount(age);
+                        .collect(Collectors.toList()),
+                age);
 
         return new PathResponse(result, fare);
 
