@@ -14,18 +14,18 @@ public class PathExplorer {
 
     public PathExplorer(List<Line> lines) {
         graph = new WeightedMultigraph(DefaultWeightedEdge.class);
-        addStationVertex(graph, lines);
-        addSectionEdge(graph, lines);
+        addStationVertex(lines);
+        addSectionEdge(lines);
     }
 
-    private void addStationVertex(WeightedMultigraph<Station, DefaultWeightedEdge> graph, List<Line> lines) {
+    private void addStationVertex(List<Line> lines) {
         lines.stream()
                 .flatMap(line -> line.getStations().stream())
                 .distinct()
                 .forEach(graph::addVertex);
     }
 
-    private void addSectionEdge(WeightedMultigraph<Station, DefaultWeightedEdge> graph, List<Line> lines) {
+    private void addSectionEdge(List<Line> lines) {
         lines.forEach(line -> {
             Sections sections = line.getSections();
             sections.getSections()
