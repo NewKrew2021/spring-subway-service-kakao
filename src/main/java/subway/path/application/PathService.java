@@ -28,16 +28,10 @@ public class PathService {
     }
 
     public PathResponse findShortestPath(Long sourceId, Long targetId, Integer age) {
-        List<Line> lines = lineDao.findAll();
-        Path path = new Path(lines);
+        Path path = new Path(lineDao.findAll());
 
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
-        Fare fare = FareCalculator.calculate(result,
-                path.findLineListInPath(result.getPathVertices())
-                .stream()
-                .map(line -> line.getExtraFare())
-                .collect(Collectors.toList()),
-                age);
+        Fare fare = FareCalculator.calculate(result, age);
 
         return new PathResponse(result, fare);
 
