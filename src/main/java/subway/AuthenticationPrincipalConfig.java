@@ -30,13 +30,8 @@ public class AuthenticationPrincipalConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(createLoginInterceptor())
+        registry.addInterceptor(new LoginInterceptor(authService))
                 .addPathPatterns("/favorites")
                 .addPathPatterns("/favorites/*");
-    }
-
-    @Bean
-    public LoginInterceptor createLoginInterceptor() {
-        return new LoginInterceptor(authService);
     }
 }

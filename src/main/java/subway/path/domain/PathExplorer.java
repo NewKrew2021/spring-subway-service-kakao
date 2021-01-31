@@ -9,10 +9,10 @@ import subway.station.domain.Station;
 
 import java.util.List;
 
-public class StationGraph {
+public class PathExplorer {
     private WeightedMultigraph<Station, DefaultWeightedEdge> graph;
 
-    public StationGraph(List<Line> lines) {
+    public PathExplorer(List<Line> lines) {
         graph = new WeightedMultigraph(DefaultWeightedEdge.class);
         addStationVertex(graph, lines);
         addSectionEdge(graph, lines);
@@ -35,7 +35,11 @@ public class StationGraph {
         });
     }
 
-    public DijkstraShortestPath getDijkstraShortestPath() {
-        return new DijkstraShortestPath(graph);
+    public Path getShortestPath(Station source, Station target) {
+    	DijkstraShortestPath dijkstraShortestPath = new DijkstraShortestPath(graph);
+    	List<Station> stations = dijkstraShortestPath.getPath(source, target).getVertexList();
+        int distance = (int) dijkstraShortestPath.getPathWeight(source, target);
+        
+        return new Path(stations, distance);
     }
 }
