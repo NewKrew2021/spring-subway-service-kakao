@@ -12,9 +12,6 @@ import subway.path.dto.PathResponse;
 import subway.path.dto.PathResult;
 import subway.station.dao.StationDao;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class PathService {
     MemberDao memberDao;
@@ -29,7 +26,6 @@ public class PathService {
 
     public PathResponse findShortestPath(Long sourceId, Long targetId, Integer age) {
         Path path = new Path(lineDao.findAll());
-
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
         Fare fare = FareCalculator.calculate(result, age);
 

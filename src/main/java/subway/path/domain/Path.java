@@ -1,19 +1,21 @@
 package subway.path.domain;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
+import subway.line.dao.LineDao;
 import subway.line.domain.Line;
 import subway.line.domain.Sections;
 import subway.path.dto.PathResult;
 import subway.station.domain.Station;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
-public class Path {
+public class Path implements BeanPostProcessor {
 
     WeightedMultigraph<PathVertex, DefaultWeightedEdge> graph
             = new WeightedMultigraph(DefaultWeightedEdge.class);
@@ -21,14 +23,12 @@ public class Path {
     private PathVertices pathVertices;
 
     public Path(List<Line> lines){
-        this(PathVertices.from(lines));
-        lines.forEach(line -> addSections(line.getSections()));
-    }
-
-    public Path(PathVertices pathVertices){
-        this.pathVertices = pathVertices;
-
+        this.pathVertices = PathVertices.from(lines);
         pathVertices.getPathVertexList().forEach(vertex -> graph.addVertex(vertex));
+        pathVertices.getPathVertexList()
+                .forEach(vertex -> vertex.getLineList()
+                        .stream()
+                        .forEach(line -> addSections(line.getSections())));
     }
 
     public void addSections(Sections sections){
