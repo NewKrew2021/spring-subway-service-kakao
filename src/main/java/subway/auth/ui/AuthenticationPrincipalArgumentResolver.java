@@ -9,6 +9,7 @@ import subway.auth.domain.AuthenticationPrincipal;
 import subway.auth.exceptions.UnauthenticatedException;
 import subway.auth.infrastructure.AuthorizationExtractor;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.member.domain.DefaultMember;
 import subway.member.domain.LoginMember;
 import subway.member.service.MemberService;
 
@@ -36,7 +37,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
             if (auth.required()) {
                 throw new UnauthenticatedException("유효하지 않은 사용자입니다");
             }
-            return null;
+            return new DefaultMember();
         }
 
         LoginMember member = memberService.findMemberById(Long.valueOf(jwtTokenProvider.getPayload(token)));

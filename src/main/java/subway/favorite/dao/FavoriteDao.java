@@ -17,15 +17,11 @@ import java.util.List;
 public class FavoriteDao {
     private final JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<FavoriteResponse> favoriteMapper = (rs, rowNum) ->
-            new FavoriteResponse(
+    private final RowMapper<Favorite> favoriteMapper = (rs, rowNum) ->
+            new Favorite(
                     rs.getLong("id"),
-                    new StationResponse(
-                            rs.getLong("source_station_id"),
-                            rs.getString("source_station_name")),
-                    new StationResponse(
-                            rs.getLong("target_station_id"),
-                            rs.getString("target_station_name"))
+                    rs.getLong("source_station_id"),
+                    rs.getLong("target_station_id")
             );
 
     public FavoriteDao(JdbcTemplate jdbcTemplate) {
@@ -38,7 +34,6 @@ public class FavoriteDao {
 
         jdbcTemplate.update(con -> {
             PreparedStatement pstmt = con.prepareStatement(sql, new String[]{"id"});
-
             pstmt.setLong(1, favorite.getMemberId());
             pstmt.setLong(2, favorite.getSourceStationId());
             pstmt.setLong(3, favorite.getTargetStationId());
@@ -48,15 +43,8 @@ public class FavoriteDao {
         return keyHolder.getKey().longValue();
     }
 
-    public List<FavoriteResponse> findFavoriteResponsesByMemberId(long memberId) {
-        String sql = "select F.id, F.member_id, " +
-                "SST.id as source_station_id, SST.name as source_station_name, " +
-                "TST.id as target_station_id, TST.name as target_station_name, " +
-                "from favorite F \n" +
-                "left outer join station SST on F.source_station_id = SST.id " +
-                "left outer join station TST on F.target_station_id = TST.id " +
-                "WHERE F.member_id = ?";
-
+    public List<Favorite> findFavoritesByMemberId(long memberId) {
+        String sql = "select * from favorite WHERE member_id = ?";
         return jdbcTemplate.query(sql, favoriteMapper, memberId);
     }
 

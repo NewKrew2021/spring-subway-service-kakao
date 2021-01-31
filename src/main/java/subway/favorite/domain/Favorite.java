@@ -13,10 +13,6 @@ public class Favorite {
         this.targetStationId = targetStationId;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public long getMemberId() {
         return memberId;
     }

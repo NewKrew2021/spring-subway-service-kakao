@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.favorite.domain.Favorite;
 import subway.favorite.dto.FavoriteRequest;
 import subway.favorite.dto.FavoriteResponse;
+import subway.favorite.exceptions.FavoriteNullRequestException;
 import subway.favorite.service.FavoriteService;
 import subway.member.domain.LoginMember;
 
@@ -25,13 +27,16 @@ public class FavoriteController {
     @PostMapping
     public ResponseEntity<Void> createFavorite(@AuthenticationPrincipal LoginMember loginMember,
                                                @RequestBody FavoriteRequest favoriteRequest) {
-        long favoriteId = favoriteService.insert(loginMember.getId(), favoriteRequest);
+        if(favoriteRequest == null){
+            throw new FavoriteNullRequestException("Favorite 값이 null 입니다");
+        }
+        long favoriteId = favoriteService.insert(new Favorite(loginMember.getId(), favoriteRequest.getSource(), favoriteRequest.getTarget()));
         return ResponseEntity.created(URI.create("/favorites/" + favoriteId)).build();
     }
 
     @GetMapping
     public ResponseEntity<List<FavoriteResponse>> getFavorites(@AuthenticationPrincipal LoginMember loginMember) {
-        return ResponseEntity.ok().body(favoriteService.find(loginMember.getId()));
+        return ResponseEntity.ok().body(favoriteService.findFavoriteResponses(loginMember.getId()));
     }
 
     @DeleteMapping("/{favoriteId}")

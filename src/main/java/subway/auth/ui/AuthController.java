@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
+import subway.auth.exceptions.TokenRequestNullException;
 import subway.auth.service.AuthService;
 
 @RestController
@@ -20,6 +21,9 @@ public class AuthController {
 
     @PostMapping("/login/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest request) {
+        if(request == null){
+            throw new TokenRequestNullException("TokenRequest 가 null 입니다");
+        }
         return ResponseEntity.ok(authService.createToken(request));
     }
 }

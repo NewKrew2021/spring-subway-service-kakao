@@ -23,8 +23,8 @@ public class PathController {
 
     @GetMapping("/paths")
     public ResponseEntity<PathResponse> findShortestPath(@AuthenticationPrincipal(required = false) LoginMember loginMember,
-                                                         @RequestParam("source") long sourceId,
-                                                         @RequestParam("target") long targetId) {
+                                                         @RequestParam("source") Long sourceId,
+                                                         @RequestParam("target") Long targetId) {
         Path path = pathService.find(sourceId, targetId);
         int fare = pathService.calculateFare(path, Person.of(loginMember));
         return ResponseEntity.ok(PathResponse.of(path, fare));

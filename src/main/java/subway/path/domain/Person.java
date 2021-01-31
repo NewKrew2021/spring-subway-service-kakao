@@ -1,5 +1,6 @@
 package subway.path.domain;
 
+import subway.member.domain.DefaultMember;
 import subway.member.domain.LoginMember;
 
 import java.util.stream.Stream;
@@ -24,7 +25,7 @@ public enum Person {
     }
 
     public static Person of(LoginMember loginMember) {
-        if (loginMember == null) {
+        if (loginMember == null || loginMember instanceof DefaultMember) {
             return ADULT;
         }
 
