@@ -6,9 +6,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import subway.favorite.domain.Favorite;
-import subway.favorite.dto.FavoriteResponse;
 import subway.favorite.exceptions.FavoriteNotFoundException;
-import subway.station.dto.StationResponse;
 
 import java.sql.PreparedStatement;
 import java.util.List;

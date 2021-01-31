@@ -1,9 +1,6 @@
 package subway.favorite.dto;
 
-import subway.favorite.domain.Favorite;
 import subway.station.dto.StationResponse;
-
-import java.util.List;
 
 public class FavoriteResponse {
     private Long id;
