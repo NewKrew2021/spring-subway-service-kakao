@@ -18,15 +18,15 @@ public class PathVertices {
 
     public static PathVertices from(List<Line> lines){
         List<PathVertex> pathVertices = new ArrayList<>();
-        Map<Station, List<Long>> tmp = new HashMap<>();
+        Map<Station, List<Line>> tmp = new HashMap<>();
         lines.forEach(line -> {
             List<Station> stations = line.getStations();
             stations.forEach(station -> {
                 if (tmp.containsKey(station)) {
-                    tmp.get(station).add(line.getId());
+                    tmp.get(station).add(line);
                     return;
                 }
-                tmp.put(station, new ArrayList<>(Arrays.asList(line.getId())));
+                tmp.put(station, new ArrayList<>(Arrays.asList(line)));
             });
         });
         tmp.forEach((key, value) ->

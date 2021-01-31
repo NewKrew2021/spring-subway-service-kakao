@@ -33,9 +33,9 @@ public class PathService {
 
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
         Fare fare = FareCalculator.calculate(result,
-                path.findLineIdListInPath(result.getPathVertices())
+                path.findLineListInPath(result.getPathVertices())
                 .stream()
-                .map(lineId -> lineDao.findById(lineId).getExtraFare())
+                .map(line -> line.getExtraFare())
                 .collect(Collectors.toList()),
                 age);
 

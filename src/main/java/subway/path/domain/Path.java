@@ -48,30 +48,29 @@ public class Path {
         return new PathResult(PathVertices.of(result.getVertexList()), (int)result.getWeight());
     }
 
-    public List<Long> findLineIdListInPath(PathVertices pathVertices){
+    public List<Line> findLineListInPath(PathVertices pathVertices){
 
-        Set<Long> lineIdSet = new HashSet<>();
-        List<Long> previousLineIdList = new ArrayList<>();
+        Set<Line> lineSet = new HashSet<>();
+        List<Line> previousLineList = new ArrayList<>();
         for (PathVertex pathVertex : pathVertices.getPathVertexList()) {
-            Optional<Long> duplicateLineId = getDuplicateLineId(pathVertex.getLineList(), previousLineIdList);
-            addLineIdIfExist(duplicateLineId, lineIdSet);
-            previousLineIdList = pathVertex.getLineList();
+            Line duplicateLine = getDuplicateLineId(pathVertex.getLineList(), previousLineList);
+            addLineIdIfExist(duplicateLine, lineSet);
+            previousLineList = pathVertex.getLineList();
         }
-        return new ArrayList<>(lineIdSet);
+        return new ArrayList<>(lineSet);
     }
 
-    private void addLineIdIfExist(Optional<Long> dup, Set<Long> lineIdSet){
-        if(dup.isPresent())
-            lineIdSet.add(dup.get());
+    private void addLineIdIfExist(Line dup, Set<Line> lineSet){
+        if(dup != null)
+            lineSet.add(dup);
     }
 
-    private Optional<Long> getDuplicateLineId(List<Long> newLineIdList, List<Long> previousLineList){
+    private Line getDuplicateLineId(List<Line> newLineList, List<Line> previousLineList){
 
-        return newLineIdList
+        return newLineList
                 .stream()
-                .filter(newLineId -> previousLineList.contains(newLineId))
-                .map(id -> Optional.of(id))
+                .filter(newLine -> previousLineList.contains(newLine))
                 .findFirst()
-                .orElse(Optional.empty());
+                .orElse(null);
     }
 }
