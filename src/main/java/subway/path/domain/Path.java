@@ -5,6 +5,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
+import subway.line.domain.Line;
 import subway.line.domain.Sections;
 import subway.path.dto.PathResult;
 import subway.station.domain.Station;
@@ -18,6 +19,11 @@ public class Path {
             = new WeightedMultigraph(DefaultWeightedEdge.class);
 
     private PathVertices pathVertices;
+
+    public Path(List<Line> lines){
+        this(PathVertices.from(lines));
+        lines.forEach(line -> addSections(line.getSections()));
+    }
 
     public Path(PathVertices pathVertices){
         this.pathVertices = pathVertices;

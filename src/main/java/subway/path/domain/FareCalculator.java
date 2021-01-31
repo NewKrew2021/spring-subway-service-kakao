@@ -1,6 +1,9 @@
 package subway.path.domain;
 
+import subway.path.dto.PathResult;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FareCalculator {
 
@@ -12,11 +15,13 @@ public class FareCalculator {
     private static final int KID_UPPER_BOUND = 13;
     private static final int TEEN_UPPER_BOUND = 19;
 
-    public static int calculate(int distance, List<Integer> extraFareList, Integer age){
-        int basicFare = getFareByDistance(distance);
+    public static Fare calculate(PathResult result, List<Integer> extraFareList, Integer age){
+        int basicFare = getFareByDistance(result.getDistance());
         int extraFare = getExtraFareByLines(extraFareList);
 
-        return age == null ? basicFare + extraFare : discount(basicFare + extraFare, age);
+        int fare = age == null ? basicFare + extraFare : discount(basicFare, age);
+
+        return new Fare(fare);
     }
 
     private static int getFareByDistance(int distance) {

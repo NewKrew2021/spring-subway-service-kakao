@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 public class Fare {
     private int fare;
 
-    public Fare(int distance, List<Integer> extraFareList, Integer age){
-        fare = FareCalculator.calculate(distance, extraFareList, age);
+    public Fare(int fare){
+        this.fare = fare;
     }
 
     public int getFare() {

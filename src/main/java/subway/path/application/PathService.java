@@ -7,10 +7,7 @@ import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
 import subway.line.domain.Sections;
 import subway.member.dao.MemberDao;
-import subway.path.domain.Fare;
-import subway.path.domain.Path;
-import subway.path.domain.PathVertex;
-import subway.path.domain.PathVertices;
+import subway.path.domain.*;
 import subway.path.dto.PathResponse;
 import subway.path.dto.PathResult;
 import subway.station.dao.StationDao;
@@ -32,16 +29,14 @@ public class PathService {
 
     public PathResponse findShortestPath(Long sourceId, Long targetId, Integer age) {
         List<Line> lines = lineDao.findAll();
-        PathVertices pathVertices = PathVertices.from(lines);
-        Path path = new Path(pathVertices);
-        lines.forEach(line -> path.addSections(line.getSections()));
+        Path path = new Path(lines);
 
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
-        Fare fare = new Fare(result.getDistance(),
+        Fare fare = FareCalculator.calculate(result,
                 path.findLineIdListInPath(result.getPathVertices())
-                        .stream()
-                        .map(lineId -> lineDao.findById(lineId).getExtraFare())
-                        .collect(Collectors.toList()),
+                .stream()
+                .map(lineId -> lineDao.findById(lineId).getExtraFare())
+                .collect(Collectors.toList()),
                 age);
 
         return new PathResponse(result, fare);
