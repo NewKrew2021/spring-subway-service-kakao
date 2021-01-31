@@ -5,6 +5,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 import subway.line.dao.LineDao;
@@ -15,15 +16,18 @@ import subway.station.domain.Station;
 
 import java.util.List;
 
-public class Path implements BeanPostProcessor {
+public class Path {
 
     WeightedMultigraph<PathVertex, DefaultWeightedEdge> graph
             = new WeightedMultigraph(DefaultWeightedEdge.class);
 
     private PathVertices pathVertices;
 
-    public Path(List<Line> lines){
-        this.pathVertices = PathVertices.from(lines);
+    @Autowired
+    private LineDao lineDao;
+
+    public void initPath(){
+        this.pathVertices = PathVertices.from(lineDao.findAll());
         pathVertices.getPathVertexList().forEach(vertex -> graph.addVertex(vertex));
         pathVertices.getPathVertexList()
                 .forEach(vertex -> vertex.getLineList()

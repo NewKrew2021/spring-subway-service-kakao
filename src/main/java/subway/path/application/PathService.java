@@ -17,15 +17,17 @@ public class PathService {
     MemberDao memberDao;
     LineDao lineDao;
     StationDao stationDao;
+    Path path;
 
-    public PathService(LineDao lineDao, MemberDao memberDao, StationDao stationDao){
+    public PathService(LineDao lineDao, MemberDao memberDao, StationDao stationDao, Path path){
         this.lineDao = lineDao;
         this.memberDao = memberDao;
         this.stationDao = stationDao;
+        this.path = path;
     }
 
     public PathResponse findShortestPath(Long sourceId, Long targetId, Integer age) {
-        Path path = new Path(lineDao.findAll());
+        path.initPath();
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
         Fare fare = FareCalculator.calculate(result, age);
 
