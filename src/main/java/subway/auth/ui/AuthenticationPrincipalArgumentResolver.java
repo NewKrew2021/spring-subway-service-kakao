@@ -14,9 +14,12 @@ import subway.member.domain.Member;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
     private AuthService authService;
+    private Map<String, LoginMember> cache = new HashMap<>();
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
@@ -32,8 +35,13 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         try{
             String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
+            if(cache.containsKey(token))
+                return cache.get(token);
+
             Member member = authService.getMemberByToken(token);
-            return new LoginMember(member.getId(), member.getEmail(), member.getAge());
+            LoginMember loginMember = new LoginMember(member.getId(), member.getEmail(), member.getAge());
+            cache.put(token, loginMember);
+            return loginMember;
         }catch (Exception e){
             return null;
         }
