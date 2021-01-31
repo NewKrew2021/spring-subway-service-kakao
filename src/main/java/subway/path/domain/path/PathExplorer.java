@@ -1,4 +1,4 @@
-package subway.path.domain;
+package subway.path.domain.path;
 
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;

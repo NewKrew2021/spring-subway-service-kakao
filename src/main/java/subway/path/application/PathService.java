@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.domain.Line;
 import subway.member.domain.LoginMember;
-import subway.path.domain.FareCalculator;
-import subway.path.domain.Path;
-import subway.path.domain.PathExplorer;
+import subway.path.domain.fare.FareCalculator;
+import subway.path.domain.path.Path;
+import subway.path.domain.path.PathExplorer;
 import subway.path.dto.PathResponse;
 import subway.station.dao.StationDao;
 
@@ -28,8 +28,11 @@ public class PathService {
 		PathExplorer pathExplorer = new PathExplorer(lines);
 		
 		Path shortestPath = pathExplorer.getShortestPath(stationDao.findById(source), stationDao.findById(target));
+		
+		List<Line> containedLines = shortestPath.getContainedLines(lines);
+		FareCalculator fareCalculator = new FareCalculator(containedLines);
 		int age = loginMember == null ? ADULT_AGE : loginMember.getAge();
-		int fare = FareCalculator.calculate(shortestPath, lines, age);
+		int fare = fareCalculator.calculate(shortestPath, age);
 
 		return PathResponse.of(shortestPath, fare);
 	}
