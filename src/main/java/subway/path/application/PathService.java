@@ -24,7 +24,6 @@ public class PathService {
 
     public PathResponse findMinDistance(LoginMember loginMember, Long source, Long target) {
         Path path = new Path(new Lines(lineDao.findAll()));
-        path.getMaxExtraFare(source, target, stationDao.findAll());
         int totalDistance = path.getTotalDistance(source, target);
         int totalFare = path.getAgeFare(loginMember, path.getMaxExtraFare(source, target, stationDao.findAll())
                  + path.calculateDistanceFare(source, target));
