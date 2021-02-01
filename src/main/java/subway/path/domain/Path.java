@@ -36,14 +36,21 @@ public class Path {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph
                 = new WeightedMultigraph(DefaultWeightedEdge.class);
 
+        addStation(graph);
+        addSection(graph);
+
+        return graph;
+    }
+
+    private void addStation(WeightedMultigraph<Long, DefaultWeightedEdge> graph) {
         lines.getLines().forEach(line -> line.getStations()
                 .forEach(station -> graph.addVertex(station.getId())));
+    }
 
+    private void addSection(WeightedMultigraph<Long, DefaultWeightedEdge> graph) {
         lines.getLines().forEach(line -> line.getSections().getSections()
                 .forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation().getId(),
                         section.getDownStation().getId()), section.getDistance())));
-
-        return graph;
     }
 
     public int getTotalDistance(Long source, Long target) {
