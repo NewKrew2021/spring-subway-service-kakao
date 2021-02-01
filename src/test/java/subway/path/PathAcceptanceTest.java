@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import subway.AcceptanceTest;
 import subway.line.dto.LineResponse;
@@ -66,6 +67,21 @@ public class PathAcceptanceTest extends AcceptanceTest {
         총_거리와_소요_시간을_함께_응답됨(response, 5);
     }
 
+    @DisplayName("존재하지 않는 경로를 조회한다.")
+    @Test
+    void findNotExistPath() {
+        // given
+        StationResponse 오이도역 = 지하철역_등록되어_있음("오이도역");
+        StationResponse 당고개역 = 지하철역_등록되어_있음("당고개역");
+        LineResponse 사호선 = 지하철_노선_등록되어_있음("사호선", "bg-blue-700", 오이도역, 당고개역, 200);
+
+        // when
+        ExtractableResponse<Response> response = 거리_경로_조회_요청(2L, 5L);
+
+        // then
+        경로가_존재하지_않음(response);
+    }
+
     public static ExtractableResponse<Response> 거리_경로_조회_요청(long source, long target) {
         return RestAssured
                 .given().log().all()
@@ -92,5 +108,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
     public static void 총_거리와_소요_시간을_함께_응답됨(ExtractableResponse<Response> response, int totalDistance) {
         PathResponse pathResponse = response.as(PathResponse.class);
         assertThat(pathResponse.getDistance()).isEqualTo(totalDistance);
+    }
+
+    public static void 경로가_존재하지_않음(ExtractableResponse<Response> response) {
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }

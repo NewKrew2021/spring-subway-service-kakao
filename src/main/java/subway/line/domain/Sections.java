@@ -1,11 +1,11 @@
 package subway.line.domain;
 
+import subway.common.domain.Distance;
+import subway.common.exception.AlreadyExistException;
+import subway.common.exception.NotExistException;
 import subway.station.domain.Station;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Sections {
@@ -28,19 +28,23 @@ public class Sections {
             return;
         }
 
-        checkAlreadyExisted(section);
-        checkExistedAny(section);
+        try {
+            checkAlreadyExisted(section);
+            checkExistedAny(section);
 
-        addSectionUpToUp(section);
-        addSectionDownToDown(section);
+            addSectionUpToUp(section);
+            addSectionDownToDown(section);
 
-        this.sections.add(section);
+            this.sections.add(section);
+        } catch (NotExistException | AlreadyExistException e) {
+            throw new IllegalStateException("지하철 구간을 추가할 수 없습니다. (" + e.getMessage() +")");
+        }
     }
 
     private void checkAlreadyExisted(Section section) {
         List<Station> stations = getStations();
         if (!stations.contains(section.getUpStation()) && !stations.contains(section.getDownStation())) {
-            throw new RuntimeException();
+            throw new NotExistException("존재하지 않는 지하철 역입니다.");
         }
     }
 
@@ -48,7 +52,7 @@ public class Sections {
         List<Station> stations = getStations();
         List<Station> stationsOfNewSection = Arrays.asList(section.getUpStation(), section.getDownStation());
         if (stations.containsAll(stationsOfNewSection)) {
-            throw new RuntimeException();
+            throw new AlreadyExistException("이미 존재하는 지하철 구간입니다.");
         }
     }
 
@@ -67,24 +71,24 @@ public class Sections {
     }
 
     private void replaceSectionWithUpStation(Section newSection, Section existSection) {
-        if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+        if (!newSection.isShorter(existSection)) {
+            throw new IllegalStateException("기존 구간은 길이가 더 긴 구간으로 대체될 수 없습니다.");
         }
-        this.sections.add(new Section(existSection.getUpStation(), newSection.getUpStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(Section.of(existSection.getUpStation(), newSection.getUpStation(), existSection.getDifferenceOfDistance(newSection)));
         this.sections.remove(existSection);
     }
 
     private void replaceSectionWithDownStation(Section newSection, Section existSection) {
-        if (existSection.getDistance() <= newSection.getDistance()) {
-            throw new RuntimeException();
+        if (!newSection.isShorter(existSection)) {
+            throw new IllegalStateException("기존 구간은 길이가 더 긴 구간으로 대체될 수 없습니다.");
         }
-        this.sections.add(new Section(newSection.getDownStation(), existSection.getDownStation(), existSection.getDistance() - newSection.getDistance()));
+        this.sections.add(Section.of(newSection.getDownStation(), existSection.getDownStation(), existSection.getDifferenceOfDistance(newSection)));
         this.sections.remove(existSection);
     }
 
     public List<Station> getStations() {
         if (sections.isEmpty()) {
-            return Arrays.asList();
+            return Collections.emptyList();
         }
 
         List<Station> stations = new ArrayList<>();
@@ -102,13 +106,13 @@ public class Sections {
 
     private Section findUpEndSection() {
         List<Station> downStations = this.sections.stream()
-                .map(it -> it.getDownStation())
+                .map(Section::getDownStation)
                 .collect(Collectors.toList());
 
         return this.sections.stream()
                 .filter(it -> !downStations.contains(it.getUpStation()))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new NotExistException("상행 종점이 존재하지 않습니다."));
     }
 
     private Section findSectionByNextUpStation(Station station) {
@@ -120,7 +124,7 @@ public class Sections {
 
     public void removeStation(Station station) {
         if (sections.size() <= 1) {
-            throw new RuntimeException();
+            throw new IllegalStateException("삭제할 수 있는 지하철 역이 없습니다.");
         }
 
         Optional<Section> upSection = sections.stream()
@@ -133,8 +137,8 @@ public class Sections {
         if (upSection.isPresent() && downSection.isPresent()) {
             Station newUpStation = downSection.get().getUpStation();
             Station newDownStation = upSection.get().getDownStation();
-            int newDistance = upSection.get().getDistance() + downSection.get().getDistance();
-            sections.add(new Section(newUpStation, newDownStation, newDistance));
+            Distance newDistance = upSection.get().getSumOfDistance(downSection.get());
+            sections.add(Section.of(newUpStation, newDownStation, newDistance));
         }
 
         upSection.ifPresent(it -> sections.remove(it));

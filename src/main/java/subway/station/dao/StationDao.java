@@ -13,15 +13,17 @@ import java.util.List;
 
 @Repository
 public class StationDao {
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert insertAction;
-
-    private RowMapper<Station> rowMapper = (rs, rowNum) ->
-            new Station(
+    private static final String SELECT_ALL_QUERY = "select * from STATION";
+    private static final String SELECT_BY_ID_QUERY = "select * from STATION where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "delete from STATION where id = ?";
+    private static final RowMapper<Station> rowMapper = (rs, rowNum) ->
+            Station.of(
                     rs.getLong("id"),
                     rs.getString("name")
             );
 
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert insertAction;
 
     public StationDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
@@ -33,21 +35,18 @@ public class StationDao {
     public Station insert(Station station) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(station);
         Long id = insertAction.executeAndReturnKey(params).longValue();
-        return new Station(id, station.getName());
+        return Station.of(id, station.getName());
     }
 
     public List<Station> findAll() {
-        String sql = "select * from STATION";
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(SELECT_ALL_QUERY, rowMapper);
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from STATION where id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(DELETE_BY_ID_QUERY, id);
     }
 
     public Station findById(Long id) {
-        String sql = "select * from STATION where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(SELECT_BY_ID_QUERY, rowMapper, id);
     }
 }

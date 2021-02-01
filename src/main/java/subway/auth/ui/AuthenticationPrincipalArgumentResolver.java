@@ -7,9 +7,16 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import subway.auth.application.AuthService;
 import subway.auth.domain.AuthenticationPrincipal;
+import subway.auth.infrastructure.AuthorizationExtractor;
+import subway.common.domain.Age;
+import subway.member.domain.LoginMember;
+import subway.member.dto.MemberResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthenticationPrincipalArgumentResolver(AuthService authService) {
         this.authService = authService;
@@ -20,10 +27,17 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
     }
 
-    // parameter에 @AuthenticationPrincipal이 붙어있는 경우 동작
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        // TODO: 유효한 로그인인 경우 LoginMember 만들어서 응답하기
-        return null;
+        String token = AuthorizationExtractor.extract((HttpServletRequest) webRequest.getNativeRequest());
+        if (!loginIsRequired(parameter) && token==null) {
+            return null;
+        }
+        MemberResponse response = authService.findMemberByToken(token);
+        return LoginMember.of(response.getId(), response.getEmail(), Age.from(response.getAge()));
+    }
+
+    private boolean loginIsRequired(MethodParameter parameter) {
+        return Objects.requireNonNull(parameter.getParameterAnnotation(AuthenticationPrincipal.class)).required();
     }
 }
