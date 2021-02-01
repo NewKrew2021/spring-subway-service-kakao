@@ -1,10 +1,10 @@
 package subway.line.application;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
-import subway.line.domain.Line;
-import subway.line.domain.Section;
+import subway.line.domain.*;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class LineService {
-    private LineDao lineDao;
-    private SectionDao sectionDao;
-    private StationService stationService;
+    private final LineDao lineDao;
+    private final SectionDao sectionDao;
+    private final StationService stationService;
+    @Autowired
+    private SubwayMap map;
 
     public LineService(LineDao lineDao, SectionDao sectionDao, StationService stationService) {
         this.lineDao = lineDao;
@@ -27,8 +29,9 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor()));
+        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(),request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
+        map.refresh(findLines());
         return LineResponse.of(persistLine);
     }
 
@@ -64,10 +67,12 @@ public class LineService {
 
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
         lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
+        map.refresh(findLines());
     }
 
     public void deleteLineById(Long id) {
         lineDao.deleteById(id);
+        map.refresh(findLines());
     }
 
     public void addLineStation(Long lineId, SectionRequest request) {
@@ -78,6 +83,7 @@ public class LineService {
 
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
+        map.refresh(findLines());
     }
 
     public void removeLineStation(Long lineId, Long stationId) {
@@ -87,6 +93,6 @@ public class LineService {
 
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
+        map.refresh(findLines());
     }
-
 }

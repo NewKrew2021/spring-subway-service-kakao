@@ -118,6 +118,12 @@ public class Sections {
                 .orElse(null);
     }
 
+    public boolean hasStations(Station stationA, Station stationB){
+        return !this.sections.stream()
+                .filter(section -> section.contains(stationA) && section.contains(stationB))
+                .findAny().equals(Optional.empty());
+    }
+
     public void removeStation(Station station) {
         if (sections.size() <= 1) {
             throw new RuntimeException();
