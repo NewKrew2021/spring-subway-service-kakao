@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -52,5 +54,12 @@ public class SectionDao {
                 .collect(Collectors.toList());
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
+    }
+
+    public int findByStationId(Long stationId) {
+        return jdbcTemplate.queryForObject(
+                "select count(*) from SECTION where up_station_id = ? or down_station_id = ?",
+                Integer.class, stationId, stationId
+        );
     }
 }

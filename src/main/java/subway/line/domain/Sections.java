@@ -102,7 +102,7 @@ public class Sections {
 
     private Section findUpEndSection() {
         List<Station> downStations = this.sections.stream()
-                .map(it -> it.getDownStation())
+                .map(Section::getDownStation)
                 .collect(Collectors.toList());
 
         return this.sections.stream()
@@ -139,5 +139,20 @@ public class Sections {
 
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
+    }
+
+    public void addSections(Sections sections) {
+        this.sections.addAll(sections.sections);
+    }
+
+    public Section getSection(Station upStation, Station downStation) {
+        return sections.stream()
+                .filter(section -> (section.getUpStation().equals(upStation) && section.getDownStation().equals(downStation))
+                || (section.getDownStation().equals(upStation) && section.getUpStation().equals(downStation)))
+                .findFirst().get();
+    }
+
+    public boolean hasSection(Section section) {
+        return sections.contains(section);
     }
 }
