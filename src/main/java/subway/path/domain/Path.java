@@ -29,6 +29,10 @@ public class Path {
 
     public Path(Lines lines) {
         this.lines = lines;
+        this.dijkstraShortestPath = new DijkstraShortestPath(getGraph());
+    }
+
+    private WeightedMultigraph getGraph() {
         WeightedMultigraph<Long, DefaultWeightedEdge> graph
                 = new WeightedMultigraph(DefaultWeightedEdge.class);
 
@@ -39,7 +43,7 @@ public class Path {
                 .forEach(section -> graph.setEdgeWeight(graph.addEdge(section.getUpStation().getId(),
                         section.getDownStation().getId()), section.getDistance())));
 
-        dijkstraShortestPath = new DijkstraShortestPath(graph);
+        return graph;
     }
 
     public int getTotalDistance(Long source, Long target) {
