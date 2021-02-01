@@ -1,11 +1,12 @@
 package subway.line.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import subway.line.application.LineService;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.line.service.LineService;
 
 import java.net.URI;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ public class LineController {
 
     private LineService lineService;
 
+    @Autowired
     public LineController(LineService lineService) {
         this.lineService = lineService;
     }

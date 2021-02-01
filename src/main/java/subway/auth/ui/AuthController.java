@@ -1,5 +1,29 @@
 package subway.auth.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import subway.auth.dto.TokenRequest;
+import subway.auth.dto.TokenResponse;
+import subway.auth.exceptions.TokenRequestNullException;
+import subway.auth.service.AuthService;
+
+@RestController
 public class AuthController {
-    // TODO: 로그인(토큰 발급) 요청 처리하기
+    private final AuthService authService;
+
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/login/token")
+    public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest request) {
+        if(request == null){
+            throw new TokenRequestNullException("TokenRequest 가 null 입니다");
+        }
+        return ResponseEntity.ok(authService.createToken(request));
+    }
 }

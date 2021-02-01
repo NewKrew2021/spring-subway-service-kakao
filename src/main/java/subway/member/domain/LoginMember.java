@@ -8,6 +8,10 @@ public class LoginMember {
     public LoginMember() {
     }
 
+    public LoginMember(String email, Integer age) {
+        this(null, email, age);
+    }
+
     public LoginMember(Long id, String email, Integer age) {
         this.id = id;
         this.email = email;
