@@ -30,7 +30,7 @@ public class PathController {
             @AuthenticationPrincipal(required = false) LoginMember loginMember,
             @RequestParam(name = "source") Long sourceStationId,
             @RequestParam(name = "target") Long targetStationId) {
-        PathResponse response = pathService.getPath(
+        PathResponse response = pathService.findPath(
                 loginMember,
                 sourceStationId,
                 targetStationId

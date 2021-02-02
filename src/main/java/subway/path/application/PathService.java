@@ -32,7 +32,7 @@ public class PathService {
         this.fareService = fareService;
     }
 
-    public PathResponse getPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
+    public PathResponse findPath(LoginMember loginMember, Long sourceStationId, Long targetStationId) {
 
         WeightedMultigraph<Station, Section> graph = makeGraph();
 
