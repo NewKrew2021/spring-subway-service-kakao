@@ -26,10 +26,6 @@ public class Line {
         this(id, name, color, 0, new Sections());
     }
 
-    public Line(Long id, String name, String color, Sections sections) {
-        this(id, name, color, 0, sections);
-    }
-
     public Line(Long id, String name, String color, int extraFare) {
         this(id, name, color, extraFare, new Sections());
     }
