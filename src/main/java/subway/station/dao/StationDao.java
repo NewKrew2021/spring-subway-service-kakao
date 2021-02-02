@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import subway.exception.DuplicateNameException;
+import subway.exception.NotExistStationException;
 import subway.station.domain.Station;
 
 import javax.sql.DataSource;
@@ -32,8 +34,12 @@ public class StationDao {
 
     public Station insert(Station station) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(station);
-        Long id = insertAction.executeAndReturnKey(params).longValue();
-        return new Station(id, station.getName());
+        try {
+            Long id = insertAction.executeAndReturnKey(params).longValue();
+            return new Station(id, station.getName());
+        } catch (RuntimeException e){
+            throw new DuplicateNameException();
+        }
     }
 
     public List<Station> findAll() {
@@ -48,6 +54,10 @@ public class StationDao {
 
     public Station findById(Long id) {
         String sql = "select * from STATION where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        } catch (RuntimeException e){
+            throw new NotExistStationException();
+        }
     }
 }

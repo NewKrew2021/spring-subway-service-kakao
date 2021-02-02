@@ -2,8 +2,7 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import subway.line.domain.Line;
-import subway.line.dto.LineRequest;
+import subway.exception.WrongEmailFormatException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
@@ -19,8 +18,14 @@ public class MemberService {
 
     @Transactional
     public MemberResponse createMember(MemberRequest request) {
-        Member member = memberDao.insert(request.toMember());
+        Member member = request.toMember();
+        member.checkValidEmail();
+        member = memberDao.insert(request.toMember());
         return MemberResponse.of(member);
+    }
+
+    public Member findByEmail(String email) {
+        return memberDao.findByEmail(email);
     }
 
     public MemberResponse findMember(Long id) {
@@ -30,7 +35,9 @@ public class MemberService {
 
     @Transactional
     public void updateMember(Long id, MemberRequest memberRequest) {
-        memberDao.update(new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge()));
+        Member member = new Member(id, memberRequest.getEmail(), memberRequest.getPassword(), memberRequest.getAge());
+        member.checkValidEmail();
+        memberDao.update(member);
     }
 
     @Transactional

@@ -1,5 +1,7 @@
 package subway.line.domain;
 
+import subway.exception.TooLowDistanceException;
+import subway.exception.WrongStationIdException;
 import subway.station.domain.Station;
 
 public class Section {
@@ -12,16 +14,24 @@ public class Section {
     }
 
     public Section(Long id, Station upStation, Station downStation, int distance) {
+        this(upStation, downStation, distance);
         this.id = id;
-        this.upStation = upStation;
-        this.downStation = downStation;
-        this.distance = distance;
     }
 
     public Section(Station upStation, Station downStation, int distance) {
+        this(upStation, downStation);
+        if (distance < 1) {
+            throw new TooLowDistanceException();
+        }
+        this.distance = distance;
+    }
+
+    public Section(Station upStation, Station downStation) {
+        if (upStation.equals(downStation)) {
+            throw new WrongStationIdException();
+        }
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = distance;
     }
 
     public Long getId() {
