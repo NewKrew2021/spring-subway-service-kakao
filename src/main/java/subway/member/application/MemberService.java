@@ -2,6 +2,8 @@ package subway.member.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import subway.auth.application.AuthService;
+import subway.exception.InvalidTokenException;
 import subway.line.domain.Line;
 import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
@@ -13,9 +15,11 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
+    private AuthService authService;
     private MemberDao memberDao;
 
-    public MemberService(MemberDao memberDao) {
+    public MemberService(AuthService authService, MemberDao memberDao) {
+        this.authService = authService;
         this.memberDao = memberDao;
     }
 
@@ -28,6 +32,13 @@ public class MemberService {
     public MemberResponse findMember(Long id) {
         Member member = memberDao.findById(id);
         return MemberResponse.of(member);
+    }
+
+    public Member getMemberByToken(String token){
+        if (authService.validateToken(token)){
+            return memberDao.findByEmail(authService.getPayLoad(token));
+        }
+        throw new InvalidTokenException();
     }
 
     public MemberResponse findMemberByEmail(String email){
