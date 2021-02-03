@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import subway.auth.dto.TokenRequest;
 import subway.auth.dto.TokenResponse;
 import subway.auth.infrastructure.JwtTokenProvider;
+import subway.exception.InvalidTokenException;
 import subway.exception.LoginFailException;
 import subway.member.dao.MemberDao;
 import subway.member.domain.LoginMember;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class AuthService {
     private final MemberDao memberDao;
     private final JwtTokenProvider jwtTokenProvider;
-    private Map<String, LoginMember> cache = new HashMap<>();
+    private Map<String, Member> cache = new HashMap<>();
 
     public AuthService(MemberDao memberDao, JwtTokenProvider jwtTokenProvider) {
         this.memberDao = memberDao;
@@ -27,7 +28,6 @@ public class AuthService {
         if(!checkEmailValidation(tokenRequest.getEmail(), tokenRequest.getPassword())){
             throw new LoginFailException();
         }
-
         String accessToken = jwtTokenProvider.createToken(tokenRequest.getEmail());
         return new TokenResponse(accessToken);
     }
@@ -40,15 +40,17 @@ public class AuthService {
         return jwtTokenProvider.getPayload(token);
     }
 
-    public boolean validateToken(String accessToken) {
-        return jwtTokenProvider.validateToken(accessToken);
+    public void validateToken(String accessToken) {
+        if(accessToken == null || !jwtTokenProvider.validateToken(accessToken))
+            throw new InvalidTokenException();
     }
 
-    public void putLoginMember(String key, LoginMember value){
+    public void putLoginMember(String key, Member value){
+        validateToken(key);
         cache.put(key, value);
     }
 
-    public LoginMember getLoginMember(String key){
+    public Member getLoginMember(String key){
         return cache.containsKey(key) ? cache.get(key) : null;
     }
 }

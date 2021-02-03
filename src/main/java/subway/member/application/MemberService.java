@@ -7,6 +7,7 @@ import subway.exception.InvalidTokenException;
 import subway.line.domain.Line;
 import subway.line.dto.LineRequest;
 import subway.member.dao.MemberDao;
+import subway.member.domain.LoginMember;
 import subway.member.domain.Member;
 import subway.member.dto.MemberRequest;
 import subway.member.dto.MemberResponse;
@@ -35,10 +36,13 @@ public class MemberService {
     }
 
     public Member getMemberByToken(String token){
-        if (authService.validateToken(token)){
-            return memberDao.findByEmail(authService.getPayLoad(token));
+        authService.validateToken(token);
+        Member member = authService.getLoginMember(token);
+        if(member == null){
+            member = memberDao.findByEmail(authService.getPayLoad(token));
+            authService.putLoginMember(token, member);
         }
-        throw new InvalidTokenException();
+        return member;
     }
 
     public MemberResponse findMemberByEmail(String email){
