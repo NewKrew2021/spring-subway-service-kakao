@@ -43,16 +43,18 @@ public class PathVertices {
             nextStation = pathVertex.getStation();
             if(prevStation == null) continue;
 
-            Station finalPrevStation = prevStation;
-            Station finalNextStation = nextStation;
-            lines.forEach(line -> {
-                if(line.getSections().findSectionByStations(finalPrevStation, finalNextStation) != null){
-                    passingLine.add(line);
-                }
-            });
+            passingLine.add(getLineBySection(lines, prevStation, nextStation));
         }
         return passingLine.stream()
+                .filter(Objects::nonNull)
                 .map(Line::getExtraFare)
                 .collect(Collectors.toList());
+    }
+
+    private Line getLineBySection(List<Line> lines, final Station prev, final Station next){
+        return lines.stream()
+                .filter(line -> line.hasSectionByStations(prev, next))
+                .findFirst()
+                .orElse(null);
     }
 }

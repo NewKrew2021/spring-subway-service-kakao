@@ -100,7 +100,7 @@ public class Line {
         return sections.getStations();
     }
 
-    public boolean hasSection(Section section){
-        return sections.hasSection(section);
+    public boolean hasSectionByStations(Station from, Station to){
+        return sections.hasSectionByStations(from, to);
     }
 }

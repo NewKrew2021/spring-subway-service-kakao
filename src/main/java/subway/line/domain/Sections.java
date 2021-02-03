@@ -148,7 +148,7 @@ public class Sections {
                 .orElse(null);
     }
 
-    public boolean hasSection(Section section){
-        return sections.contains(section);
+    public boolean hasSectionByStations(Station from, Station to){
+        return findSectionByStations(from, to) != null;
     }
 }

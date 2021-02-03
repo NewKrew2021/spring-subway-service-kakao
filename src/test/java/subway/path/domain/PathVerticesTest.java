@@ -19,7 +19,7 @@ class PathVerticesTest {
     void setUp(){
         s1 = new Station(1L, "s1");
         s2 = new Station(2L, "s2");
-        l1 = new Line("l1", "c1", 0);
+        l1 = new Line("l1", "c1", 300);
         l1.addSection(new Section(s1, s2, 5));
         v1 = new PathVertex(s1);
         v2 = new PathVertex(s2);
@@ -39,5 +39,11 @@ class PathVerticesTest {
     void getTest(){
         assertThat(pathVertices.getPathVertexList()).containsExactly(v1, v2);
         assertThat(pathVertices.getPathVertexByStation(s1)).isEqualTo(v1);
+    }
+
+    @DisplayName("노선별 추가요금 확인")
+    @Test
+    void extraFareTest(){
+        assertThat(pathVertices.getExtraFareList(Arrays.asList(l1))).containsExactly(300);
     }
 }
