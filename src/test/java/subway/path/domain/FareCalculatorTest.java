@@ -31,28 +31,28 @@ class FareCalculatorTest {
         fareCalculator = new FareCalculator();
     }
 
-    @DisplayName("6세 이하의 승객에 대한 요금 테스트")
+    @DisplayName("유아 승객 총 합산 요금 확인")
     @Test
     void babyFareTest(){
         Fare fare = fareCalculator.calculate(pathResult, 5);
         assertThat(fare.getFare()).isEqualTo(0);
     }
 
-    @DisplayName("6세 이상, 13세 미만의 승객에 대한 요금 테스트")
+    @DisplayName("어린이 승객 총 합산 요금 확인")
     @Test
     void youthFareTest(){
         Fare fare = fareCalculator.calculate(pathResult, 9);
         assertThat(fare.getFare()).isEqualTo(900);
     }
 
-    @DisplayName("13세 이상, 19세 미만의 승객에 대한 요금 테스트")
+    @DisplayName("청소년 승객 총 합산 요금 확인")
     @Test
     void teenFareTest(){
         Fare fare = fareCalculator.calculate(pathResult, 15);
         assertThat(fare.getFare()).isEqualTo(1230);
     }
 
-    @DisplayName("성인 승객에 대한 요금 테스트")
+    @DisplayName("성인 승객 총 합산 요금 확인")
     @Test
     void adultFareTest(){
         Fare fare = fareCalculator.calculate(pathResult, 30);
