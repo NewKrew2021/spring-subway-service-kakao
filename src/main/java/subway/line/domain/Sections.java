@@ -140,4 +140,11 @@ public class Sections {
         upSection.ifPresent(it -> sections.remove(it));
         downSection.ifPresent(it -> sections.remove(it));
     }
+
+    public Section findSectionByStations(Station from, Station to){
+        return sections.stream()
+                .filter(section -> section.getUpStation().equals(from) && section.getDownStation().equals(to))
+                .findFirst()
+                .orElse(null);
+    }
 }
