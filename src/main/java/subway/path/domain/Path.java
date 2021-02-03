@@ -24,10 +24,16 @@ public class Path {
             = new WeightedMultigraph(DefaultWeightedEdge.class);
 
     private PathVertices pathVertices;
+    private List<Line> lines;
 
-    public void initPath(List<Line> lines){
+    public Path(List<Line> lines) {
+        this.lines = lines;
+    }
+
+    public void initPath(List<Line> lineParam){
+        lines = lineParam;
         List<Station> stations = new ArrayList<>();
-        lines.stream().map(Line::getStations).forEach(sts -> stations.addAll(sts));
+        lines.stream().map(Line::getStations).forEach(stations::addAll);
         this.pathVertices = PathVertices.from(stations.stream().distinct().collect(Collectors.toList()));
 
         pathVertices.getPathVertexList().forEach(vertex -> graph.addVertex(vertex));
@@ -47,5 +53,9 @@ public class Path {
                 this.pathVertices.getPathVertexByStation(sourceStation),
                 this.pathVertices.getPathVertexByStation(targetStation));
         return new PathResult(PathVertices.of(result.getVertexList()), (int)result.getWeight());
+    }
+
+    public List<Line> getLines() {
+        return lines;
     }
 }
