@@ -1,7 +1,5 @@
 package subway.path.dto;
 
-import subway.path.domain.Fare;
-import subway.path.domain.Path;
 import subway.station.dto.StationResponse;
 
 import java.util.List;

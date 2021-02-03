@@ -34,7 +34,7 @@ public class PathVertices {
                 .orElse(null);
     }
 
-    public List<Line> getPassingLines(List<Line> lines) {
+    public List<Integer> getExtraFareList(List<Line> lines) {
         List<Line> passingLine = new ArrayList<>();
         Station prevStation = null;
         Station nextStation = null;
@@ -46,12 +46,13 @@ public class PathVertices {
             Station finalPrevStation = prevStation;
             Station finalNextStation = nextStation;
             lines.forEach(line -> {
-                        if(line.getSections().findSectionByStations(finalPrevStation, finalNextStation) != null){
-                            passingLine.add(line);
-                        }
-                    });
+                if(line.getSections().findSectionByStations(finalPrevStation, finalNextStation) != null){
+                    passingLine.add(line);
+                }
+            });
         }
-
-        return passingLine;
+        return passingLine.stream()
+                .map(Line::getExtraFare)
+                .collect(Collectors.toList());
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.path.dto.Fare;
 import subway.path.dto.PathResult;
 import subway.station.domain.Station;
 
@@ -34,28 +35,28 @@ class FareCalculatorTest {
     @DisplayName("유아 승객 총 합산 요금 확인")
     @Test
     void babyFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1), 5);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(200), 5);
         assertThat(fare.getFare()).isEqualTo(0);
     }
 
     @DisplayName("어린이 승객 총 합산 요금 확인")
     @Test
     void youthFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1),9);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(200),9);
         assertThat(fare.getFare()).isEqualTo(900);
     }
 
     @DisplayName("청소년 승객 총 합산 요금 확인")
     @Test
     void teenFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1),15);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(200),15);
         assertThat(fare.getFare()).isEqualTo(1230);
     }
 
     @DisplayName("성인 승객 총 합산 요금 확인")
     @Test
     void adultFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1),30);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(200),30);
         assertThat(fare.getFare()).isEqualTo(1450);
     }
 }

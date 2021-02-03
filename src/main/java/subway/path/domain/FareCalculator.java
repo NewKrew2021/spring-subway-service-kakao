@@ -1,28 +1,26 @@
 package subway.path.domain;
 
 import subway.line.domain.Line;
+import subway.path.dto.Fare;
 import subway.path.dto.PathResult;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FareCalculator {
-    private FareByDistance fareByDistance;
-    private FareByLine fareByLine;
-    private FareByAge fareDiscount;
+    private DistanceFarePolicy distanceFarePolicy;
+    private LineExtraFarePolicy lineExtraFarePolicy;
+    private AgeDiscountFarePolicy fareDiscount;
 
     public FareCalculator (){
-        fareByDistance = new FareByDistance();
-        fareByLine = new FareByLine();
-        fareDiscount = new FareByAge();
+        distanceFarePolicy = new DistanceFarePolicy();
+        lineExtraFarePolicy = new LineExtraFarePolicy();
+        fareDiscount = new AgeDiscountFarePolicy();
     }
 
-    public Fare calculate(PathResult result, List<Line> passingLines, Integer age){
-        fareByDistance.calculateFare(result.getDistance());
-        fareByLine.calculateFare(passingLines);
+    public Fare calculate(PathResult result, List<Integer> extraFares, Integer age){
+        int basicFare = distanceFarePolicy.apply(result.getDistance());
+        int extraFare = lineExtraFarePolicy.apply(extraFares);
 
-        return fareDiscount.calculateFare(fareByDistance.getFare() + fareByLine.getFare(), age);
+        return new Fare(fareDiscount.apply(basicFare + extraFare, age));
     }
 }
