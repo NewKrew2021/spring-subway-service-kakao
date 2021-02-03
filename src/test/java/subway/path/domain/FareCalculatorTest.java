@@ -19,6 +19,7 @@ class FareCalculatorTest {
     PathVertex vertex;
     PathVertices pathVertices;
     PathResult pathResult;
+    FareCalculator fareCalculator;
     @BeforeEach
     void setUp(){
         s1 = new Station(1L, "s1");
@@ -28,9 +29,11 @@ class FareCalculatorTest {
         vertex = new PathVertex(s1, Arrays.asList(l1));
         pathVertices = PathVertices.of(Arrays.asList(vertex));
         pathResult = new PathResult(pathVertices, 5);
+        fareCalculator = new FareCalculator();
     }
     @Test
     void calculateTest(){
+
         Fare fare = FareCalculator.calculate(pathResult, 5);
         assertThat(fare.getFare()).isEqualTo(0);
 

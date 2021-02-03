@@ -29,7 +29,7 @@ public class PathService {
     public PathResponse findShortestPath(Long sourceId, Long targetId, Integer age) {
         path.initPath();
         PathResult result = path.findShortestPath(stationDao.findById(sourceId), stationDao.findById(targetId));
-        Fare fare = FareCalculator.calculate(result, age);
+        Fare fare = new FareCalculator().calculate(result, age);
 
         return new PathResponse(result, fare);
 

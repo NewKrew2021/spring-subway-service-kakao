@@ -5,14 +5,9 @@ public class FareByAge extends Fare{
     private static final int KID_UPPER_BOUND = 13;
     private static final int TEEN_UPPER_BOUND = 19;
 
-    public FareByAge(int fare, Integer age) {
-        super(fare);
-        discount(age);
-    }
-
-    private void discount(Integer age){
+    public Fare calculateFare(int fare, Integer age){
         if(age == null)
-            return ;
+            age = TEEN_UPPER_BOUND + 1;
 
         if(age < KID_LOWER_BOUND){
             fare = 0;
@@ -25,5 +20,7 @@ public class FareByAge extends Fare{
         if(age >= KID_UPPER_BOUND && age < TEEN_UPPER_BOUND){
             fare = (int) ((fare - 350) * 0.8) + 350;
         }
+
+        return this;
     }
 }

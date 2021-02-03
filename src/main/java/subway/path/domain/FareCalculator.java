@@ -9,17 +9,23 @@ import java.util.List;
 import java.util.Set;
 
 public class FareCalculator {
-    public static Fare calculate(PathResult result, Integer age){
-        FareByDistance basicFare = new FareByDistance(result.getDistance());
+    private FareByDistance fareByDistance;
+    private FareByLine fareByLine;
+    private FareByAge fareDiscount;
 
-        FareByLine extraFare = new FareByLine(findLineListInPath(result.getPathVertices()));
-
-        FareByAge fareDiscount = new FareByAge(basicFare.getFare() + extraFare.getFare(), age);
-
-        return fareDiscount;
+    public FareCalculator (){
+        fareByDistance = new FareByDistance();
+        fareByLine = new FareByLine();
+        fareDiscount = new FareByAge();
     }
 
-    private static List<Line> findLineListInPath(PathVertices pathVertices){
+    public Fare calculate(PathResult result, Integer age){
+        fareByDistance.calculateFare(result.getDistance());
+        fareByLine.calculateFare(findLineListInPath(result.getPathVertices()));
+        return fareDiscount.calculateFare(fareByDistance.getFare() + fareByLine.getFare(), age);
+    }
+
+    private List<Line> findLineListInPath(PathVertices pathVertices){
 
         Set<Line> lineSet = new HashSet<>();
         List<Line> previousLineList = new ArrayList<>();
@@ -31,12 +37,12 @@ public class FareCalculator {
         return new ArrayList<>(lineSet);
     }
 
-    private static void addLineIdIfExist(Line dup, Set<Line> lineSet){
+    private void addLineIdIfExist(Line dup, Set<Line> lineSet){
         if(dup != null)
             lineSet.add(dup);
     }
 
-    private static Line getDuplicateLineId(List<Line> newLineList, List<Line> previousLineList){
+    private Line getDuplicateLineId(List<Line> newLineList, List<Line> previousLineList){
 
         return newLineList
                 .stream()

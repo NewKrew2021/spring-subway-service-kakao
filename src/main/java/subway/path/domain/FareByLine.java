@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FareByLine extends Fare{
-    public FareByLine(List<Line> lines) {
-        super(getExtraFareByLines(lines.stream()
+
+    public Fare calculateFare (List<Line> lines){
+        fare = getExtraFareByLines(lines.stream()
                 .map(Line::getExtraFare)
-                .collect(Collectors.toList())));
+                .collect(Collectors.toList()));
+        return this;
     }
 
-    private static int getExtraFareByLines(List<Integer> extraFareList){
+    private int getExtraFareByLines(List<Integer> extraFareList){
         return extraFareList.stream().max(Integer::compare).orElse(0);
     }
 }
