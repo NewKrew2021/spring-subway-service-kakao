@@ -17,8 +17,7 @@ public class SubwayConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor()).addPathPatterns("/favorites/**");
-        registry.addInterceptor(loginInterceptor()).addPathPatterns("/members/me");
+        registry.addInterceptor(loginInterceptor()).addPathPatterns("/favorites/**", "/members/me");
     }
 
     @Bean
