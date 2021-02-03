@@ -10,8 +10,6 @@ import subway.station.domain.Station;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 class PathVerticesTest {
     Line l1;
     Station s1, s2;
@@ -32,13 +30,14 @@ class PathVerticesTest {
     @Test
     void fromTest(){
         PathVertices vertices = PathVertices.from(Arrays.asList(s1, s2));
-        assertTrue(vertices.getPathVertexList().size() != 0);
+        assertThat(vertices.getPathVertexByStation(s1)).isEqualTo(v1);
+        assertThat(vertices.getPathVertexByStation(s2)).isEqualTo(v2);
     }
 
     @DisplayName("PathVertices 객체의 데이터 저장 여부 확인")
     @Test
     void getTest(){
-        assertThat(pathVertices.getPathVertexList()).isNotEmpty();
-        assertThat(pathVertices.getPathVertexByStation(s1)).isNotNull();
+        assertThat(pathVertices.getPathVertexList()).containsExactly(v1, v2);
+        assertThat(pathVertices.getPathVertexByStation(s1)).isEqualTo(v1);
     }
 }
