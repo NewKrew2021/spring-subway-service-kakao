@@ -31,9 +31,9 @@ public class FareCalculator {
         Set<Line> lineSet = new HashSet<>();
         List<Line> previousLineList = new ArrayList<>();
         for (PathVertex pathVertex : pathVertices.getPathVertexList()) {
-            Line duplicateLine = getDuplicateLineId(pathVertex.getLineList(), previousLineList);
-            addLineIdIfExist(duplicateLine, lineSet);
-            previousLineList = pathVertex.getLineList();
+            //Line duplicateLine = getDuplicateLineId(pathVertex.getLineList(), previousLineList);
+            //addLineIdIfExist(duplicateLine, lineSet);
+            //previousLineList = pathVertex.getLineList();
         }
         return new ArrayList<>(lineSet);
     }

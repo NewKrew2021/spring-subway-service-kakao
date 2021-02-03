@@ -23,24 +23,16 @@ public class Path {
 
     private PathVertices pathVertices;
 
-    @Autowired
-    private LineDao lineDao;
-
-    public void initPath(){
-        this.pathVertices = PathVertices.from(lineDao.findAll());
+    public void initPath(List<Station> stations, Sections sections){
+        this.pathVertices = PathVertices.from(stations);
         pathVertices.getPathVertexList().forEach(vertex -> graph.addVertex(vertex));
-        pathVertices.getPathVertexList()
-                .forEach(vertex -> vertex.getLineList()
-                        .stream()
-                        .forEach(line -> addSections(line.getSections())));
+        addSections(sections);
     }
 
     public void addSections(Sections sections){
-        sections.getSections()
-                .forEach(section ->
-                        graph.setEdgeWeight(graph.addEdge(
-                                pathVertices.getPathVertexByStation(section.getUpStation()),
-                                pathVertices.getPathVertexByStation(section.getDownStation())),
+        sections.getSections().forEach(section -> graph.setEdgeWeight(graph.addEdge(
+                pathVertices.getPathVertexByStation(section.getUpStation()),
+                pathVertices.getPathVertexByStation(section.getDownStation())),
                                 section.getDistance()));
     }
 

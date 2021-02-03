@@ -4,6 +4,7 @@ import subway.line.domain.Line;
 import subway.station.domain.Station;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PathVertices {
     private List<PathVertex> pathVertices;
@@ -16,26 +17,9 @@ public class PathVertices {
         return new PathVertices(pathVertexList);
     }
 
-    public static PathVertices from(List<Line> lines){
-        List<PathVertex> pathVertices = new ArrayList<>();
-        Map<Station, List<Line>> tmp = new HashMap<>();
-        lines.forEach(line -> {
-            List<Station> stations = line.getStations();
-            stations.forEach(station -> {
-                if (tmp.containsKey(station)) {
-                    tmp.get(station).add(line);
-                    return;
-                }
-                tmp.put(station, new ArrayList<>(Arrays.asList(line)));
-            });
-        });
-        tmp.forEach((key, value) ->
-                pathVertices.add(new PathVertex(key, value))
-        );
-
-        return new PathVertices(pathVertices);
+    public static PathVertices from(List<Station> stations){
+        return of(stations.stream().map(PathVertex::new).collect(Collectors.toList()));
     }
-
 
     public List<PathVertex> getPathVertexList() {
         return pathVertices;
