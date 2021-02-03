@@ -10,15 +10,19 @@ public class FareByAge extends Fare{
             age = TEEN_UPPER_BOUND + 1;
 
         if(age < KID_LOWER_BOUND){
-            fare = 0;
+            this.fare = 0;
         }
 
         if(age >=KID_LOWER_BOUND && age < KID_UPPER_BOUND){
-            fare = (int) ((fare - 350) * 0.5) + 350;
+            this.fare = (int) ((fare - 350) * 0.5) + 350;
         }
 
         if(age >= KID_UPPER_BOUND && age < TEEN_UPPER_BOUND){
-            fare = (int) ((fare - 350) * 0.8) + 350;
+            this.fare = (int) ((fare - 350) * 0.8) + 350;
+        }
+
+        if(age >= TEEN_UPPER_BOUND){
+            this.fare = fare;
         }
 
         return this;

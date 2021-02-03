@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FareByDistanceTest {
     @Test
     void distanceTest(){
-        FareByDistance fare = new FareByDistance(30);
+        Fare fare = new FareByDistance().calculateFare(30);
         assertThat(fare.getFare()).isEqualTo(1650);
     }
 }

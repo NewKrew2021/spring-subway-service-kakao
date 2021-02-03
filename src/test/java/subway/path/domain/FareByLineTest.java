@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FareByLineTest {
     @Test
     void lineTest(){
-        FareByLine fare = new FareByLine(Arrays.asList(new Line("l1", "c1", 500), new Line("l2", "c2", 1000)));
+        Fare fare = new FareByLine().calculateFare(Arrays.asList(new Line("l1", "c1", 500), new Line("l2", "c2", 1000)));
         assertThat(fare.getFare()).isEqualTo(1000);
     }
 }

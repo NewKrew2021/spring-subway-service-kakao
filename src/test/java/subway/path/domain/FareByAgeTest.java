@@ -8,10 +8,10 @@ public class FareByAgeTest {
 
     @Test
     void ageTest(){
-        FareByAge baby = new FareByAge(3000, 5);
-        FareByAge young = new FareByAge(3000, 7);
-        FareByAge teen = new FareByAge(3000, 15);
-        FareByAge adult = new FareByAge(3000, 30);
+        Fare baby = new FareByAge().calculateFare(3000, 5);
+        Fare young = new FareByAge().calculateFare(3000, 7);
+        Fare teen = new FareByAge().calculateFare(3000, 15);
+        Fare adult = new FareByAge().calculateFare(3000, 30);
 
         assertThat(baby.getFare()).isEqualTo(0);
         assertThat(young.getFare()).isEqualTo(1675);

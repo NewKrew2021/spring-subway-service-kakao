@@ -22,6 +22,7 @@ public class FareCalculator {
     public Fare calculate(PathResult result, Integer age){
         fareByDistance.calculateFare(result.getDistance());
         fareByLine.calculateFare(findLineListInPath(result.getPathVertices()));
+
         return fareDiscount.calculateFare(fareByDistance.getFare() + fareByLine.getFare(), age);
     }
 
