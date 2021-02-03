@@ -23,15 +23,15 @@ class PathVerticesTest {
         s2 = new Station(2L, "s2");
         l1 = new Line("l1", "c1", 0);
         l1.addSection(new Section(s1, s2, 5));
-        v1 = new PathVertex(s1, Arrays.asList(l1));
-        v2 = new PathVertex(s2, Arrays.asList(l1));
+        v1 = new PathVertex(s1);
+        v2 = new PathVertex(s2);
         pathVertices = PathVertices.of(Arrays.asList(v1, v2));
     }
 
     @DisplayName("List<Line> 으로 PathVertices 잘 만들어지는지 확인")
     @Test
     void fromTest(){
-        PathVertices vertices = PathVertices.from(Arrays.asList(l1));
+        PathVertices vertices = PathVertices.from(Arrays.asList(s1, s2));
         assertTrue(vertices.getPathVertexList().size() != 0);
     }
 

@@ -24,8 +24,8 @@ class FareCalculatorTest {
         s2 = new Station(2L, "s2");
         l1 = new Line("l1", "c1", 200);
         l1.addSection(new Section(s1, s2, 5));
-        vertex1 = new PathVertex(s1, Arrays.asList(l1));
-        vertex2 = new PathVertex(s2, Arrays.asList(l1));
+        vertex1 = new PathVertex(s1);
+        vertex2 = new PathVertex(s2);
         pathVertices = PathVertices.of(Arrays.asList(vertex1, vertex2));
         pathResult = new PathResult(pathVertices, 5);
         fareCalculator = new FareCalculator();
@@ -34,28 +34,28 @@ class FareCalculatorTest {
     @DisplayName("유아 승객 총 합산 요금 확인")
     @Test
     void babyFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, 5);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1), 5);
         assertThat(fare.getFare()).isEqualTo(0);
     }
 
     @DisplayName("어린이 승객 총 합산 요금 확인")
     @Test
     void youthFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, 9);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1),9);
         assertThat(fare.getFare()).isEqualTo(900);
     }
 
     @DisplayName("청소년 승객 총 합산 요금 확인")
     @Test
     void teenFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, 15);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1),15);
         assertThat(fare.getFare()).isEqualTo(1230);
     }
 
     @DisplayName("성인 승객 총 합산 요금 확인")
     @Test
     void adultFareTest(){
-        Fare fare = fareCalculator.calculate(pathResult, 30);
+        Fare fare = fareCalculator.calculate(pathResult, Arrays.asList(l1),30);
         assertThat(fare.getFare()).isEqualTo(1450);
     }
 }

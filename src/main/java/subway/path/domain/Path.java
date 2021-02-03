@@ -14,7 +14,9 @@ import subway.line.domain.Sections;
 import subway.path.dto.PathResult;
 import subway.station.domain.Station;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Path {
 
@@ -23,10 +25,13 @@ public class Path {
 
     private PathVertices pathVertices;
 
-    public void initPath(List<Station> stations, Sections sections){
-        this.pathVertices = PathVertices.from(stations);
+    public void initPath(List<Line> lines){
+        List<Station> stations = new ArrayList<>();
+        lines.stream().map(Line::getStations).forEach(sts -> stations.addAll(sts));
+        this.pathVertices = PathVertices.from(stations.stream().distinct().collect(Collectors.toList()));
+
         pathVertices.getPathVertexList().forEach(vertex -> graph.addVertex(vertex));
-        addSections(sections);
+        lines.stream().map(Line::getSections).forEach(this::addSections);
     }
 
     public void addSections(Sections sections){

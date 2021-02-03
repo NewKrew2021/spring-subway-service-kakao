@@ -8,6 +8,7 @@ import subway.line.domain.Section;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
+import subway.path.domain.PathVertices;
 import subway.station.application.StationService;
 import subway.station.domain.Station;
 
@@ -88,5 +89,4 @@ public class LineService {
         sectionDao.deleteByLineId(lineId);
         sectionDao.insertSections(line);
     }
-
 }
