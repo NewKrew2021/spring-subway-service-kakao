@@ -5,6 +5,7 @@ import subway.line.dao.LineDao;
 import subway.line.dao.SectionDao;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
 import subway.line.dto.LineRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionRequest;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class LineService {
+
     private LineDao lineDao;
     private SectionDao sectionDao;
     private StationService stationService;
@@ -27,7 +29,7 @@ public class LineService {
     }
 
     public LineResponse saveLine(LineRequest request) {
-        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor()));
+        Line persistLine = lineDao.insert(new Line(request.getName(), request.getColor(), request.getExtraFare()));
         persistLine.addSection(addInitSection(persistLine, request));
         return LineResponse.of(persistLine);
     }
@@ -53,6 +55,10 @@ public class LineService {
         return lineDao.findAll();
     }
 
+    public Sections findAllSections() {
+        return new Sections(sectionDao.findAll());
+    }
+
     public LineResponse findLineResponseById(Long id) {
         Line persistLine = findLineById(id);
         return LineResponse.of(persistLine);
@@ -63,7 +69,7 @@ public class LineService {
     }
 
     public void updateLine(Long id, LineRequest lineUpdateRequest) {
-        lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor()));
+        lineDao.update(new Line(id, lineUpdateRequest.getName(), lineUpdateRequest.getColor(), lineUpdateRequest.getExtraFare()));
     }
 
     public void deleteLineById(Long id) {
@@ -89,4 +95,13 @@ public class LineService {
         sectionDao.insertSections(line);
     }
 
+    public int findExtraFare(Long lineId) {
+        return lineDao.findExtraFareById(lineId);
+    }
+
+    public List<Integer> findExtraFares(List<Long> lineIds) {
+        return lineIds.stream()
+                .map(this::findExtraFare)
+                .collect(Collectors.toList());
+    }
 }

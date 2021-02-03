@@ -32,13 +32,14 @@ public class LineDao {
         params.put("id", line.getId());
         params.put("name", line.getName());
         params.put("color", line.getColor());
+        params.put("extra_fare", line.getExtraFare());
 
         Long lineId = insertAction.executeAndReturnKey(params).longValue();
         return new Line(lineId, line.getName(), line.getColor());
     }
 
     public Line findById(Long id) {
-        String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, " +
+        String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as line_extra_fare," +
                 "S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -53,12 +54,12 @@ public class LineDao {
     }
 
     public void update(Line newLine) {
-        String sql = "update LINE set name = ?, color = ? where id = ?";
-        jdbcTemplate.update(sql, new Object[]{newLine.getName(), newLine.getColor(), newLine.getId()});
+        String sql = "update LINE set name = ?, color = ?, extra_fare = ? where id = ?";
+        jdbcTemplate.update(sql, new Object[]{newLine.getName(), newLine.getColor(), newLine.getExtraFare(), newLine.getId()});
     }
 
     public List<Line> findAll() {
-        String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, " +
+        String sql = "select L.id as line_id, L.name as line_name, L.color as line_color, L.extra_fare as line_extra_fare," +
                 "S.id as section_id, S.distance as section_distance, " +
                 "UST.id as up_station_id, UST.name as up_station_name, " +
                 "DST.id as down_station_id, DST.name as down_station_name " +
@@ -82,30 +83,37 @@ public class LineDao {
         List<Section> sections = extractSections(result);
 
         return new Line(
-                (Long) result.get(0).get("LINE_ID"),
-                (String) result.get(0).get("LINE_NAME"),
-                (String) result.get(0).get("LINE_COLOR"),
+                (Long) result.get(0).get("line_id"),
+                (String) result.get(0).get("line_name"),
+                (String) result.get(0).get("line_color"),
+                (int) result.get(0).get("line_extra_fare"),
                 new Sections(sections));
     }
 
     private List<Section> extractSections(List<Map<String, Object>> result) {
-        if (result.isEmpty() || result.get(0).get("SECTION_ID") == null) {
+        if (result.isEmpty() || result.get(0).get("section_id") == null) {
             return Collections.EMPTY_LIST;
         }
         return result.stream()
-                .collect(Collectors.groupingBy(it -> it.get("SECTION_ID")))
+                .collect(Collectors.groupingBy(it -> it.get("section_id")))
                 .entrySet()
                 .stream()
                 .map(it ->
                         new Section(
                                 (Long) it.getKey(),
-                                new Station((Long) it.getValue().get(0).get("UP_STATION_ID"), (String) it.getValue().get(0).get("UP_STATION_Name")),
-                                new Station((Long) it.getValue().get(0).get("DOWN_STATION_ID"), (String) it.getValue().get(0).get("DOWN_STATION_Name")),
-                                (int) it.getValue().get(0).get("SECTION_DISTANCE")))
+                                (Long) it.getValue().get(0).get("line_id"),
+                                new Station((Long) it.getValue().get(0).get("up_station_id"), (String) it.getValue().get(0).get("up_station_name")),
+                                new Station((Long) it.getValue().get(0).get("down_station_id"), (String) it.getValue().get(0).get("down_station_name")),
+                                (int) it.getValue().get(0).get("section_distance")))
                 .collect(Collectors.toList());
     }
 
     public void deleteById(Long id) {
         jdbcTemplate.update("delete from Line where id = ?", id);
+    }
+
+    public int findExtraFareById(Long lineId) {
+        String sql = "select extra_fare from LINE where id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, lineId);
     }
 }
