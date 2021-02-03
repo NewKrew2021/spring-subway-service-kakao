@@ -147,4 +147,8 @@ public class Sections {
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean hasSection(Section section){
+        return sections.contains(section);
+    }
 }
