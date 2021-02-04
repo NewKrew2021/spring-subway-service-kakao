@@ -1,10 +1,14 @@
 package subway.line.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import subway.line.domain.Line;
 import subway.line.domain.Section;
+import subway.line.domain.Sections;
+import subway.station.dao.StationDao;
+import subway.station.domain.Station;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -16,9 +20,19 @@ import java.util.stream.Collectors;
 public class SectionDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
+    private StationDao stationDao;
 
-    public SectionDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    private RowMapper<Section> rowMapper = (rs, rowNum) ->
+            new Section(
+                    rs.getLong("id"),
+                    stationDao.findById(rs.getLong("up_station_id")),
+                    stationDao.findById(rs.getLong("down_station_id")),
+                    rs.getInt("distance")
+            );
+
+    public SectionDao(JdbcTemplate jdbcTemplate, DataSource dataSource, StationDao stationDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.stationDao = stationDao;
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("SECTION")
                 .usingGeneratedKeyColumns("id");
@@ -52,5 +66,10 @@ public class SectionDao {
                 .collect(Collectors.toList());
 
         simpleJdbcInsert.executeBatch(batchValues.toArray(new Map[sections.size()]));
+    }
+
+    public Sections findAll(){
+        String sql = "select * from SECTION";
+        return new Sections(jdbcTemplate.query(sql, rowMapper));
     }
 }

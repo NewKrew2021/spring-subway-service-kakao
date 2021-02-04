@@ -12,7 +12,6 @@ import subway.auth.dto.TokenResponse;
 import subway.line.dto.LineResponse;
 import subway.path.dto.PathResponse;
 import subway.station.dto.StationResponse;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static subway.auth.AuthAcceptanceTest.로그인되어_있음;
 import static subway.line.LineAcceptanceTest.지하철_노선_등록되어_있음;
@@ -73,6 +72,7 @@ public class FareAcceptanceTest extends AcceptanceTest {
         청소년 = 로그인되어_있음(청소년_이메일, 패스워드);
         어린이 = 로그인되어_있음(어린이_이메일, 패스워드);
     }
+
 
     @DisplayName("기본 요금")
     @Test
